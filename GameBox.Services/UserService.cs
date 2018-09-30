@@ -110,6 +110,10 @@ namespace GameBox.Services
                 return GetServiceResult(string.Format(UserLockedState, username, Constants.Common.Locked), ServiceResultType.Fail);
             }
 
+            user.IsLocked = true;
+
+            Database.SaveChanges();
+
             return GetServiceResult(string.Format(Constants.Common.Success, nameof(User), username, Constants.Common.Locked), ServiceResultType.Success);
         }
 
@@ -129,6 +133,10 @@ namespace GameBox.Services
             {
                 return GetServiceResult(string.Format(UserLockedState, username, Constants.Common.Unlocked), ServiceResultType.Fail);
             }
+
+            user.IsLocked = false;
+
+            Database.SaveChanges();
 
             return GetServiceResult(string.Format(Constants.Common.Success, nameof(User), username, Constants.Common.Unlocked), ServiceResultType.Success);
         }

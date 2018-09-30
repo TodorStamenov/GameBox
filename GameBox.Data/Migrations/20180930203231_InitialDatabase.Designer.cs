@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameBox.Data.Migrations
 {
     [DbContext(typeof(GameBoxDbContext))]
-    [Migration("20180930093648_InitialDatabase")]
+    [Migration("20180930203231_InitialDatabase")]
     partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +43,8 @@ namespace GameBox.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("IsLocked");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(50);
@@ -61,7 +63,7 @@ namespace GameBox.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("GameBox.Data.Models.UserRole", b =>
+            modelBuilder.Entity("GameBox.Data.Models.UserRoles", b =>
                 {
                     b.Property<Guid>("UserId");
 
@@ -71,10 +73,10 @@ namespace GameBox.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRole");
+                    b.ToTable("UserRoles");
                 });
 
-            modelBuilder.Entity("GameBox.Data.Models.UserRole", b =>
+            modelBuilder.Entity("GameBox.Data.Models.UserRoles", b =>
                 {
                     b.HasOne("GameBox.Data.Models.Role", "Role")
                         .WithMany("Users")
