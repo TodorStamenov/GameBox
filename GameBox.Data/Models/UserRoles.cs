@@ -2,7 +2,7 @@
 
 namespace GameBox.Data.Models
 {
-    public class UserRole
+    public class UserRoles
     {
         public Guid UserId { get; set; }
 

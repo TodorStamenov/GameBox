@@ -32,21 +32,27 @@ namespace GameBox.Services
                     u.Username,
                     u.Password,
                     u.Salt,
+                    u.IsLocked,
                     IsAdmin = u.Roles
                         .Any(r => r.Role.Name == Constants.Common.Admin)
                 })
                 .FirstOrDefault();
 
-            string hashedPassword = this.HashPassword(password, userInfo?.Salt);
-
-            if (userInfo == null
-                || userInfo.Password != hashedPassword)
+            if (userInfo == null)
             {
-                return new ServiceResult
-                {
-                    ResultType = ServiceResultType.Failed,
-                    Message = Constants.Common.InvalidCredentials
-                };
+                return GetServiceResult(Constants.Common.InvalidCredentials, ServiceResultType.Fail);
+            }
+
+            if (userInfo.IsLocked)
+            {
+                return GetServiceResult($"User {username} is locked!", ServiceResultType.Fail);
+            }
+
+            string hashedPassword = this.HashPassword(password, userInfo.Salt);
+
+            if (userInfo.Password != hashedPassword)
+            {
+                return GetServiceResult(Constants.Common.InvalidCredentials, ServiceResultType.Fail);
             }
 
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.Common.SymmetricSecurityKey));
@@ -69,22 +75,14 @@ namespace GameBox.Services
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: signinCredentials);
 
-            return new ServiceResult
-            {
-                ResultType = ServiceResultType.Success,
-                Message = new JwtSecurityTokenHandler().WriteToken(tokeOptions)
-            };
+            return GetServiceResult(new JwtSecurityTokenHandler().WriteToken(tokeOptions), ServiceResultType.Success);
         }
 
         public ServiceResult Register(string username, string password)
         {
             if (this.HasUser(username))
             {
-                return new ServiceResult
-                {
-                    ResultType = ServiceResultType.Failed,
-                    Message = string.Format(Constants.Common.DuplicateEntry, nameof(User), username)
-                };
+                return GetServiceResult(string.Format(Constants.Common.DuplicateEntry, nameof(User), username), ServiceResultType.Fail);
             }
 
             byte[] salt = new byte[128 / 8];
@@ -105,11 +103,7 @@ namespace GameBox.Services
             Database.Users.Add(user);
             Database.SaveChanges();
 
-            return new ServiceResult
-            {
-                ResultType = ServiceResultType.Success,
-                Message = $"User {username} registered successfully!"
-            };
+            return GetServiceResult(string.Format(Constants.Common.Success, nameof(User), username, "Registered"), ServiceResultType.Success);
         }
 
         public ServiceResult ChangePassword(string username, string oldPassword, string newPassword)
@@ -119,16 +113,16 @@ namespace GameBox.Services
                 .Where(u => u.Username == username)
                 .FirstOrDefault();
 
+            if (user == null)
+            {
+                return GetServiceResult(string.Format(Constants.Common.NotExistingEntry, nameof(User), username), ServiceResultType.Fail);
+            }
+
             string oldHashedPassword = this.HashPassword(oldPassword, user.Salt);
 
-            if (user == null
-                || oldHashedPassword != user.Password)
+            if (oldHashedPassword != user.Password)
             {
-                return new ServiceResult
-                {
-                    ResultType = ServiceResultType.Failed,
-                    Message = string.Format(Constants.Common.NotExistingEntry, nameof(User), username)
-                };
+                return GetServiceResult("Incorect password!", ServiceResultType.Fail);
             }
 
             string newHashedPassword = this.HashPassword(newPassword, user.Salt);
@@ -137,30 +131,16 @@ namespace GameBox.Services
 
             Database.SaveChanges();
 
-            return new ServiceResult
-            {
-                ResultType = ServiceResultType.Success,
-                Message = string.Format("Password changed successfully!")
-            };
+            return GetServiceResult("You have successfully updated your password!", ServiceResultType.Success);
         }
 
         private bool HasUser(string username)
         {
-            return Database
-                .Users
-                .Where(u => u.Username == username)
-                .Any();
+            return Database.Users.Any(u => u.Username == username);
         }
 
         private string HashPassword(string password, byte[] salt)
         {
-            if (string.IsNullOrEmpty(password)
-                || string.IsNullOrWhiteSpace(password)
-                || salt == null)
-            {
-                return null;
-            }
-
             return Convert.ToBase64String(
                 KeyDerivation.Pbkdf2(
                     password: password,

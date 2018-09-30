@@ -3,6 +3,6 @@
     public enum ServiceResultType
     {
         Success = 0,
-        Failed = 1
+        Fail = 1
     }
 }

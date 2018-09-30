@@ -27,7 +27,7 @@ namespace GameBox.Api.Controllers
 
             ServiceResult result = this.account.Login(model.Username, model.Password);
 
-            if (result.ResultType == ServiceResultType.Failed)
+            if (result.ResultType == ServiceResultType.Fail)
             {
                 ModelState.AddModelError(Constants.Common.Error, result.Message);
                 return BadRequest(ModelState);
@@ -47,7 +47,7 @@ namespace GameBox.Api.Controllers
 
             ServiceResult result = this.account.Register(model.Username, model.Password);
 
-            if (result.ResultType == ServiceResultType.Failed)
+            if (result.ResultType == ServiceResultType.Fail)
             {
                 ModelState.AddModelError(Constants.Common.Error, result.Message);
                 return BadRequest(ModelState);
@@ -72,7 +72,7 @@ namespace GameBox.Api.Controllers
 
             ServiceResult result = this.account.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword);
 
-            if (result.ResultType == ServiceResultType.Failed)
+            if (result.ResultType == ServiceResultType.Fail)
             {
                 ModelState.AddModelError(Constants.Common.Error, result.Message);
                 return BadRequest(ModelState);

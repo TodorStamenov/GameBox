@@ -17,6 +17,6 @@ namespace GameBox.Data.Models
         [MaxLength(Constants.RoleConstants.NameMaxLength)]
         public string Name { get; set; }
 
-        public List<UserRole> Users { get; set; } = new List<UserRole>();
+        public List<UserRoles> Users { get; set; } = new List<UserRoles>();
     }
 }

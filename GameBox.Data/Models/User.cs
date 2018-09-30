@@ -22,8 +22,10 @@ namespace GameBox.Data.Models
         [MaxLength(Constants.UserConstants.PasswordMaxLength)]
         public string Password { get; set; }
 
+        public bool IsLocked { get; set; }
+
         public byte[] Salt { get; set; }
 
-        public List<UserRole> Roles { get; set; } = new List<UserRole>();
+        public List<UserRoles> Roles { get; set; } = new List<UserRoles>();
     }
 }

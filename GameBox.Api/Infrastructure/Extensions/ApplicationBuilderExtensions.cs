@@ -113,7 +113,7 @@ namespace GameBox.Api.Infrastructure.Extensions
                     Salt = salt
                 };
 
-                user.Roles.Add(new UserRole
+                user.Roles.Add(new UserRoles
                 {
                     RoleId = roleId
                 });

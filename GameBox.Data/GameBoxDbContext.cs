@@ -15,6 +15,8 @@ namespace GameBox.Data
 
         public DbSet<Role> Roles { get; set; }
 
+        public DbSet<UserRoles> UserRoles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

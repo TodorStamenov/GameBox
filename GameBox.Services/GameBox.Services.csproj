@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\View\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GameBox.Core\GameBox.Core.csproj" />
     <ProjectReference Include="..\GameBox.Data\GameBox.Data.csproj" />
   </ItemGroup>

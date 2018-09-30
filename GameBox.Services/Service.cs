@@ -1,4 +1,6 @@
-﻿using GameBox.Data;
+﻿using GameBox.Core;
+using GameBox.Core.Enums;
+using GameBox.Data;
 
 namespace GameBox.Services
 {
@@ -10,5 +12,14 @@ namespace GameBox.Services
         }
 
         protected GameBoxDbContext Database { get; }
+
+        protected ServiceResult GetServiceResult(string message, ServiceResultType resultType)
+        {
+            return new ServiceResult
+            {
+                Message = message,
+                ResultType = resultType
+            };
+        }
     }
 }

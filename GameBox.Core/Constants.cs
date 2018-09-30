@@ -8,12 +8,16 @@
 
             public const string Admin = "Admin";
 
-            public const string InvalidCredentials = "Invalid Username or Password";
+            public const string InvalidCredentials = "Invalid Username or Password!";
 
-            public const string DuplicateEntry = "{0} {1} already exists in database";
-            public const string NotExistingEntry = "{0} {1} is not existing in database";
+            public const string Success = "{0} {1} successfully {2}.";
+            public const string DuplicateEntry = "{0} {1} already exists in database!";
+            public const string NotExistingEntry = "{0} {1} is not existing in database!";
 
             public const string Error = "error";
+
+            public const string Locked = "Locked";
+            public const string Unlocked = "Unlocked";
         }
 
         public static class UserConstants
