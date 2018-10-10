@@ -1,0 +1,16 @@
+nav.navbar.navbar-default {
+  font-size: 1em;
+}
+
+ul.dropdown-menu li a {
+  padding: 10px;
+  font-size: 1em;
+}
+
+.nav-element {
+  padding: 20px;
+}
+
+a.navbar-brand.nav-element {
+  font-weight: bold;
+}
