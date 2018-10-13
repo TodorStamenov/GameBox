@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../authentication/auth.service';
 
 @Component({
   selector: 'app-navigation',
@@ -7,10 +8,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent {
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private authService: AuthService
+    ) { }
 
   logout() {
-    localStorage.clear();
+    this.authService.logout();
     this.router.navigate(['/']);
   }
 }

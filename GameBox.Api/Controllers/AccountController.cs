@@ -33,7 +33,15 @@ namespace GameBox.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(new { username = model.Username, token = result.Message });
+            ServiceAuthResult authResult = (ServiceAuthResult)result;
+
+            return Ok(new
+            {
+                username = authResult.Username,
+                token = authResult.Token,
+                isAdmin = authResult.IsAdmin,
+                message = authResult.Message
+            });
         }
 
         [HttpPost]

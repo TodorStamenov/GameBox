@@ -75,7 +75,14 @@ namespace GameBox.Services
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: signinCredentials);
 
-            return GetServiceResult(new JwtSecurityTokenHandler().WriteToken(tokeOptions), ServiceResultType.Success);
+            string token = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+
+            return GetServiceResult(
+                userInfo.Username,
+                token,
+                userInfo.IsAdmin,
+                string.Format(Constants.Common.Success, nameof(User), username, "Logged In"),
+                ServiceResultType.Success);
         }
 
         public ServiceResult Register(string username, string password)

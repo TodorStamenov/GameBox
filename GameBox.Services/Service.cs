@@ -21,5 +21,17 @@ namespace GameBox.Services
                 ResultType = resultType
             };
         }
+
+        protected ServiceResult GetServiceResult(string username, string token, bool isAdmin, string message, ServiceResultType resultType)
+        {
+            return new ServiceAuthResult
+            {
+                Username = username,
+                Token = token,
+                IsAdmin = isAdmin,
+                Message = message,
+                ResultType = resultType
+            };
+        }
     }
 }

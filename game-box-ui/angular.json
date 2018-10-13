@@ -23,6 +23,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/ngx-toastr/toastr.css",
               "node_modules/ngf-bootstrap/dist/bootstrap.min.css",
               "src/styles.css"
             ],

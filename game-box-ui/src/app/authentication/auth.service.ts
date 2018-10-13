@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { RegisterModel } from './models/register.model';
 import { LoginModel } from './models/login.model';
 
-const loginUrl = 'http://localhost:5000/auth/login';
-const registerUrl = 'http://localhost:5000/auth/signup';
+const loginUrl = 'http://localhost:5000/api/account/login';
+const registerUrl = 'http://localhost:5000/api/account/register';
 
 @Injectable()
 export class AuthService {

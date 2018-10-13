@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { authComponents } from '.';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,9 @@ import { RegisterComponent } from './register/register.component';
     RegisterComponent
   ],
   imports: [
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserModule
   ],
   providers: [
     AuthService
