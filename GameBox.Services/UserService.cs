@@ -12,7 +12,7 @@ namespace GameBox.Services
 {
     public class UserService : Service, IUserService
     {
-        private const int UsersInPage = 20;
+        private const int UsersInPage = 15;
         private const string UserLockedState = "User {0} is currently {1}";
 
         public UserService(GameBoxDbContext database)
@@ -160,7 +160,7 @@ namespace GameBox.Services
                     Id = u.Id,
                     Username = u.Username,
                     IsLocked = u.IsLocked,
-                    Roles = u.Roles.Select(r => r.Role.Name)
+                    IsAdmin = u.Roles.Any(r => r.Role.Name == Constants.Common.Admin)
                 })
                 .ToList();
         }

@@ -33,5 +33,24 @@
             public const int NameMinLength = 3;
             public const int NameMaxLength = 50;
         }
+
+        public static class CategoryConstants
+        {
+            public const int NameMinLength = 3;
+            public const int NameMaxLength = 30;
+        }
+
+        public static class GameConstants
+        {
+            public const int TitleMinLength = 3;
+            public const int TitleMaxLength = 100;
+            public const double MinPrice = double.Epsilon;
+            public const double MaxPrice = double.MaxValue;
+            public const double MinSize = double.Epsilon;
+            public const double MaxSize = double.MaxValue;
+            public const int MinVideoIdLength = 11;
+            public const int MaxVideoIdLength = 11;
+            public const int MinDescriptionLength = 20;
+        }
     }
 }

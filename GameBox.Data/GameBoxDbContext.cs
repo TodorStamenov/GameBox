@@ -17,6 +17,12 @@ namespace GameBox.Data
 
         public DbSet<UserRoles> UserRoles { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Game> Games { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -24,6 +30,8 @@ namespace GameBox.Data
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new RoleConfiguration());
             builder.ApplyConfiguration(new UserRoleConfiguration());
+            builder.ApplyConfiguration(new CategoryConfiguration());
+            builder.ApplyConfiguration(new GameOrderConfiguration());
         }
     }
 }

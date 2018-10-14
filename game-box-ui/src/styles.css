@@ -3,6 +3,6 @@ body {
   color: black;
 }
 
-div.form-group label {
-  font-size: 1em;
+th, td, label {
+  font-size: 14px;
 }

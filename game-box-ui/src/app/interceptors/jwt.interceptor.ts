@@ -32,16 +32,21 @@ export class JwtInterceptor implements HttpInterceptor {
     return next
       .handle(request)
       .pipe(tap((res: any) => {
-        if (res instanceof HttpResponse && res.body.token) {
+        if (res instanceof HttpResponse
+          && res.body.token
+          && (res.url.endsWith('login')
+            || res.url.endsWith('register'))) {
           this.saveToken(res.body);
           this.toastr.success(res.body.message, 'Success!');
           this.router.navigate(['/']);
         }
 
-        // if (res instanceof HttpResponse && res.body.success && res.url.endsWith('create')) {
-        //   this.toastr.success(res.body.message, "Success!");
-        //   this.router.navigate(['/furniture/all']);
-        // }
+        if (res instanceof HttpResponse
+          && res.body.message
+          && !res.url.endsWith('login')
+          && !res.url.endsWith('register')) {
+          this.toastr.success(res.body.message, "Success!");
+        }
       }));
   }
 

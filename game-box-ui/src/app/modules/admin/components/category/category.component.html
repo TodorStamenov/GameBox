@@ -1,0 +1,30 @@
+<div>
+  <div class='row'>
+    <div class='col-md-6 col-md-offset-2'>
+      <h2>All Categories - 
+        <a class='btn btn-success' routerLink='/admin/categories/create'>Create new Category</a>
+      </h2>
+    </div>
+  </div>
+  <br />
+  <div class='row'>
+    <div class="col-md-8 col-md-offset-2">
+      <table class='table'>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Games Count</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let category of categories">
+            <td>{{category.name}}</td>
+            <td>{{category.games}}</td>
+            <td><a class='btn btn-success btn-sm' [routerLink]="['/admin/categories/edit', category.id]">Edit</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

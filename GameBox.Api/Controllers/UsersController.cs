@@ -46,7 +46,7 @@ namespace GameBox.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(result.Message);
+            return Ok(result);
         }
 
         [HttpGet]
@@ -67,7 +67,7 @@ namespace GameBox.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(result.Message);
+            return Ok(result);
         }
 
         [HttpGet]
@@ -88,7 +88,7 @@ namespace GameBox.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(result.Message);
+            return Ok(result);
         }
 
         [HttpGet]
@@ -109,7 +109,7 @@ namespace GameBox.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(result.Message);
+            return Ok(result);
         }
     }
 }

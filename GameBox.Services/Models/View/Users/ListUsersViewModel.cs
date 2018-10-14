@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace GameBox.Services.Models.View.Users
 {
@@ -11,6 +10,6 @@ namespace GameBox.Services.Models.View.Users
 
         public bool IsLocked { get; set; }
 
-        public IEnumerable<string> Roles { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

@@ -11,6 +11,11 @@ namespace GameBox.Data.Configurations
             builder
                 .HasIndex(u => u.Username)
                 .IsUnique();
+
+            builder
+                .HasMany(u => u.Orders)
+                .WithOne(o => o.User)
+                .HasForeignKey(o => o.UserId);
         }
     }
 }

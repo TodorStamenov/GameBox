@@ -1,0 +1,39 @@
+<div class="row">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed nav-element" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+          aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand nav-element" routerLink="/">Game Box</a>
+      </div>
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a *ngIf="authService.isAuthenticated()" class="nav-element" routerLink="#">Owned</a></li>
+          <li><a class="nav-element" routerLink="#">Cart</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li *ngIf="authService.isAdmin()" class="dropdown">
+            <a href="#" class="dropdown-toggle nav-element" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              Admin
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a routerLink="/admin/games/add">Add Game</a></li>
+              <li><a routerLink="/admin/categories">Categories</a></li>
+              <li><a routerLink="/admin/orders">Orders</a></li>
+              <li><a routerLink="/admin/users">Users</a></li>
+            </ul>
+          </li>
+          <li><a class="nav-element btn" *ngIf="authService.isAuthenticated()" (click)="logout()">Logout</a></li>
+          <li><a class="nav-element" *ngIf="!authService.isAuthenticated()" routerLink="/auth/login">Login</a></li>
+          <li><a class="nav-element" *ngIf="!authService.isAuthenticated()" routerLink="/auth/register">Register</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>

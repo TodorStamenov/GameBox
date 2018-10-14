@@ -27,5 +27,7 @@ namespace GameBox.Data.Models
         public byte[] Salt { get; set; }
 
         public List<UserRoles> Roles { get; set; } = new List<UserRoles>();
+
+        public List<Order> Orders { get; set; } = new List<Order>();
     }
 }
