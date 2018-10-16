@@ -18,6 +18,10 @@
 
             public const string Locked = "Locked";
             public const string Unlocked = "Unlocked";
+
+            public const string Added = "Added";
+            public const string Edited = "Edited";
+            public const string Deleted = "Deleted";
         }
 
         public static class UserConstants

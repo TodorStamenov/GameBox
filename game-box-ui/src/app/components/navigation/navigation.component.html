@@ -23,10 +23,10 @@
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li><a routerLink="/admin/games/add">Add Game</a></li>
-              <li><a routerLink="/admin/categories">Categories</a></li>
-              <li><a routerLink="/admin/orders">Orders</a></li>
-              <li><a routerLink="/admin/users">Users</a></li>
+              <li><a routerLink="/admin/games/create">Add Game</a></li>
+              <li><a routerLink="/admin/categories/all">Categories</a></li>
+              <li><a routerLink="/admin/orders/all">Orders</a></li>
+              <li><a routerLink="/admin/users/all">Users</a></li>
             </ul>
           </li>
           <li><a class="nav-element btn" *ngIf="authService.isAuthenticated()" (click)="logout()">Logout</a></li>

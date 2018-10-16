@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="col-md-offset-3 col-md-3">
+    <form [formGroup]="categoryForm" (ngSubmit)="createCategory()">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input formControlName="name" type="text" class="form-control" id="name" placeholder="Name">
+        <div *ngIf="nameMessage" class="alert alert-danger">{{nameMessage}}</div>
+      </div>      
+      <button type="submit" class="btn btn-default" [disabled]="!categoryForm.valid">Save Category</button>
+    </form>
+  </div>
+</div>

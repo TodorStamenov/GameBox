@@ -33,6 +33,7 @@ export class JwtInterceptor implements HttpInterceptor {
       .handle(request)
       .pipe(tap((res: any) => {
         if (res instanceof HttpResponse
+          && res.body
           && res.body.token
           && (res.url.endsWith('login')
             || res.url.endsWith('register'))) {
@@ -42,6 +43,7 @@ export class JwtInterceptor implements HttpInterceptor {
         }
 
         if (res instanceof HttpResponse
+          && res.body
           && res.body.message
           && !res.url.endsWith('login')
           && !res.url.endsWith('register')) {

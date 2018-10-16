@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminService } from '../../admin.service';
-import { UserModel } from '../../models/user.model';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { UserModel } from '../../../models/users/user.model';
+import { AdminService } from '../../../services/admin.service';
 
 @Component({
   selector: 'app-user',
-  templateUrl: './user.component.html'
+  templateUrl: './all-users.component.html'
 })
-export class UserComponent implements OnInit {
+export class AllUsersComponent implements OnInit {
   public searchForm: FormGroup;
   public users: UserModel[];
 

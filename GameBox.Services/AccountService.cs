@@ -72,7 +72,7 @@ namespace GameBox.Services
                 issuer: "http://localhost:5000",
                 audience: "http://localhost:5000",
                 claims: claims,
-                expires: DateTime.Now.AddHours(1),
+                expires: DateTime.Now.AddDays(1),
                 signingCredentials: signinCredentials);
 
             string token = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
