@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AdminRoutingModule } from './admin-routing.module';
 import { CategoryService } from './services/category.service';
+import { OrderService } from './services/order.service';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { CategoryService } from './services/category.service';
   ],
   providers: [
     AdminService,
-    CategoryService
+    CategoryService,
+    OrderService
   ]
 })
 export class AdminModule { }

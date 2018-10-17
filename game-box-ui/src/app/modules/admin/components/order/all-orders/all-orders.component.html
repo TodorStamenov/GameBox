@@ -1,3 +1,41 @@
-<p>
-  all-orders works!
-</p>
+<div>
+  <div class='row'>
+    <div class='col-md-6 col-md-offset-2'>
+      <h2>Orders</h2>
+      <form class="form-inline" [formGroup]="dateRange" (ngSubmit)="filterOrders()">
+        <div class="form-group">
+          <label for="startDate">Start Date: </label>
+          <input formControlName="startDate" type="text" class="form-control" id="startDate" placeholder="Start Date">
+        </div>
+        <div class="form-group">
+          <label for="endDate">End Date: </label>
+          <input formControlName="endDate" type="text" class="form-control" id="endDate" placeholder="End Date">
+        </div>
+        <button type="submit" class="btn btn-default">Search</button>
+      </form>
+    </div>
+  </div>
+  <br />
+  <div class='row'>
+    <div class="col-md-8 col-md-offset-2">
+      <table class='table'>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Time Stamp</th>
+            <th>Price</th>
+            <th>Games</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orders">
+            <td>{{order.username}}</td>
+            <td>{{order.timeStamp}}</td>
+            <td>${{order.price.toFixed(2)}}</td>
+            <td>{{order.gamesCount}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
