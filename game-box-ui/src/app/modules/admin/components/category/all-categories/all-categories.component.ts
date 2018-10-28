@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CategoryModel } from '../../../models/categories/category.model';
+import { ListCategoriesModel } from '../../../models/categories/list-categories.model';
 import { CategoryService } from '../../../services/category.service';
 
 @Component({
@@ -7,7 +7,7 @@ import { CategoryService } from '../../../services/category.service';
   templateUrl: './all-categories.component.html'
 })
 export class AllCategoriesComponent implements OnInit {
-  public categories: CategoryModel[];
+  public categories: ListCategoriesModel[];
 
   constructor(private categoryService: CategoryService) { }
 

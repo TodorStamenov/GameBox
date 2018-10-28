@@ -1,6 +1,6 @@
 ﻿using GameBox.Data;
 using GameBox.Services.Contracts;
-using GameBox.Services.Models.View.Order;
+using GameBox.Services.Models.View.Orders;
 using System;
 using System.Collections.Generic;
 using System.Linq;

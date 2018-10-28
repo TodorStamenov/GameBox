@@ -1,3 +1,39 @@
-<p>
-  delete-game works!
-</p>
+<div class="row">
+  <div class="col-md-offset-3 col-md-5">
+    <form [formGroup]="deleteGameForm" (ngSubmit)="deleteGame()">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input formControlName="title" type="text" class="form-control" id="title">
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea formControlName="description" type="text" class="form-control" id="description" rows="5"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="thumbnailUrl">Thumbnail</label>
+        <input formControlName="thumbnailUrl" type="text" class="form-control" id="thumbnailUrl">
+      </div>
+      <div class="form-group">
+        <label for="price">Price</label>
+        <input formControlName="price" type="number" class="form-control" id="price">
+      </div>
+      <div class="form-group">
+        <label for="size">Size</label>
+        <input formControlName="size" type="number" class="form-control" id="size">
+      </div>
+      <div class="form-group">
+        <label for="videoId">YouTube Video URL</label>
+        <input formControlName="videoId" type="text" class="form-control" id="videoId">
+      </div>
+      <div class="form-group">
+        <label for="releaseDate">Release Date</label>
+        <input formControlName="releaseDate" type="text" class="form-control" id="releaseDate">
+      </div>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <input formControlName="categoryId" type="text" class="form-control" id="category">
+      </div>
+      <button type="submit" class="btn btn-default">Delete Game</button>
+    </form>
+  </div>
+</div>

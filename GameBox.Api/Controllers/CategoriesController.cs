@@ -1,7 +1,7 @@
 ﻿using GameBox.Core;
 using GameBox.Core.Enums;
 using GameBox.Services.Contracts;
-using GameBox.Services.Models.Binding.Category;
+using GameBox.Services.Models.Binding.Categories;
 using GameBox.Services.Models.View.Categories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +32,13 @@ namespace GameBox.Api.Controllers
         public IActionResult Get([FromRoute]Guid id)
         {
             return Ok(this.category.Get(id));
+        }
+
+        [HttpGet]
+        [Route("menu")]
+        public IEnumerable<ListMenuCategoriesViewModel> Menu()
+        {
+            return this.category.Menu();
         }
 
         [HttpPut]

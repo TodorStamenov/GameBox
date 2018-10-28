@@ -9,6 +9,10 @@ namespace GameBox.Data.Configurations
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder
+                .HasIndex(c => c.Name)
+                .IsUnique();
+
+            builder
                 .HasMany(c => c.Games)
                 .WithOne(g => g.Category)
                 .HasForeignKey(g => g.CategoryId);

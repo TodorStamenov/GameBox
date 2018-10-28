@@ -3,7 +3,7 @@ using GameBox.Core.Enums;
 using GameBox.Data;
 using GameBox.Data.Models;
 using GameBox.Services.Contracts;
-using GameBox.Services.Models.Binding.Category;
+using GameBox.Services.Models.Binding.Categories;
 using GameBox.Services.Models.View.Categories;
 using System;
 using System.Collections.Generic;
@@ -65,6 +65,20 @@ namespace GameBox.Services
                     Name = c.Name
                 })
                 .FirstOrDefault();
+        }
+
+        public IEnumerable<ListMenuCategoriesViewModel> Menu()
+        {
+            return Database
+                .Categories
+                .Where(c => c.Games.Any())
+                .OrderBy(c => c.Name)
+                .Select(c => new ListMenuCategoriesViewModel
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToList();
         }
 
         public IEnumerable<ListCategoriesViewModel> All()

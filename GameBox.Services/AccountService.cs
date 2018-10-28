@@ -92,11 +92,7 @@ namespace GameBox.Services
                 return GetServiceResult(string.Format(Constants.Common.DuplicateEntry, nameof(User), username), ServiceResultType.Fail);
             }
 
-            byte[] salt = new byte[128 / 8];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(salt);
-            }
+            byte[] salt = this.GenerateSalt();
 
             string hashedPassword = this.HashPassword(password, salt);
 
@@ -132,6 +128,8 @@ namespace GameBox.Services
                 return GetServiceResult("Incorect password!", ServiceResultType.Fail);
             }
 
+            user.Salt = this.GenerateSalt();
+
             string newHashedPassword = this.HashPassword(newPassword, user.Salt);
 
             user.Password = newHashedPassword;
@@ -144,6 +142,17 @@ namespace GameBox.Services
         private bool HasUser(string username)
         {
             return Database.Users.Any(u => u.Username == username);
+        }
+
+        private byte[] GenerateSalt()
+        {
+            byte[] salt = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+
+            return salt;
         }
 
         private string HashPassword(string password, byte[] salt)

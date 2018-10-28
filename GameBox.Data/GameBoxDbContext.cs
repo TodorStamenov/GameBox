@@ -28,10 +28,12 @@ namespace GameBox.Data
             base.OnModelCreating(builder);
 
             builder.ApplyConfiguration(new UserConfiguration());
-            builder.ApplyConfiguration(new RoleConfiguration());
             builder.ApplyConfiguration(new UserRoleConfiguration());
+            builder.ApplyConfiguration(new RoleConfiguration());
             builder.ApplyConfiguration(new CategoryConfiguration());
+            builder.ApplyConfiguration(new GameConfiguration());
             builder.ApplyConfiguration(new GameOrderConfiguration());
+            builder.ApplyConfiguration(new OrderConfiguration());
         }
     }
 }

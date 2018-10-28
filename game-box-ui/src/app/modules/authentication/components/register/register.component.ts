@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
 import { AuthService } from '../../auth.service';
-import { matchingProperties } from './equal-value-validator';
+import { matchingProperties } from '../common/equal-value-validator';
 
 @Component({
   selector: 'app-register',
@@ -74,7 +74,7 @@ export class RegisterComponent implements OnInit {
 
   setPasswordMessage(control: AbstractControl, targetControl: AbstractControl, fieldName: string, targetFieldName: string): string {
     if (control.value !== targetControl.value) {
-      return `${fieldName} and ${targetFieldName} fields should have same value!`
+      return `${fieldName} and ${targetFieldName} fields should have same value!`;
     }
   }
 

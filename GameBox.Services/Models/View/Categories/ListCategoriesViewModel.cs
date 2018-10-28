@@ -1,13 +1,7 @@
-﻿using System;
-
-namespace GameBox.Services.Models.View.Categories
+﻿namespace GameBox.Services.Models.View.Categories
 {
-    public class ListCategoriesViewModel
+    public class ListCategoriesViewModel : ListMenuCategoriesViewModel
     {
-        public Guid Id { get; set; }
-
-        public string Name { get; set; }
-
         public int Games { get; set; }
     }
 }

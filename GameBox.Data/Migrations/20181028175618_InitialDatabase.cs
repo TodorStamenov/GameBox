@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GameBox.Data.Migrations
 {
@@ -52,12 +52,12 @@ namespace GameBox.Data.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Title = table.Column<string>(maxLength: 100, nullable: false),
-                    Price = table.Column<decimal>(nullable: false),
-                    Size = table.Column<double>(nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
+                    Size = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
                     VideoId = table.Column<string>(maxLength: 11, nullable: false),
                     ThumbnailUrl = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: false),
-                    ReleaseDate = table.Column<DateTime>(nullable: false),
+                    ReleaseDate = table.Column<DateTime>(type: "date", nullable: false),
                     ViewCount = table.Column<int>(nullable: false),
                     CategoryId = table.Column<Guid>(nullable: false)
                 },
@@ -79,7 +79,7 @@ namespace GameBox.Data.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
                     TimeStamp = table.Column<DateTime>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false)
+                    Price = table.Column<decimal>(type: "decimal(18, 2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -141,6 +141,12 @@ namespace GameBox.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Categories_Name",
+                table: "Categories",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GameOrder_OrderId",
                 table: "GameOrder",
                 column: "OrderId");
@@ -149,6 +155,12 @@ namespace GameBox.Data.Migrations
                 name: "IX_Games_CategoryId",
                 table: "Games",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_Title",
+                table: "Games",
+                column: "Title",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",

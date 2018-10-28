@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { RegisterModel } from './models/register.model';
 import { LoginModel } from './models/login.model';
 import { constants } from '../../common';
+import { ChangePasswordModel } from './models/change-password.model';
 
 const authUrl = constants.host + 'account/';
 
@@ -24,6 +25,10 @@ export class AuthService {
 
   logout(): void {
     localStorage.clear();
+  }
+
+  changePassword(body: ChangePasswordModel) {
+    return this.http.post(authUrl + 'changePassword', body);
   }
 
   isAuthenticated(): boolean {

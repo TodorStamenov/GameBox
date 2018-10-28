@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameBox.Data.Migrations
 {
     [DbContext(typeof(GameBoxDbContext))]
-    [Migration("20181014171436_InitialDatabase")]
+    [Migration("20181028175618_InitialDatabase")]
     partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace GameBox.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Categories");
                 });
 
@@ -45,11 +48,15 @@ namespace GameBox.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired();
 
-                    b.Property<decimal>("Price");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 2)");
 
-                    b.Property<DateTime>("ReleaseDate");
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("date");
 
-                    b.Property<double>("Size");
+                    b.Property<decimal>("Size")
+                        .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 38, scale: 17)))
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("ThumbnailUrl");
 
@@ -66,6 +73,9 @@ namespace GameBox.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
 
                     b.ToTable("Games");
                 });
@@ -88,7 +98,8 @@ namespace GameBox.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<decimal>("Price");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<DateTime>("TimeStamp");
 

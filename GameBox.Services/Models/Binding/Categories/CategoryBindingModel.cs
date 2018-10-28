@@ -1,7 +1,7 @@
 ﻿using GameBox.Core;
 using System.ComponentModel.DataAnnotations;
 
-namespace GameBox.Services.Models.Binding.Category
+namespace GameBox.Services.Models.Binding.Categories
 {
     public class CategoryBindingModel
     {

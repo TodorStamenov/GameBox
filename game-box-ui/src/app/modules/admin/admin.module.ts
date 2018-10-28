@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AdminRoutingModule } from './admin-routing.module';
 import { CategoryService } from './services/category.service';
 import { OrderService } from './services/order.service';
+import { GameService } from './services/game.service';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { OrderService } from './services/order.service';
   providers: [
     AdminService,
     CategoryService,
+    GameService,
     OrderService
   ]
 })

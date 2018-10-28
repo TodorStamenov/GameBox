@@ -29,6 +29,7 @@
               <li><a routerLink="/admin/users/all">Users</a></li>
             </ul>
           </li>
+          <li><a class="nav-element" *ngIf="authService.isAuthenticated()" routerLink="/auth/changePassword">Hello {{authService.user.username}}!</a></li>
           <li><a class="nav-element btn" *ngIf="authService.isAuthenticated()" (click)="logout()">Logout</a></li>
           <li><a class="nav-element" *ngIf="!authService.isAuthenticated()" routerLink="/auth/login">Login</a></li>
           <li><a class="nav-element" *ngIf="!authService.isAuthenticated()" routerLink="/auth/register">Register</a></li>

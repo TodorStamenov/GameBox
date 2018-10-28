@@ -1,5 +1,5 @@
 ﻿using GameBox.Services.Contracts;
-using GameBox.Services.Models.View.Order;
+using GameBox.Services.Models.View.Orders;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 

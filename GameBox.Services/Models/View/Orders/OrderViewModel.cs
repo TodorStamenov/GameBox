@@ -1,4 +1,4 @@
-﻿namespace GameBox.Services.Models.View.Order
+﻿namespace GameBox.Services.Models.View.Orders
 {
     public class OrderViewModel
     {

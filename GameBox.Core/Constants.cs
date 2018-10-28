@@ -22,6 +22,8 @@
             public const string Added = "Added";
             public const string Edited = "Edited";
             public const string Deleted = "Deleted";
+
+            public const string NotValidDateFormat = "{0} is not valid date format!";
         }
 
         public static class UserConstants
