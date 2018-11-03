@@ -1,11 +1,15 @@
 ﻿using GameBox.Core;
 using GameBox.Services.Models.Binding.Games;
+using GameBox.Services.Models.View.Game;
 using System;
+using System.Collections.Generic;
 
 namespace GameBox.Services.Contracts
 {
     public interface IGameService
     {
+        GameDetailsViewModel Details(Guid id);
+
         GameBindingModel Get(Guid id);
 
         ServiceResult Create(
@@ -30,5 +34,9 @@ namespace GameBox.Services.Contracts
             Guid categoryId);
 
         ServiceResult Delete(Guid id);
+
+        IEnumerable<ListGamesViewModel> Get(int loadedGames, Guid? categoryId);
+
+        IEnumerable<ListGamesViewModel> Owned(int loadedGames, string name);
     }
 }

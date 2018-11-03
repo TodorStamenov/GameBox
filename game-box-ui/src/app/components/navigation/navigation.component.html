@@ -13,7 +13,16 @@
       </div>
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          <li><a *ngIf="authService.isAuthenticated()" class="nav-element" routerLink="#">Owned</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle nav-element" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  Categories
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li *ngFor="let category of categories"><a routerLink="/category/{{category.id}}/games">{{category.name}}</a></li>
+                </ul>
+              </li>
+          <li><a *ngIf="authService.isAuthenticated()" class="nav-element" routerLink="/games/owned">Owned</a></li>
           <li><a class="nav-element" routerLink="#">Cart</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">

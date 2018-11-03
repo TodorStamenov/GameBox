@@ -1,7 +1,7 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { CategoryService } from '../../../services/category.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-category',

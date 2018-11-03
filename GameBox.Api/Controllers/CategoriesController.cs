@@ -36,6 +36,7 @@ namespace GameBox.Api.Controllers
 
         [HttpGet]
         [Route("menu")]
+        [AllowAnonymous]
         public IEnumerable<ListMenuCategoriesViewModel> Menu()
         {
             return this.category.Menu();

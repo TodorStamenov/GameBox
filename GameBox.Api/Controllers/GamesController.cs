@@ -2,9 +2,11 @@
 using GameBox.Core.Enums;
 using GameBox.Services.Contracts;
 using GameBox.Services.Models.Binding.Games;
+using GameBox.Services.Models.View.Game;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 
 namespace GameBox.Api.Controllers
 {
@@ -16,6 +18,30 @@ namespace GameBox.Api.Controllers
         public GamesController(IGameService game)
         {
             this.game = game;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("")]
+        public IEnumerable<ListGamesViewModel> Get([FromQuery]int loadedGames, [FromQuery]Guid? categoryId)
+        {
+            return this.game.Get(loadedGames, categoryId);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("details/{id}")]
+        public IActionResult Details([FromRoute]Guid id)
+        {
+            return Ok(this.game.Details(id));
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("owned")]
+        public IEnumerable<ListGamesViewModel> Owned([FromQuery]int loadedGames)
+        {
+            return this.game.Owned(loadedGames, User.Identity.Name);
         }
 
         [HttpGet]

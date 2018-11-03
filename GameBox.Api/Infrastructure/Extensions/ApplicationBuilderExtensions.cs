@@ -168,11 +168,12 @@ namespace GameBox.Api.Infrastructure.Extensions
                     Description = "Lorem, ipsum dolor sit amet consectetur adipisicing elit. " +
                         "Itaque quibusdam ut ad molestiae labore ipsam distinctio, quam vitae sequi optio sit deserunt? " +
                         "Distinctio eveniet rem illo impedit, in dicta perspiciatis.",
-                    Price = random.Next(2000, 20000) / 100,
+                    Price = random.Next(2000, 20000) / 100M,
                     Size = random.Next(1, 230),
                     ReleaseDate = DateTime.Now.AddMonths(-i),
                     CategoryId = categoryIds[random.Next(0, categoryIds.Count)],
-                    VideoId = "pyZw_oqk7Q8"
+                    VideoId = "pyZw_oqk7Q8",
+                    ViewCount = random.Next(10, 10000)
                 });
             }
 

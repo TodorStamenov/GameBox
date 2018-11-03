@@ -15,7 +15,7 @@ export class CategoryService {
     return this.http.get<ListCategoriesModel[]>(categoriesUrl);
   }
 
-  getCategory(id: string){
+  getCategory(id: string) {
     return this.http.get<ListCategoriesModel>(categoriesUrl + id);
   }
 
@@ -23,7 +23,7 @@ export class CategoryService {
     return this.http.post<CategoryBindingModel>(categoriesUrl, body);
   }
 
-  editCategory(id: string, body: CategoryBindingModel){
+  editCategory(id: string, body: CategoryBindingModel) {
     return this.http.put(categoriesUrl + id, body);
   }
 
