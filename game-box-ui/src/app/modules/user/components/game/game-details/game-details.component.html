@@ -13,7 +13,7 @@
     <a *ngIf="authService.isAdmin()" class="btn btn-warning" routerLink="/admin/games/edit/{{game.id}}">Edit</a>
     <a *ngIf="authService.isAdmin()" style="margin-left: 10px;" class="btn btn-danger" routerLink="/admin/games/delete/{{game.id}}">Delete</a>
     <a style="margin-left: 10px;" class="btn btn-default" routerLink="/">Back</a>
-    <a style="margin-left: 10px;" class="btn btn-success" routerLink="/">Buy</a>
+    <button (click)="addItem(game.id)" style="margin-left: 10px;" class="btn btn-success" routerLink="/cart">Buy</button>
     <br />
     <br />
   </div>

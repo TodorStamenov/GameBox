@@ -35,7 +35,9 @@ namespace GameBox.Services.Contracts
 
         ServiceResult Delete(Guid id);
 
-        IEnumerable<ListGamesViewModel> Get(int loadedGames, Guid? categoryId);
+        IEnumerable<ListGamesCartViewModel> Cart(IEnumerable<Guid> gameIds);
+
+        IEnumerable<ListGamesViewModel> ByCategory(int loadedGames, Guid? categoryId);
 
         IEnumerable<ListGamesViewModel> Owned(int loadedGames, string name);
     }

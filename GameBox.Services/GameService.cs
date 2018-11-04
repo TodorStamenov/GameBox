@@ -158,7 +158,26 @@ namespace GameBox.Services
             return GetServiceResult(string.Format(Constants.Common.Success, nameof(Game), game.Title, Constants.Common.Deleted), ServiceResultType.Success);
         }
 
-        public IEnumerable<ListGamesViewModel> Get(int loadedGames, Guid? categoryId)
+        public IEnumerable<ListGamesCartViewModel> Cart(IEnumerable<Guid> gameIds)
+        {
+            return Database
+                .Games
+                .Where(g => gameIds.Contains(g.Id))
+                .OrderByDescending(g => g.Price)
+                .Distinct()
+                .Select(g => new ListGamesCartViewModel
+                {
+                    Id = g.Id,
+                    Title = g.Title,
+                    Price = g.Price,
+                    Description = g.Description,
+                    VideoId = g.VideoId,
+                    ThumbnailUrl = g.ThumbnailUrl
+                })
+                .ToList();
+        }
+
+        public IEnumerable<ListGamesViewModel> ByCategory(int loadedGames, Guid? categoryId)
         {
             return Database
                 .Games

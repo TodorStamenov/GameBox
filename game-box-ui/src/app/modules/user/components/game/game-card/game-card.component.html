@@ -14,10 +14,7 @@
         </div>
         <div class="card-footer">
           <a class="card-button btn btn-sm btn-info" href="/games/details/{{game.id}}">Info</a>
-          <a class="card-button btn btn-sm btn-success" style="margin-left: 5px;"
-            routerLink="/order/buy/{{game.id}}">
-            Buy
-          </a>
+          <button class="btn btn-sm btn-success" (click)="addItem(game.id)" style="margin-left: 5px;">Buy</button>
         </div>
       </div>
     </div>

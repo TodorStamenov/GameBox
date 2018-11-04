@@ -10,7 +10,6 @@ using System.Collections.Generic;
 
 namespace GameBox.Api.Controllers
 {
-    [Authorize(Roles = Constants.Common.Admin)]
     public class GamesController : BaseApiController
     {
         private readonly IGameService game;
@@ -21,15 +20,13 @@ namespace GameBox.Api.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         [Route("")]
         public IEnumerable<ListGamesViewModel> Get([FromQuery]int loadedGames, [FromQuery]Guid? categoryId)
         {
-            return this.game.Get(loadedGames, categoryId);
+            return this.game.ByCategory(loadedGames, categoryId);
         }
 
         [HttpGet]
-        [AllowAnonymous]
         [Route("details/{id}")]
         public IActionResult Details([FromRoute]Guid id)
         {
@@ -45,6 +42,7 @@ namespace GameBox.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = Constants.Common.Admin)]
         [Route("{id}")]
         public IActionResult Get([FromRoute]Guid id)
         {
@@ -52,6 +50,7 @@ namespace GameBox.Api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = Constants.Common.Admin)]
         [Route("{id}")]
         public IActionResult Put([FromRoute]Guid id, [FromBody]GameBindingModel model)
         {
@@ -81,6 +80,7 @@ namespace GameBox.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Constants.Common.Admin)]
         public IActionResult Post([FromBody]GameBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -108,6 +108,7 @@ namespace GameBox.Api.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = Constants.Common.Admin)]
         [Route("{id}")]
         public IActionResult Delete(Guid id)
         {

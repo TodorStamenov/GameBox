@@ -23,7 +23,7 @@
                 </ul>
               </li>
           <li><a *ngIf="authService.isAuthenticated()" class="nav-element" routerLink="/games/owned">Owned</a></li>
-          <li><a class="nav-element" routerLink="#">Cart</a></li>
+          <li><a class="nav-element" routerLink="/cart">Cart</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li *ngIf="authService.isAdmin()" class="dropdown">

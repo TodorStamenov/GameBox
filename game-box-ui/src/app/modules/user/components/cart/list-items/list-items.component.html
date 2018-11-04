@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-12 text-center">
+    <h1>Your Cart <span *ngIf="games.length === 0">is Empty</span></h1>
+  </div>
+</div>
+<div *ngFor="let game of games" class="row" style="margin-top: 30px;">
+  <div class="col-sm-1 text-center">
+    <button (click)="removeItem(game.id)" style="margin-top: 80%" class="btn btn-danger">X</button>
+  </div>
+  <div class="col-sm-3">
+    <a routerLink="/games/details/{{game.id}}">
+      <img class="img-responsive" src="{{game.thumbnailUrl}}" (error)="changeSource($event, game.videoId)">
+    </a>
+  </div>
+  <div class="col-sm-6">
+    <h3>{{game.title}}</h3>
+    <p>{{game.description.substring(0, 300)}}</p>
+  </div>
+  <div class="col-sm-2">
+    <h2 style="padding-top: 30%">{{game.price.toFixed(2)}}&euro;</h2>
+  </div>
+</div>
+<div *ngIf="games.length > 0" class="row">
+  <div class="col-sm-8 text-right">
+    <h1>
+      <strong>Total Price - </strong>{{totalPrice.toFixed(2)}}&euro;
+    </h1>
+  </div>
+  <div class="col-sm-4">
+    <button (click)="order()" style="margin-top: 21px;" class="btn btn-success">Order</button>
+  </div>
+</div>
