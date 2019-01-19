@@ -4,44 +4,43 @@
       <div class="form-group">
         <label for="title">Title</label>
         <input formControlName="title" type="text" class="form-control" id="title" placeholder="Title">
-        <div *ngIf="titleMessage" class="alert alert-danger">{{titleMessage}}</div>
+        <div *ngIf="titleMessage" class="alert alert-danger">{{ titleMessage }}</div>
       </div>
       <div class="form-group">
         <label for="description">Description</label>
         <textarea formControlName="description" type="text" class="form-control" id="description" placeholder="Description"
           rows="5"></textarea>
-        <div *ngIf="descriptionMessage" class="alert alert-danger">{{descriptionMessage}}</div>
+        <div *ngIf="descriptionMessage" class="alert alert-danger">{{ descriptionMessage }}</div>
       </div>
       <div class="form-group">
         <label for="thumbnailUrl">Thumbnail</label>
         <input formControlName="thumbnailUrl" type="text" class="form-control" id="thumbnailUrl" placeholder="Thumbnail Url">
-        <div *ngIf="thumbnailUrlMessage" class="alert alert-danger">{{thumbnailUrlMessage}}</div>
       </div>
       <div class="form-group">
         <label for="price">Price</label>
         <input formControlName="price" type="number" class="form-control" id="price" placeholder="Price">
-        <div *ngIf="priceMessage" class="alert alert-danger">{{priceMessage}}</div>
+        <div *ngIf="priceMessage" class="alert alert-danger">{{ priceMessage }}</div>
       </div>
       <div class="form-group">
         <label for="size">Size</label>
         <input formControlName="size" type="number" class="form-control" id="size" placeholder="Size">
-        <div *ngIf="sizeMessage" class="alert alert-danger">{{sizeMessage}}</div>
+        <div *ngIf="sizeMessage" class="alert alert-danger">{{ sizeMessage }}</div>
       </div>
       <div class="form-group">
         <label for="videoId">YouTube Video URL</label>
         <input formControlName="videoId" type="text" class="form-control" id="videoId" placeholder="YouTube Video URL">
-        <div *ngIf="videoIdMessage" class="alert alert-danger">{{videoIdMessage}}</div>
+        <div *ngIf="videoIdMessage" class="alert alert-danger">{{ videoIdMessage }}</div>
       </div>
       <div class="form-group">
         <label for="releaseDate">Release Date</label>
         <input formControlName="releaseDate" type="text" class="form-control" id="releaseDate" placeholder="Release Date">
-        <div *ngIf="releaseDateMessage" class="alert alert-danger">{{releaseDateMessage}}</div>
+        <div *ngIf="releaseDateMessage" class="alert alert-danger">{{ releaseDateMessage }}</div>
       </div>
       <div class="form-group">
         <label for="category">Category</label>
         <select class="form-control" formControlName="categoryId" id="category">
           <option value="none">--Select Category--</option>
-          <option *ngFor="let category of categories" value="{{category.id}}">{{category.name}}</option>
+          <option *ngFor="let category of categories$ | async" value="{{ category.id }}">{{ category.name }}</option>
         </select>
       </div>
       <button type="submit" class="btn btn-default" [disabled]="!addGameForm.valid">Add Game</button>

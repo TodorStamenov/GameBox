@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { AllCategoriesComponent } from './components/category/all-categories/all-categories.component';
 import { CreateCategoryComponent } from './components/category/create-category/create-category.component';
 import { EditCategoryComponent } from './components/category/edit-category/edit-category.component';

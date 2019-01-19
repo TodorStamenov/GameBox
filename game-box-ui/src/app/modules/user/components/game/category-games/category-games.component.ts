@@ -1,7 +1,8 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+
 import { GameService } from '../../../services/game.service';
 import { ListGamesModel } from '../../../models/list-games.model';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-category-games',
@@ -14,17 +15,17 @@ export class CategoryGamesComponent implements OnInit {
   constructor(
     private gameService: GameService,
     private route: ActivatedRoute
-  ) { 
+  ) {
     this.categoryId = this.route.snapshot.params['categoryId'];
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.loadGames();
   }
 
-  loadGames(): void {
+  public loadGames(): void {
     this.gameService
-    .getGames(this.games.length, this.categoryId)
+      .getGames(this.games.length, this.categoryId)
       .subscribe(res => this.games = [...this.games, ...res]);
   }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { ListGamesModel } from '../../models/list-games.model';
 import { GameService } from '../../services/game.service';
 
@@ -11,11 +12,11 @@ export class HomeComponent implements OnInit {
 
   constructor(private gameService: GameService) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.loadGames();
   }
 
-  loadGames(): void {
+  public loadGames(): void {
     this.gameService
       .getGames(this.games.length, '')
       .subscribe(res => this.games = [...this.games, ...res]);

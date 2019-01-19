@@ -1,13 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
-import { AuthService } from '../../auth.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { Subscription } from 'rxjs';
+
+import { AuthService } from '../../../../sharedServices/auth.service';
 import { matchingProperties } from '../common/equal-value-validator';
+import { FormService } from 'src/app/sharedServices/form.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html'
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
+  private usernameSubscription: Subscription;
+  private passwordSubscription: Subscription;
+  private repeatPasswordSubscription: Subscription;
+
   public registerForm: FormGroup;
 
   public usernameMessage: string;
@@ -29,56 +37,50 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private formService: FormService
   ) { }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.registerForm = this.fb.group({
-      username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
-      repeatPassword: new FormControl('')
+      'username': new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+      'password': new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+      'repeatPassword': new FormControl('')
     }, { validator: matchingProperties('password', 'repeatPassword') });
 
     const usernameControl = this.registerForm.controls.username;
-    usernameControl
+    this.usernameSubscription = usernameControl
       .valueChanges
       .subscribe(() => {
         this.usernameMessage = '';
-        this.usernameMessage = this.setMessage(usernameControl, 'usernameValidationMessage');
+        this.usernameMessage = this.formService.setMessage(usernameControl, 'usernameValidationMessage', this.validationMessages);
       });
 
     const passwordControl = this.registerForm.controls.password;
-    passwordControl
+    this.passwordSubscription = passwordControl
       .valueChanges
       .subscribe(() => {
         this.passwordMessage = '';
-        this.passwordMessage = this.setMessage(passwordControl, 'passwordValidationMessage');
+        this.passwordMessage = this.formService.setMessage(passwordControl, 'passwordValidationMessage', this.validationMessages);
       });
 
     const repeatPasswordControl = this.registerForm.controls.repeatPassword;
-    repeatPasswordControl
+    this.repeatPasswordSubscription = repeatPasswordControl
       .valueChanges
       .subscribe(() => {
         this.repeatPasswordMessage = '';
-        this.repeatPasswordMessage = this.setPasswordMessage(repeatPasswordControl, passwordControl, 'Password', 'Repeat Password');
+        this.repeatPasswordMessage = this.formService
+          .setPasswordMessage(repeatPasswordControl, passwordControl, 'Password', 'Repeat Password');
       });
   }
 
-  setMessage(control: AbstractControl, messageKey: string): string {
-    if ((control.touched || control.dirty) && control.errors) {
-      return Object.keys(control.errors)
-        .map(key => this.validationMessages[messageKey][key])
-        .join(' ');
-    }
+  public ngOnDestroy(): void {
+    this.usernameSubscription.unsubscribe();
+    this.passwordSubscription.unsubscribe();
+    this.repeatPasswordSubscription.unsubscribe();
   }
 
-  setPasswordMessage(control: AbstractControl, targetControl: AbstractControl, fieldName: string, targetFieldName: string): string {
-    if (control.value !== targetControl.value) {
-      return `${fieldName} and ${targetFieldName} fields should have same value!`;
-    }
-  }
-
-  register(): void {
+  public register(): void {
     this.authService
       .register(this.registerForm.value)
       .subscribe();

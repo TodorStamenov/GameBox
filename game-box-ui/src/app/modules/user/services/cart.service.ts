@@ -1,9 +1,12 @@
-import { HttpClient } from "@angular/common/http";
-import { CartItemModel } from "../models/cart-item.model";
-import { constants } from "src/app/common";
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
-const cartUrl = constants.host + 'cart/'
+import { Observable } from 'rxjs';
+
+import { constants } from 'src/app/common';
+import { CartItemModel } from '../models/cart-item.model';
+
+const cartUrl = constants.host + 'cart/';
 
 @Injectable()
 export class CartService {
@@ -21,14 +24,14 @@ export class CartService {
     localStorage.setItem('cart', JSON.stringify(Array.from(new Set(items))));
   }
 
-  addItem(id: string): void {
-    let items = this.cart;
+  public addItem(id: string): void {
+    const items = this.cart;
     items.push(id);
     this.cart = items;
   }
 
-  removeItem(id: string): void {
-    let items = new Set(this.cart);
+  public removeItem(id: string): void {
+    const items = new Set(this.cart);
 
     if (!items || !items.has(id)) {
       return;
@@ -38,11 +41,11 @@ export class CartService {
     this.cart = Array.from(items);
   }
 
-  clear() {
+  public clear(): void {
     this.cart = [];
   }
 
-  getCart() {
+  public getCart(): Observable<CartItemModel[]> {
     return this.http.post<CartItemModel[]>(cartUrl, this.cart);
   }
 }

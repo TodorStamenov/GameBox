@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RegisterModel } from './models/register.model';
-import { LoginModel } from './models/login.model';
-import { constants } from '../../common';
-import { ChangePasswordModel } from './models/change-password.model';
+
+import { RegisterModel } from '../modules/authentication/models/register.model';
+import { LoginModel } from '../modules/authentication/models/login.model';
+import { constants } from '../common';
+import { ChangePasswordModel } from '../modules/authentication/models/change-password.model';
 
 const authUrl = constants.host + 'account/';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
   constructor(private http: HttpClient) { }
 
@@ -15,27 +18,27 @@ export class AuthService {
     return JSON.parse(localStorage.getItem('currentUser'));
   }
 
-  register(body: RegisterModel) {
+  public register(body: RegisterModel) {
     return this.http.post(authUrl + 'register', body);
   }
 
-  login(body: LoginModel) {
+  public login(body: LoginModel) {
     return this.http.post(authUrl + 'login', body);
   }
 
-  logout(): void {
+  public logout(): void {
     localStorage.clear();
   }
 
-  changePassword(body: ChangePasswordModel) {
+  public changePassword(body: ChangePasswordModel) {
     return this.http.post(authUrl + 'changePassword', body);
   }
 
-  isAuthenticated(): boolean {
+  public isAuthenticated(): boolean {
     return localStorage.getItem('currentUser') !== null;
   }
 
-  isAdmin(): boolean {
+  public isAdmin(): boolean {
     if (this.user) {
       return this.user.isAdmin;
     }

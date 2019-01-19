@@ -2,18 +2,26 @@
   <div *ngFor="let game of games" class="col-md-4">
     <div class="card thumbnail" style="background-color: white;">
       <a routerLink="/games/details/{{game.id}}">
-        <img class="card-image-top img-responsive" src="{{game.thumbnailUrl}}" (error)="changeSource($event, game.videoId)">
+        <img class="card-image-top img-responsive" src="{{ game.thumbnailUrl }}" (error)="changeSource($event, game.videoId)">
       </a>
       <div style="padding: 5%;">
         <div class="card-body">
-          <h4 class="card-title">{{game.title}}</h4>
-          <p class="card-text"><strong>Price</strong> - {{game.price.toFixed(2)}}&euro;</p>
-          <p class="card-text"><strong>Size</strong> - {{game.size.toFixed(1)}} GB</p>
-          <p class="card-text"><strong>Views</strong> - {{game.viewCount}}</p>
-          <p class="card-text">{{game.description.substring(0, 300)}}</p>
+          <h4 class="card-title">{{ game.title }}</h4>
+          <p class="card-text">
+            <strong>Price</strong> - {{ game.price.toFixed(2) | currency }}
+          </p>
+          <p class="card-text">
+            <strong>Size</strong> - {{ game.size.toFixed(1) }} GB
+          </p>
+          <p class="card-text">
+            <strong>Views</strong> - {{ game.viewCount }}
+          </p>
+          <p class="card-text">
+            {{ game.description.substring(0, 300) }}
+          </p>
         </div>
         <div class="card-footer">
-          <a class="card-button btn btn-sm btn-info" href="/games/details/{{game.id}}">Info</a>
+          <a class="card-button btn btn-sm btn-info" routerLink="/games/details/{{ game.id }}">Info</a>
           <button class="btn btn-sm btn-success" (click)="addItem(game.id)" style="margin-left: 5px;">Buy</button>
         </div>
       </div>

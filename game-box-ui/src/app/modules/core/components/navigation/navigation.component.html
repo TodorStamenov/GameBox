@@ -19,7 +19,9 @@
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li *ngFor="let category of categories"><a routerLink="/category/{{category.id}}/games">{{category.name}}</a></li>
+                  <li *ngFor="let category of categories$ | async">
+                    <a routerLink="/category/{{ category.id }}/games">{{ category.name }}</a>
+                  </li>
                 </ul>
               </li>
           <li><a *ngIf="authService.isAuthenticated()" class="nav-element" routerLink="/games/owned">Owned</a></li>
@@ -38,7 +40,7 @@
               <li><a routerLink="/admin/users/all">Users</a></li>
             </ul>
           </li>
-          <li><a class="nav-element" *ngIf="authService.isAuthenticated()" routerLink="/auth/changePassword">Hello {{authService.user.username}}!</a></li>
+          <li><a class="nav-element" *ngIf="authService.isAuthenticated()" routerLink="/auth/changePassword">Hello {{ authService.user.username }}!</a></li>
           <li><a class="nav-element btn" *ngIf="authService.isAuthenticated()" (click)="logout()">Logout</a></li>
           <li><a class="nav-element" *ngIf="!authService.isAuthenticated()" routerLink="/auth/login">Login</a></li>
           <li><a class="nav-element" *ngIf="!authService.isAuthenticated()" routerLink="/auth/register">Register</a></li>

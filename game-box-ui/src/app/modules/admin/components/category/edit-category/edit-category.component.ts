@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { CategoryService } from '../../../services/category.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
+
+import { Subscription } from 'rxjs';
+
+import { CategoryService } from '../../../services/category.service';
+import { FormService } from 'src/app/sharedServices/form.service';
 
 @Component({
   selector: 'app-edit-category',
   templateUrl: './edit-category.component.html'
 })
-export class EditCategoryComponent implements OnInit {
+export class EditCategoryComponent implements OnInit, OnDestroy {
+  private nameSubscription: Subscription;
   private categoryId: string;
   public categoryForm: FormGroup;
 
@@ -24,38 +29,35 @@ export class EditCategoryComponent implements OnInit {
     private fb: FormBuilder,
     private categoryService: CategoryService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private formService: FormService
   ) {
     this.categoryId = this.route.snapshot.params['id'];
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
+    this.categoryForm = this.fb.group({
+      'name': new FormControl('', [Validators.required, Validators.minLength(3)])
+    });
+
     this.categoryService
       .getCategory(this.categoryId)
       .subscribe(res => this.categoryForm.setValue({ name: res.name }));
 
-    this.categoryForm = this.fb.group({
-      name: new FormControl('', [Validators.required, Validators.minLength(3)])
-    });
-
     const nameControl = this.categoryForm.controls.name;
-    nameControl
+    this.nameSubscription = nameControl
       .valueChanges
       .subscribe(() => {
         this.nameMessage = '';
-        this.nameMessage = this.setMessage(nameControl, 'nameValidationMessage');
+        this.nameMessage = this.formService.setMessage(nameControl, 'nameValidationMessage', this.validationMessages);
       });
   }
 
-  setMessage(control: AbstractControl, messageKey: string): string {
-    if ((control.touched || control.dirty) && control.errors) {
-      return Object.keys(control.errors)
-        .map(key => this.validationMessages[messageKey][key])
-        .join(' ');
-    }
+  public ngOnDestroy(): void {
+    this.nameSubscription.unsubscribe();
   }
 
-  editCategory(): void {
+  public editCategory(): void {
     this.categoryService
       .editCategory(this.categoryId, this.categoryForm.value)
       .subscribe(() => this.router.navigate(['/admin/categories/all']));

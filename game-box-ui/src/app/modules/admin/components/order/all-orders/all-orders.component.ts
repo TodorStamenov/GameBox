@@ -1,40 +1,40 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+
+import { Observable } from 'rxjs';
+
 import { OrderService } from '../../../services/order.service';
 import { OrderModel } from '../../../models/orders/order.model';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-all-orders',
   templateUrl: './all-orders.component.html'
 })
 export class AllOrdersComponent implements OnInit {
+  public orders$: Observable<OrderModel[]>;
   public dateRange: FormGroup;
-
-  public orders: OrderModel[];
 
   constructor(
     private fb: FormBuilder,
     private orderService: OrderService
   ) { }
 
-  ngOnInit() {
-    this.getOrders('', '');
-
+  public ngOnInit(): void {
     this.dateRange = this.fb.group({
-      startDate: new FormControl(''),
-      endDate: new FormControl('')
+      'startDate': new FormControl(''),
+      'endDate': new FormControl('')
     });
+
+    this.getOrders('', '');
   }
 
-  getOrders(startDate: string, endDate: string) {
-    this.orderService
-      .getOrders(startDate, endDate)
-      .subscribe(res => this.orders = res);
+  public getOrders(startDate: string, endDate: string): void {
+    this.orders$ = this.orderService.getOrders(startDate, endDate);
   }
 
-  filterOrders() {
+  public filterOrders(): void {
     this.getOrders(
-      this.dateRange.controls.startDate.value, 
+      this.dateRange.controls.startDate.value,
       this.dateRange.controls.endDate.value);
   }
 }

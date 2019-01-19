@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { UserModel } from '../models/users/user.model';
+
+import { Observable } from 'rxjs';
+
 import { constants } from '../../../common';
+import { UserModel } from '../models/users/user.model';
 
 const usersUrl = constants.host + 'users/';
 
@@ -9,23 +12,23 @@ const usersUrl = constants.host + 'users/';
 export class AdminService {
   constructor(private http: HttpClient) { }
 
-  getUsers(username: string) {
+  public getUsers(username: string): Observable<UserModel[]> {
     return this.http.get<UserModel[]>(usersUrl + 'all?username=' + username);
   }
 
-  lock(username: string) {
+  public lock(username: string): Observable<string> {
     return this.http.get<string>(usersUrl + 'lock?username=' + username);
   }
 
-  unlock(username: string) {
+  public unlock(username: string): Observable<string> {
     return this.http.get<string>(usersUrl + 'unlock?username=' + username);
   }
 
-  addRole(username: string, role: string) {
+  public addRole(username: string, role: string): Observable<string> {
     return this.http.get<string>(usersUrl + 'addRole?username=' + username + '&roleName=' + role);
   }
 
-  removeRole(username: string, role: string) {
+  public removeRole(username: string, role: string): Observable<string> {
     return this.http.get<string>(usersUrl + 'removeRole?username=' + username + '&roleName=' + role);
   }
 }

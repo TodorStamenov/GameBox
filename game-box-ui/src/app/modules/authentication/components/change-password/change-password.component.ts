@@ -1,14 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, AbstractControl, Validators, FormGroup } from '@angular/forms';
-import { AuthService } from '../../auth.service';
-import { matchingProperties } from '../common/equal-value-validator';
 import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
+
+import { Subscription } from 'rxjs';
+
+import { AuthService } from '../../../../sharedServices/auth.service';
+import { matchingProperties } from '../common/equal-value-validator';
+import { FormService } from 'src/app/sharedServices/form.service';
 
 @Component({
   selector: 'app-change-password',
   templateUrl: './change-password.component.html'
 })
-export class ChangePasswordComponent implements OnInit {
+export class ChangePasswordComponent implements OnInit, OnDestroy {
+  private oldPasswordSubscription: Subscription;
+  private newPasswordSubscription: Subscription;
+  private repeatPasswordSubscription: Subscription;
+
   public changePasswordForm: FormGroup;
 
   public oldPasswordMessage: string;
@@ -29,56 +37,50 @@ export class ChangePasswordComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private formService: FormService
   ) { }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.changePasswordForm = this.fb.group({
-      oldPassword: new FormControl('', [Validators.required]),
-      newPassword: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
-      repeatPassword: new FormControl('')
+      'oldPassword': new FormControl('', [Validators.required]),
+      'newPassword': new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+      'repeatPassword': new FormControl('')
     }, { validator: matchingProperties('newPassword', 'repeatPassword') });
 
     const oldPasswordControl = this.changePasswordForm.controls.oldPassword;
-    oldPasswordControl
+    this.oldPasswordSubscription = oldPasswordControl
       .valueChanges
       .subscribe(() => {
         this.oldPasswordMessage = '';
-        this.oldPasswordMessage = this.setMessage(oldPasswordControl, 'oldPasswordValidationMessage');
+        this.oldPasswordMessage = this.formService.setMessage(oldPasswordControl, 'oldPasswordValidationMessage', this.validationMessages);
       });
 
     const newPasswordControl = this.changePasswordForm.controls.newPassword;
-    newPasswordControl
+    this.newPasswordSubscription = newPasswordControl
       .valueChanges
       .subscribe(() => {
         this.newPasswordMessage = '';
-        this.newPasswordMessage = this.setMessage(newPasswordControl, 'newPasswordValidationMessage');
+        this.newPasswordMessage = this.formService.setMessage(newPasswordControl, 'newPasswordValidationMessage', this.validationMessages);
       });
 
     const repeatPasswordControl = this.changePasswordForm.controls.repeatPassword;
-    repeatPasswordControl
+    this.repeatPasswordSubscription = repeatPasswordControl
       .valueChanges
       .subscribe(() => {
         this.repeatPasswordMessage = '';
-        this.repeatPasswordMessage = this.setPasswordMessage(repeatPasswordControl, newPasswordControl, 'Old Password', 'Repeat Password');
+        this.repeatPasswordMessage = this.formService
+          .setPasswordMessage(repeatPasswordControl, newPasswordControl, 'Old Password', 'Repeat Password');
       });
   }
 
-  setMessage(control: AbstractControl, messageKey: string): string {
-    if ((control.touched || control.dirty) && control.errors) {
-      return Object.keys(control.errors)
-        .map(key => this.validationMessages[messageKey][key])
-        .join(' ');
-    }
+  public ngOnDestroy(): void {
+    this.oldPasswordSubscription.unsubscribe();
+    this.newPasswordSubscription.unsubscribe();
+    this.repeatPasswordSubscription.unsubscribe();
   }
 
-  setPasswordMessage(control: AbstractControl, targetControl: AbstractControl, fieldName: string, targetFieldName: string): string {
-    if (control.value !== targetControl.value) {
-      return `${fieldName} and ${targetFieldName} fields should have same value!`;
-    }
-  }
-
-  changePassword(): void {
+  public changePassword(): void {
     this.authService
       .changePassword(this.changePasswordForm.value)
       .subscribe(() => this.router.navigate(['/']));

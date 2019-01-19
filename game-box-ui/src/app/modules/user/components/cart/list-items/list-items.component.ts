@@ -1,8 +1,12 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
 import { CartItemModel } from '../../../models/cart-item.model';
 import { CartService } from '../../../services/cart.service';
-import { AuthService } from 'src/app/modules/authentication/auth.service';
-import { Router } from '@angular/router';
+import { AuthService } from 'src/app/sharedServices/auth.service';
 import { OrderService } from '../../../services/order.service';
 
 @Component({
@@ -11,7 +15,7 @@ import { OrderService } from '../../../services/order.service';
 })
 export class ListItemsComponent implements OnInit {
   public totalPrice: number;
-  public games: CartItemModel[] = [];
+  public games$: Observable<CartItemModel[]>;
 
   constructor(
     private authService: AuthService,
@@ -20,20 +24,20 @@ export class ListItemsComponent implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getGames();
   }
 
-  changeSource(event, videoId: string): void {
+  public changeSource(event: any, videoId: string): void {
     event.target.src = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
   }
 
-  removeItem(id: string): void {
+  public removeItem(id: string): void {
     this.cartService.removeItem(id);
     this.getGames();
   }
 
-  order(): void {
+  public order(): void {
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/auth/login']);
       return;
@@ -48,11 +52,12 @@ export class ListItemsComponent implements OnInit {
   }
 
   private getGames(): void {
-    this.cartService
+    this.games$ = this.cartService
       .getCart()
-      .subscribe(res => {
-        this.totalPrice = res.length === 0 ? 0 : res.map(i => i.price).reduce((x, y) => x + y);
-        this.games = res;
-      });
+      .pipe(tap((res: any) => {
+        this.totalPrice = res.length === 0
+          ? 0
+          : res.map((i: any) => i.price).reduce((x: number, y: number) => x + y);
+      }));
   }
 }

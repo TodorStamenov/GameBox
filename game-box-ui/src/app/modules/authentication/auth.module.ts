@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { authComponents } from '.';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from './auth.service';
-import { AuthRoutingModule } from './auth-routing.module';
 import { CommonModule } from '@angular/common';
+
+import { authComponents } from '.';
+import { AuthRoutingModule } from './auth-routing.module';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 
 @NgModule({
@@ -16,9 +16,6 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
     ReactiveFormsModule,
     CommonModule,
     AuthRoutingModule
-  ],
-  providers: [
-    AuthService
   ]
 })
 export class AuthModule { }

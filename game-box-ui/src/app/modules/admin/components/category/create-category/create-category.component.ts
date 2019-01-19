@@ -1,15 +1,20 @@
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+
+import { Subscription } from 'rxjs';
+
 import { CategoryService } from '../../../services/category.service';
+import { FormService } from 'src/app/sharedServices/form.service';
 
 @Component({
   selector: 'app-create-category',
   templateUrl: './create-category.component.html'
 })
-export class CreateCategoryComponent implements OnInit {
-  public categoryForm: FormGroup;
+export class CreateCategoryComponent implements OnInit, OnDestroy {
+  private nameSubscription: Subscription;
 
+  public categoryForm: FormGroup;
   public nameMessage: string;
 
   private validationMessages = {
@@ -22,32 +27,29 @@ export class CreateCategoryComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoryService,
-    private router: Router
+    private router: Router,
+    private formService: FormService
   ) { }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.categoryForm = this.fb.group({
-      name: new FormControl('', [Validators.required, Validators.minLength(3)])
+      'name': new FormControl('', [Validators.required, Validators.minLength(3)])
     });
 
     const nameControl = this.categoryForm.controls.name;
-    nameControl
+    this.nameSubscription = nameControl
       .valueChanges
       .subscribe(() => {
         this.nameMessage = '';
-        this.nameMessage = this.setMessage(nameControl, 'nameValidationMessage');
+        this.nameMessage = this.formService.setMessage(nameControl, 'nameValidationMessage', this.validationMessages);
       });
   }
 
-  setMessage(control: AbstractControl, messageKey: string): string {
-    if ((control.touched || control.dirty) && control.errors) {
-      return Object.keys(control.errors)
-        .map(key => this.validationMessages[messageKey][key])
-        .join(' ');
-    }
+  public ngOnDestroy(): void {
+    this.nameSubscription.unsubscribe();
   }
 
-  createCategory(): void {
+  public createCategory(): void {
     this.categoryService
       .createCategory(this.categoryForm.value)
       .subscribe(() => this.router.navigate(['/admin/categories/all']));

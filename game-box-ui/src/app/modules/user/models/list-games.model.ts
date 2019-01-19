@@ -1,4 +1,4 @@
-export class ListGamesModel{
+export class ListGamesModel {
   constructor(
     public id: string,
     public title: string,

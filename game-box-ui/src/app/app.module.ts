@@ -1,32 +1,26 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { AppRoutingModule } from './app.routing';
-import { AppComponent } from './app.component';
-import { AuthModule } from './modules/authentication/auth.module';
-import { NavigationComponent } from './components/navigation/navigation.component';
+import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { ToastrModule } from 'ngx-toastr';
+
+import { AppRoutingModule } from './app.routing';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
-import { ToastrModule } from 'ngx-toastr';
-import { AdminModule } from './modules/admin/admin.module';
-import { UserModule } from './modules/user/user.module';
-import { FooterComponent } from './components/footer/footer.component';
+import { AppComponent } from './app.component';
+import { CoreModule } from './modules/core/core.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NavigationComponent,
-    FooterComponent
+    AppComponent
   ],
   imports: [
-    AuthModule,
-    AdminModule,
-    UserModule,
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
     HttpClientModule,
+    CoreModule,
+    AppRoutingModule,
     ToastrModule.forRoot()
   ],
   providers: [

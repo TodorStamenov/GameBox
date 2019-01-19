@@ -18,10 +18,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let category of categories">
-            <td>{{category.name}}</td>
-            <td>{{category.games}}</td>
-            <td><a class='btn btn-success btn-sm' [routerLink]="['/admin/categories/edit', category.id]">Edit</a></td>
+          <tr *ngFor="let category of categories$ | async">
+            <td>{{ category.name }}</td>
+            <td>{{ category.games }}</td>
+            <td>
+              <a class='btn btn-success btn-sm' [routerLink]="['/admin/categories/edit', category.id]">Edit</a>
+            </td>
           </tr>
         </tbody>
       </table>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { GameService } from '../../../services/game.service';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+
+import { GameService } from '../../../services/game.service';
 
 @Component({
   selector: 'app-delete-game',
@@ -21,7 +22,18 @@ export class DeleteGameComponent implements OnInit {
     this.gameId = this.route.snapshot.params['id'];
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
+    this.deleteGameForm = this.fb.group({
+      'title': new FormControl({ value: '', disabled: true }),
+      'description': new FormControl({ value: '', disabled: true }),
+      'thumbnailUrl': new FormControl({ value: '', disabled: true }),
+      'price': new FormControl({ value: '', disabled: true }),
+      'size': new FormControl({ value: '', disabled: true }),
+      'videoId': new FormControl({ value: '', disabled: true }),
+      'releaseDate': new FormControl({ value: '', disabled: true }),
+      'categoryId': new FormControl({ value: '', disabled: true })
+    });
+
     this.gameService
       .getGame(this.gameId)
       .subscribe(res => this.deleteGameForm.setValue({
@@ -34,20 +46,9 @@ export class DeleteGameComponent implements OnInit {
         releaseDate: res.releaseDate,
         categoryId: res.categoryId
       }));
-
-    this.deleteGameForm = this.fb.group({
-      title: new FormControl({ value: '', disabled: true }),
-      description: new FormControl({ value: '', disabled: true }),
-      thumbnailUrl: new FormControl({ value: '', disabled: true }),
-      price: new FormControl({ value: '', disabled: true }),
-      size: new FormControl({ value: '', disabled: true }),
-      videoId: new FormControl({ value: '', disabled: true }),
-      releaseDate: new FormControl({ value: '', disabled: true }),
-      categoryId: new FormControl({ value: '', disabled: true })
-    });
   }
 
-  deleteGame(): void {
+  public deleteGame(): void {
     this.gameService
       .deleteGame(this.gameId)
       .subscribe(() => this.router.navigate(['/']));

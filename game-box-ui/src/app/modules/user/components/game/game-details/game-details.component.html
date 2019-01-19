@@ -1,17 +1,17 @@
 <div class="row">
   <div class="col-12 text-center">
-    <h1>{{game.title}}</h1>
+    <h1>{{ game.title }}</h1>
     <br />
     <iframe width="560" height="315" [src]="videoId" frameborder="0" allowfullscreen></iframe>
     <br />
     <br />
-    <p>{{game.description}}</p>
-    <p><strong>Price</strong> - {{game.price}}&euro;</p>
-    <p><strong>Size</strong> - {{game.size}} GB</p>
-    <p><strong>Release Date</strong> - {{game.releaseDate}}</p>
-    <p><strong>Views</strong> - {{game.viewCount}}</p>
-    <a *ngIf="authService.isAdmin()" class="btn btn-warning" routerLink="/admin/games/edit/{{game.id}}">Edit</a>
-    <a *ngIf="authService.isAdmin()" style="margin-left: 10px;" class="btn btn-danger" routerLink="/admin/games/delete/{{game.id}}">Delete</a>
+    <p>{{ game.description }}</p>
+    <p><strong>Price</strong> - {{ game.price | currency }}</p>
+    <p><strong>Size</strong> - {{ game.size }} GB</p>
+    <p><strong>Release Date</strong> - {{ game.releaseDate | date}}</p>
+    <p><strong>Views</strong> - {{ game.viewCount }}</p>
+    <a *ngIf="authService.isAdmin()" class="btn btn-warning" routerLink="/admin/games/edit/{{ game.id }}">Edit</a>
+    <a *ngIf="authService.isAdmin()" style="margin-left: 10px;" class="btn btn-danger" routerLink="/admin/games/delete/{{ game.id }}">Delete</a>
     <a style="margin-left: 10px;" class="btn btn-default" routerLink="/">Back</a>
     <button (click)="addItem(game.id)" style="margin-left: 10px;" class="btn btn-success" routerLink="/cart">Buy</button>
     <br />

@@ -3,6 +3,6 @@ export class OrderModel {
     public username: string,
     public timeStamp: Date,
     public price: number,
-    public gamesCount: number 
+    public gamesCount: number
   ) { }
 }

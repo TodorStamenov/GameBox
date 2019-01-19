@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+
+import { Observable, Subscription } from 'rxjs';
+
 import { UserModel } from '../../../models/users/user.model';
 import { AdminService } from '../../../services/admin.service';
 
@@ -7,53 +10,57 @@ import { AdminService } from '../../../services/admin.service';
   selector: 'app-user',
   templateUrl: './all-users.component.html'
 })
-export class AllUsersComponent implements OnInit {
+export class AllUsersComponent implements OnInit, OnDestroy {
+  private usernameSubscription: Subscription;
+
   public searchForm: FormGroup;
-  public users: UserModel[];
+  public users$: Observable<UserModel[]>;
 
   constructor(
     private fb: FormBuilder,
     private adminService: AdminService
   ) { }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.getUsers('');
 
     this.searchForm = this.fb.group({
-      username: new FormControl('')
+      'username': new FormControl('')
     });
 
     const usernameControl = this.searchForm.controls.username;
-    usernameControl
+    this.usernameSubscription = usernameControl
       .valueChanges
       .subscribe(() => this.getUsers(usernameControl.value));
   }
 
-  getUsers(username: string){
-    this.adminService
-      .getUsers(username)
-      .subscribe(res => this.users = res);
+  public ngOnDestroy(): void {
+    this.usernameSubscription.unsubscribe();
   }
 
-  lock(username: string) {
+  public getUsers(username: string): void {
+    this.users$ = this.adminService.getUsers(username);
+  }
+
+  public lock(username: string): void {
     this.adminService
       .lock(username)
       .subscribe(() => this.getUsers(this.searchForm.controls.username.value));
   }
 
-  unlock(username: string) {
+  public unlock(username: string): void {
     this.adminService
       .unlock(username)
       .subscribe(() => this.getUsers(this.searchForm.controls.username.value));
   }
 
-  addRole(username: string, roleName: string) {
+  public addRole(username: string, roleName: string): void {
     this.adminService
       .addRole(username, roleName)
       .subscribe(() => this.getUsers(this.searchForm.controls.username.value));
   }
 
-  removeRole(username: string, roleName: string) {
+  public removeRole(username: string, roleName: string): void {
     this.adminService
       .removeRole(username, roleName)
       .subscribe(() => this.getUsers(this.searchForm.controls.username.value));

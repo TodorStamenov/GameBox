@@ -22,8 +22,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of users">
-          <td>{{user.username}}</td>
+        <tr *ngFor="let user of users$ | async">
+          <td>{{ user.username }}</td>
           <td>
             <button *ngIf="!user.isLocked" class='btn btn-danger btn-sm' (click)="lock(user.username)">Lock</button>
             <button *ngIf="user.isLocked" class='btn btn-success btn-sm' (click)="unlock(user.username)">Unlock</button>

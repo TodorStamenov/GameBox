@@ -1,33 +1,38 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ListCategoriesModel } from '../models/categories/list-categories.model';
+
+import { Observable } from 'rxjs';
+
 import { constants } from '../../../common';
+import { ListCategoriesModel } from '../models/categories/list-categories.model';
 import { CategoryBindingModel } from '../models/categories/category-binding.model';
 import { CategoryMenuModel } from '../models/categories/category-menu.model';
 
 const categoriesUrl = constants.host + 'categories/';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class CategoryService {
   constructor(private http: HttpClient) { }
 
-  getCategories() {
+  public getCategories(): Observable<ListCategoriesModel[]> {
     return this.http.get<ListCategoriesModel[]>(categoriesUrl);
   }
 
-  getCategory(id: string) {
+  public getCategory(id: string): Observable<ListCategoriesModel> {
     return this.http.get<ListCategoriesModel>(categoriesUrl + id);
   }
 
-  createCategory(body: CategoryBindingModel) {
+  public createCategory(body: CategoryBindingModel): Observable<CategoryBindingModel> {
     return this.http.post<CategoryBindingModel>(categoriesUrl, body);
   }
 
-  editCategory(id: string, body: CategoryBindingModel) {
-    return this.http.put(categoriesUrl + id, body);
+  public editCategory(id: string, body: CategoryBindingModel): Observable<CategoryBindingModel> {
+    return this.http.put<CategoryBindingModel>(categoriesUrl + id, body);
   }
 
-  getCategoryNames() {
-    return this.http.get<CategoryMenuModel[]>(categoriesUrl + 'menu')
+  public getCategoryNames(): Observable<CategoryMenuModel[]> {
+    return this.http.get<CategoryMenuModel[]>(categoriesUrl + 'menu');
   }
 }

@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../modules/authentication/auth.service';
+
+import { Observable } from 'rxjs';
+
 import { CategoryService } from 'src/app/modules/admin/services/category.service';
 import { CategoryMenuModel } from 'src/app/modules/admin/models/categories/category-menu.model';
+import { AuthService } from 'src/app/sharedServices/auth.service';
 
 @Component({
   selector: 'app-navigation',
@@ -10,24 +13,22 @@ import { CategoryMenuModel } from 'src/app/modules/admin/models/categories/categ
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnInit {
-  public categories: CategoryMenuModel[];
+  public categories$: Observable<CategoryMenuModel[]>;
 
   constructor(
     private router: Router,
-    private authService: AuthService,
+    public authService: AuthService,
     private categoryService: CategoryService
-  ) { 
+  ) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
-  logout(): void {
+  public logout(): void {
     this.authService.logout();
     this.router.navigate(['/']);
   }
 
-  ngOnInit(): void {
-    this.categoryService
-      .getCategoryNames()
-      .subscribe(c => this.categories = c);
+  public ngOnInit(): void {
+    this.categories$ = this.categoryService.getCategoryNames();
   }
 }
