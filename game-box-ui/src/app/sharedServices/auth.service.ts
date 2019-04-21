@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { RegisterModel } from '../modules/authentication/models/register.model';
-import { LoginModel } from '../modules/authentication/models/login.model';
+import { ToastrService } from 'ngx-toastr';
+
+import { RegisterModel } from '../modules/auth/models/register.model';
+import { LoginModel } from '../modules/auth/models/login.model';
+import { ChangePasswordModel } from '../modules/auth/models/change-password.model';
 import { constants } from '../common';
-import { ChangePasswordModel } from '../modules/authentication/models/change-password.model';
 
 const authUrl = constants.host + 'account/';
 
@@ -12,7 +14,10 @@ const authUrl = constants.host + 'account/';
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private toastr: ToastrService
+  ) { }
 
   get user() {
     return JSON.parse(localStorage.getItem('currentUser'));
@@ -28,6 +33,7 @@ export class AuthService {
 
   public logout(): void {
     localStorage.clear();
+    this.toastr.success('You have successfully logged out', 'Success!');
   }
 
   public changePassword(body: ChangePasswordModel) {

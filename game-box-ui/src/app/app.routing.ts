@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminGuard } from './guards/admin.guard';
 
 const routes: Routes = [
-  { path: 'auth', loadChildren: './modules/authentication/auth.module#AuthModule' },
+  { path: 'auth', loadChildren: './modules/auth/auth.module#AuthModule' },
   { path: 'admin', loadChildren: './modules/admin/admin.module#AdminModule', canActivate: [AdminGuard] },
   { path: '', loadChildren: './modules/user/user.module#UserModule' }
 ];

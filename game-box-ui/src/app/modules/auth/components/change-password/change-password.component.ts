@@ -13,9 +13,7 @@ import { FormService } from 'src/app/sharedServices/form.service';
   templateUrl: './change-password.component.html'
 })
 export class ChangePasswordComponent implements OnInit, OnDestroy {
-  private oldPasswordSubscription: Subscription;
-  private newPasswordSubscription: Subscription;
-  private repeatPasswordSubscription: Subscription;
+  private subscription = new Subscription();
 
   public changePasswordForm: FormGroup;
 
@@ -49,35 +47,33 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
     }, { validator: matchingProperties('newPassword', 'repeatPassword') });
 
     const oldPasswordControl = this.changePasswordForm.controls.oldPassword;
-    this.oldPasswordSubscription = oldPasswordControl
+    this.subscription.add(oldPasswordControl
       .valueChanges
       .subscribe(() => {
         this.oldPasswordMessage = '';
         this.oldPasswordMessage = this.formService.setMessage(oldPasswordControl, 'oldPasswordValidationMessage', this.validationMessages);
-      });
+      }));
 
     const newPasswordControl = this.changePasswordForm.controls.newPassword;
-    this.newPasswordSubscription = newPasswordControl
+    this.subscription.add(newPasswordControl
       .valueChanges
       .subscribe(() => {
         this.newPasswordMessage = '';
         this.newPasswordMessage = this.formService.setMessage(newPasswordControl, 'newPasswordValidationMessage', this.validationMessages);
-      });
+      }));
 
     const repeatPasswordControl = this.changePasswordForm.controls.repeatPassword;
-    this.repeatPasswordSubscription = repeatPasswordControl
+    this.subscription.add(repeatPasswordControl
       .valueChanges
       .subscribe(() => {
         this.repeatPasswordMessage = '';
         this.repeatPasswordMessage = this.formService
           .setPasswordMessage(repeatPasswordControl, newPasswordControl, 'Old Password', 'Repeat Password');
-      });
+      }));
   }
 
   public ngOnDestroy(): void {
-    this.oldPasswordSubscription.unsubscribe();
-    this.newPasswordSubscription.unsubscribe();
-    this.repeatPasswordSubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   public changePassword(): void {

@@ -35,7 +35,7 @@ export class DeleteGameComponent implements OnInit {
     });
 
     this.gameService
-      .getGame(this.gameId)
+      .getGame$(this.gameId)
       .subscribe(res => this.deleteGameForm.setValue({
         title: res.title,
         description: res.description,
@@ -50,7 +50,7 @@ export class DeleteGameComponent implements OnInit {
 
   public deleteGame(): void {
     this.gameService
-      .deleteGame(this.gameId)
+      .deleteGame$(this.gameId)
       .subscribe(() => this.router.navigate(['/']));
   }
 }

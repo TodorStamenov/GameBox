@@ -3,7 +3,6 @@ import { catchError } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import {
   HttpEvent,
   HttpHandler,
@@ -14,10 +13,7 @@ import {
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(
-    private toastr: ToastrService,
-    private router: Router
-  ) { }
+  constructor(private toastr: ToastrService) { }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next

@@ -32,28 +32,30 @@ export class JwtInterceptor implements HttpInterceptor {
 
     return next
       .handle(request)
-      .pipe(tap((res: any) => {
-        if (res instanceof HttpResponse
-          && res.body
-          && res.body.token
-          && (res.url.endsWith('login')
-            || res.url.endsWith('register'))) {
-          this.saveToken(res.body);
-          this.toastr.success(res.body.message, 'Success!');
-          this.router.navigate(['/']);
-        }
+      .pipe(
+        tap((res: any) => {
+          if (res instanceof HttpResponse
+            && res.body
+            && res.body.token
+            && (res.url.endsWith('login')
+              || res.url.endsWith('register'))) {
+            this.saveToken(res.body);
+            this.toastr.success(res.body.message, 'Success!');
+            this.router.navigate(['/']);
+          }
 
-        if (res instanceof HttpResponse
-          && res.body
-          && res.body.message
-          && !res.url.endsWith('login')
-          && !res.url.endsWith('register')) {
-          this.toastr.success(res.body.message, 'Success!');
-        }
-      }));
+          if (res instanceof HttpResponse
+            && res.body
+            && res.body.message
+            && !res.url.endsWith('login')
+            && !res.url.endsWith('register')) {
+            this.toastr.success(res.body.message, 'Success!');
+          }
+        })
+      );
   }
 
-  private saveToken(data): void {
+  private saveToken(data: any): void {
     localStorage.setItem('currentUser', JSON.stringify({
       username: data.username,
       token: data.token,

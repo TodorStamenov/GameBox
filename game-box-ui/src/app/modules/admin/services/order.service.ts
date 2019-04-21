@@ -12,7 +12,7 @@ const ordersUrl = constants.host + 'orders';
 export class OrderService {
   constructor(private http: HttpClient) { }
 
-  public getOrders(startDate: string, endDate: string): Observable<OrderModel[]> {
+  public getOrders$(startDate: string, endDate: string): Observable<OrderModel[]> {
     return this.http.get<OrderModel[]>(ordersUrl + '?startDate=' + startDate + '&endDate=' + endDate);
   }
 }

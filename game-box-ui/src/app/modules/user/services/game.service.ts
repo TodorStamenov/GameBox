@@ -13,15 +13,15 @@ const gamesUrl = constants.host + 'games/';
 export class GameService {
   constructor(private http: HttpClient) { }
 
-  public getGames(loadedGames: number, categoryId: string): Observable<ListGamesModel[]> {
+  public getGames$(loadedGames: number, categoryId: string): Observable<ListGamesModel[]> {
     return this.http.get<ListGamesModel[]>(gamesUrl + '?loadedGames=' + loadedGames + '&categoryId=' + categoryId);
   }
 
-  public getOwned(loadedGames: number): Observable<ListGamesModel[]> {
+  public getOwned$(loadedGames: number): Observable<ListGamesModel[]> {
     return this.http.get<ListGamesModel[]>(gamesUrl + 'owned?loadedGames=' + loadedGames);
   }
 
-  public getDetails(id: string): Observable<GameDetailsModel> {
+  public getDetails$(id: string): Observable<GameDetailsModel> {
     return this.http.get<GameDetailsModel>(gamesUrl + 'details/' + id);
   }
 }

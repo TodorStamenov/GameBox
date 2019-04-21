@@ -29,7 +29,7 @@ export class AllOrdersComponent implements OnInit {
   }
 
   public getOrders(startDate: string, endDate: string): void {
-    this.orders$ = this.orderService.getOrders(startDate, endDate);
+    this.orders$ = this.orderService.getOrders$(startDate, endDate);
   }
 
   public filterOrders(): void {

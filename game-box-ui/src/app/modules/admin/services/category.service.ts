@@ -16,23 +16,23 @@ const categoriesUrl = constants.host + 'categories/';
 export class CategoryService {
   constructor(private http: HttpClient) { }
 
-  public getCategories(): Observable<ListCategoriesModel[]> {
+  public getCategories$(): Observable<ListCategoriesModel[]> {
     return this.http.get<ListCategoriesModel[]>(categoriesUrl);
   }
 
-  public getCategory(id: string): Observable<ListCategoriesModel> {
+  public getCategory$(id: string): Observable<ListCategoriesModel> {
     return this.http.get<ListCategoriesModel>(categoriesUrl + id);
   }
 
-  public createCategory(body: CategoryBindingModel): Observable<CategoryBindingModel> {
+  public createCategory$(body: CategoryBindingModel): Observable<CategoryBindingModel> {
     return this.http.post<CategoryBindingModel>(categoriesUrl, body);
   }
 
-  public editCategory(id: string, body: CategoryBindingModel): Observable<CategoryBindingModel> {
+  public editCategory$(id: string, body: CategoryBindingModel): Observable<CategoryBindingModel> {
     return this.http.put<CategoryBindingModel>(categoriesUrl + id, body);
   }
 
-  public getCategoryNames(): Observable<CategoryMenuModel[]> {
+  public getCategoryNames$(): Observable<CategoryMenuModel[]> {
     return this.http.get<CategoryMenuModel[]>(categoriesUrl + 'menu');
   }
 }

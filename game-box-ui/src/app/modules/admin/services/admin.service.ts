@@ -12,23 +12,23 @@ const usersUrl = constants.host + 'users/';
 export class AdminService {
   constructor(private http: HttpClient) { }
 
-  public getUsers(username: string): Observable<UserModel[]> {
+  public getUsers$(username: string): Observable<UserModel[]> {
     return this.http.get<UserModel[]>(usersUrl + 'all?username=' + username);
   }
 
-  public lock(username: string): Observable<string> {
+  public lock$(username: string): Observable<string> {
     return this.http.get<string>(usersUrl + 'lock?username=' + username);
   }
 
-  public unlock(username: string): Observable<string> {
+  public unlock$(username: string): Observable<string> {
     return this.http.get<string>(usersUrl + 'unlock?username=' + username);
   }
 
-  public addRole(username: string, role: string): Observable<string> {
+  public addRole$(username: string, role: string): Observable<string> {
     return this.http.get<string>(usersUrl + 'addRole?username=' + username + '&roleName=' + role);
   }
 
-  public removeRole(username: string, role: string): Observable<string> {
+  public removeRole$(username: string, role: string): Observable<string> {
     return this.http.get<string>(usersUrl + 'removeRole?username=' + username + '&roleName=' + role);
   }
 }

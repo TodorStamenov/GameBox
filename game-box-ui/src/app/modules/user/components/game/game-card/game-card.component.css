@@ -1,0 +1,26 @@
+.action-button {
+  margin-left: 10px;
+}
+
+div.card.thumbnail {
+  background-color: white;
+}
+
+.game-card {
+  padding: 5%;
+}
+
+.card-title {
+  margin-top: 0;
+}
+
+div.row.card-row {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.game-col {
+  min-width: 33%;
+}

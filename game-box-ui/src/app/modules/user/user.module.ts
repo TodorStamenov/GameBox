@@ -6,9 +6,10 @@ import { UserRoutingModule } from './user-routing.module';
 import { GameService } from './services/game.service';
 import { CartService } from './services/cart.service';
 import { OrderService } from './services/order.service';
+import { LoadMoreComponent } from './components/shared/load-more/load-more.component';
 
 @NgModule({
-  declarations: [...userComponents],
+  declarations: [...userComponents, LoadMoreComponent],
   imports: [
     CommonModule,
     UserRoutingModule

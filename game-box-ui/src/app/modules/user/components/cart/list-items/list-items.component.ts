@@ -1,7 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
-import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { CartItemModel } from '../../../models/cart-item.model';
@@ -11,11 +10,12 @@ import { OrderService } from '../../../services/order.service';
 
 @Component({
   selector: 'app-list-items',
-  templateUrl: './list-items.component.html'
+  templateUrl: './list-items.component.html',
+  styleUrls: ['./list-items.component.css']
 })
 export class ListItemsComponent implements OnInit {
   public totalPrice: number;
-  public games$: Observable<CartItemModel[]>;
+  public games: CartItemModel[] = [];
 
   constructor(
     private authService: AuthService,
@@ -34,7 +34,8 @@ export class ListItemsComponent implements OnInit {
 
   public removeItem(id: string): void {
     this.cartService.removeItem(id);
-    this.getGames();
+    this.games = this.games.filter(g => g.id !== id);
+    this.totalPrice = this.calculateTotalPrice();
   }
 
   public order(): void {
@@ -51,13 +52,30 @@ export class ListItemsComponent implements OnInit {
       });
   }
 
+  public clear(): void {
+    this.cartService.clear();
+    this.games = [];
+  }
+
   private getGames(): void {
-    this.games$ = this.cartService
-      .getCart()
-      .pipe(tap((res: any) => {
-        this.totalPrice = res.length === 0
-          ? 0
-          : res.map((i: any) => i.price).reduce((x: number, y: number) => x + y);
-      }));
+    this.cartService
+      .getCart$()
+      .pipe(
+        tap((res: CartItemModel[]) => {
+          this.games = res;
+          this.totalPrice = this.calculateTotalPrice();
+        })
+      )
+      .subscribe();
+  }
+
+  private calculateTotalPrice(): number {
+    if (this.games.length === 0) {
+      return 0;
+    }
+
+    return this.games
+      .map((i: CartItemModel) => i.price)
+      .reduce((x: number, y: number) => x + y);
   }
 }

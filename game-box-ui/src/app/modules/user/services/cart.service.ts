@@ -25,9 +25,7 @@ export class CartService {
   }
 
   public addItem(id: string): void {
-    const items = this.cart;
-    items.push(id);
-    this.cart = items;
+    this.cart = [...this.cart, id];
   }
 
   public removeItem(id: string): void {
@@ -45,7 +43,7 @@ export class CartService {
     this.cart = [];
   }
 
-  public getCart(): Observable<CartItemModel[]> {
+  public getCart$(): Observable<CartItemModel[]> {
     return this.http.post<CartItemModel[]>(cartUrl, this.cart);
   }
 }

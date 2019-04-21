@@ -12,7 +12,7 @@ import { FormService } from 'src/app/sharedServices/form.service';
   templateUrl: './edit-category.component.html'
 })
 export class EditCategoryComponent implements OnInit, OnDestroy {
-  private nameSubscription: Subscription;
+  private subscription = new Subscription();
   private categoryId: string;
   public categoryForm: FormGroup;
 
@@ -41,25 +41,25 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     });
 
     this.categoryService
-      .getCategory(this.categoryId)
+      .getCategory$(this.categoryId)
       .subscribe(res => this.categoryForm.setValue({ name: res.name }));
 
     const nameControl = this.categoryForm.controls.name;
-    this.nameSubscription = nameControl
+    this.subscription.add(nameControl
       .valueChanges
       .subscribe(() => {
         this.nameMessage = '';
         this.nameMessage = this.formService.setMessage(nameControl, 'nameValidationMessage', this.validationMessages);
-      });
+      }));
   }
 
   public ngOnDestroy(): void {
-    this.nameSubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   public editCategory(): void {
     this.categoryService
-      .editCategory(this.categoryId, this.categoryForm.value)
+      .editCategory$(this.categoryId, this.categoryForm.value)
       .subscribe(() => this.router.navigate(['/admin/categories/all']));
   }
 }

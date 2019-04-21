@@ -11,19 +11,19 @@ const gamesUrl = constants.host + 'games/';
 export class GameService {
   constructor(private http: HttpClient) { }
 
-  public getGame(id: string): Observable<GameBindingModel> {
+  public getGame$(id: string): Observable<GameBindingModel> {
     return this.http.get<GameBindingModel>(gamesUrl + id);
   }
 
-  public addGame(body: GameBindingModel): Observable<GameBindingModel> {
+  public addGame$(body: GameBindingModel): Observable<GameBindingModel> {
     return this.http.post<GameBindingModel>(gamesUrl, body);
   }
 
-  public editGame(id: string, body: GameBindingModel): Observable<GameBindingModel> {
+  public editGame$(id: string, body: GameBindingModel): Observable<GameBindingModel> {
     return this.http.put<GameBindingModel>(gamesUrl + id, body);
   }
 
-  public deleteGame(id: string): Observable<GameBindingModel> {
+  public deleteGame$(id: string): Observable<GameBindingModel> {
     return this.http.delete<GameBindingModel>(gamesUrl + id);
   }
 }

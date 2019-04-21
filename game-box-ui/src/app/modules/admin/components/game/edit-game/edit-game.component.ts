@@ -2,11 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { GameService } from '../../../services/game.service';
 import { CategoryService } from '../../../services/category.service';
-import { CategoryMenuModel } from '../../../models/categories/category-menu.model';
 import { FormService } from 'src/app/sharedServices/form.service';
 
 @Component({
@@ -14,16 +13,11 @@ import { FormService } from 'src/app/sharedServices/form.service';
   templateUrl: './edit-game.component.html'
 })
 export class EditGameComponent implements OnInit, OnDestroy {
-  private titleSubscription: Subscription;
-  private descriptionSubscription: Subscription;
-  private priceSubscription: Subscription;
-  private sizeSubscription: Subscription;
-  private videoIdSubscription: Subscription;
-  private releaseDateSubscription: Subscription;
+  private subscription = new Subscription();
 
   public gameId: string;
+  public categories$ = this.categoryService.getCategoryNames$();
   public editGameForm: FormGroup;
-  public categories$: Observable<CategoryMenuModel[]>;
 
   public titleMessage: string;
   public descriptionMessage: string;
@@ -86,7 +80,7 @@ export class EditGameComponent implements OnInit, OnDestroy {
     });
 
     this.gameService
-      .getGame(this.gameId)
+      .getGame$(this.gameId)
       .subscribe(res => this.editGameForm.setValue({
         title: res.title,
         description: res.description,
@@ -98,69 +92,62 @@ export class EditGameComponent implements OnInit, OnDestroy {
         categoryId: res.categoryId
       }));
 
-    this.categories$ = this.categoryService.getCategoryNames();
-
     const titleControl = this.editGameForm.controls.title;
-    this.titleSubscription = titleControl
+    this.subscription.add(titleControl
       .valueChanges
       .subscribe(() => {
         this.titleMessage = '';
         this.titleMessage = this.formService.setMessage(titleControl, 'titleValidationMessage', this.validationMessages);
-      });
+      }));
 
     const descriptionControl = this.editGameForm.controls.description;
-    this.descriptionSubscription = descriptionControl
+    this.subscription.add(descriptionControl
       .valueChanges
       .subscribe(() => {
         this.descriptionMessage = '';
         this.descriptionMessage = this.formService.setMessage(descriptionControl, 'descriptionMessage', this.validationMessages);
-      });
+      }));
 
     const priceControl = this.editGameForm.controls.price;
-    this.priceSubscription = priceControl
+    this.subscription.add(priceControl
       .valueChanges
       .subscribe(() => {
         this.priceMessage = '';
         this.priceMessage = this.formService.setMessage(priceControl, 'priceMessage', this.validationMessages);
-      });
+      }));
 
     const sizeControl = this.editGameForm.controls.size;
-    this.sizeSubscription = sizeControl
+    this.subscription.add(sizeControl
       .valueChanges
       .subscribe(() => {
         this.sizeMessage = '';
         this.sizeMessage = this.formService.setMessage(sizeControl, 'sizeMessage', this.validationMessages);
-      });
+      }));
 
     const videoIdControl = this.editGameForm.controls.videoId;
-    this.videoIdSubscription = videoIdControl
+    this.subscription.add(videoIdControl
       .valueChanges
       .subscribe(() => {
         this.videoIdMessage = '';
         this.videoIdMessage = this.formService.setMessage(videoIdControl, 'videoIdMessage', this.validationMessages);
-      });
+      }));
 
     const releaseDateControl = this.editGameForm.controls.releaseDate;
-    this.releaseDateSubscription = releaseDateControl
+    this.subscription.add(releaseDateControl
       .valueChanges
       .subscribe(() => {
         this.releaseDateMessage = '';
         this.releaseDateMessage = this.formService.setMessage(releaseDateControl, 'releaseDateMessage', this.validationMessages);
-      });
+      }));
   }
 
   public ngOnDestroy(): void {
-    this.titleSubscription.unsubscribe();
-    this.descriptionSubscription.unsubscribe();
-    this.priceSubscription.unsubscribe();
-    this.sizeSubscription.unsubscribe();
-    this.videoIdSubscription.unsubscribe();
-    this.releaseDateSubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   public editGame(): void {
     this.gameService
-      .editGame(this.gameId, this.editGameForm.value)
+      .editGame$(this.gameId, this.editGameForm.value)
       .subscribe(() => this.router.navigate(['/']));
   }
 }

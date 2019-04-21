@@ -39,7 +39,10 @@
       <div class="form-group">
         <label for="category">Category</label>
         <select class="form-control" formControlName="categoryId" id="category">
-          <option *ngFor="let category of categories$ | async" value="{{category.id}}" [selected]="editGameForm.get('categoryId').value === category.id">
+          <option
+            *ngFor="let category of categories$ | async"
+            value="{{category.id}}"
+            [selected]="editGameForm.get('categoryId').value === category.id">
             {{ category.name }}
           </option>
         </select>

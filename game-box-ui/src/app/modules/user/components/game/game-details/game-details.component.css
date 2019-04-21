@@ -1,0 +1,16 @@
+.action-button {
+  display: block;
+  margin-bottom: 5px;
+  width: 70px;
+}
+
+.game-i-frame {
+  width: 840px;
+  height: 472.5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.game-title {
+  margin-top: 0;
+}

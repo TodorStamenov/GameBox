@@ -9,7 +9,8 @@ import { CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-game-details',
-  templateUrl: './game-details.component.html'
+  templateUrl: './game-details.component.html',
+  styleUrls: ['./game-details.component.css']
 })
 export class GameDetailsComponent implements OnInit {
   public game: GameDetailsModel = new GameDetailsModel('', '', 0, 0, '', '', '', 0, new Date);
@@ -25,7 +26,7 @@ export class GameDetailsComponent implements OnInit {
 
   public ngOnInit(): void {
     this.gameService
-      .getDetails(this.router.snapshot.params['id'])
+      .getDetails$(this.router.snapshot.params['id'])
       .subscribe(res => {
         this.game = res;
         this.videoId = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${res.videoId}`);

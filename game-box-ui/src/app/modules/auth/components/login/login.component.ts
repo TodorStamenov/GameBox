@@ -11,8 +11,7 @@ import { FormService } from 'src/app/sharedServices/form.service';
   templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  private usernameSubscription: Subscription;
-  private passwordSubscription: Subscription;
+  private subscription = new Subscription();
 
   public loginForm: FormGroup;
 
@@ -43,25 +42,24 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     const usernameControl = this.loginForm.controls.username;
-    this.usernameSubscription = usernameControl
+    this.subscription.add(usernameControl
       .valueChanges
       .subscribe(() => {
         this.usernameMessage = '';
         this.usernameMessage = this.formService.setMessage(usernameControl, 'usernameValidationMessage', this.validationMessages);
-      });
+      }));
 
     const passwordControl = this.loginForm.controls.password;
-    this.passwordSubscription = passwordControl
+    this.subscription.add(passwordControl
       .valueChanges
       .subscribe(() => {
         this.passwordMessage = '';
         this.passwordMessage = this.formService.setMessage(passwordControl, 'passwordValidationMessage', this.validationMessages);
-      });
+      }));
   }
 
   public ngOnDestroy(): void {
-    this.usernameSubscription.unsubscribe();
-    this.passwordSubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   public login(): void {

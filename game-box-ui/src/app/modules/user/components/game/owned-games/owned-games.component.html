@@ -1,6 +1,13 @@
-<app-game-card [games]="games"></app-game-card>
-<div class="row">
-  <div class="col-12 text-center">
-    <button (click)="loadGames()" class="btn btn-success">Load Games</button>
+<div *ngIf="games.length === 0; else gamesAvailable" class="row">
+  <div class="col-md-12">
+    <h2>You do not own any games!</h2>
   </div>
 </div>
+
+<ng-template #gamesAvailable>
+  <app-game-card [games]="games"></app-game-card>
+  <app-load-more
+    [gamesCount]="games.length"
+    (loadClick)="loadGames()">
+  </app-load-more>
+</ng-template>

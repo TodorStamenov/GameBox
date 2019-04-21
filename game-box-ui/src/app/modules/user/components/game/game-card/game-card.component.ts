@@ -5,7 +5,8 @@ import { CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-game-card',
-  templateUrl: './game-card.component.html'
+  templateUrl: './game-card.component.html',
+  styleUrls: ['./game-card.component.css']
 })
 export class GameCardComponent {
   @Input()

@@ -12,9 +12,7 @@ import { FormService } from 'src/app/sharedServices/form.service';
   templateUrl: './register.component.html'
 })
 export class RegisterComponent implements OnInit, OnDestroy {
-  private usernameSubscription: Subscription;
-  private passwordSubscription: Subscription;
-  private repeatPasswordSubscription: Subscription;
+  private subscription = new Subscription();
 
   public registerForm: FormGroup;
 
@@ -49,35 +47,33 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }, { validator: matchingProperties('password', 'repeatPassword') });
 
     const usernameControl = this.registerForm.controls.username;
-    this.usernameSubscription = usernameControl
+    this.subscription.add(usernameControl
       .valueChanges
       .subscribe(() => {
         this.usernameMessage = '';
         this.usernameMessage = this.formService.setMessage(usernameControl, 'usernameValidationMessage', this.validationMessages);
-      });
+      }));
 
     const passwordControl = this.registerForm.controls.password;
-    this.passwordSubscription = passwordControl
+    this.subscription.add(passwordControl
       .valueChanges
       .subscribe(() => {
         this.passwordMessage = '';
         this.passwordMessage = this.formService.setMessage(passwordControl, 'passwordValidationMessage', this.validationMessages);
-      });
+      }));
 
     const repeatPasswordControl = this.registerForm.controls.repeatPassword;
-    this.repeatPasswordSubscription = repeatPasswordControl
+    this.subscription.add(repeatPasswordControl
       .valueChanges
       .subscribe(() => {
         this.repeatPasswordMessage = '';
         this.repeatPasswordMessage = this.formService
           .setPasswordMessage(repeatPasswordControl, passwordControl, 'Password', 'Repeat Password');
-      });
+      }));
   }
 
   public ngOnDestroy(): void {
-    this.usernameSubscription.unsubscribe();
-    this.passwordSubscription.unsubscribe();
-    this.repeatPasswordSubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   public register(): void {
