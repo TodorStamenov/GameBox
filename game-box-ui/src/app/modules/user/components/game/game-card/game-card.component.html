@@ -1,6 +1,6 @@
 <div class="row card-row">
   <div *ngFor="let game of games" class="col-md-4 game-col">
-    <div class="card thumbnail">
+    <div class="card thumbnail" [@itemCard]>
       <a routerLink="/games/details/{{game.id}}">
         <img
           class="card-image-top img-responsive"
@@ -20,7 +20,7 @@
             <strong>Views</strong> - {{ game.viewCount }}
           </p>
           <p class="card-text">
-            {{ game.description.substring(0, 300) }}
+            {{ game.description | sliceString }}
           </p>
         </div>
       </div>

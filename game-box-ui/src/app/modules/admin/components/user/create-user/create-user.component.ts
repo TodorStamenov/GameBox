@@ -1,20 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import { AuthService } from '../../../core/sharedServices/auth.service';
-import { matchingProperties } from '../common/equal-value-validator';
 import { FormService } from 'src/app/modules/core/sharedServices/form.service';
+import { matchingProperties } from '../../../../auth/components/common/equal-value-validator';
+import { AdminService } from '../../../services/admin.service';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html'
+  selector: 'app-create-user',
+  templateUrl: './create-user.component.html'
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class CreateUserComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
 
-  public registerForm: FormGroup;
+  public createUserForm: FormGroup;
 
   public usernameMessage: string;
   public passwordMessage: string;
@@ -35,18 +36,19 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
-    private formService: FormService
+    private adminService: AdminService,
+    private formService: FormService,
+    private router: Router
   ) { }
 
   public ngOnInit(): void {
-    this.registerForm = this.fb.group({
+    this.createUserForm = this.fb.group({
       'username': new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
       'password': new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
       'repeatPassword': new FormControl('')
     }, { validator: matchingProperties('password', 'repeatPassword') });
 
-    const usernameControl = this.registerForm.controls.username;
+    const usernameControl = this.createUserForm.controls.username;
     this.subscription.add(usernameControl
       .valueChanges
       .subscribe(() => {
@@ -54,7 +56,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.usernameMessage = this.formService.setMessage(usernameControl, 'usernameValidationMessage', this.validationMessages);
       }));
 
-    const passwordControl = this.registerForm.controls.password;
+    const passwordControl = this.createUserForm.controls.password;
     this.subscription.add(passwordControl
       .valueChanges
       .subscribe(() => {
@@ -62,7 +64,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.passwordMessage = this.formService.setMessage(passwordControl, 'passwordValidationMessage', this.validationMessages);
       }));
 
-    const repeatPasswordControl = this.registerForm.controls.repeatPassword;
+    const repeatPasswordControl = this.createUserForm.controls.repeatPassword;
     this.subscription.add(repeatPasswordControl
       .valueChanges
       .subscribe(() => {
@@ -76,9 +78,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  public register(): void {
-    this.authService
-      .register(this.registerForm.value)
-      .subscribe();
+  public createUser(): void {
+    this.adminService
+      .createUser$(this.createUserForm.value)
+      .subscribe(() => this.router.navigate(['/admin/users/all']));
   }
 }

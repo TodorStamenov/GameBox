@@ -1,17 +1,28 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { trigger, transition, animate, style } from '@angular/animations';
 
 import { tap } from 'rxjs/operators';
 
 import { CartItemModel } from '../../../models/cart-item.model';
 import { CartService } from '../../../services/cart.service';
-import { AuthService } from 'src/app/sharedServices/auth.service';
+import { AuthService } from 'src/app/modules/core/sharedServices/auth.service';
 import { OrderService } from '../../../services/order.service';
 
 @Component({
   selector: 'app-list-items',
   templateUrl: './list-items.component.html',
-  styleUrls: ['./list-items.component.css']
+  styleUrls: ['./list-items.component.css'],
+  animations: [
+    trigger('itemCard', [
+      transition('* => void', [
+        animate(500, style({
+          transform: 'translateX(300px)',
+          opacity: 0
+        }))
+      ])
+    ])
+  ]
 })
 export class ListItemsComponent implements OnInit {
   public totalPrice: number;

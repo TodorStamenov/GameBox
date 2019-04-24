@@ -9,6 +9,7 @@ import { EditGameComponent } from './components/game/edit-game/edit-game.compone
 import { DeleteGameComponent } from './components/game/delete-game/delete-game.component';
 import { AllUsersComponent } from './components/user/all-users/all-users.component';
 import { AllOrdersComponent } from './components/order/all-orders/all-orders.component';
+import { CreateUserComponent } from './components/user/create-user/create-user.component';
 
 const adminRoute: Routes = [
   { path: 'categories/all', component: AllCategoriesComponent },
@@ -18,6 +19,7 @@ const adminRoute: Routes = [
   { path: 'games/edit/:id', component: EditGameComponent },
   { path: 'games/delete/:id', component: DeleteGameComponent },
   { path: 'users/all', component: AllUsersComponent },
+  { path: 'users/create', component: CreateUserComponent },
   { path: 'orders/all', component: AllOrdersComponent }
 ];
 

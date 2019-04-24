@@ -165,9 +165,19 @@ namespace GameBox.Api.Infrastructure.Extensions
                 db.Games.Add(new Game
                 {
                     Title = $"Title{i}",
-                    Description = "Lorem, ipsum dolor sit amet consectetur adipisicing elit. " +
-                        "Itaque quibusdam ut ad molestiae labore ipsam distinctio, quam vitae sequi optio sit deserunt? " +
-                        "Distinctio eveniet rem illo impedit, in dicta perspiciatis.",
+                    Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                        "Suspendisse tellus ipsum, dignissim sit amet rutrum congue, vehicula in elit. " +
+                        "Phasellus lorem urna, iaculis non egestas eu, sollicitudin nec risus. Nunc mollis nisi a orci vulputate molestie. " +
+                        "Nam hendrerit ex sit amet ligula sollicitudin, at placerat sapien auctor. " +
+                        "Suspendisse pulvinar imperdiet quam. Proin pellentesque efficitur dui. " +
+                        "Suspendisse commodo aliquam elit, consequat pellentesque ipsum dictum sed. " +
+                        "Nam vel nisi et risus porttitor ultrices vestibulum ut ante. Duis vulputate interdum bibendum. " +
+                        "Etiam vitae elit eget leo interdum varius. Aenean volutpat vehicula felis, a semper nisl rutrum id. " +
+                        "Donec ac fringilla nisl. Ut nec laoreet nunc, sit amet porttitor felis. Praesent in placerat libero. " +
+                        "In ipsum mauris, dictum eu magna sed, tristique auctor lorem. " +
+                        "Integer aliquet augue tellus, ac eleifend elit condimentum sed.Morbi luctus non lacus id facilisis.Vivamus vulputate elementum arcu, " +
+                        "gravida malesuada ante facilisis eu.Vivamus in tellus ac urna tempor porta ut ac risus.Ut commodo ac arcu sed tincidunt.Mauris pharetra " +
+                        "lectus at massa convallis fringilla.Morbi commodo ex enim, nec interdum nisl viverra id.",
                     Price = random.Next(2000, 20000) / 100M,
                     Size = random.Next(1, 230),
                     ReleaseDate = DateTime.Now.AddMonths(-i),

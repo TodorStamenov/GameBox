@@ -4,9 +4,9 @@ import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms'
 
 import { Subscription } from 'rxjs';
 
-import { AuthService } from '../../../../sharedServices/auth.service';
+import { AuthService } from '../../../core/sharedServices/auth.service';
 import { matchingProperties } from '../common/equal-value-validator';
-import { FormService } from 'src/app/sharedServices/form.service';
+import { FormService } from 'src/app/modules/core/sharedServices/form.service';
 
 @Component({
   selector: 'app-change-password',

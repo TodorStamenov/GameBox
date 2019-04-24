@@ -4,7 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { GameDetailsModel } from '../../../models/game-details.model';
 import { GameService } from '../../../services/game.service';
-import { AuthService } from 'src/app/sharedServices/auth.service';
+import { AuthService } from 'src/app/modules/core/sharedServices/auth.service';
 import { CartService } from '../../../services/cart.service';
 
 @Component({

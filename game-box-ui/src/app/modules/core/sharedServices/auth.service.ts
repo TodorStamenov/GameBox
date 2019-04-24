@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 
 import { ToastrService } from 'ngx-toastr';
 
-import { RegisterModel } from '../modules/auth/models/register.model';
-import { LoginModel } from '../modules/auth/models/login.model';
-import { ChangePasswordModel } from '../modules/auth/models/change-password.model';
-import { constants } from '../common';
+import { RegisterModel } from '../../auth/models/register.model';
+import { LoginModel } from '../../auth/models/login.model';
+import { ChangePasswordModel } from '../../auth/models/change-password.model';
+import { constants } from '../../../common';
 
 const authUrl = constants.host + 'account/';
 

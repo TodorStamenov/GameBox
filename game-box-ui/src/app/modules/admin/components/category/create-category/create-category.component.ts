@@ -5,7 +5,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs';
 
 import { CategoryService } from '../../../services/category.service';
-import { FormService } from 'src/app/sharedServices/form.service';
+import { FormService } from 'src/app/modules/core/sharedServices/form.service';
 
 @Component({
   selector: 'app-create-category',

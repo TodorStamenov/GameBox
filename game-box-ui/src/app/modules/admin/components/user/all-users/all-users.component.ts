@@ -7,7 +7,7 @@ import { UserModel } from '../../../models/users/user.model';
 import { AdminService } from '../../../services/admin.service';
 
 @Component({
-  selector: 'app-user',
+  selector: 'app-all-users',
   templateUrl: './all-users.component.html'
 })
 export class AllUsersComponent implements OnInit, OnDestroy {

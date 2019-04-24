@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { CategoryService } from 'src/app/modules/admin/services/category.service';
-import { AuthService } from 'src/app/sharedServices/auth.service';
+import { AuthService } from 'src/app/modules/core/sharedServices/auth.service';
 
 @Component({
   selector: 'app-navigation',

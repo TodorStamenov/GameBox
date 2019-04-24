@@ -1,6 +1,7 @@
 ﻿using GameBox.Core;
 using GameBox.Core.Enums;
 using GameBox.Services.Contracts;
+using GameBox.Services.Models.Binding.Users;
 using GameBox.Services.Models.View.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,12 @@ namespace GameBox.Api.Controllers
         private const string UsernameAndRoleMandatory = "User and Role names should have value!";
 
         private readonly IUserService user;
+        private readonly IAccountService account;
 
-        public UsersController(IUserService user)
+        public UsersController(IUserService user, IAccountService account)
         {
             this.user = user;
+            this.account = account;
         }
 
         [HttpGet]
@@ -26,6 +29,26 @@ namespace GameBox.Api.Controllers
         public IEnumerable<ListUsersViewModel> All([FromQuery]string username)
         {
             return this.user.All(username);
+        }
+
+        [HttpPost]
+        [Route("create")]
+        public IActionResult Create([FromBody]CreateUserBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            ServiceResult result = this.account.Register(model.Username, model.Password);
+
+            if (result.ResultType == ServiceResultType.Fail)
+            {
+                ModelState.AddModelError(Constants.Common.Error, result.Message);
+                return BadRequest(ModelState);
+            }
+
+            return Ok(result);
         }
 
         [HttpGet]

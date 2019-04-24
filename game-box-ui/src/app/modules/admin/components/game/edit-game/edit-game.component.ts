@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 
 import { GameService } from '../../../services/game.service';
 import { CategoryService } from '../../../services/category.service';
-import { FormService } from 'src/app/sharedServices/form.service';
+import { FormService } from 'src/app/modules/core/sharedServices/form.service';
 
 @Component({
   selector: 'app-edit-game',

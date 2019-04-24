@@ -6,6 +6,7 @@ import { EditGameComponent } from './components/game/edit-game/edit-game.compone
 import { DeleteGameComponent } from './components/game/delete-game/delete-game.component';
 import { AllOrdersComponent } from './components/order/all-orders/all-orders.component';
 import { AllUsersComponent } from './components/user/all-users/all-users.component';
+import { CreateUserComponent } from './components/user/create-user/create-user.component';
 
 export const adminComponents = [
   AllCategoriesComponent,
@@ -15,5 +16,6 @@ export const adminComponents = [
   EditGameComponent,
   DeleteGameComponent,
   AllOrdersComponent,
-  AllUsersComponent
+  AllUsersComponent,
+  CreateUserComponent
 ];

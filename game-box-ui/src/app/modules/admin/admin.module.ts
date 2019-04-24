@@ -8,6 +8,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { CategoryService } from './services/category.service';
 import { OrderService } from './services/order.service';
 import { GameService } from './services/game.service';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { GameService } from './services/game.service';
     CommonModule,
     ReactiveFormsModule,
     AdminRoutingModule,
+    CoreModule
   ],
   providers: [
     AdminService,

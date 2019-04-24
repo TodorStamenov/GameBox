@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 
 import { constants } from '../../../common';
 import { UserModel } from '../models/users/user.model';
+import { CreateUserModel } from '../models/users/create-user.model';
 
 const usersUrl = constants.host + 'users/';
 
@@ -30,5 +31,9 @@ export class AdminService {
 
   public removeRole$(username: string, role: string): Observable<string> {
     return this.http.get<string>(usersUrl + 'removeRole?username=' + username + '&roleName=' + role);
+  }
+
+  public createUser$(body: CreateUserModel): Observable<any> {
+    return this.http.post(usersUrl + 'create', body);
   }
 }
