@@ -4,6 +4,7 @@ import { CategoryGamesComponent } from './components/game/category-games/categor
 import { OwnedGamesComponent } from './components/game/owned-games/owned-games.component';
 import { GameDetailsComponent } from './components/game/game-details/game-details.component';
 import { ListItemsComponent } from './components/cart/list-items/list-items.component';
+import { LoadMoreComponent } from './components/shared/load-more/load-more.component';
 
 export const userComponents = [
   HomeComponent,
@@ -11,5 +12,6 @@ export const userComponents = [
   CategoryGamesComponent,
   OwnedGamesComponent,
   GameDetailsComponent,
-  ListItemsComponent
+  ListItemsComponent,
+  LoadMoreComponent
 ];

@@ -8,7 +8,9 @@ import { IOrderModel } from '../models/orders/order.model';
 
 const ordersUrl = constants.host + 'orders';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class OrderService {
   constructor(private http: HttpClient) { }
 

@@ -4,20 +4,16 @@ import { CommonModule } from '@angular/common';
 
 import { authComponents } from '.';
 import { AuthRoutingModule } from './auth-routing.module';
-import { ChangePasswordComponent } from './components/change-password/change-password.component';
-import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [
-    ...authComponents,
-    ChangePasswordComponent
+    ...authComponents
   ],
   imports: [
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    AuthRoutingModule,
-    CoreModule
+    AuthRoutingModule
   ]
 })
 export class AuthModule { }

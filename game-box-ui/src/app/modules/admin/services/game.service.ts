@@ -7,7 +7,9 @@ import { Observable } from 'rxjs';
 
 const gamesUrl = constants.host + 'games/';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class GameService {
   constructor(private http: HttpClient) { }
 

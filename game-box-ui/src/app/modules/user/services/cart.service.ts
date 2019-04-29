@@ -8,7 +8,9 @@ import { ICartItemModel } from '../models/cart-item.model';
 
 const cartUrl = constants.host + 'cart/';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class CartService {
   constructor(private http: HttpClient) { }
 

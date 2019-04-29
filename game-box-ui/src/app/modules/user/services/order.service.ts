@@ -5,7 +5,9 @@ import { constants } from '../../../common';
 
 const ordersUrl = constants.host + 'orders/';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class OrderService {
   constructor(private http: HttpClient) { }
 

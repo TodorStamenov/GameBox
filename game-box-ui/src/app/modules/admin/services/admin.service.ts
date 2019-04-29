@@ -9,7 +9,9 @@ import { ICreateUserModel } from '../models/users/create-user.model';
 
 const usersUrl = constants.host + 'users/';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AdminService {
   constructor(private http: HttpClient) { }
 
