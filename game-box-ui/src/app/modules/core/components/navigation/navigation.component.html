@@ -13,7 +13,9 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand nav-element" routerLink="/">Game Box</a>
+        <a class="navbar-brand nav-element" routerLink="/">
+          Game Box
+        </a>
       </div>
       <div class="collapse navbar-collapse" id="collapse-target">
         <ul class="nav navbar-nav">
@@ -30,31 +32,63 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li *ngFor="let category of categories$ | async">
-                    <a routerLink="/category/{{ category.id }}/games">{{ category.name }}</a>
+                    <a routerLink="/category/{{ category.id }}/games">
+                      {{ category.name }}
+                    </a>
                   </li>
                 </ul>
               </li>
-          <li><a *ngIf="authHelperService.isAuthenticated()" class="nav-element" routerLink="/games/owned">Owned</a></li>
-          <li><a class="nav-element" routerLink="/cart">Cart</a></li>
+          <li>
+            <a *ngIf="authHelperService.isAuthenticated()" class="nav-element" routerLink="/games/owned">
+              Owned
+            </a>
+          </li>
+          <li>
+            <a class="nav-element" routerLink="/cart">
+              Cart
+            </a>
+          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li *ngIf="authHelperService.isAdmin()" class="dropdown">
-            <a href="#" class="dropdown-toggle nav-element" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <a
+              href="#"
+              class="dropdown-toggle nav-element"
+              data-toggle="dropdown"
+              role="button"
+              aria-haspopup="true"
+              aria-expanded="false">
               Admin
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li><a routerLink="/admin/games/create">Add Game</a></li>
+              <li><a [routerLink]="['/admin/games', 'create']">Add Game</a></li>
               <li><a routerLink="/admin/categories/all">Categories</a></li>
               <li><a routerLink="/admin/orders/all">Orders</a></li>
               <li><a routerLink="/admin/users/all">Users</a></li>
               <li><a routerLink="/admin/users/create">Add User</a></li>
             </ul>
           </li>
-          <li><a class="nav-element" *ngIf="authHelperService.isAuthenticated()" routerLink="/auth/changePassword">Hello {{ authHelperService.user.username }}!</a></li>
-          <li><a class="nav-element btn" *ngIf="authHelperService.isAuthenticated()" (click)="logout()">Logout</a></li>
-          <li><a class="nav-element" *ngIf="!authHelperService.isAuthenticated()" routerLink="/auth/login">Login</a></li>
-          <li><a class="nav-element" *ngIf="!authHelperService.isAuthenticated()" routerLink="/auth/register">Register</a></li>
+          <li>
+            <a class="nav-element" *ngIf="authHelperService.isAuthenticated()" routerLink="/auth/changePassword">
+              Hello {{ authHelperService.user.username }}!
+            </a>
+          </li>
+          <li>
+            <a class="nav-element btn" *ngIf="authHelperService.isAuthenticated()" (click)="logout()">
+              Logout
+            </a>
+          </li>
+          <li>
+            <a class="nav-element" *ngIf="!authHelperService.isAuthenticated()" routerLink="/auth/login">
+              Login
+            </a>
+          </li>
+          <li>
+            <a class="nav-element" *ngIf="!authHelperService.isAuthenticated()" routerLink="/auth/register">
+              Register
+            </a>
+          </li>
         </ul>
       </div>
     </div>

@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-offset-3 col-md-3">
-    <form [formGroup]="categoryForm" (ngSubmit)="createCategory()">
+    <form [formGroup]="categoryForm" (ngSubmit)="saveCategory()">
       <div class="form-group">
         <label for="name">Name</label>
         <input formControlName="name" type="text" class="form-control" id="name" placeholder="Name">

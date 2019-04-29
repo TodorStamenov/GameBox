@@ -6,6 +6,10 @@ div.card.thumbnail {
   background-color: white;
 }
 
+img.card-image-top {
+  min-width: 100%;
+}
+
 .game-card {
   padding: 5%;
 }

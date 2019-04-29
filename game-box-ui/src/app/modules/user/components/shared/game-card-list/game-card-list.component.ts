@@ -5,9 +5,9 @@ import { IListGamesModel } from '../../../models/list-games.model';
 import { CartService } from '../../../services/cart.service';
 
 @Component({
-  selector: 'app-game-card',
-  templateUrl: './game-card.component.html',
-  styleUrls: ['./game-card.component.css'],
+  selector: 'app-game-card-list',
+  templateUrl: './game-card-list.component.html',
+  styleUrls: ['./game-card-list.component.css'],
   animations: [
     trigger('itemCard', [
       transition('void => *', [
@@ -20,7 +20,7 @@ import { CartService } from '../../../services/cart.service';
     ])
   ]
 })
-export class GameCardComponent {
+export class GameCardListComponent {
   @Input()
   public games: IListGamesModel[];
 

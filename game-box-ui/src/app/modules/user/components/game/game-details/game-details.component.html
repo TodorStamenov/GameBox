@@ -30,7 +30,8 @@
       <a 
         *ngIf="authHelperService.isAdmin()"
         class="btn btn-sm btn-warning action-button"
-        routerLink="/admin/games/edit/{{ game.id }}">
+        [routerLink]="['/admin/games', 'edit']"
+        [queryParams]="{ id: game.id }">
         Edit
       </a>
       <a

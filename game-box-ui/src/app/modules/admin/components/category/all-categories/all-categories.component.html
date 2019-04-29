@@ -22,7 +22,12 @@
             <td>{{ category.name }}</td>
             <td>{{ category.games }}</td>
             <td>
-              <a class='btn btn-success btn-sm' [routerLink]="['/admin/categories/edit', category.id]">Edit</a>
+              <a
+                class='btn btn-success btn-sm'
+                [routerLink]="['/admin/categories', 'edit']"
+                [queryParams]="{ id: category.id }">
+                Edit
+              </a>
             </td>
           </tr>
         </tbody>

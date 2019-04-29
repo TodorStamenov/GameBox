@@ -5,7 +5,7 @@
 </div>
 
 <ng-template #gamesAvailable>
-  <app-game-card [games]="games"></app-game-card>
+  <app-game-card-list [games]="games"></app-game-card-list>
   <app-load-more
     [gamesCount]="games.length"
     (loadClick)="loadGames()">
