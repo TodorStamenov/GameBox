@@ -19,10 +19,6 @@ export class AuthService {
     private toastr: ToastrService
   ) { }
 
-  get user() {
-    return JSON.parse(localStorage.getItem('currentUser'));
-  }
-
   public register(body: RegisterModel) {
     return this.http.post(authUrl + 'register', body);
   }
@@ -38,17 +34,5 @@ export class AuthService {
 
   public changePassword(body: ChangePasswordModel) {
     return this.http.post(authUrl + 'changePassword', body);
-  }
-
-  public isAuthenticated(): boolean {
-    return localStorage.getItem('currentUser') !== null;
-  }
-
-  public isAdmin(): boolean {
-    if (this.user) {
-      return this.user.isAdmin;
-    }
-
-    return false;
   }
 }

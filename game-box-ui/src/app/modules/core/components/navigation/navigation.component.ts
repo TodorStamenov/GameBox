@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { CategoryService } from 'src/app/modules/admin/services/category.service';
-import { AuthService } from 'src/app/modules/core/sharedServices/auth.service';
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
+import { AuthHelperService } from '../../services/auth-helper.service';
 
 @Component({
   selector: 'app-navigation',
@@ -13,7 +14,8 @@ export class NavigationComponent {
   public categories$ = this.categoryService.getCategoryNames$();
 
   constructor(
-    public authService: AuthService,
+    public authHelperService: AuthHelperService,
+    private authService: AuthService,
     private router: Router,
     private categoryService: CategoryService
   ) {

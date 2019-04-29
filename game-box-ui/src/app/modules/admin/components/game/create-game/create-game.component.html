@@ -4,13 +4,18 @@
       <div class="form-group">
         <label for="title">Title</label>
         <input formControlName="title" type="text" class="form-control" id="title" placeholder="Title">
-        <div *ngIf="titleMessage" class="alert alert-danger">{{ titleMessage }}</div>
+        <div *ngIf="title.touched && title.invalid" class="alert alert-danger">
+          {{ formService.getErrorMessage(title, 'Title') }}
+        </div>
       </div>
       <div class="form-group">
         <label for="description">Description</label>
         <textarea formControlName="description" type="text" class="form-control" id="description" placeholder="Description"
-          rows="5"></textarea>
-        <div *ngIf="descriptionMessage" class="alert alert-danger">{{ descriptionMessage }}</div>
+          rows="5">
+        </textarea>
+        <div *ngIf="description.touched && description.invalid" class="alert alert-danger">
+          {{ formService.getErrorMessage(description, 'Description') }}
+        </div>
       </div>
       <div class="form-group">
         <label for="thumbnailUrl">Thumbnail</label>
@@ -19,22 +24,30 @@
       <div class="form-group">
         <label for="price">Price</label>
         <input formControlName="price" type="number" class="form-control" id="price" placeholder="Price">
-        <div *ngIf="priceMessage" class="alert alert-danger">{{ priceMessage }}</div>
+        <div *ngIf="price.touched && price.invalid" class="alert alert-danger">
+          {{ formService.getErrorMessage(price, 'Price') }}
+        </div>
       </div>
       <div class="form-group">
         <label for="size">Size</label>
         <input formControlName="size" type="number" class="form-control" id="size" placeholder="Size">
-        <div *ngIf="sizeMessage" class="alert alert-danger">{{ sizeMessage }}</div>
+        <div *ngIf="size.touched && size.invalid" class="alert alert-danger">
+          {{ formService.getErrorMessage(size, 'Size') }}
+        </div>
       </div>
       <div class="form-group">
         <label for="videoId">YouTube Video URL</label>
         <input formControlName="videoId" type="text" class="form-control" id="videoId" placeholder="YouTube Video URL">
-        <div *ngIf="videoIdMessage" class="alert alert-danger">{{ videoIdMessage }}</div>
+        <div *ngIf="videoId.touched && videoId.invalid" class="alert alert-danger">
+          {{ formService.getErrorMessage(videoId, 'Video Id') }}
+        </div>
       </div>
       <div class="form-group">
         <label for="releaseDate">Release Date</label>
         <input formControlName="releaseDate" type="text" class="form-control" id="releaseDate" placeholder="Release Date">
-        <div *ngIf="releaseDateMessage" class="alert alert-danger">{{ releaseDateMessage }}</div>
+        <div *ngIf="releaseDate.touched && releaseDate.invalid" class="alert alert-danger">
+          {{ formService.getErrorMessage(releaseDate, 'Release Date') }}
+        </div>
       </div>
       <div class="form-group">
         <label for="category">Category</label>

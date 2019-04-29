@@ -6,8 +6,8 @@ import { tap } from 'rxjs/operators';
 
 import { CartItemModel } from '../../../models/cart-item.model';
 import { CartService } from '../../../services/cart.service';
-import { AuthService } from 'src/app/modules/core/sharedServices/auth.service';
 import { OrderService } from '../../../services/order.service';
+import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.service';
 
 @Component({
   selector: 'app-list-items',
@@ -29,7 +29,7 @@ export class ListItemsComponent implements OnInit {
   public games: CartItemModel[] = [];
 
   constructor(
-    private authService: AuthService,
+    private authHelperService: AuthHelperService,
     private cartService: CartService,
     private orderService: OrderService,
     private router: Router
@@ -50,7 +50,7 @@ export class ListItemsComponent implements OnInit {
   }
 
   public order(): void {
-    if (!this.authService.isAuthenticated()) {
+    if (!this.authHelperService.isAuthenticated()) {
       this.router.navigate(['/auth/login']);
       return;
     }

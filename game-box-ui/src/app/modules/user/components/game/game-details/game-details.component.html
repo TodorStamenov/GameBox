@@ -27,13 +27,13 @@
   </div>
   <div class="col-md-4">
     <a
-      *ngIf="authService.isAdmin()"
+      *ngIf="authHelperService.isAdmin()"
       class="btn btn-sm btn-warning action-button"
       routerLink="/admin/games/edit/{{ game.id }}">
       Edit
     </a>
     <a
-      *ngIf="authService.isAdmin()"
+      *ngIf="authHelperService.isAdmin()"
       class="btn btn-sm btn-danger action-button"
       routerLink="/admin/games/delete/{{ game.id }}">
       Delete

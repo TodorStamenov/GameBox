@@ -1,52 +1,30 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { Subscription } from 'rxjs';
-
 import { CategoryService } from '../../../services/category.service';
-import { FormService } from 'src/app/modules/core/sharedServices/form.service';
+import { FormService } from 'src/app/modules/core/services/form.service';
 
 @Component({
   selector: 'app-create-category',
   templateUrl: './create-category.component.html'
 })
-export class CreateCategoryComponent implements OnInit, OnDestroy {
-  private subscription = new Subscription();
-
+export class CreateCategoryComponent implements OnInit {
   public categoryForm: FormGroup;
-  public nameMessage: string;
 
-  private validationMessages = {
-    nameValidationMessage: {
-      required: 'Name is required',
-      minlength: 'Name should be at least 3 symbols long!'
-    }
-  };
+  get name() { return this.categoryForm.get('name'); }
 
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoryService,
     private router: Router,
-    private formService: FormService
+    public formService: FormService
   ) { }
 
   public ngOnInit(): void {
     this.categoryForm = this.fb.group({
-      'name': new FormControl('', [Validators.required, Validators.minLength(3)])
+      'name': [null, [Validators.required, Validators.minLength(3)]]
     });
-
-    const nameControl = this.categoryForm.controls.name;
-    this.subscription.add(nameControl
-      .valueChanges
-      .subscribe(() => {
-        this.nameMessage = '';
-        this.nameMessage = this.formService.setMessage(nameControl, 'nameValidationMessage', this.validationMessages);
-      }));
-  }
-
-  public ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 
   public createCategory(): void {

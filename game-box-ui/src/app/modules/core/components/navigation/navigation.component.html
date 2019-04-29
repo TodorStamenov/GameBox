@@ -34,11 +34,11 @@
                   </li>
                 </ul>
               </li>
-          <li><a *ngIf="authService.isAuthenticated()" class="nav-element" routerLink="/games/owned">Owned</a></li>
+          <li><a *ngIf="authHelperService.isAuthenticated()" class="nav-element" routerLink="/games/owned">Owned</a></li>
           <li><a class="nav-element" routerLink="/cart">Cart</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li *ngIf="authService.isAdmin()" class="dropdown">
+          <li *ngIf="authHelperService.isAdmin()" class="dropdown">
             <a href="#" class="dropdown-toggle nav-element" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               Admin
               <span class="caret"></span>
@@ -51,10 +51,10 @@
               <li><a routerLink="/admin/users/create">Add User</a></li>
             </ul>
           </li>
-          <li><a class="nav-element" *ngIf="authService.isAuthenticated()" routerLink="/auth/changePassword">Hello {{ authService.user.username }}!</a></li>
-          <li><a class="nav-element btn" *ngIf="authService.isAuthenticated()" (click)="logout()">Logout</a></li>
-          <li><a class="nav-element" *ngIf="!authService.isAuthenticated()" routerLink="/auth/login">Login</a></li>
-          <li><a class="nav-element" *ngIf="!authService.isAuthenticated()" routerLink="/auth/register">Register</a></li>
+          <li><a class="nav-element" *ngIf="authHelperService.isAuthenticated()" routerLink="/auth/changePassword">Hello {{ authHelperService.user.username }}!</a></li>
+          <li><a class="nav-element btn" *ngIf="authHelperService.isAuthenticated()" (click)="logout()">Logout</a></li>
+          <li><a class="nav-element" *ngIf="!authHelperService.isAuthenticated()" routerLink="/auth/login">Login</a></li>
+          <li><a class="nav-element" *ngIf="!authHelperService.isAuthenticated()" routerLink="/auth/register">Register</a></li>
         </ul>
       </div>
     </div>

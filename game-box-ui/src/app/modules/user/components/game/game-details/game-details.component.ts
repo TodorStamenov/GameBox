@@ -4,8 +4,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { GameDetailsModel } from '../../../models/game-details.model';
 import { GameService } from '../../../services/game.service';
-import { AuthService } from 'src/app/modules/core/sharedServices/auth.service';
 import { CartService } from '../../../services/cart.service';
+import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.service';
 
 @Component({
   selector: 'app-game-details',
@@ -21,7 +21,7 @@ export class GameDetailsComponent implements OnInit {
     private router: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private cartService: CartService,
-    public authService: AuthService
+    public authHelperService: AuthHelperService
   ) { }
 
   public ngOnInit(): void {
