@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { constants } from '../../../common';
-import { IListCategoriesModel } from '../models/categories/list-categories.model';
+import { ICategoriesListModel } from '../models/categories/categories-list.model';
 import { ICategoryBindingModel } from '../models/categories/category-binding.model';
 import { ICategoryMenuModel } from '../models/categories/category-menu.model';
 
@@ -16,12 +16,12 @@ const categoriesUrl = constants.host + 'categories/';
 export class CategoryService {
   constructor(private http: HttpClient) { }
 
-  public getCategories$(): Observable<IListCategoriesModel[]> {
-    return this.http.get<IListCategoriesModel[]>(categoriesUrl);
+  public getCategories$(): Observable<ICategoriesListModel[]> {
+    return this.http.get<ICategoriesListModel[]>(categoriesUrl);
   }
 
-  public getCategory$(id: string): Observable<IListCategoriesModel> {
-    return this.http.get<IListCategoriesModel>(categoriesUrl + id);
+  public getCategory$(id: string): Observable<ICategoriesListModel> {
+    return this.http.get<ICategoriesListModel>(categoriesUrl + id);
   }
 
   public createCategory$(body: ICategoryBindingModel): Observable<ICategoryBindingModel> {

@@ -27,30 +27,32 @@ namespace GameBox.Services
 
             if (userId == default(Guid))
             {
-                return GetServiceResult(string.Format(Constants.Common.NotExistingEntry, nameof(User), username), ServiceResultType.Fail);
+                return GetServiceResult(
+                    string.Format(Constants.Common.NotExistingEntry, nameof(User), username),
+                    ServiceResultType.Fail);
             }
 
-            var gamesInfo = Database
+            List<Game> games = Database
                 .Games
                 .Where(g => gameIds.Contains(g.Id))
-                .Select(g => new
-                {
-                    g.Id,
-                    g.Price
-                })
                 .ToList();
 
-            if (!gamesInfo.Any())
+            if (!games.Any())
             {
                 return GetServiceResult("Not valid game ids!", ServiceResultType.Fail);
+            }
+
+            foreach (var game in games)
+            {
+                game.OrderCount++;
             }
 
             Order order = new Order
             {
                 UserId = userId,
                 TimeStamp = DateTime.Now,
-                Price = gamesInfo.Sum(g => g.Price),
-                Games = gamesInfo
+                Price = games.Sum(g => g.Price),
+                Games = games
                     .Select(g => new GameOrder
                     {
                         GameId = g.Id
@@ -61,7 +63,9 @@ namespace GameBox.Services
             Database.Orders.Add(order);
             Database.SaveChanges();
 
-            return GetServiceResult(string.Format(Constants.Common.Success, nameof(Order), string.Empty, Constants.Common.Added), ServiceResultType.Success);
+            return GetServiceResult(
+                string.Format(Constants.Common.Success, nameof(Order), string.Empty, Constants.Common.Added),
+                ServiceResultType.Success);
         }
 
         public IEnumerable<OrderViewModel> All(string startDateString, string endDateString)

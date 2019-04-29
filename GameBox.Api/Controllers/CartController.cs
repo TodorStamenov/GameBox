@@ -1,5 +1,5 @@
 ﻿using GameBox.Services.Contracts;
-using GameBox.Services.Models.View.Game;
+using GameBox.Services.Models.View.Games;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

@@ -42,6 +42,8 @@ namespace GameBox.Data.Models
 
         public int ViewCount { get; set; }
 
+        public int OrderCount { get; set; }
+
         public Guid CategoryId { get; set; }
 
         public Category Category { get; set; }

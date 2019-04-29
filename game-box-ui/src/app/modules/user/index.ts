@@ -3,7 +3,7 @@ import { GameCardListComponent } from './components/shared/game-card-list/game-c
 import { CategoryGamesComponent } from './components/game/category-games/category-games.component';
 import { OwnedGamesComponent } from './components/game/owned-games/owned-games.component';
 import { GameDetailsComponent } from './components/game/game-details/game-details.component';
-import { ListItemsComponent } from './components/cart/list-items/list-items.component';
+import { ItemsListComponent } from './components/cart/items-list/items-list.component';
 import { LoadMoreComponent } from './components/shared/load-more/load-more.component';
 
 export const userComponents = [
@@ -12,6 +12,6 @@ export const userComponents = [
   CategoryGamesComponent,
   OwnedGamesComponent,
   GameDetailsComponent,
-  ListItemsComponent,
+  ItemsListComponent,
   LoadMoreComponent
 ];

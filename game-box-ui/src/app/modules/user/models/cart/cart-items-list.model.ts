@@ -1,4 +1,4 @@
-export interface ICartItemModel {
+export interface ICartItemsListModel {
   id: string;
   title: string;
   description: string;

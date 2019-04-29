@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 
-import { IListGamesModel } from '../../../models/list-games.model';
+import { IGamesListModel } from '../../../models/games/games-list.model';
 import { CartService } from '../../../services/cart.service';
 
 @Component({
@@ -22,7 +22,7 @@ import { CartService } from '../../../services/cart.service';
 })
 export class GameCardListComponent {
   @Input()
-  public games: IListGamesModel[];
+  public games: IGamesListModel[];
 
   constructor(private cartService: CartService) { }
 

@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { constants } from '../../../common';
-import { IUserModel } from '../models/users/user.model';
+import { IUsersListModel } from '../models/users/users-list.model';
 import { ICreateUserModel } from '../models/users/create-user.model';
 
 const usersUrl = constants.host + 'users/';
@@ -15,8 +15,8 @@ const usersUrl = constants.host + 'users/';
 export class AdminService {
   constructor(private http: HttpClient) { }
 
-  public getUsers$(username: string): Observable<IUserModel[]> {
-    return this.http.get<IUserModel[]>(usersUrl + 'all?username=' + username);
+  public getUsers$(username: string): Observable<IUsersListModel[]> {
+    return this.http.get<IUsersListModel[]>(usersUrl + 'all?username=' + username);
   }
 
   public lock$(username: string): Observable<string> {

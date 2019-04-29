@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="col-md-offset-2 col-md-6">
+    <h2>Search Users</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-2 col-md-offset-2">
+    <app-search-form [fieldName]="'username'" (textChange)="setUsername($event)"></app-search-form>
+  </div>
+</div>
+<br />
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Lock</th>
+          <th>Admin Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users$ | async">
+          <td>{{ user.username }}</td>
+          <td>
+            <button 
+              *ngIf="!user.isLocked"
+              class="btn btn-danger btn-sm"
+              (click)="lock(user.username)">
+              Lock
+            </button>
+            <button
+              *ngIf="user.isLocked"
+              class="btn btn-success btn-sm"
+              (click)="unlock(user.username)">
+              Unlock
+            </button>
+          </td>
+          <td>
+            <button
+              *ngIf="user.isAdmin"
+              class="btn btn-danger btn-sm"
+              (click)="removeRole(user.username, 'Admin')">
+              Remove Role
+            </button>
+            <button
+              *ngIf="!user.isAdmin"
+              class="btn btn-success btn-sm"
+              (click)="addRole(user.username, 'Admin')">
+              Add Role
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

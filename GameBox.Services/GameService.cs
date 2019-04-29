@@ -4,7 +4,7 @@ using GameBox.Data;
 using GameBox.Data.Models;
 using GameBox.Services.Contracts;
 using GameBox.Services.Models.Binding.Games;
-using GameBox.Services.Models.View.Game;
+using GameBox.Services.Models.View.Games;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,9 @@ namespace GameBox.Services
 {
     public class GameService : Service, IGameService
     {
+        private const int GamesInPage = 15;
+        private const int GameCardsCount = 9;
+
         public GameService(GameBoxDbContext database)
             : base(database)
         {
@@ -76,12 +79,16 @@ namespace GameBox.Services
         {
             if (!DateTime.TryParse(releaseDateString, out DateTime releaseDate))
             {
-                return GetServiceResult(string.Format(Constants.Common.NotValidDateFormat, releaseDateString), ServiceResultType.Fail);
+                return GetServiceResult(
+                    string.Format(Constants.Common.NotValidDateFormat, releaseDateString),
+                    ServiceResultType.Fail);
             }
 
             if (this.HasGame(title))
             {
-                return GetServiceResult(string.Format(Constants.Common.DuplicateEntry, nameof(Game), title), ServiceResultType.Fail);
+                return GetServiceResult(
+                    string.Format(Constants.Common.DuplicateEntry, nameof(Game), title),
+                    ServiceResultType.Fail);
             }
 
             Database.Games.Add(new Game
@@ -98,7 +105,9 @@ namespace GameBox.Services
 
             Database.SaveChanges();
 
-            return GetServiceResult(string.Format(Constants.Common.Success, nameof(Game), title, Constants.Common.Added), ServiceResultType.Success);
+            return GetServiceResult(
+                string.Format(Constants.Common.Success, nameof(Game), title, Constants.Common.Added),
+                ServiceResultType.Success);
         }
 
         public ServiceResult Edit(
@@ -114,19 +123,25 @@ namespace GameBox.Services
         {
             if (!DateTime.TryParse(releaseDateString, out DateTime releaseDate))
             {
-                return GetServiceResult(string.Format(Constants.Common.NotValidDateFormat, releaseDateString), ServiceResultType.Fail);
+                return GetServiceResult(
+                    string.Format(Constants.Common.NotValidDateFormat, releaseDateString),
+                    ServiceResultType.Fail);
             }
 
             Game game = Database.Games.Find(id);
 
             if (game == null)
             {
-                return GetServiceResult(string.Format(Constants.Common.NotExistingEntry, nameof(Game), title), ServiceResultType.Fail);
+                return GetServiceResult(
+                    string.Format(Constants.Common.NotExistingEntry, nameof(Game), title),
+                    ServiceResultType.Fail);
             }
 
             if (this.HasGame(title) && game.Title != title)
             {
-                return GetServiceResult(string.Format(Constants.Common.DuplicateEntry, nameof(Game), title), ServiceResultType.Fail);
+                return GetServiceResult(
+                    string.Format(Constants.Common.DuplicateEntry, nameof(Game), title),
+                    ServiceResultType.Fail);
             }
 
             game.Title = title;
@@ -140,7 +155,9 @@ namespace GameBox.Services
 
             Database.SaveChanges();
 
-            return GetServiceResult(string.Format(Constants.Common.Success, nameof(Game), title, Constants.Common.Edited), ServiceResultType.Success);
+            return GetServiceResult(
+                string.Format(Constants.Common.Success, nameof(Game), title, Constants.Common.Edited),
+                ServiceResultType.Success);
         }
 
         public ServiceResult Delete(Guid id)
@@ -149,13 +166,42 @@ namespace GameBox.Services
 
             if (game == null)
             {
-                return GetServiceResult(string.Format(Constants.Common.NotExistingEntry, nameof(Game), id), ServiceResultType.Fail);
+                return GetServiceResult(
+                    string.Format(Constants.Common.NotExistingEntry, nameof(Game), id),
+                    ServiceResultType.Fail);
             }
 
             Database.Games.Remove(game);
             Database.SaveChanges();
 
-            return GetServiceResult(string.Format(Constants.Common.Success, nameof(Game), game.Title, Constants.Common.Deleted), ServiceResultType.Success);
+            return GetServiceResult(
+                string.Format(Constants.Common.Success, nameof(Game), game.Title, Constants.Common.Deleted),
+                ServiceResultType.Success);
+        }
+
+        public IEnumerable<ListGamesAdminViewModel> All(string title)
+        {
+            IQueryable<Game> query = Database.Games;
+
+            if (!string.IsNullOrEmpty(title)
+                && !string.IsNullOrWhiteSpace(title))
+            {
+                query = query
+                    .Where(g => g.Title.ToLower().Contains(title.ToLower()));
+            }
+
+            return query
+                .OrderBy(g => g.Title)
+                .Take(GamesInPage)
+                .Select(g => new ListGamesAdminViewModel
+                {
+                    Id = g.Id,
+                    Title = g.Title,
+                    Price = g.Price,
+                    ViewCount = g.ViewCount,
+                    OrderCount = g.OrderCount
+                })
+                .ToList();
         }
 
         public IEnumerable<ListGamesCartViewModel> Cart(IEnumerable<Guid> gameIds)
@@ -186,7 +232,7 @@ namespace GameBox.Services
                 .ThenByDescending(g => g.ViewCount)
                 .ThenBy(g => g.Title)
                 .Skip(loadedGames)
-                .Take(9)
+                .Take(GameCardsCount)
                 .Select(g => new ListGamesViewModel
                 {
                     Id = g.Id,
@@ -210,7 +256,7 @@ namespace GameBox.Services
                 .Distinct()
                 .OrderBy(g => g.Title)
                 .Skip(loadedGames)
-                .Take(9)
+                .Take(GameCardsCount)
                 .Select(g => new ListGamesViewModel
                 {
                     Id = g.Id,

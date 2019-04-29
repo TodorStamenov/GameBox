@@ -2,7 +2,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { GameService } from '../../../services/game.service';
-import { IListGamesModel } from '../../../models/list-games.model';
+import { IGamesListModel } from '../../../models/games/games-list.model';
 
 @Component({
   selector: 'app-category-games',
@@ -10,7 +10,7 @@ import { IListGamesModel } from '../../../models/list-games.model';
 })
 export class CategoryGamesComponent implements OnInit {
   public categoryId: string;
-  public games: IListGamesModel[] = [];
+  public games: IGamesListModel[] = [];
 
   constructor(
     private gameService: GameService,

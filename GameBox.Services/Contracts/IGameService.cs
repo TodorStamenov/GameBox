@@ -1,6 +1,6 @@
 ﻿using GameBox.Core;
 using GameBox.Services.Models.Binding.Games;
-using GameBox.Services.Models.View.Game;
+using GameBox.Services.Models.View.Games;
 using System;
 using System.Collections.Generic;
 
@@ -34,6 +34,8 @@ namespace GameBox.Services.Contracts
             Guid categoryId);
 
         ServiceResult Delete(Guid id);
+
+        IEnumerable<ListGamesAdminViewModel> All(string title);
 
         IEnumerable<ListGamesCartViewModel> Cart(IEnumerable<Guid> gameIds);
 

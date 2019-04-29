@@ -40,7 +40,9 @@ namespace GameBox.Services
 
             if (userRoleInfo != null)
             {
-                return GetServiceResult($"User {username} is already in {roleName} role.", ServiceResultType.Fail);
+                return GetServiceResult(
+                    $"User {username} is already in {roleName} role.",
+                    ServiceResultType.Fail);
             }
 
             Guid? userId = Database
@@ -59,7 +61,9 @@ namespace GameBox.Services
 
             if (userId == null || roleId == null)
             {
-                return GetServiceResult($"User {username} or {roleName} role is not present in database.", ServiceResultType.Fail);
+                return GetServiceResult(
+                    $"User {username} or {roleName} role is not present in database.",
+                    ServiceResultType.Fail);
             }
 
             UserRoles userRole = new UserRoles
@@ -71,7 +75,9 @@ namespace GameBox.Services
             Database.UserRoles.Add(userRole);
             Database.SaveChanges();
 
-            return GetServiceResult($"User {username} successfully added to {roleName} role.", ServiceResultType.Success);
+            return GetServiceResult(
+                $"User {username} successfully added to {roleName} role.",
+                ServiceResultType.Success);
         }
 
         public ServiceResult RemoveRole(string username, string roleName)
@@ -84,13 +90,17 @@ namespace GameBox.Services
 
             if (userRole == null)
             {
-                return GetServiceResult($"User {username} is not in {roleName} role.", ServiceResultType.Fail);
+                return GetServiceResult(
+                    $"User {username} is not in {roleName} role.",
+                    ServiceResultType.Fail);
             }
 
             Database.UserRoles.Remove(userRole);
             Database.SaveChanges();
 
-            return GetServiceResult($"User {username} successfully removed from {roleName} role.", ServiceResultType.Success);
+            return GetServiceResult(
+                $"User {username} successfully removed from {roleName} role.",
+                ServiceResultType.Success);
         }
 
         public ServiceResult Lock(string username)
@@ -102,19 +112,25 @@ namespace GameBox.Services
 
             if (user == null)
             {
-                return GetServiceResult(string.Format(Constants.Common.NotExistingEntry, nameof(User), username), ServiceResultType.Fail);
+                return GetServiceResult(
+                    string.Format(Constants.Common.NotExistingEntry, nameof(User), username),
+                    ServiceResultType.Fail);
             }
 
             if (user.IsLocked)
             {
-                return GetServiceResult(string.Format(UserLockedState, username, Constants.Common.Locked), ServiceResultType.Fail);
+                return GetServiceResult(
+                    string.Format(UserLockedState, username, Constants.Common.Locked),
+                    ServiceResultType.Fail);
             }
 
             user.IsLocked = true;
 
             Database.SaveChanges();
 
-            return GetServiceResult(string.Format(Constants.Common.Success, nameof(User), username, Constants.Common.Locked), ServiceResultType.Success);
+            return GetServiceResult(
+                string.Format(Constants.Common.Success, nameof(User), username, Constants.Common.Locked),
+                ServiceResultType.Success);
         }
 
         public ServiceResult Unlock(string username)
@@ -126,19 +142,25 @@ namespace GameBox.Services
 
             if (user == null)
             {
-                return GetServiceResult(string.Format(Constants.Common.NotExistingEntry, nameof(User), username), ServiceResultType.Fail);
+                return GetServiceResult(
+                    string.Format(Constants.Common.NotExistingEntry, nameof(User), username),
+                    ServiceResultType.Fail);
             }
 
             if (!user.IsLocked)
             {
-                return GetServiceResult(string.Format(UserLockedState, username, Constants.Common.Unlocked), ServiceResultType.Fail);
+                return GetServiceResult(
+                    string.Format(UserLockedState, username, Constants.Common.Unlocked),
+                    ServiceResultType.Fail);
             }
 
             user.IsLocked = false;
 
             Database.SaveChanges();
 
-            return GetServiceResult(string.Format(Constants.Common.Success, nameof(User), username, Constants.Common.Unlocked), ServiceResultType.Success);
+            return GetServiceResult(
+                string.Format(Constants.Common.Success, nameof(User), username, Constants.Common.Unlocked),
+                ServiceResultType.Success);
         }
 
         public IEnumerable<ListUsersViewModel> All(string userQuery)

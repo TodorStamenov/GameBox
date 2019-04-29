@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { constants } from 'src/app/common';
-import { ICartItemModel } from '../models/cart-item.model';
+import { ICartItemsListModel } from '../models/cart/cart-items-list.model';
 
 const cartUrl = constants.host + 'cart/';
 
@@ -45,7 +45,7 @@ export class CartService {
     this.cart = [];
   }
 
-  public getCart$(): Observable<ICartItemModel[]> {
-    return this.http.post<ICartItemModel[]>(cartUrl, this.cart);
+  public getCart$(): Observable<ICartItemsListModel[]> {
+    return this.http.post<ICartItemsListModel[]>(cartUrl, this.cart);
   }
 }

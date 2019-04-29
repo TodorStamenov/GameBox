@@ -4,7 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { Observable } from 'rxjs';
 
-import { IGameDetailsModel } from '../../../models/game-details.model';
+import { IGameDetailsModel } from '../../../models/games/game-details.model';
 import { GameService } from '../../../services/game.service';
 import { CartService } from '../../../services/cart.service';
 import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.service';

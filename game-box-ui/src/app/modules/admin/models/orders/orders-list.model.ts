@@ -1,4 +1,4 @@
-export interface IOrderModel {
+export interface IOrdersListModel {
   username: string;
   timeStamp: Date;
   price: number;

@@ -4,14 +4,14 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 import { OrderService } from '../../../services/order.service';
-import { IOrderModel } from '../../../models/orders/order.model';
+import { IOrdersListModel } from '../../../models/orders/orders-list.model';
 
 @Component({
-  selector: 'app-all-orders',
-  templateUrl: './all-orders.component.html'
+  selector: 'app-orders-list',
+  templateUrl: './orders-list.component.html'
 })
-export class AllOrdersComponent implements OnInit {
-  public orders$: Observable<IOrderModel[]>;
+export class OrdersListComponent implements OnInit {
+  public orders$: Observable<IOrdersListModel[]>;
   public dateRange: FormGroup;
 
   constructor(

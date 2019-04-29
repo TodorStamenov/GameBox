@@ -1,4 +1,4 @@
-﻿namespace GameBox.Services.Models.View.Game
+﻿namespace GameBox.Services.Models.View.Games
 {
     public class GameDetailsViewModel : ListGamesViewModel
     {

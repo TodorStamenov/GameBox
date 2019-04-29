@@ -4,15 +4,15 @@ import { trigger, transition, animate, style } from '@angular/animations';
 
 import { tap } from 'rxjs/operators';
 
-import { ICartItemModel } from '../../../models/cart-item.model';
+import { ICartItemsListModel } from '../../../models/cart/cart-items-list.model';
 import { CartService } from '../../../services/cart.service';
 import { OrderService } from '../../../services/order.service';
 import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.service';
 
 @Component({
-  selector: 'app-list-items',
-  templateUrl: './list-items.component.html',
-  styleUrls: ['./list-items.component.css'],
+  selector: 'app-items-list',
+  templateUrl: './items-list.component.html',
+  styleUrls: ['./items-list.component.css'],
   animations: [
     trigger('itemCard', [
       transition('* => void', [
@@ -24,9 +24,9 @@ import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.ser
     ])
   ]
 })
-export class ListItemsComponent implements OnInit {
+export class ItemsListComponent implements OnInit {
   public totalPrice: number;
-  public games: ICartItemModel[] = [];
+  public games: ICartItemsListModel[] = [];
 
   constructor(
     private authHelperService: AuthHelperService,
@@ -72,7 +72,7 @@ export class ListItemsComponent implements OnInit {
     this.cartService
       .getCart$()
       .pipe(
-        tap((res: ICartItemModel[]) => {
+        tap((res: ICartItemsListModel[]) => {
           this.games = res;
           this.totalPrice = this.calculateTotalPrice();
         })
@@ -86,7 +86,7 @@ export class ListItemsComponent implements OnInit {
     }
 
     return this.games
-      .map((i: ICartItemModel) => i.price)
+      .map((i: ICartItemsListModel) => i.price)
       .reduce((x: number, y: number) => x + y);
   }
 }

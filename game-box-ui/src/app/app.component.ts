@@ -8,6 +8,4 @@ import { Component } from '@angular/core';
     <app-footer></app-footer>
   `
 })
-export class AppComponent {
-  title = 'app';
-}
+export class AppComponent { }

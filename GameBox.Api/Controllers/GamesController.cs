@@ -2,7 +2,7 @@
 using GameBox.Core.Enums;
 using GameBox.Services.Contracts;
 using GameBox.Services.Models.Binding.Games;
-using GameBox.Services.Models.View.Game;
+using GameBox.Services.Models.View.Games;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -39,6 +39,14 @@ namespace GameBox.Api.Controllers
         public IEnumerable<ListGamesViewModel> Owned([FromQuery]int loadedGames)
         {
             return this.game.Owned(loadedGames, User.Identity.Name);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = Constants.Common.Admin)]
+        [Route("all")]
+        public IEnumerable<ListGamesAdminViewModel> Get([FromQuery]string title)
+        {
+            return this.game.All(title);
         }
 
         [HttpGet]

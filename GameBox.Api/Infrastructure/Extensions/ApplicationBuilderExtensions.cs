@@ -183,7 +183,8 @@ namespace GameBox.Api.Infrastructure.Extensions
                     ReleaseDate = DateTime.Now.AddMonths(-i),
                     CategoryId = categoryIds[random.Next(0, categoryIds.Count)],
                     VideoId = "pyZw_oqk7Q8",
-                    ViewCount = random.Next(10, 10000)
+                    ViewCount = random.Next(10, 10000),
+                    OrderCount = random.Next(10, 10000)
                 });
             }
 

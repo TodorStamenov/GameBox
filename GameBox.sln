@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Api", "GameBox.Api\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Data", "GameBox.Data\GameBox.Data.csproj", "{6175C8DF-6204-45E1-B590-C15A4FA88311}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBox.Core", "GameBox.Core\GameBox.Core.csproj", "{E63AD4B9-CCC4-481F-9374-D598611F5A17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Core", "GameBox.Core\GameBox.Core.csproj", "{E63AD4B9-CCC4-481F-9374-D598611F5A17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
