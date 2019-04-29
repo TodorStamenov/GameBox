@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { Observable, Subscription } from 'rxjs';
 
-import { UserModel } from '../../../models/users/user.model';
+import { IUserModel } from '../../../models/users/user.model';
 import { AdminService } from '../../../services/admin.service';
 import { debounceTime } from 'rxjs/operators';
 
@@ -15,7 +15,7 @@ export class AllUsersComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
 
   public searchForm: FormGroup;
-  public users$: Observable<UserModel[]>;
+  public users$: Observable<IUserModel[]>;
 
   get username() { return this.searchForm.get('username'); }
 

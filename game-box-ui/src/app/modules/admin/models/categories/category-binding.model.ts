@@ -1,5 +1,3 @@
-export class CategoryBindingModel {
-  constructor(
-    public name: string
-  ) { }
+export interface ICategoryBindingModel {
+  name: string;
 }

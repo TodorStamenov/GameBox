@@ -1,8 +1,6 @@
-export class OrderModel {
-  constructor(
-    public username: string,
-    public timeStamp: Date,
-    public price: number,
-    public gamesCount: number
-  ) { }
+export interface IOrderModel {
+  username: string;
+  timeStamp: Date;
+  price: number;
+  gamesCount: number;
 }

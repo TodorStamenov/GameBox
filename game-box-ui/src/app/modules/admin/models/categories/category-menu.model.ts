@@ -1,6 +1,4 @@
-export class CategoryMenuModel {
-  constructor(
-    public id: string,
-    public name: string
-  ) { }
+export interface ICategoryMenuModel {
+  id: string;
+  name: string;
 }

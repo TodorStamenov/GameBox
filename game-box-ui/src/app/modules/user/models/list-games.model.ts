@@ -1,12 +1,10 @@
-export class ListGamesModel {
-  constructor(
-    public id: string,
-    public title: string,
-    public price: number,
-    public size: number,
-    public videoId: string,
-    public thumbnailUrl: string,
-    public description: string,
-    public viewCount: number
-  ) { }
+export interface IListGamesModel {
+  id: string;
+  title: string;
+  price: number;
+  size: number;
+  videoId: string;
+  thumbnailUrl: string;
+  description: string;
+  viewCount: number;
 }

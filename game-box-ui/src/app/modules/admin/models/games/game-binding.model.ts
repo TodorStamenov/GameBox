@@ -1,12 +1,10 @@
-export class GameBindingModel {
-  constructor(
-    public title: string,
-    public description: string,
-    public price: number,
-    public size: number,
-    public thumbnailUrl: string,
-    public videoId: string,
-    public releaseDate: Date,
-    public categoryId: string
-  ) { }
+export interface IGameBindingModel {
+  title: string;
+  description: string;
+  price: number;
+  size: number;
+  thumbnailUrl: string;
+  videoId: string;
+  releaseDate: Date;
+  categoryId: string;
 }

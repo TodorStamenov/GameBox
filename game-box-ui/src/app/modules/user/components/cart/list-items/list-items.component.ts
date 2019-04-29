@@ -4,7 +4,7 @@ import { trigger, transition, animate, style } from '@angular/animations';
 
 import { tap } from 'rxjs/operators';
 
-import { CartItemModel } from '../../../models/cart-item.model';
+import { ICartItemModel } from '../../../models/cart-item.model';
 import { CartService } from '../../../services/cart.service';
 import { OrderService } from '../../../services/order.service';
 import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.service';
@@ -26,7 +26,7 @@ import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.ser
 })
 export class ListItemsComponent implements OnInit {
   public totalPrice: number;
-  public games: CartItemModel[] = [];
+  public games: ICartItemModel[] = [];
 
   constructor(
     private authHelperService: AuthHelperService,
@@ -72,7 +72,7 @@ export class ListItemsComponent implements OnInit {
     this.cartService
       .getCart$()
       .pipe(
-        tap((res: CartItemModel[]) => {
+        tap((res: ICartItemModel[]) => {
           this.games = res;
           this.totalPrice = this.calculateTotalPrice();
         })
@@ -86,7 +86,7 @@ export class ListItemsComponent implements OnInit {
     }
 
     return this.games
-      .map((i: CartItemModel) => i.price)
+      .map((i: ICartItemModel) => i.price)
       .reduce((x: number, y: number) => x + y);
   }
 }

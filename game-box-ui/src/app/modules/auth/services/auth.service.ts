@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 
 import { ToastrService } from 'ngx-toastr';
 
-import { RegisterModel } from '../../auth/models/register.model';
-import { LoginModel } from '../../auth/models/login.model';
-import { ChangePasswordModel } from '../../auth/models/change-password.model';
+import { IRegisterModel } from '../../auth/models/register.model';
+import { ILoginModel } from '../../auth/models/login.model';
+import { IChangePasswordModel } from '../../auth/models/change-password.model';
 import { constants } from '../../../common';
 
 const authUrl = constants.host + 'account/';
@@ -19,11 +19,11 @@ export class AuthService {
     private toastr: ToastrService
   ) { }
 
-  public register(body: RegisterModel) {
+  public register(body: IRegisterModel) {
     return this.http.post(authUrl + 'register', body);
   }
 
-  public login(body: LoginModel) {
+  public login(body: ILoginModel) {
     return this.http.post(authUrl + 'login', body);
   }
 
@@ -32,7 +32,7 @@ export class AuthService {
     this.toastr.success('You have successfully logged out', 'Success!');
   }
 
-  public changePassword(body: ChangePasswordModel) {
+  public changePassword(body: IChangePasswordModel) {
     return this.http.post(authUrl + 'changePassword', body);
   }
 }

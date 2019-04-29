@@ -1,7 +1,5 @@
-export class CreateUserModel {
-  constructor(
-    public username: string,
-    public password: string,
-    public repeatPassword: string
-  ) { }
+export interface ICreateUserModel {
+  username: string;
+  password: string;
+  repeatPassword: string;
 }

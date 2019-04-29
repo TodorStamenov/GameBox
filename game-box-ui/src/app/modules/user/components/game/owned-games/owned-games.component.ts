@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ListGamesModel } from '../../../models/list-games.model';
+import { IListGamesModel } from '../../../models/list-games.model';
 import { GameService } from '../../../services/game.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { GameService } from '../../../services/game.service';
   templateUrl: './owned-games.component.html'
 })
 export class OwnedGamesComponent implements OnInit {
-  public games: ListGamesModel[] = [];
+  public games: IListGamesModel[] = [];
 
   constructor(private gameService: GameService) { }
 

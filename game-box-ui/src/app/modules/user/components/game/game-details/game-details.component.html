@@ -1,53 +1,50 @@
-<div class="row">
-  <div class="col-md-12 text-center">
-    <h1 class="game-title">{{ game.title }}</h1>
-    <iframe class="game-i-frame" [src]="videoId" frameborder="0" allowfullscreen>
-    </iframe>
+<ng-container *ngIf="(game$ | async) as game">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <h1 class="game-title">{{ game.title }}</h1>
+      <iframe class="game-i-frame" [src]="videoId" frameborder="0" allowfullscreen>
+      </iframe>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-md-offset-2 col-md-8">
-    <p>{{ game.description }}</p>
+  <div class="row">
+    <div class="col-md-offset-2 col-md-8">
+      <p>{{ game.description }}</p>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-md-offset-4 col-md-2">
-    <p>
-      <strong>Price</strong> - {{ game.price | currency }}
-    </p>
-    <p>
-      <strong>Size</strong> - {{ game.size }} GB
-    </p>
-    <p>
-      <strong>Release Date</strong> - {{ game.releaseDate | date}}
-    </p>
-    <p>
-      <strong>Views</strong> - {{ game.viewCount }}
-    </p>
+  <div class="row">
+    <div class="col-md-offset-4 col-md-2">
+      <p>
+        <strong>Price</strong> - {{ game.price | currency }}
+      </p>
+      <p>
+        <strong>Size</strong> - {{ game.size }} GB
+      </p>
+      <p>
+        <strong>Release Date</strong> - {{ game.releaseDate | date}}
+      </p>
+      <p>
+        <strong>Views</strong> - {{ game.viewCount }}
+      </p>
+    </div>
+    <div class="col-md-4">
+      <a 
+        *ngIf="authHelperService.isAdmin()"
+        class="btn btn-sm btn-warning action-button"
+        routerLink="/admin/games/edit/{{ game.id }}">
+        Edit
+      </a>
+      <a
+        *ngIf="authHelperService.isAdmin()"
+        class="btn btn-sm btn-danger action-button"
+        routerLink="/admin/games/delete/{{ game.id }}">
+        Delete
+      </a>
+      <a (click)="addItem(game.id)" class="btn btn-sm btn-success action-button" routerLink="/cart">
+        Buy
+      </a>
+      <a class="btn btn-sm btn-default action-button" routerLink="/">
+        Back
+      </a>
+    </div>
   </div>
-  <div class="col-md-4">
-    <a
-      *ngIf="authHelperService.isAdmin()"
-      class="btn btn-sm btn-warning action-button"
-      routerLink="/admin/games/edit/{{ game.id }}">
-      Edit
-    </a>
-    <a
-      *ngIf="authHelperService.isAdmin()"
-      class="btn btn-sm btn-danger action-button"
-      routerLink="/admin/games/delete/{{ game.id }}">
-      Delete
-    </a>
-    <a
-      (click)="addItem(game.id)"
-      class="btn btn-sm btn-success action-button"
-      routerLink="/cart">
-      Buy
-    </a>
-    <a
-      class="btn btn-sm btn-default action-button"
-      routerLink="/">
-      Back
-    </a>
-  </div>
-</div>
+</ng-container>

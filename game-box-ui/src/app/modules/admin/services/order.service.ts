@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { constants } from 'src/app/common';
-import { OrderModel } from '../models/orders/order.model';
+import { IOrderModel } from '../models/orders/order.model';
 
 const ordersUrl = constants.host + 'orders';
 
@@ -12,7 +12,7 @@ const ordersUrl = constants.host + 'orders';
 export class OrderService {
   constructor(private http: HttpClient) { }
 
-  public getOrders$(startDate: string, endDate: string): Observable<OrderModel[]> {
-    return this.http.get<OrderModel[]>(ordersUrl + '?startDate=' + startDate + '&endDate=' + endDate);
+  public getOrders$(startDate: string, endDate: string): Observable<IOrderModel[]> {
+    return this.http.get<IOrderModel[]>(ordersUrl + '?startDate=' + startDate + '&endDate=' + endDate);
   }
 }

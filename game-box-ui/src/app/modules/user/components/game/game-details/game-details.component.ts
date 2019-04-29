@@ -2,10 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
-import { GameDetailsModel } from '../../../models/game-details.model';
+import { Observable } from 'rxjs';
+
+import { IGameDetailsModel } from '../../../models/game-details.model';
 import { GameService } from '../../../services/game.service';
 import { CartService } from '../../../services/cart.service';
 import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-game-details',
@@ -13,8 +16,9 @@ import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.ser
   styleUrls: ['./game-details.component.css']
 })
 export class GameDetailsComponent implements OnInit {
-  public game: GameDetailsModel = new GameDetailsModel('', '', 0, 0, '', '', '', 0, new Date);
+  public game$: Observable<IGameDetailsModel>; // = new IGameDetailsModel('', '', 0, 0, '', '', '', 0, new Date);
   public videoId: SafeResourceUrl;
+  private gameId: string;
 
   constructor(
     private gameService: GameService,
@@ -22,15 +26,18 @@ export class GameDetailsComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private cartService: CartService,
     public authHelperService: AuthHelperService
-  ) { }
+  ) {
+    this.gameId = this.router.snapshot.params['id'];
+  }
 
   public ngOnInit(): void {
-    this.gameService
-      .getDetails$(this.router.snapshot.params['id'])
-      .subscribe(res => {
-        this.game = res;
-        this.videoId = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${res.videoId}`);
-      });
+    this.game$ = this.gameService
+      .getDetails$(this.gameId)
+      .pipe(
+        tap((res: IGameDetailsModel) => {
+          this.videoId = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${res.videoId}`);
+        })
+      );
   }
 
   public addItem(id: string): void {

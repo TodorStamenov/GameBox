@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { constants } from '../../../common';
-import { UserModel } from '../models/users/user.model';
-import { CreateUserModel } from '../models/users/create-user.model';
+import { IUserModel } from '../models/users/user.model';
+import { ICreateUserModel } from '../models/users/create-user.model';
 
 const usersUrl = constants.host + 'users/';
 
@@ -13,8 +13,8 @@ const usersUrl = constants.host + 'users/';
 export class AdminService {
   constructor(private http: HttpClient) { }
 
-  public getUsers$(username: string): Observable<UserModel[]> {
-    return this.http.get<UserModel[]>(usersUrl + 'all?username=' + username);
+  public getUsers$(username: string): Observable<IUserModel[]> {
+    return this.http.get<IUserModel[]>(usersUrl + 'all?username=' + username);
   }
 
   public lock$(username: string): Observable<string> {
@@ -33,7 +33,7 @@ export class AdminService {
     return this.http.get<string>(usersUrl + 'removeRole?username=' + username + '&roleName=' + role);
   }
 
-  public createUser$(body: CreateUserModel): Observable<any> {
+  public createUser$(body: ICreateUserModel): Observable<any> {
     return this.http.post(usersUrl + 'create', body);
   }
 }

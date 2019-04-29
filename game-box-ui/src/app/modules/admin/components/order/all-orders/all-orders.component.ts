@@ -4,14 +4,14 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 import { OrderService } from '../../../services/order.service';
-import { OrderModel } from '../../../models/orders/order.model';
+import { IOrderModel } from '../../../models/orders/order.model';
 
 @Component({
   selector: 'app-all-orders',
   templateUrl: './all-orders.component.html'
 })
 export class AllOrdersComponent implements OnInit {
-  public orders$: Observable<OrderModel[]>;
+  public orders$: Observable<IOrderModel[]>;
   public dateRange: FormGroup;
 
   constructor(
