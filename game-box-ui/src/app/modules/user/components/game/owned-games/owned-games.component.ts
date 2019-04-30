@@ -19,6 +19,6 @@ export class OwnedGamesComponent implements OnInit {
   public loadGames(): void {
     this.gameService
       .getOwned$(this.games.length)
-      .subscribe(res => this.games = [...this.games, ...res]);
+      .subscribe((res: IGamesListModel[]) => this.games = [...this.games, ...res]);
   }
 }

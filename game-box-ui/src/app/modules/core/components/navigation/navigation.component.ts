@@ -26,7 +26,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.id = setInterval(() => {
       this.categories$ = this.categoryService.getCategoryNames$();
-    }, 60 * 60 * 24);
+    }, 1000 * 60 * 60 * 24);
   }
 
   public ngOnDestroy(): void {

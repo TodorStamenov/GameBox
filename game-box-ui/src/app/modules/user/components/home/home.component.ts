@@ -19,6 +19,6 @@ export class HomeComponent implements OnInit {
   public loadGames(): void {
     this.gameService
       .getGames$(this.games.length, '')
-      .subscribe(res => this.games = [...this.games, ...res]);
+      .subscribe((res: IGamesListModel[]) => this.games = [...this.games, ...res]);
   }
 }

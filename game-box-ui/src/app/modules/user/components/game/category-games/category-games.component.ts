@@ -26,6 +26,6 @@ export class CategoryGamesComponent implements OnInit {
   public loadGames(): void {
     this.gameService
       .getGames$(this.games.length, this.categoryId)
-      .subscribe(res => this.games = [...this.games, ...res]);
+      .subscribe((res: IGamesListModel[]) => this.games = [...this.games, ...res]);
   }
 }

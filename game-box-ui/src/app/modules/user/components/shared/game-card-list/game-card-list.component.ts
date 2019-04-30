@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 import { IGamesListModel } from '../../../models/games/games-list.model';
@@ -8,6 +8,7 @@ import { CartService } from '../../../services/cart.service';
   selector: 'app-game-card-list',
   templateUrl: './game-card-list.component.html',
   styleUrls: ['./game-card-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('itemCard', [
       transition('void => *', [

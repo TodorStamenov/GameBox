@@ -1,12 +1,21 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnDestroy,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-form',
-  templateUrl: './search-form.component.html'
+  templateUrl: './search-form.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchFormComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
