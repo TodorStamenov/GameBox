@@ -4,9 +4,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminGuard } from './guards/admin.guard';
 
 const routes: Routes = [
-  { path: 'auth', loadChildren: './modules/auth/auth.module#AuthModule' },
-  { path: 'admin', loadChildren: './modules/admin/admin.module#AdminModule', canActivate: [AdminGuard] },
-  { path: '', loadChildren: './modules/user/user.module#UserModule' }
+  { path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule) },
+  { path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule), canActivate: [AdminGuard] },
+  { path: '', loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule) }
 ];
 
 @NgModule({
