@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { constants } from '../../../common';
 import { IUsersListModel } from '../models/users/users-list.model';
 import { ICreateUserModel } from '../models/users/create-user.model';
+import { IAppState } from 'src/app/store/app.state';
+import { GetAllUsers } from 'src/app/store/users/users.actions';
 
 const usersUrl = constants.host + 'users/';
 
@@ -13,10 +17,17 @@ const usersUrl = constants.host + 'users/';
   providedIn: 'root'
 })
 export class AdminService {
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private store: Store<IAppState>
+  ) { }
 
-  public getUsers$(username: string): Observable<IUsersListModel[]> {
-    return this.http.get<IUsersListModel[]>(usersUrl + 'all?username=' + username);
+  public getUsers$(username: string): Observable<void> {
+    return this.http.get<IUsersListModel[]>(usersUrl + 'all?username=' + username).pipe(
+      map((users: IUsersListModel[]) => {
+        this.store.dispatch(new GetAllUsers(users));
+      })
+    );
   }
 
   public lock$(username: string): Observable<string> {
@@ -35,7 +46,7 @@ export class AdminService {
     return this.http.get<string>(usersUrl + 'removeRole?username=' + username + '&roleName=' + role);
   }
 
-  public createUser$(body: ICreateUserModel): Observable<any> {
-    return this.http.post(usersUrl + 'create', body);
+  public createUser$(body: ICreateUserModel): Observable<void> {
+    return this.http.post<void>(usersUrl + 'create', body);
   }
 }

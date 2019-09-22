@@ -1,19 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
 
 import { IUsersListModel } from '../../../models/users/users-list.model';
 import { AdminService } from '../../../services/admin.service';
+import { IAppState } from 'src/app/store/app.state';
 
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html'
 })
-export class UsersListComponent {
+export class UsersListComponent implements OnInit {
   private username = '';
   public users$: Observable<IUsersListModel[]>;
 
-  constructor(private adminService: AdminService) {
+  constructor(
+    private adminService: AdminService,
+    private store: Store<IAppState>
+  ) { }
+
+  public ngOnInit(): void {
     this.getUsers();
   }
 
@@ -47,6 +54,12 @@ export class UsersListComponent {
   }
 
   private getUsers(username?: string): void {
-    this.users$ = this.adminService.getUsers$(username || '');
+    this.adminService
+      .getUsers$(username || '')
+      .subscribe(() => {
+        this.users$ = this.store.pipe(
+          select(state => state.users.all)
+        );
+      });
   }
 }
