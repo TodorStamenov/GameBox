@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { StoreModule } from '@ngrx/store';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,6 +11,7 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { AppComponent } from './app.component';
 import { CoreModule } from './modules/core/core.module';
+import { appReducers } from './store/app.reducers';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { CoreModule } from './modules/core/core.module';
     HttpClientModule,
     CoreModule,
     AppRoutingModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    StoreModule.forRoot(appReducers)
   ],
   providers: [
     {

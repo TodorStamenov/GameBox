@@ -1,11 +1,13 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Store, select } from '@ngrx/store';
 
 import { CategoryService } from '../../../services/category.service';
 import { FormService } from 'src/app/modules/core/services/form.service';
 import { ActionType } from '../../../shared/enums/action-type.enum';
 import { ICategoryBindingModel } from '../../../models/categories/category-binding.model';
+import { AppState } from 'src/app/store/app.state';
 
 @Component({
   selector: 'app-category',
@@ -24,6 +26,7 @@ export class CategoryComponent implements OnInit {
     private categoryService: CategoryService,
     private router: Router,
     private route: ActivatedRoute,
+    private store: Store<AppState>,
     public formService: FormService
   ) {
     this.actionType = ActionType[<string>this.route.snapshot.params['action']];
@@ -38,9 +41,14 @@ export class CategoryComponent implements OnInit {
     if (this.actionType === ActionType.edit) {
       this.categoryService
         .getCategory$(this.categoryId)
-        .subscribe((res: ICategoryBindingModel) => this.categoryForm.setValue({
-          name: res.name
-        }));
+        .subscribe(() => {
+          this.store.pipe(
+              select(state => state.categories.toEdit)
+            )
+            .subscribe((category: ICategoryBindingModel) => this.categoryForm.setValue({
+              name: category.name
+            }));
+        });
     }
   }
 
@@ -48,11 +56,15 @@ export class CategoryComponent implements OnInit {
     if (this.actionType === ActionType.create) {
       this.categoryService
         .createCategory$(this.categoryForm.value)
-        .subscribe(() => this.router.navigate(['/admin/categories/all']));
+        .subscribe(() => this.navigateToAllCategories());
     } else if (this.actionType === ActionType.edit) {
       this.categoryService
         .editCategory$(this.categoryId, this.categoryForm.value)
-        .subscribe(() => this.router.navigate(['/admin/categories/all']));
+        .subscribe(() => this.navigateToAllCategories());
     }
+  }
+
+  private navigateToAllCategories(): void {
+    this.router.navigate(['/admin/categories/all']);
   }
 }

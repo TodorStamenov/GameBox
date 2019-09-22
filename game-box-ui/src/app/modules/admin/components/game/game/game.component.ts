@@ -1,12 +1,16 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Store, select } from '@ngrx/store';
 
 import { GameService } from '../../../services/game.service';
 import { CategoryService } from '../../../services/category.service';
 import { FormService } from 'src/app/modules/core/services/form.service';
 import { ActionType } from '../../../shared/enums/action-type.enum';
 import { IGameBindingModel } from '../../../models/games/game-binding.model';
+import { Observable } from 'rxjs';
+import { ICategoryMenuModel } from '../../../models/categories/category-menu.model';
+import { AppState } from 'src/app/store/app.state';
 
 @Component({
   selector: 'app-game',
@@ -16,7 +20,7 @@ export class GameComponent implements OnInit {
   private gameId: string | undefined;
   private actionType: ActionType | undefined;
 
-  public categories$ = this.categoryService.getCategoryNames$();
+  public categories$: Observable<ICategoryMenuModel[]>;
   public gameForm: FormGroup;
 
   get title() { return this.gameForm.get('title'); }
@@ -34,6 +38,7 @@ export class GameComponent implements OnInit {
     private categoryService: CategoryService,
     private router: Router,
     private route: ActivatedRoute,
+    private store: Store<AppState>,
     public formService: FormService
   ) {
     this.actionType = ActionType[<string>this.route.snapshot.params['action']];
@@ -41,6 +46,14 @@ export class GameComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.categoryService
+      .getCategoryNames$()
+      .subscribe(() => {
+        this.categories$ = this.store.pipe(
+          select(state => state.categories.names)
+        );
+      });
+
     this.gameForm = this.fb.group({
       'title': [null, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
       'description': [null, [Validators.required, Validators.minLength(20)]],
@@ -72,11 +85,15 @@ export class GameComponent implements OnInit {
     if (this.actionType === ActionType.create) {
       this.gameService
         .addGame$(this.gameForm.value)
-        .subscribe(() => this.router.navigate(['/']));
+        .subscribe(() => this.navigateToHome());
     } else if (this.actionType === ActionType.edit) {
       this.gameService
         .editGame$(this.gameId, this.gameForm.value)
-        .subscribe(() => this.router.navigate(['/']));
+        .subscribe(() => this.navigateToHome());
     }
+  }
+
+  private navigateToHome(): void {
+    this.router.navigate(['/']);
   }
 }
