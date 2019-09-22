@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 
-import { IAppState } from 'src/app/store/app.state';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { IAppState } from 'src/app/store/app.state';
 import { constants } from '../../../common';
 import { ICategoriesListModel } from '../models/categories/categories-list.model';
 import { ICategoryBindingModel } from '../models/categories/category-binding.model';
