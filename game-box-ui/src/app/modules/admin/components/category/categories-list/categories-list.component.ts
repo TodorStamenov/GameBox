@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
 
-import { AppState } from 'src/app/store/app.state';
+import { IAppState } from 'src/app/store/app.state';
 import { CategoryService } from '../../../services/category.service';
 import { ICategoriesListModel } from '../../../models/categories/categories-list.model';
 
@@ -16,7 +16,7 @@ export class CategoriesListComponent implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private store: Store<AppState>
+    private store: Store<IAppState>
   ) { }
 
   public ngOnInit() {

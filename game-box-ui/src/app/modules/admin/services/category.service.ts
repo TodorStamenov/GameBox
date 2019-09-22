@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 
-import { AppState } from 'src/app/store/app.state';
+import { IAppState } from 'src/app/store/app.state';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -20,7 +20,7 @@ const categoriesUrl = constants.host + 'categories/';
 export class CategoryService {
   constructor(
     private http: HttpClient,
-    private store: Store<AppState>
+    private store: Store<IAppState>
   ) { }
 
   public getCategories$(): Observable<void> {
@@ -39,12 +39,12 @@ export class CategoryService {
     );
   }
 
-  public createCategory$(body: ICategoryBindingModel): Observable<ICategoryBindingModel> {
-    return this.http.post<ICategoryBindingModel>(categoriesUrl, body);
+  public createCategory$(body: ICategoryBindingModel): Observable<void> {
+    return this.http.post<void>(categoriesUrl, body);
   }
 
-  public editCategory$(id: string, body: ICategoryBindingModel): Observable<ICategoryBindingModel> {
-    return this.http.put<ICategoryBindingModel>(categoriesUrl + id, body);
+  public editCategory$(id: string, body: ICategoryBindingModel): Observable<void> {
+    return this.http.put<void>(categoriesUrl + id, body);
   }
 
   public getCategoryNames$(): Observable<void> {

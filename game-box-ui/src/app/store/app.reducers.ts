@@ -1,5 +1,7 @@
 import { categoriesReducer } from './categories/categories.reducer';
+import { gamesReducer } from './games/games.reducer';
 
 export const appReducers = {
-  categories: categoriesReducer
+  categories: categoriesReducer,
+  games: gamesReducer
 };

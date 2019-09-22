@@ -8,7 +8,7 @@ import { CategoryService } from 'src/app/modules/admin/services/category.service
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { AuthHelperService } from '../../services/auth-helper.service';
 import { ICategoryMenuModel } from 'src/app/modules/admin/models/categories/category-menu.model';
-import { AppState } from 'src/app/store/app.state';
+import { IAppState } from 'src/app/store/app.state';
 
 @Component({
   selector: 'app-navigation',
@@ -23,7 +23,7 @@ export class NavigationComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private categoryService: CategoryService,
-    private store: Store<AppState>
+    private store: Store<IAppState>
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }

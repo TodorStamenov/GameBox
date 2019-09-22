@@ -10,7 +10,7 @@ import { ActionType } from '../../../shared/enums/action-type.enum';
 import { IGameBindingModel } from '../../../models/games/game-binding.model';
 import { Observable } from 'rxjs';
 import { ICategoryMenuModel } from '../../../models/categories/category-menu.model';
-import { AppState } from 'src/app/store/app.state';
+import { IAppState } from 'src/app/store/app.state';
 
 @Component({
   selector: 'app-game',
@@ -38,7 +38,7 @@ export class GameComponent implements OnInit {
     private categoryService: CategoryService,
     private router: Router,
     private route: ActivatedRoute,
-    private store: Store<AppState>,
+    private store: Store<IAppState>,
     public formService: FormService
   ) {
     this.actionType = ActionType[<string>this.route.snapshot.params['action']];
@@ -67,17 +67,22 @@ export class GameComponent implements OnInit {
 
     if (this.actionType === ActionType.edit) {
       this.gameService
-      .getGame$(this.gameId)
-      .subscribe((res: IGameBindingModel) => this.gameForm.setValue({
-        title: res.title,
-        description: res.description,
-        thumbnailUrl: res.thumbnailUrl,
-        price: res.price,
-        size: res.size,
-        videoId: res.videoId,
-        releaseDate: res.releaseDate,
-        categoryId: res.categoryId
-      }));
+        .getGame$(this.gameId)
+        .subscribe(() => {
+          this.store.pipe(
+            select(state => state.games.toEdit)
+          )
+          .subscribe((game: IGameBindingModel) => this.gameForm.setValue({
+            title: game.title,
+            description: game.description,
+            thumbnailUrl: game.thumbnailUrl,
+            price: game.price,
+            size: game.size,
+            videoId: game.videoId,
+            releaseDate: game.releaseDate,
+            categoryId: game.categoryId
+          }));
+        });
     }
   }
 

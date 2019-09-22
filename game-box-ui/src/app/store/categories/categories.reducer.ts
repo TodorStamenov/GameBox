@@ -1,34 +1,34 @@
-import { CategoriesState } from './categories.state';
+import { ICategoriesState } from './categories.state';
 import * as CategoriesActions from '../categories/categories.actions';
 
-const initialState: CategoriesState = {
+const initialState: ICategoriesState = {
   all: [],
   toEdit: null,
   names: []
 };
 
-function getAllCategories(state: CategoriesState, allCategories: any) {
+function getAllCategories(state: ICategoriesState, allCategories: any) {
   return {
     ...state,
     all: allCategories
   };
 }
 
-function getCategoryToEdit(state: CategoriesState, categoryToEdit: any) {
+function getCategoryToEdit(state: ICategoriesState, categoryToEdit: any) {
   return {
     ...state,
     toEdit: categoryToEdit
   };
 }
 
-function getCategoryNames(state: CategoriesState, categoryNames: any) {
+function getCategoryNames(state: ICategoriesState, categoryNames: any) {
   return {
     ...state,
     names: categoryNames
   };
 }
 
-export function categoriesReducer(state: CategoriesState = initialState, action: CategoriesActions.Types) {
+export function categoriesReducer(state: ICategoriesState = initialState, action: CategoriesActions.Types) {
   switch (action.type) {
     case CategoriesActions.GET_ALL_CATEGORIES:
       return getAllCategories(state, action.payload);

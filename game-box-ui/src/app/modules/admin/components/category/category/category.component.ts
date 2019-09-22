@@ -7,7 +7,7 @@ import { CategoryService } from '../../../services/category.service';
 import { FormService } from 'src/app/modules/core/services/form.service';
 import { ActionType } from '../../../shared/enums/action-type.enum';
 import { ICategoryBindingModel } from '../../../models/categories/category-binding.model';
-import { AppState } from 'src/app/store/app.state';
+import { IAppState } from 'src/app/store/app.state';
 
 @Component({
   selector: 'app-category',
@@ -26,7 +26,7 @@ export class CategoryComponent implements OnInit {
     private categoryService: CategoryService,
     private router: Router,
     private route: ActivatedRoute,
-    private store: Store<AppState>,
+    private store: Store<IAppState>,
     public formService: FormService
   ) {
     this.actionType = ActionType[<string>this.route.snapshot.params['action']];
@@ -43,11 +43,11 @@ export class CategoryComponent implements OnInit {
         .getCategory$(this.categoryId)
         .subscribe(() => {
           this.store.pipe(
-              select(state => state.categories.toEdit)
-            )
-            .subscribe((category: ICategoryBindingModel) => this.categoryForm.setValue({
-              name: category.name
-            }));
+            select(state => state.categories.toEdit)
+          )
+          .subscribe((category: ICategoryBindingModel) => this.categoryForm.setValue({
+            name: category.name
+          }));
         });
     }
   }

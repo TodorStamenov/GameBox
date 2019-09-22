@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Store, select } from '@ngrx/store';
 
 import { GameService } from '../../../services/game.service';
+import { IAppState } from 'src/app/store/app.state';
+import { IGameBindingModel } from '../../../models/games/game-binding.model';
 
 @Component({
   selector: 'app-delete-game',
@@ -17,7 +20,8 @@ export class DeleteGameComponent implements OnInit {
     private fb: FormBuilder,
     private gameService: GameService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private store: Store<IAppState>
   ) {
     this.gameId = this.route.snapshot.params['id'];
   }
@@ -36,16 +40,21 @@ export class DeleteGameComponent implements OnInit {
 
     this.gameService
       .getGame$(this.gameId)
-      .subscribe(res => this.deleteGameForm.setValue({
-        title: res.title,
-        description: res.description,
-        thumbnailUrl: res.thumbnailUrl,
-        price: res.price,
-        size: res.size,
-        videoId: res.videoId,
-        releaseDate: res.releaseDate,
-        categoryId: res.categoryId
-      }));
+      .subscribe(() => {
+        this.store.pipe(
+          select(state => state.games.toEdit)
+        )
+        .subscribe((game: IGameBindingModel) => this.deleteGameForm.setValue({
+          title: game.title,
+          description: game.description,
+          thumbnailUrl: game.thumbnailUrl,
+          price: game.price,
+          size: game.size,
+          videoId: game.videoId,
+          releaseDate: game.releaseDate,
+          categoryId: game.categoryId
+        }));
+      });
   }
 
   public deleteGame(): void {

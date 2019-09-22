@@ -1,5 +1,7 @@
-import { CategoriesState } from './categories/categories.state';
+import { ICategoriesState } from './categories/categories.state';
+import { IGamesState } from './games/games.state';
 
-export interface AppState {
-  categories: CategoriesState;
+export interface IAppState {
+  categories: ICategoriesState;
+  games: IGamesState;
 }
