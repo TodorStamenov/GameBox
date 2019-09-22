@@ -56,7 +56,7 @@ export class ItemsListComponent implements OnInit {
     }
 
     this.orderService
-      .createOrder(this.cartService.cart)
+      .createOrder$(this.cartService.cart)
       .subscribe(() => {
         this.cartService.clear();
         this.router.navigate(['/']);

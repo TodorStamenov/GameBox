@@ -1,4 +1,4 @@
-export interface IGamesListModel {
+export interface IGamesHomeListModel {
   id: string;
   title: string;
   price: number;

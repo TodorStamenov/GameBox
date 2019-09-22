@@ -1,8 +1,10 @@
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { Store, select } from '@ngrx/store';
 
 import { GameService } from '../../../services/game.service';
-import { IGamesListModel } from '../../../models/games/games-list.model';
+import { IGamesHomeListModel } from '../../../models/games/games-list.model';
+import { IAppState } from 'src/app/store/app.state';
 
 @Component({
   selector: 'app-category-games',
@@ -10,11 +12,12 @@ import { IGamesListModel } from '../../../models/games/games-list.model';
 })
 export class CategoryGamesComponent implements OnInit {
   public categoryId: string;
-  public games: IGamesListModel[] = [];
+  public games: IGamesHomeListModel[] = [];
 
   constructor(
     private gameService: GameService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private store: Store<IAppState>
   ) {
     this.categoryId = this.route.snapshot.params['categoryId'];
   }
@@ -26,6 +29,11 @@ export class CategoryGamesComponent implements OnInit {
   public loadGames(): void {
     this.gameService
       .getGames$(this.games.length, this.categoryId)
-      .subscribe((res: IGamesListModel[]) => this.games = [...this.games, ...res]);
+      .subscribe(() => {
+        this.store.pipe(
+          select(state => state.games.byCategory)
+        )
+        .subscribe((res: IGamesHomeListModel[]) => this.games = [...this.games, ...res]);
+      });
   }
 }

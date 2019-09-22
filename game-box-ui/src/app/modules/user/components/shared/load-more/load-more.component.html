@@ -1,4 +1,4 @@
-<div *ngIf="gamesCount % 3 === 0 && showButton" class="row">
+<div *ngIf="gamesCount % 9 === 0 && showButton" class="row">
   <div class="col-12 text-center">
     <button (click)="loadClick.emit()" class="btn btn-success">
       Load Games

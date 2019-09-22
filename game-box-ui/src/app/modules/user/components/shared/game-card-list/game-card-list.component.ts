@@ -1,7 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 
-import { IGamesListModel } from '../../../models/games/games-list.model';
+import { IGamesHomeListModel } from '../../../models/games/games-list.model';
 import { CartService } from '../../../services/cart.service';
 
 @Component({
@@ -23,7 +23,7 @@ import { CartService } from '../../../services/cart.service';
 })
 export class GameCardListComponent {
   @Input()
-  public games: IGamesListModel[];
+  public games: IGamesHomeListModel[];
 
   constructor(private cartService: CartService) { }
 
