@@ -14,7 +14,7 @@ import { ClearGames } from 'src/app/store/games/games.actions';
   templateUrl: './owned-games.component.html'
 })
 export class OwnedGamesComponent implements OnInit, OnDestroy {
-  private gamesLength = 1;
+  private gamesLength = 0;
 
   public games$: Observable<IGamesHomeListModel[]>;
 

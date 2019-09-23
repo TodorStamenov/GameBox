@@ -34,7 +34,7 @@ function getAllGamesByCategory(state: IGamesState, allGamesByCategory: any) {
 function getAllOwnedGames(state: IGamesState, allOwnedGames: any) {
   return {
     ...state,
-    owned: allOwnedGames
+    owned: [...state.owned, ...allOwnedGames]
   };
 }
 

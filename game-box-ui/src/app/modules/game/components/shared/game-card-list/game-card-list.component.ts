@@ -7,7 +7,7 @@ import { CartService } from '../../../../cart/services/cart.service';
 @Component({
   selector: 'app-game-card-list',
   templateUrl: './game-card-list.component.html',
-  styleUrls: ['./game-card-list.component.css'],
+  styleUrls: ['./game-card-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('itemCard', [

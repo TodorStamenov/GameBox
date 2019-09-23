@@ -12,7 +12,7 @@ import { OrderService } from 'src/app/modules/order/services/order.service';
 @Component({
   selector: 'app-items-list',
   templateUrl: './items-list.component.html',
-  styleUrls: ['./items-list.component.css'],
+  styleUrls: ['./items-list.component.scss'],
   animations: [
     trigger('itemCard', [
       transition('* => void', [
@@ -59,7 +59,7 @@ export class ItemsListComponent implements OnInit {
       .createOrder$(this.cartService.cart)
       .subscribe(() => {
         this.cartService.clear();
-        this.router.navigate(['/']);
+        this.router.navigate(['/games/owned']);
       });
   }
 

@@ -13,7 +13,7 @@ import { IAppState } from 'src/app/store/app.state';
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.css']
+  styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit {
   public categories$: Observable<ICategoryMenuModel[]>;
