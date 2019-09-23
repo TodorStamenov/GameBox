@@ -1,0 +1,13 @@
+<div *ngIf="!games$ || (games$ | async).length === 0; else gamesAvailable" class="row">
+  <div class="col-md-12">
+    <h2>You do not own any games!</h2>
+  </div>
+</div>
+
+<ng-template #gamesAvailable>
+  <app-game-card-list [games]="games$ | async"></app-game-card-list>
+  <app-load-more
+    [gamesCount]="(games$ | async)?.length"
+    (loadClick)="loadGames()">
+  </app-load-more>
+</ng-template>

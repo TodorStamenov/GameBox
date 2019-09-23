@@ -32,7 +32,7 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li *ngFor="let category of categories$ | async">
-                    <a routerLink="/category/{{ category.id }}/games">
+                    <a routerLink="/games/{{ category.id }}/games">
                       {{ category.name }}
                     </a>
                   </li>
@@ -44,7 +44,7 @@
             </a>
           </li>
           <li>
-            <a class="nav-element" routerLink="/cart">
+            <a class="nav-element" routerLink="/cart/items">
               Cart
             </a>
           </li>
@@ -62,12 +62,12 @@
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li><a [routerLink]="['/admin/games', 'create']">Add Game</a></li>
-              <li><a routerLink="/admin/games/all">Games</a></li>
-              <li><a routerLink="/admin/categories/all">Categories</a></li>
-              <li><a routerLink="/admin/orders/all">Orders</a></li>
-              <li><a routerLink="/admin/users/all">Users</a></li>
-              <li><a routerLink="/admin/users/create">Add User</a></li>
+              <li><a [routerLink]="['/games', 'create']">Add Game</a></li>
+              <li><a routerLink="/games/all">Games</a></li>
+              <li><a routerLink="/categories/all">Categories</a></li>
+              <li><a routerLink="/orders/all">Orders</a></li>
+              <li><a routerLink="/users/all">Users</a></li>
+              <li><a routerLink="/users/create">Add User</a></li>
             </ul>
           </li>
           <li>

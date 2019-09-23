@@ -1,10 +1,11 @@
-import { IGamesListModel } from 'src/app/modules/admin/models/games/games-list.model';
-import { IGameBindingModel } from 'src/app/modules/admin/models/games/game-binding.model';
-import { IGamesHomeListModel } from 'src/app/modules/user/models/games/games-list.model';
-import { IGameDetailsModel } from 'src/app/modules/user/models/games/game-details.model';
+import { IGamesListModel } from 'src/app/modules/game/models/games-list.model';
+import { IGameBindingModel } from 'src/app/modules/game/models/game-binding.model';
+import { IGamesHomeListModel } from 'src/app/modules/game/models/games-home-list.model';
+import { IGameDetailsModel } from 'src/app/modules/game/models/game-details.model';
 
 export interface IGamesState {
   all: IGamesListModel[];
+  allHome: IGamesHomeListModel[];
   byCategory: IGamesHomeListModel[];
   owned: IGamesHomeListModel[];
   detail: IGameDetailsModel;

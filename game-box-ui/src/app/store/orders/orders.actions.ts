@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { IOrdersListModel } from 'src/app/modules/admin/models/orders/orders-list.model';
+import { IOrdersListModel } from 'src/app/modules/order/models/orders-list.model';
 
 export const GET_ALL_ORDERS = '[ORDERS] Get All';
 

@@ -4,10 +4,10 @@ import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
 
-import { CategoryService } from 'src/app/modules/admin/services/category.service';
+import { CategoryService } from 'src/app/modules/category/services/category.service';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { AuthHelperService } from '../../services/auth-helper.service';
-import { ICategoryMenuModel } from 'src/app/modules/admin/models/categories/category-menu.model';
+import { ICategoryMenuModel } from 'src/app/modules/category/models/category-menu.model';
 import { IAppState } from 'src/app/store/app.state';
 
 @Component({
