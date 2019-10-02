@@ -23,4 +23,6 @@ export class GetCategoryNames implements Action {
   constructor(public payload: ICategoryMenuModel[]) { }
 }
 
-export type Types = GetAllCategories | GetCategoryToEdit | GetCategoryNames;
+export type Types = GetAllCategories
+  | GetCategoryToEdit
+  | GetCategoryNames;

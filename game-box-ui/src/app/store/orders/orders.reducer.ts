@@ -5,17 +5,21 @@ const initialState: IOrdersState = {
   all: []
 };
 
-function getAllOrders(state: IOrdersState, allActions: any) {
+function getAllOrders(state: IOrdersState, allActions: any): IOrdersState {
   return {
     ...state,
     all: allActions
   };
 }
 
-export function ordersReducer(state: IOrdersState = initialState, action: OrdersActions.Types) {
+export function ordersReducer(
+  state: IOrdersState = initialState,
+  action: OrdersActions.Types): IOrdersState {
+
   switch (action.type) {
     case OrdersActions.GET_ALL_ORDERS:
       return getAllOrders(state, action.payload);
+
     default:
       return state;
   }
