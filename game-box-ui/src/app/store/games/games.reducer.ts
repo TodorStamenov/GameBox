@@ -1,5 +1,9 @@
 import { IGamesState } from './games.state';
-import * as GamesActions from './games.actions';
+import { GameActionTypes, Types } from './games.actions';
+import { IGamesListModel } from 'src/app/modules/game/models/games-list.model';
+import { IGamesHomeListModel } from 'src/app/modules/game/models/games-home-list.model';
+import { IGameDetailsModel } from 'src/app/modules/game/models/game-details.model';
+import { IGameBindingModel } from 'src/app/modules/game/models/game-binding.model';
 
 const initialState: IGamesState = {
   all: [],
@@ -10,42 +14,42 @@ const initialState: IGamesState = {
   toEdit: null
 };
 
-function getAllGames(state: IGamesState, allGames: any): IGamesState {
+function getAllGames(state: IGamesState, allGames: IGamesListModel[]): IGamesState {
   return {
     ...state,
     all: allGames
   };
 }
 
-function getAllGamesHome(state: IGamesState, allGamesHome: any): IGamesState {
+function getAllGamesHome(state: IGamesState, allGamesHome: IGamesHomeListModel[]): IGamesState {
   return {
     ...state,
     allHome: [...state.allHome, ...allGamesHome]
   };
 }
 
-function getAllGamesByCategory(state: IGamesState, allGamesByCategory: any): IGamesState {
+function getAllGamesByCategory(state: IGamesState, allGamesByCategory: IGamesHomeListModel[]): IGamesState {
   return {
     ...state,
     byCategory: [...state.byCategory, ...allGamesByCategory]
   };
 }
 
-function getAllOwnedGames(state: IGamesState, allOwnedGames: any): IGamesState {
+function getAllOwnedGames(state: IGamesState, allOwnedGames: IGamesHomeListModel[]): IGamesState {
   return {
     ...state,
     owned: [...state.owned, ...allOwnedGames]
   };
 }
 
-function getGameDetail(state: IGamesState, gameDetail: any): IGamesState {
+function getGameDetail(state: IGamesState, gameDetail: IGameDetailsModel): IGamesState {
   return {
     ...state,
     detail: gameDetail
   };
 }
 
-function getGameToEdit(state: IGamesState, gameToEdit: any): IGamesState {
+function getGameToEdit(state: IGamesState, gameToEdit: IGameBindingModel): IGamesState {
   return {
     ...state,
     toEdit: gameToEdit
@@ -75,30 +79,27 @@ function clearGames(state: IGamesState, setToClear: string): IGamesState {
   }
 }
 
-export function gamesReducer(
-  state: IGamesState = initialState,
-  action: GamesActions.Types): IGamesState {
-
+export function gamesReducer(state = initialState, action: Types): IGamesState {
   switch (action.type) {
-    case GamesActions.GET_ALL_GAMES:
+    case GameActionTypes.GetAllGames:
       return getAllGames(state, action.payload);
 
-    case GamesActions.GET_ALL_GAMES_HOME:
+    case GameActionTypes.GetAllGamesHome:
       return getAllGamesHome(state, action.payload);
 
-    case GamesActions.GET_ALL_GAMES_BY_CATEGORY:
+    case GameActionTypes.GetAllGamesByCategory:
       return getAllGamesByCategory(state, action.payload);
 
-    case GamesActions.GET_ALL_OWNED_GAMES:
+    case GameActionTypes.GetAllOwnedGames:
       return getAllOwnedGames(state, action.payload);
 
-    case GamesActions.GET_GAME_DETAIL:
+    case GameActionTypes.GetGameDetail:
       return getGameDetail(state, action.payload);
 
-    case GamesActions.GET_GAME_TO_EDIT:
+    case GameActionTypes.GetGameToEdit:
       return getGameToEdit(state, action.payload);
 
-    case GamesActions.CLEAR_GAMES:
+    case GameActionTypes.ClearGames:
       return clearGames(state, action.payload);
 
     default:

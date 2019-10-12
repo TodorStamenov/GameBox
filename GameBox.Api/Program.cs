@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore;
+﻿using GameBox.Application.Contracts;
+using GameBox.Persistence;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GameBox.Api
 {
@@ -7,7 +10,17 @@ namespace GameBox.Api
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            var host = CreateWebHostBuilder(args).Build();
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<IGameBoxDbContext>();
+                var concreteContext = (GameBoxDbContext)context;
+
+                GameBoxDbInitializer.SeedDatabase(concreteContext);
+            }
+
+            host.Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

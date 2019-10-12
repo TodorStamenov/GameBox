@@ -1,23 +1,21 @@
 import { IUsersState } from './users.state';
-import * as UsersActions from './users.actions';
+import { UserActionTypes, Types } from './users.actions';
+import { IUsersListModel } from 'src/app/modules/user/models/users-list.model';
 
 const initialState: IUsersState = {
   all: []
 };
 
-function getAllUsers(state: IUsersState, allUsers: any): IUsersState {
+function getAllUsers(state: IUsersState, allUsers: IUsersListModel[]): IUsersState {
   return {
     ...state,
     all: allUsers
   };
 }
 
-export function usersReducer(
-  state: IUsersState = initialState,
-  action: UsersActions.Types): IUsersState {
-
+export function usersReducer(state = initialState, action: Types): IUsersState {
   switch (action.type) {
-    case UsersActions.GET_ALL_USERS:
+    case UserActionTypes.GetAllUsers:
       return getAllUsers(state, action.payload);
 
     default:

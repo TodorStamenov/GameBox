@@ -1,84 +1,55 @@
-﻿using GameBox.Core;
-using GameBox.Core.Enums;
-using GameBox.Services.Contracts;
-using GameBox.Services.Models.Binding.Categories;
-using GameBox.Services.Models.View.Categories;
+﻿using GameBox.Application.Categories.Commands.CreateCategory;
+using GameBox.Application.Categories.Commands.UpdateCategory;
+using GameBox.Application.Categories.Queries.GetAllCategories;
+using GameBox.Application.Categories.Queries.GetCategory;
+using GameBox.Application.Categories.Queries.GetMenuCategories;
+using GameBox.Application.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GameBox.Api.Controllers
 {
     [Authorize(Roles = Constants.Common.Admin)]
     public class CategoriesController : BaseApiController
     {
-        private readonly ICategoryService category;
-
-        public CategoriesController(ICategoryService category)
-        {
-            this.category = category;
-        }
-
         [HttpGet]
         [Route("")]
-        public IEnumerable<ListCategoriesViewModel> Get()
+        public async Task<ActionResult<IEnumerable<CategoriesListViewModel>>> Get()
         {
-            return this.category.All();
+            return Ok(await Mediator.Send(new GetAllCategoriesQuery()));
         }
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult Get([FromRoute]Guid id)
+        public async Task<IActionResult> Get([FromRoute]Guid id)
         {
-            return Ok(this.category.Get(id));
+            return Ok(await Mediator.Send(new GetCategoryQuery { Id = id }));
         }
 
         [HttpGet]
         [Route("menu")]
         [AllowAnonymous]
-        public IEnumerable<ListMenuCategoriesViewModel> Menu()
+        public async Task<ActionResult<IEnumerable<CategoriesListMenuViewModel>>> Menu()
         {
-            return this.category.Menu();
+            return Ok(await Mediator.Send(new GetMenuCategoriesQuery()));
         }
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Put([FromRoute]Guid id, [FromBody]CategoryBindingModel model)
+        public async Task<IActionResult> Put([FromRoute]Guid id, [FromBody]UpdateCategoryCommand command)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            command.Id = id;
 
-            ServiceResult result = this.category.Edit(id, model.Name);
-
-            if (result.ResultType == ServiceResultType.Fail)
-            {
-                ModelState.AddModelError(Constants.Common.Error, result.Message);
-                return BadRequest(ModelState);
-            }
-
-            return Ok(result);
+            return Ok(await Mediator.Send(command));
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]CategoryBindingModel model)
+        public async Task<IActionResult> Post([FromBody]CreateCategoryCommand command)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            ServiceResult result = this.category.Create(model.Name);
-
-            if (result.ResultType == ServiceResultType.Fail)
-            {
-                ModelState.AddModelError(Constants.Common.Error, result.Message);
-                return BadRequest(ModelState);
-            }
-
-            return Ok(result);
+            return Ok(await Mediator.Send(command));
         }
     }
 }

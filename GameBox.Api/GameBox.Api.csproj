@@ -9,12 +9,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.5.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameBox.Data\GameBox.Data.csproj" />
-    <ProjectReference Include="..\GameBox.Services\GameBox.Services.csproj" />
+    <ProjectReference Include="..\GameBox.Application\GameBox.Application.csproj" />
+    <ProjectReference Include="..\GameBox.Infrastructure\GameBox.Infrastructure.csproj" />
+    <ProjectReference Include="..\GameBox.Persistence\GameBox.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

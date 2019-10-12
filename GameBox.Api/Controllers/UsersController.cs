@@ -1,138 +1,72 @@
-﻿using GameBox.Core;
-using GameBox.Core.Enums;
-using GameBox.Services.Contracts;
-using GameBox.Services.Models.Binding.Users;
-using GameBox.Services.Models.View.Users;
+﻿using GameBox.Application.Accounts.Commands.Register;
+using GameBox.Application.Infrastructure;
+using GameBox.Application.Users.Commands.AddRole;
+using GameBox.Application.Users.Commands.LockUser;
+using GameBox.Application.Users.Commands.RemoveRole;
+using GameBox.Application.Users.Commands.UnlockUser;
+using GameBox.Application.Users.Querues.GetAllUsers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GameBox.Api.Controllers
 {
     [Authorize(Roles = Constants.Common.Admin)]
     public class UsersController : BaseApiController
     {
-        private const string UsernameNotNull = "Username cannot be null.";
-        private const string UsernameAndRoleMandatory = "User and Role names should have value!";
-
-        private readonly IUserService user;
-        private readonly IAccountService account;
-
-        public UsersController(IUserService user, IAccountService account)
-        {
-            this.user = user;
-            this.account = account;
-        }
-
         [HttpGet]
         [Route("all")]
-        public IEnumerable<ListUsersViewModel> All([FromQuery]string username)
+        public async Task<ActionResult<IEnumerable<UsersListViewModel>>> All([FromQuery]string username)
         {
-            return this.user.All(username);
+            return Ok(await Mediator.Send(new GetAllUsersQuery { QueryString = username }));
         }
 
         [HttpPost]
         [Route("create")]
-        public IActionResult Create([FromBody]CreateUserBindingModel model)
+        public async Task<IActionResult> Create([FromBody]RegisterCommand command)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            ServiceResult result = this.account.Register(model.Username, model.Password);
-
-            if (result.ResultType == ServiceResultType.Fail)
-            {
-                ModelState.AddModelError(Constants.Common.Error, result.Message);
-                return BadRequest(ModelState);
-            }
-
-            return Ok(result);
+            return Ok(await Mediator.Send(command));
         }
 
         [HttpGet]
         [Route("lock")]
-        public IActionResult Lock([FromQuery]string username)
+        public async Task<IActionResult> Lock([FromQuery]string username)
         {
-            if (username == null)
-            {
-                ModelState.AddModelError(Constants.Common.Error, UsernameNotNull);
-                return BadRequest(ModelState);
-            }
-
-            ServiceResult result = this.user.Lock(username);
-
-            if (result.ResultType == ServiceResultType.Fail)
-            {
-                ModelState.AddModelError(Constants.Common.Error, result.Message);
-                return BadRequest(ModelState);
-            }
-
-            return Ok(result);
+            return Ok(await Mediator.Send(new LockUserCommand { Username = username }));
         }
 
         [HttpGet]
         [Route("unlock")]
-        public IActionResult Unlock([FromQuery]string username)
+        public async Task<IActionResult> Unlock([FromQuery]string username)
         {
-            if (username == null)
-            {
-                ModelState.AddModelError(Constants.Common.Error, UsernameNotNull);
-                return BadRequest(ModelState);
-            }
-
-            ServiceResult result = this.user.Unlock(username);
-
-            if (result.ResultType == ServiceResultType.Fail)
-            {
-                ModelState.AddModelError(Constants.Common.Error, result.Message);
-                return BadRequest(ModelState);
-            }
-
-            return Ok(result);
+            return Ok(await Mediator.Send(new UnlockUserCommand { Username = username }));
         }
 
         [HttpGet]
         [Route("addRole")]
-        public IActionResult AddRole([FromQuery]string username, [FromQuery]string roleName)
+        public async Task<IActionResult> AddRole([FromQuery]string username, [FromQuery]string roleName)
         {
-            if (username == null || roleName == null)
+            var command = new AddRoleCommand
             {
-                ModelState.AddModelError(Constants.Common.Error, UsernameAndRoleMandatory);
-                return BadRequest(ModelState);
-            }
+                Username = username,
+                RoleName = roleName
+            };
 
-            ServiceResult result = this.user.AddRole(username, roleName);
-
-            if (result.ResultType == ServiceResultType.Fail)
-            {
-                ModelState.AddModelError(Constants.Common.Error, result.Message);
-                return BadRequest(ModelState);
-            }
-
-            return Ok(result);
+            return Ok(await Mediator.Send(command));
         }
 
         [HttpGet]
         [Route("removeRole")]
-        public IActionResult RemoveRole([FromQuery]string username, [FromQuery]string roleName)
+        public async Task<IActionResult> RemoveRole([FromQuery]string username, [FromQuery]string roleName)
         {
-            if (username == null || roleName == null)
+            var command = new RemoveRoleCommand
             {
-                ModelState.AddModelError(Constants.Common.Error, UsernameAndRoleMandatory);
-                return BadRequest(ModelState);
-            }
+                Username = username,
+                RoleName = roleName
+            };
 
-            ServiceResult result = this.user.RemoveRole(username, roleName);
-
-            if (result.ResultType == ServiceResultType.Fail)
-            {
-                ModelState.AddModelError(Constants.Common.Error, result.Message);
-                return BadRequest(ModelState);
-            }
-
-            return Ok(result);
+            return Ok(await Mediator.Send(command));
         }
     }
 }

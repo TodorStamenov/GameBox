@@ -51,6 +51,14 @@ export class JwtInterceptor implements HttpInterceptor {
             && !res.url.endsWith('register')) {
             this.toastr.success(res.body.message, 'Success!');
           }
+
+          if (res instanceof HttpResponse
+            && res.body
+            && !res.url.endsWith('login')
+            && !res.url.endsWith('register')
+            && typeof res.body === 'string') {
+            this.toastr.success(res.body, 'Success!');
+          }
         })
       );
   }

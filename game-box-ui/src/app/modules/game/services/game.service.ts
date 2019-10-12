@@ -56,7 +56,7 @@ export class GameService {
   }
 
   public getGamesByCategory$(loadedGames: number, categoryId: string): Observable<void> {
-    return this.http.get<IGamesHomeListModel[]>(gamesUrl + '?loadedGames=' + loadedGames + '&categoryId=' + categoryId).pipe(
+    return this.http.get<IGamesHomeListModel[]>(gamesUrl + 'category/' + categoryId + '?loadedGames=' + loadedGames).pipe(
       map((games: IGamesHomeListModel[]) => {
         this.store.dispatch(new GetAllGamesByCategory(games));
       })

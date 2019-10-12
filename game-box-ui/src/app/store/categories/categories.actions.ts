@@ -4,22 +4,24 @@ import { ICategoriesListModel } from 'src/app/modules/category/models/categories
 import { ICategoryBindingModel } from 'src/app/modules/category/models/category-binding.model';
 import { ICategoryMenuModel } from 'src/app/modules/category/models/category-menu.model';
 
-export const GET_ALL_CATEGORIES = '[CATEGORIES] Get All';
-export const GET_CATEGORY_TO_EDIT = '[CATEGORIES] Get Category To Edit';
-export const GET_CATEGORY_NAMES = '[CATEGORIES] Get Category Names';
+export enum CategoryActionTypes {
+  GetAllCategories = '[CATEGORIES] Get All',
+  GetCategoryToEdit = '[CATEGORIES] Get Category To Edit',
+  GetCategoryNames = '[CATEGORIES] Get Category Names'
+}
 
 export class GetAllCategories implements Action {
-  type = GET_ALL_CATEGORIES;
+  readonly type = CategoryActionTypes.GetAllCategories;
   constructor(public payload: ICategoriesListModel[]) { }
 }
 
 export class GetCategoryToEdit implements Action {
-  type = GET_CATEGORY_TO_EDIT;
+  readonly type = CategoryActionTypes.GetCategoryToEdit;
   constructor(public payload: ICategoryBindingModel) { }
 }
 
 export class GetCategoryNames implements Action {
-  type = GET_CATEGORY_NAMES;
+  readonly type = CategoryActionTypes.GetCategoryNames;
   constructor(public payload: ICategoryMenuModel[]) { }
 }
 

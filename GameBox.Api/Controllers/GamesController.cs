@@ -1,134 +1,103 @@
-﻿using GameBox.Core;
-using GameBox.Core.Enums;
-using GameBox.Services.Contracts;
-using GameBox.Services.Models.Binding.Games;
-using GameBox.Services.Models.View.Games;
+﻿using GameBox.Application.Games.Commands.CreateGame;
+using GameBox.Application.Games.Commands.DeleteGame;
+using GameBox.Application.Games.Commands.UpdateGame;
+using GameBox.Application.Games.Queries.GetAllGames;
+using GameBox.Application.Games.Queries.GetGame;
+using GameBox.Application.Games.Queries.GetGameDetails;
+using GameBox.Application.Games.Queries.GetGamesByCategory;
+using GameBox.Application.Games.Queries.GetGamesByTitle;
+using GameBox.Application.Games.Queries.GetOwnedGames;
+using GameBox.Application.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GameBox.Api.Controllers
 {
     public class GamesController : BaseApiController
     {
-        private readonly IGameService game;
-
-        public GamesController(IGameService game)
+        [HttpGet]
+        [Route("")]
+        public async Task<ActionResult<IEnumerable<GamesListViewModel>>> Get([FromQuery]int loadedGames)
         {
-            this.game = game;
+            return Ok(await Mediator.Send(new GetAllGamesQuery { LoadedGames = loadedGames }));
         }
 
         [HttpGet]
-        [Route("")]
-        public IEnumerable<ListGamesViewModel> Get([FromQuery]int loadedGames, [FromQuery]Guid? categoryId)
+        [Route("category/{categoryId}")]
+        public async Task<ActionResult<IEnumerable<GamesListViewModel>>> ByCategory([FromRoute]Guid categoryId, [FromQuery]int loadedGames)
         {
-            return this.game.ByCategory(loadedGames, categoryId);
+            var query = new GetGamesByCategoryQuery
+            {
+                CategoryId = categoryId,
+                LoadedGames = loadedGames
+            };
+
+            return Ok(await Mediator.Send(query));
         }
 
         [HttpGet]
         [Route("details/{id}")]
-        public IActionResult Details([FromRoute]Guid id)
+        public async Task<IActionResult> Details([FromRoute]Guid id)
         {
-            return Ok(this.game.Details(id));
+            return Ok(await Mediator.Send(new GetGameDetailsQuery { Id = id }));
         }
 
         [HttpGet]
         [Authorize]
         [Route("owned")]
-        public IEnumerable<ListGamesViewModel> Owned([FromQuery]int loadedGames)
+        public async Task<ActionResult<IEnumerable<GamesListViewModel>>> Owned([FromQuery]int loadedGames)
         {
-            return this.game.Owned(loadedGames, User.Identity.Name);
+            var query = new GetOwnedGamesQuery
+            {
+                Username = User.Identity.Name,
+                LoadedGames = loadedGames
+            };
+            
+            return Ok(await Mediator.Send(query));
         }
 
         [HttpGet]
         [Authorize(Roles = Constants.Common.Admin)]
         [Route("all")]
-        public IEnumerable<ListGamesAdminViewModel> Get([FromQuery]string title)
+        public async Task<ActionResult<IEnumerable<GamesListByTitleViewModel>>> Get([FromQuery]string title)
         {
-            return this.game.All(title);
+            return Ok(await Mediator.Send(new GetGamesByTitleQuery { Title = title }));
         }
 
         [HttpGet]
         [Authorize(Roles = Constants.Common.Admin)]
         [Route("{id}")]
-        public IActionResult Get([FromRoute]Guid id)
+        public async Task<IActionResult> Get([FromRoute]Guid id)
         {
-            return Ok(game.Get(id));
+            return Ok(await Mediator.Send(new GetGameQuery { Id = id }));
         }
 
         [HttpPut]
         [Authorize(Roles = Constants.Common.Admin)]
         [Route("{id}")]
-        public IActionResult Put([FromRoute]Guid id, [FromBody]GameBindingModel model)
+        public async Task<IActionResult> Put([FromRoute]Guid id, [FromBody]UpdateGameCommand command)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            command.Id = id;
 
-            ServiceResult result = this.game.Edit(
-                id,
-                model.Title,
-                model.Description,
-                model.ThumbnailUrl,
-                model.Price,
-                model.Size,
-                model.VideoId,
-                model.ReleaseDate,
-                model.CategoryId);
-
-            if (result.ResultType == ServiceResultType.Fail)
-            {
-                ModelState.AddModelError(Constants.Common.Error, result.Message);
-                return BadRequest(ModelState);
-            }
-
-            return Ok(result);
+            return Ok(await Mediator.Send(command));
         }
 
         [HttpPost]
         [Authorize(Roles = Constants.Common.Admin)]
-        public IActionResult Post([FromBody]GameBindingModel model)
+        public async Task<IActionResult> Post([FromBody]CreateGameCommand command)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            ServiceResult result = this.game.Create(
-                model.Title,
-                model.Description,
-                model.ThumbnailUrl,
-                model.Price,
-                model.Size,
-                model.VideoId,
-                model.ReleaseDate,
-                model.CategoryId);
-
-            if (result.ResultType == ServiceResultType.Fail)
-            {
-                ModelState.AddModelError(Constants.Common.Error, result.Message);
-                return BadRequest(ModelState);
-            }
-
-            return Ok(result);
+            return Ok(await Mediator.Send(command));
         }
 
         [HttpDelete]
         [Authorize(Roles = Constants.Common.Admin)]
         [Route("{id}")]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            ServiceResult result = this.game.Delete(id);
-
-            if (result.ResultType == ServiceResultType.Fail)
-            {
-                ModelState.AddModelError(Constants.Common.Error, result.Message);
-                return BadRequest(ModelState);
-            }
-
-            return Ok(result);
+            return Ok(await Mediator.Send(new DeleteGameCommand { Id = id }));
         }
     }
 }

@@ -1,5 +1,8 @@
 import { ICategoriesState } from './categories.state';
-import * as CategoriesActions from '../categories/categories.actions';
+import { CategoryActionTypes, Types } from './categories.actions';
+import { ICategoryMenuModel } from 'src/app/modules/category/models/category-menu.model';
+import { ICategoriesListModel } from 'src/app/modules/category/models/categories-list.model';
+import { ICategoryBindingModel } from 'src/app/modules/category/models/category-binding.model';
 
 const initialState: ICategoriesState = {
   all: [],
@@ -7,39 +10,36 @@ const initialState: ICategoriesState = {
   names: []
 };
 
-function getAllCategories(state: ICategoriesState, allCategories: any): ICategoriesState {
+function getAllCategories(state: ICategoriesState, allCategories: ICategoriesListModel[]): ICategoriesState {
   return {
     ...state,
     all: allCategories
   };
 }
 
-function getCategoryToEdit(state: ICategoriesState, categoryToEdit: any): ICategoriesState {
+function getCategoryToEdit(state: ICategoriesState, categoryToEdit: ICategoryBindingModel): ICategoriesState {
   return {
     ...state,
     toEdit: categoryToEdit
   };
 }
 
-function getCategoryNames(state: ICategoriesState, categoryNames: any): ICategoriesState {
+function getCategoryNames(state: ICategoriesState, categoryNames: ICategoryMenuModel[]): ICategoriesState {
   return {
     ...state,
     names: categoryNames
   };
 }
 
-export function categoriesReducer(
-  state: ICategoriesState = initialState,
-  action: CategoriesActions.Types): ICategoriesState {
-
+export function categoriesReducer(state = initialState, action: Types): ICategoriesState {
   switch (action.type) {
-    case CategoriesActions.GET_ALL_CATEGORIES:
+    case CategoryActionTypes.GetAllCategories:
       return getAllCategories(state, action.payload);
 
-    case CategoriesActions.GET_CATEGORY_TO_EDIT:
+    case CategoryActionTypes.GetCategoryToEdit:
       return getCategoryToEdit(state, action.payload);
 
-    case CategoriesActions.GET_CATEGORY_NAMES:
+    case CategoryActionTypes.GetCategoryNames:
       return getCategoryNames(state, action.payload);
 
     default:

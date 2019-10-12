@@ -1,6 +1,13 @@
-﻿using GameBox.Api.Infrastructure.Extensions;
-using GameBox.Core;
-using GameBox.Data;
+﻿using AutoMapper;
+using FluentValidation.AspNetCore;
+using GameBox.Api.Filters;
+using GameBox.Application.Categories.Commands.CreateCategory;
+using GameBox.Application.Contracts;
+using GameBox.Application.Infrastructure;
+using GameBox.Application.Infrastructure.AutoMapper;
+using GameBox.Infrastructure;
+using GameBox.Persistence;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Text;
 
 namespace GameBox.Api
@@ -25,7 +33,14 @@ namespace GameBox.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<GameBoxDbContext>(options =>
+            services.AddAutoMapper(new Assembly[] { typeof(AutoMapperProfile).GetTypeInfo().Assembly });
+
+            services.AddTransient<IAccountService, AccountService>();
+
+            services.AddMediatR(typeof(CreateCategoryCommandValidator).GetTypeInfo().Assembly);
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+
+            services.AddDbContext<IGameBoxDbContext, GameBoxDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services
@@ -46,16 +61,15 @@ namespace GameBox.Api
                 options.AddPolicy("EnableCORS", builder =>
                     builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials().Build()));
 
-            services.AddDomainServices();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services
+                .AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCategoryCommandValidator>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseDatabaseMigration();
-            app.UseSeedDatabase();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
