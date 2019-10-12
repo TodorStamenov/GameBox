@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,14 +23,13 @@ namespace GameBox.Application.Categories.Queries.GetMenuCategories
 
         public async Task<IEnumerable<CategoriesListMenuViewModel>> Handle(GetMenuCategoriesQuery request, CancellationToken cancellationToken)
         {
-            var categories = await this.context
+            return await this.context
                 .Categories
                 .Include(c => c.Games)
                 .Where(c => c.Games.Any())
                 .OrderBy(c => c.Name)
+                .ProjectTo<CategoriesListMenuViewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-
-            return this.mapper.Map<IEnumerable<CategoriesListMenuViewModel>>(categories);
         }
     }
 }

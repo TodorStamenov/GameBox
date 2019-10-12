@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
 using GameBox.Domain.Entities;
 using MediatR;
@@ -33,14 +34,13 @@ namespace GameBox.Application.Users.Querues.GetAllUsers
                     .Where(u => u.Username.ToLower().Contains(request.QueryString.ToLower()));
             }
 
-            var users = await query
+            return await query
                 .Include(u => u.Roles)
                 .ThenInclude(u => u.Role)
                 .OrderBy(u => u.Username)
                 .Take(UsersOnPage)
+                .ProjectTo<UsersListViewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-
-            return this.mapper.Map<IEnumerable<UsersListViewModel>>(users);
         }
     }
 }

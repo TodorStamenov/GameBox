@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,13 +23,12 @@ namespace GameBox.Application.Categories.Queries.GetAllCategories
 
         public async Task<IEnumerable<CategoriesListViewModel>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
         {
-            var categories = await this.context
+            return await this.context
                 .Categories
                 .Include(c => c.Games)
                 .OrderBy(c => c.Name)
+                .ProjectTo<CategoriesListViewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-
-            return this.mapper.Map<IEnumerable<CategoriesListViewModel>>(categories);
         }
     }
 }

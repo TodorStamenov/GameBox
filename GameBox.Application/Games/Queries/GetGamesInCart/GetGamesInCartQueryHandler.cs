@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -23,14 +24,13 @@ namespace GameBox.Application.Games.Queries.GetGamesInCart
 
         public async Task<IEnumerable<GamesListCartViewModel>> Handle(GetGamesInCartQuery request, CancellationToken cancellationToken)
         {
-            var games = await this.context
+            return await this.context
                 .Games
                 .Where(g => request.GameIds.Contains(g.Id))
                 .OrderByDescending(g => g.Price)
                 .Distinct()
+                .ProjectTo<GamesListCartViewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-
-            return this.mapper.Map<IEnumerable<GamesListCartViewModel>>(games);
         }
     }
 }

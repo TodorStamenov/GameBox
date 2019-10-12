@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
 using GameBox.Domain.Entities;
 using MediatR;
@@ -33,12 +34,11 @@ namespace GameBox.Application.Games.Queries.GetGamesByTitle
                     .Where(g => g.Title.ToLower().Contains(request.Title.ToLower()));
             }
 
-            var games = await query
+            return await query
                 .OrderBy(g => g.Title)
                 .Take(GamesOnPage)
+                .ProjectTo<GamesListByTitleViewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-
-            return this.mapper.Map<IEnumerable<GamesListByTitleViewModel>>(games);
         }
     }
 }

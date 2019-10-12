@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
 using GameBox.Application.Games.Queries.GetAllGames;
 using MediatR;
@@ -25,7 +26,7 @@ namespace GameBox.Application.Games.Queries.GetGamesByCategory
 
         public async Task<IEnumerable<GamesListViewModel>> Handle(GetGamesByCategoryQuery request, CancellationToken cancellationToken)
         {
-            var games = await this.context
+            return await this.context
                 .Games
                 .Where(g => g.CategoryId == request.CategoryId)
                 .OrderByDescending(g => g.ReleaseDate)
@@ -33,9 +34,8 @@ namespace GameBox.Application.Games.Queries.GetGamesByCategory
                 .ThenBy(g => g.Title)
                 .Skip(request.LoadedGames)
                 .Take(GameCardsCount)
+                .ProjectTo<GamesListViewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-
-            return this.mapper.Map<IEnumerable<GamesListViewModel>>(games);
         }
     }
 }

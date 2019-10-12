@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -36,16 +37,15 @@ namespace GameBox.Application.Orders.Queries.GetAllOrders
                 endDate = endDate.AddDays(1);
             }
 
-            var orders = await this.context
+            return await this.context
                 .Orders
                 .Include(o => o.User)
                 .Include(o => o.Games)
                 .Where(o => startDate <= o.TimeStamp && o.TimeStamp <= endDate)
                 .OrderByDescending(o => o.TimeStamp)
                 .Take(OrdersOnPage)
+                .ProjectTo<OrdersListViewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-
-            return this.mapper.Map<IEnumerable<OrdersListViewModel>>(orders);
         }
     }
 }

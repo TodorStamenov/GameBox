@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
 using GameBox.Application.Games.Queries.GetAllGames;
 using MediatR;
@@ -25,7 +26,7 @@ namespace GameBox.Application.Games.Queries.GetOwnedGames
 
         public async Task<IEnumerable<GamesListViewModel>> Handle(GetOwnedGamesQuery request, CancellationToken cancellationToken)
         {
-            var games = await this.context
+            return await this.context
                 .Users
                 .Where(u => u.Username == request.Username)
                 .SelectMany(u => u.Orders.SelectMany(o => o.Games.Select(g => g.Game)))
@@ -33,9 +34,8 @@ namespace GameBox.Application.Games.Queries.GetOwnedGames
                 .OrderBy(g => g.Title)
                 .Skip(request.LoadedGames)
                 .Take(GameCardsCount)
+                .ProjectTo<GamesListViewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-
-            return this.mapper.Map<IEnumerable<GamesListViewModel>>(games);
         }
     }
 }

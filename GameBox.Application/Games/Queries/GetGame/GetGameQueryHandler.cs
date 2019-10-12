@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
+using GameBox.Application.Exceptions;
+using GameBox.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -24,9 +27,15 @@ namespace GameBox.Application.Games.Queries.GetGame
             var game = await this.context
                 .Games
                 .Where(g => g.Id == request.Id)
+                .ProjectTo<GameViewModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            return this.mapper.Map<GameViewModel>(game);
+            if (game == null)
+            {
+                throw new NotFoundException(nameof(Game), request.Id);
+            }
+
+            return game;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
 using GameBox.Application.Exceptions;
 using GameBox.Domain.Entities;
@@ -26,14 +27,15 @@ namespace GameBox.Application.Categories.Queries.GetCategory
             var category = await this.context
                 .Categories
                 .Where(c => c.Id == request.Id)
-                .SingleOrDefaultAsync(cancellationToken);
+                .ProjectTo<CategoryViewModel>(this.mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (category == null)
             {
                 throw new NotFoundException(nameof(Category), request.Id);
             }
 
-            return this.mapper.Map<CategoryViewModel>(category);
+            return category;
         }
     }
 }
