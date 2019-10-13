@@ -6,8 +6,7 @@ import { tap } from 'rxjs/operators';
 
 import { IAppState } from 'src/app/store/app.state';
 import { IGamesHomeListModel } from '../../models/games-home-list.model';
-import { GameService } from '../../services/game.service';
-import { ClearGames } from 'src/app/store/games/games.actions';
+import { LoadAllOwnedGames, ClearOwnedGames } from 'src/app/store/games/games.actions';
 
 @Component({
   selector: 'app-owned-games',
@@ -18,27 +17,21 @@ export class OwnedGamesComponent implements OnInit, OnDestroy {
 
   public games$: Observable<IGamesHomeListModel[]>;
 
-  constructor(
-    private gameService: GameService,
-    private store: Store<IAppState>
-  ) { }
+  constructor(private store: Store<IAppState>) { }
 
   public ngOnInit(): void {
     this.loadGames();
+    this.games$ = this.store.pipe(
+      select(s => s.games.owned),
+      tap(games => this.gamesLength = games.length)
+    );
   }
 
   public ngOnDestroy(): void {
-    this.store.dispatch(new ClearGames('owned'));
+    this.store.dispatch(new ClearOwnedGames());
   }
 
   public loadGames(): void {
-    this.gameService
-      .getOwned$(this.gamesLength)
-      .subscribe(() => {
-        this.games$ = this.store.pipe(
-          select(state => state.games.owned),
-          tap(games => this.gamesLength = games.length)
-        );
-      });
+    this.store.dispatch(new LoadAllOwnedGames(this.gamesLength));
   }
 }

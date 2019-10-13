@@ -4,11 +4,11 @@ import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
 
-import { CategoryService } from 'src/app/modules/category/services/category.service';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { AuthHelperService } from '../../services/auth-helper.service';
 import { ICategoryMenuModel } from 'src/app/modules/category/models/category-menu.model';
 import { IAppState } from 'src/app/store/app.state';
+import { LoadCategoryNames } from 'src/app/store/categories/categories.actions';
 
 @Component({
   selector: 'app-navigation',
@@ -22,20 +22,16 @@ export class NavigationComponent implements OnInit {
     public authHelperService: AuthHelperService,
     private authService: AuthService,
     private router: Router,
-    private categoryService: CategoryService,
     private store: Store<IAppState>
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   public ngOnInit(): void {
-    this.categoryService
-      .getCategoryNames$()
-      .subscribe(() => {
-        this.categories$ = this.store.pipe(
-          select(state => state.categories.names)
-        );
-      });
+    this.store.dispatch(new LoadCategoryNames());
+    this.categories$ = this.store.pipe(
+      select(s => s.categories.names)
+    );
   }
 
   public logout(): void {

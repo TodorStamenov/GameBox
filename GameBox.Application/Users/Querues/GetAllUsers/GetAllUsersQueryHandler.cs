@@ -35,8 +35,6 @@ namespace GameBox.Application.Users.Querues.GetAllUsers
             }
 
             return await query
-                .Include(u => u.Roles)
-                .ThenInclude(u => u.Role)
                 .OrderBy(u => u.Username)
                 .Take(UsersOnPage)
                 .ProjectTo<UsersListViewModel>(this.mapper.ConfigurationProvider)

@@ -1,19 +1,22 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
+
+import { takeWhile, filter } from 'rxjs/operators';
 
 import { CategoryService } from '../../services/category.service';
 import { FormService } from 'src/app/modules/core/services/form.service';
 import { ActionType } from '../../../core/enums/action-type.enum';
-import { ICategoryBindingModel } from '../../models/category-binding.model';
 import { IAppState } from 'src/app/store/app.state';
+import { LoadCategoryToEdit, LoadCategoryNames } from 'src/app/store/categories/categories.actions';
 
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html'
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent implements OnInit, OnDestroy {
+  private componentActive = true;
   private categoryId: string | undefined;
   private actionType: ActionType | undefined;
 
@@ -39,17 +42,20 @@ export class CategoryComponent implements OnInit {
     });
 
     if (this.actionType === ActionType.edit) {
-      this.categoryService
-        .getCategory$(this.categoryId)
-        .subscribe(() => {
-          this.store.pipe(
-            select(state => state.categories.toEdit)
-          )
-          .subscribe((category: ICategoryBindingModel) => this.categoryForm.setValue({
-            name: category.name
-          }));
-        });
+      this.store.dispatch(new LoadCategoryToEdit(this.categoryId));
+      this.store.pipe(
+        select(s => s.categories.toEdit),
+        filter(c => !!c),
+        takeWhile(() => this.componentActive)
+      )
+      .subscribe(category => this.categoryForm.setValue({
+        name: category.name
+      }));
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.componentActive = false;
   }
 
   public saveCategory(): void {
@@ -65,6 +71,7 @@ export class CategoryComponent implements OnInit {
   }
 
   private navigateToAllCategories(): void {
+    this.store.dispatch(new LoadCategoryNames());
     this.router.navigate(['/categories/all']);
   }
 }

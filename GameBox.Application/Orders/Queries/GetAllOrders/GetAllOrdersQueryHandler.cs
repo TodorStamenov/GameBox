@@ -39,8 +39,6 @@ namespace GameBox.Application.Orders.Queries.GetAllOrders
 
             return await this.context
                 .Orders
-                .Include(o => o.User)
-                .Include(o => o.Games)
                 .Where(o => startDate <= o.TimeStamp && o.TimeStamp <= endDate)
                 .OrderByDescending(o => o.TimeStamp)
                 .Take(OrdersOnPage)

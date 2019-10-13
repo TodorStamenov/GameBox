@@ -4,13 +4,13 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
+import { tap, filter } from 'rxjs/operators';
 
 import { IGameDetailsModel } from '../../models/game-details.model';
 import { CartService } from '../../../cart/services/cart.service';
 import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.service';
-import { tap } from 'rxjs/operators';
 import { IAppState } from 'src/app/store/app.state';
-import { GameService } from '../../services/game.service';
+import { LoadGameDetail } from 'src/app/store/games/games.actions';
 
 @Component({
   selector: 'app-game-details',
@@ -24,7 +24,6 @@ export class GameDetailsComponent implements OnInit {
   private gameId: string;
 
   constructor(
-    private gameService: GameService,
     private router: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private cartService: CartService,
@@ -35,16 +34,14 @@ export class GameDetailsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.gameService
-      .getDetails$(this.gameId)
-      .subscribe(() => {
-        this.game$ = this.store.pipe(
-          select(state => state.games.detail),
-          tap((game: IGameDetailsModel) => {
-            this.videoId = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${game.videoId}`);
-          })
-        );
-      });
+    this.store.dispatch(new LoadGameDetail(this.gameId));
+    this.game$ = this.store.pipe(
+      select(s => s.games.detail),
+      filter(g => !!g),
+      tap((game: IGameDetailsModel) => {
+        this.videoId = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${game.videoId}`);
+      })
+    );
   }
 
   public addItem(id: string): void {

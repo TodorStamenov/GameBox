@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 
-import { OrderService } from '../../services/order.service';
 import { IOrdersListModel } from '../../models/orders-list.model';
 import { IAppState } from 'src/app/store/app.state';
+import { LoadAllOrders } from 'src/app/store/orders/orders.actions';
 
 @Component({
   selector: 'app-orders-list',
@@ -18,7 +18,6 @@ export class OrdersListComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private orderService: OrderService,
     private store: Store<IAppState>
   ) { }
 
@@ -32,13 +31,10 @@ export class OrdersListComponent implements OnInit {
   }
 
   public getOrders(startDate: string, endDate: string): void {
-    this.orderService
-      .getOrders$(startDate, endDate)
-      .subscribe(() => {
-        this.orders$ = this.store.pipe(
-          select(state => state.orders.all)
-        );
-      });
+    this.store.dispatch(new LoadAllOrders({ startDate, endDate }));
+    this.orders$ = this.store.pipe(
+      select(s => s.orders.all)
+    );
   }
 
   public filterOrders(): void {

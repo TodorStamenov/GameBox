@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { IUsersListModel } from '../../models/users-list.model';
 import { UserService } from '../../services/user.service';
 import { IAppState } from 'src/app/store/app.state';
+import { LoadAllUsers } from 'src/app/store/users/users.actions';
 
 @Component({
   selector: 'app-users-list',
@@ -22,6 +23,9 @@ export class UsersListComponent implements OnInit {
 
   public ngOnInit(): void {
     this.getUsers();
+    this.users$ = this.store.pipe(
+      select(s => s.users.all)
+    );
   }
 
   public setUsername(username: string): void {
@@ -53,13 +57,7 @@ export class UsersListComponent implements OnInit {
       .subscribe(() => this.getUsers(this.username));
   }
 
-  private getUsers(username?: string): void {
-    this.userService
-      .getUsers$(username || '')
-      .subscribe(() => {
-        this.users$ = this.store.pipe(
-          select(state => state.users.all)
-        );
-      });
+  private getUsers(username: string = ''): void {
+    this.store.dispatch(new LoadAllUsers(username));
   }
 }

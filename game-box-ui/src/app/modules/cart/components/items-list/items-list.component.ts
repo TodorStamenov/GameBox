@@ -1,13 +1,16 @@
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { trigger, transition, animate, style } from '@angular/animations';
+import { Store, select } from '@ngrx/store';
 
-import { tap } from 'rxjs/operators';
+import { takeWhile } from 'rxjs/operators';
 
+import { IAppState } from 'src/app/store/app.state';
 import { ICartItemsListModel } from '../../models/cart-items-list.model';
 import { CartService } from '../../services/cart.service';
 import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.service';
 import { OrderService } from 'src/app/modules/order/services/order.service';
+import { LoadAllItems, ClearCartItems } from 'src/app/store/cart/cart.actions';
 
 @Component({
   selector: 'app-items-list',
@@ -24,7 +27,9 @@ import { OrderService } from 'src/app/modules/order/services/order.service';
     ])
   ]
 })
-export class ItemsListComponent implements OnInit {
+export class ItemsListComponent implements OnInit, OnDestroy {
+  private componentActive = true;
+
   public totalPrice: number;
   public games: ICartItemsListModel[] = [];
 
@@ -32,11 +37,25 @@ export class ItemsListComponent implements OnInit {
     private authHelperService: AuthHelperService,
     private cartService: CartService,
     private orderService: OrderService,
-    private router: Router
+    private router: Router,
+    private store: Store<IAppState>
   ) { }
 
   public ngOnInit(): void {
-    this.getGames();
+    this.store.dispatch(new LoadAllItems());
+    this.store.pipe(
+      select(s => s.cart.all),
+      takeWhile(() => this.componentActive)
+    )
+    .subscribe(items => {
+      this.games = items;
+      this.totalPrice = this.calculateTotalPrice();
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.componentActive = false;
+    this.store.dispatch(new ClearCartItems());
   }
 
   public changeSource(event: any, videoId: string): void {
@@ -66,18 +85,6 @@ export class ItemsListComponent implements OnInit {
   public clear(): void {
     this.cartService.clear();
     this.games = [];
-  }
-
-  private getGames(): void {
-    this.cartService
-      .getCart$()
-      .pipe(
-        tap((res: ICartItemsListModel[]) => {
-          this.games = res;
-          this.totalPrice = this.calculateTotalPrice();
-        })
-      )
-      .subscribe();
   }
 
   private calculateTotalPrice(): number {

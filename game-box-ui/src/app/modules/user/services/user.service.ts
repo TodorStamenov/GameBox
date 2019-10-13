@@ -1,15 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { constants } from '../../../common';
 import { IUsersListModel } from '../models/users-list.model';
 import { ICreateUserModel } from '../models/create-user.model';
-import { IAppState } from 'src/app/store/app.state';
-import { GetAllUsers } from 'src/app/store/users/users.actions';
 
 const usersUrl = constants.host + 'users/';
 
@@ -17,17 +13,10 @@ const usersUrl = constants.host + 'users/';
   providedIn: 'root'
 })
 export class UserService {
-  constructor(
-    private http: HttpClient,
-    private store: Store<IAppState>
-  ) { }
+  constructor(private http: HttpClient) { }
 
-  public getUsers$(username: string): Observable<void> {
-    return this.http.get<IUsersListModel[]>(usersUrl + 'all?username=' + username).pipe(
-      map((users: IUsersListModel[]) => {
-        this.store.dispatch(new GetAllUsers(users));
-      })
-    );
+  public getUsers$(username: string): Observable<IUsersListModel[]> {
+    return this.http.get<IUsersListModel[]>(usersUrl + 'all?username=' + username);
   }
 
   public lock$(username: string): Observable<string> {

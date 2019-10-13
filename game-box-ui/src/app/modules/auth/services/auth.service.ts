@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
 import { IRegisterModel } from '../../auth/models/register.model';
@@ -19,12 +20,12 @@ export class AuthService {
     private toastr: ToastrService
   ) { }
 
-  public register(body: IRegisterModel) {
-    return this.http.post(authUrl + 'register', body);
+  public register(body: IRegisterModel): Observable<void> {
+    return this.http.post<void>(authUrl + 'register', body);
   }
 
-  public login(body: ILoginModel) {
-    return this.http.post(authUrl + 'login', body);
+  public login(body: ILoginModel): Observable<void> {
+    return this.http.post<void>(authUrl + 'login', body);
   }
 
   public logout(): void {
@@ -32,7 +33,7 @@ export class AuthService {
     this.toastr.success('You have successfully logged out', 'Success!');
   }
 
-  public changePassword(body: IChangePasswordModel) {
-    return this.http.post(authUrl + 'changePassword', body);
+  public changePassword(body: IChangePasswordModel): Observable<void> {
+    return this.http.post<void>(authUrl + 'changePassword', body);
   }
 }

@@ -56,27 +56,25 @@ function getGameToEdit(state: IGamesState, gameToEdit: IGameBindingModel): IGame
   };
 }
 
-function clearGames(state: IGamesState, setToClear: string): IGamesState {
-  if (setToClear === 'home') {
-    return {
-      ...state,
-      allHome: []
-    };
-  }
+function clearGamesHome(state: IGamesState): IGamesState {
+  return {
+    ...state,
+    allHome: []
+  };
+}
 
-  if (setToClear === 'category') {
-    return {
-      ...state,
-      byCategory: []
-    };
-  }
+function clearGamesByCategory(state: IGamesState): IGamesState {
+  return {
+    ...state,
+    byCategory: []
+  };
+}
 
-  if (setToClear === 'owned') {
-    return {
-      ...state,
-      owned: []
-    };
-  }
+function clearOwnedGames(state: IGamesState): IGamesState {
+  return {
+    ...state,
+    owned: []
+  };
 }
 
 export function gamesReducer(state = initialState, action: Types): IGamesState {
@@ -99,8 +97,14 @@ export function gamesReducer(state = initialState, action: Types): IGamesState {
     case GameActionTypes.GetGameToEdit:
       return getGameToEdit(state, action.payload);
 
-    case GameActionTypes.ClearGames:
-      return clearGames(state, action.payload);
+    case GameActionTypes.ClearGamesHome:
+      return clearGamesHome(state);
+
+    case GameActionTypes.ClearGamesByCategory:
+      return clearGamesByCategory(state);
+
+    case GameActionTypes.ClearOwnedGames:
+      return clearOwnedGames(state);
 
     default:
       return state;

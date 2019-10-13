@@ -7,8 +7,7 @@ import { tap } from 'rxjs/operators';
 
 import { IGamesHomeListModel } from '../../models/games-home-list.model';
 import { IAppState } from 'src/app/store/app.state';
-import { GameService } from '../../services/game.service';
-import { ClearGames } from 'src/app/store/games/games.actions';
+import { LoadAllGamesByCategory, ClearGamesByCategory } from 'src/app/store/games/games.actions';
 
 @Component({
   selector: 'app-category-games',
@@ -21,7 +20,6 @@ export class CategoryGamesComponent implements OnInit, OnDestroy {
   public games$: Observable<IGamesHomeListModel[]>;
 
   constructor(
-    private gameService: GameService,
     private route: ActivatedRoute,
     private store: Store<IAppState>
   ) {
@@ -30,20 +28,20 @@ export class CategoryGamesComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.loadGames();
+    this.games$ = this.store.pipe(
+      select(s => s.games.byCategory),
+      tap(games => this.gamesLength = games.length)
+    );
   }
 
   public ngOnDestroy(): void {
-    this.store.dispatch(new ClearGames('category'));
+    this.store.dispatch(new ClearGamesByCategory());
   }
 
   public loadGames(): void {
-    this.gameService
-      .getGamesByCategory$(this.gamesLength, this.categoryId)
-      .subscribe(() => {
-        this.games$ = this.store.pipe(
-          select(state => state.games.byCategory),
-          tap(games => this.gamesLength = games.length)
-        );
-      });
+    this.store.dispatch(new LoadAllGamesByCategory({
+      loadedGames: this.gamesLength,
+      categoryId: this.categoryId
+    }));
   }
 }

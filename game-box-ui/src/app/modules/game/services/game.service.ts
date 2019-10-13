@@ -1,24 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { constants } from '../../../common';
-import { IAppState } from 'src/app/store/app.state';
 import { IGameBindingModel } from '../models/game-binding.model';
 import { IGamesListModel } from '../models/games-list.model';
 import { IGamesHomeListModel } from '../models/games-home-list.model';
 import { IGameDetailsModel } from '../models/game-details.model';
-import {
-  GetAllGames,
-  GetGameToEdit,
-  GetAllGamesByCategory,
-  GetAllOwnedGames,
-  GetGameDetail,
-  GetAllGamesHome
-} from 'src/app/store/games/games.actions';
 
 const gamesUrl = constants.host + 'games/';
 
@@ -26,57 +15,30 @@ const gamesUrl = constants.host + 'games/';
   providedIn: 'root'
 })
 export class GameService {
-  constructor(
-    private http: HttpClient,
-    private store: Store<IAppState>
-  ) { }
+  constructor(private http: HttpClient) { }
 
-  public searchGames$(title: string = ''): Observable<void> {
-    return this.http.get<IGamesListModel[]>(gamesUrl + 'all?title=' + title).pipe(
-      map((games: IGamesListModel[]) => {
-        this.store.dispatch(new GetAllGames(games));
-      })
-    );
+  public searchGames$(title: string = ''): Observable<IGamesListModel[]> {
+    return this.http.get<IGamesListModel[]>(gamesUrl + 'all?title=' + title);
   }
 
-  public getGame$(id: string): Observable<void> {
-    return this.http.get<IGameBindingModel>(gamesUrl + id).pipe(
-      map((game: IGameBindingModel) => {
-        this.store.dispatch(new GetGameToEdit(game));
-      })
-    );
+  public getGame$(id: string): Observable<IGameBindingModel> {
+    return this.http.get<IGameBindingModel>(gamesUrl + id);
   }
 
-  public getGames$(loadedGames: number): Observable<void> {
-    return this.http.get<IGamesHomeListModel[]>(gamesUrl + '?loadedGames=' + loadedGames).pipe(
-      map((games: IGamesHomeListModel[]) => {
-        this.store.dispatch(new GetAllGamesHome(games));
-      })
-    );
+  public getGames$(loadedGames: number): Observable<IGamesHomeListModel[]> {
+    return this.http.get<IGamesHomeListModel[]>(gamesUrl + '?loadedGames=' + loadedGames);
   }
 
-  public getGamesByCategory$(loadedGames: number, categoryId: string): Observable<void> {
-    return this.http.get<IGamesHomeListModel[]>(gamesUrl + 'category/' + categoryId + '?loadedGames=' + loadedGames).pipe(
-      map((games: IGamesHomeListModel[]) => {
-        this.store.dispatch(new GetAllGamesByCategory(games));
-      })
-    );
+  public getGamesByCategory$(loadedGames: number, categoryId: string): Observable<IGamesHomeListModel[]> {
+    return this.http.get<IGamesHomeListModel[]>(gamesUrl + 'category/' + categoryId + '?loadedGames=' + loadedGames);
   }
 
-  public getOwned$(loadedGames: number): Observable<void> {
-    return this.http.get<IGamesHomeListModel[]>(gamesUrl + 'owned?loadedGames=' + loadedGames).pipe(
-      map((games: IGamesHomeListModel[]) => {
-        this.store.dispatch(new GetAllOwnedGames(games));
-      })
-    );
+  public getOwned$(loadedGames: number): Observable<IGamesHomeListModel[]> {
+    return this.http.get<IGamesHomeListModel[]>(gamesUrl + 'owned?loadedGames=' + loadedGames);
   }
 
-  public getDetails$(id: string): Observable<void> {
-    return this.http.get<IGameDetailsModel>(gamesUrl + 'details/' + id).pipe(
-      map((game: IGameDetailsModel) => {
-        this.store.dispatch(new GetGameDetail(game));
-      })
-    );
+  public getDetails$(id: string): Observable<IGameDetailsModel> {
+    return this.http.get<IGameDetailsModel>(gamesUrl + 'details/' + id);
   }
 
   public addGame$(body: IGameBindingModel): Observable<void> {

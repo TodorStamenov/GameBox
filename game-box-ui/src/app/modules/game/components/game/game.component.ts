@@ -1,22 +1,26 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
+import { Observable } from 'rxjs';
+import { filter, takeWhile } from 'rxjs/operators';
+
+import { IAppState } from 'src/app/store/app.state';
 import { GameService } from '../../services/game.service';
-import { CategoryService } from '../../../category/services/category.service';
 import { FormService } from 'src/app/modules/core/services/form.service';
 import { ActionType } from '../../../core/enums/action-type.enum';
 import { IGameBindingModel } from '../../models/game-binding.model';
-import { Observable } from 'rxjs';
 import { ICategoryMenuModel } from '../../../category/models/category-menu.model';
-import { IAppState } from 'src/app/store/app.state';
+import { LoadCategoryNames } from 'src/app/store/categories/categories.actions';
+import { LoadGameToEdit } from 'src/app/store/games/games.actions';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html'
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
+  private componentActive = true;
   private gameId: string | undefined;
   private actionType: ActionType | undefined;
 
@@ -35,7 +39,6 @@ export class GameComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private gameService: GameService,
-    private categoryService: CategoryService,
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<IAppState>,
@@ -46,13 +49,10 @@ export class GameComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.categoryService
-      .getCategoryNames$()
-      .subscribe(() => {
-        this.categories$ = this.store.pipe(
-          select(state => state.categories.names)
-        );
-      });
+    this.store.dispatch(new LoadCategoryNames());
+    this.categories$ = this.store.pipe(
+      select(s => s.categories.names)
+    );
 
     this.gameForm = this.fb.group({
       'title': [null, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
@@ -66,24 +66,18 @@ export class GameComponent implements OnInit {
     });
 
     if (this.actionType === ActionType.edit) {
-      this.gameService
-        .getGame$(this.gameId)
-        .subscribe(() => {
-          this.store.pipe(
-            select(state => state.games.toEdit)
-          )
-          .subscribe((game: IGameBindingModel) => this.gameForm.setValue({
-            title: game.title,
-            description: game.description,
-            thumbnailUrl: game.thumbnailUrl,
-            price: game.price,
-            size: game.size,
-            videoId: game.videoId,
-            releaseDate: game.releaseDate,
-            categoryId: game.categoryId
-          }));
-        });
+      this.store.dispatch(new LoadGameToEdit(this.gameId));
+      this.store.pipe(
+        select(s => s.games.toEdit),
+        filter(g => !!g),
+        takeWhile(() => this.componentActive)
+      )
+      .subscribe(game => this.setupEditForm(game));
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.componentActive = false;
   }
 
   public saveGame(): void {
@@ -100,5 +94,18 @@ export class GameComponent implements OnInit {
 
   private navigateToHome(): void {
     this.router.navigate(['/games/all']);
+  }
+
+  private setupEditForm(game: IGameBindingModel) {
+    this.gameForm.setValue({
+      title: game.title,
+      description: game.description,
+      thumbnailUrl: game.thumbnailUrl,
+      price: game.price,
+      size: game.size,
+      videoId: game.videoId,
+      releaseDate: game.releaseDate,
+      categoryId: game.categoryId
+    });
   }
 }

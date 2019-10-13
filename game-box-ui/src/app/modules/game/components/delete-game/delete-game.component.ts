@@ -42,7 +42,7 @@ export class DeleteGameComponent implements OnInit {
       .getGame$(this.gameId)
       .subscribe(() => {
         this.store.pipe(
-          select(state => state.games.toEdit)
+          select(s => s.games.toEdit)
         )
         .subscribe((game: IGameBindingModel) => this.deleteGameForm.setValue({
           title: game.title,

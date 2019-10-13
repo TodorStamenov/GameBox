@@ -25,7 +25,6 @@ namespace GameBox.Application.Categories.Queries.GetAllCategories
         {
             return await this.context
                 .Categories
-                .Include(c => c.Games)
                 .OrderBy(c => c.Name)
                 .ProjectTo<CategoriesListViewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);

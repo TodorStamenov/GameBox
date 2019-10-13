@@ -3,7 +3,13 @@ import { Action } from '@ngrx/store';
 import { IUsersListModel } from 'src/app/modules/user/models/users-list.model';
 
 export enum UserActionTypes {
-  GetAllUsers = '[USERS] Get All'
+  LoadAllUsers = '[USERS] Load All Users',
+  GetAllUsers = '[USERS] Get All Users'
+}
+
+export class LoadAllUsers implements Action {
+  readonly type = UserActionTypes.LoadAllUsers;
+  constructor(public payload: string) { }
 }
 
 export class GetAllUsers implements Action {
@@ -11,4 +17,5 @@ export class GetAllUsers implements Action {
   constructor(public payload: IUsersListModel[]) { }
 }
 
-export type Types = GetAllUsers;
+export type Types = LoadAllUsers
+  | GetAllUsers;

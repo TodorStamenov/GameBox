@@ -25,7 +25,6 @@ namespace GameBox.Application.Categories.Queries.GetMenuCategories
         {
             return await this.context
                 .Categories
-                .Include(c => c.Games)
                 .Where(c => c.Games.Any())
                 .OrderBy(c => c.Name)
                 .ProjectTo<CategoriesListMenuViewModel>(this.mapper.ConfigurationProvider)
