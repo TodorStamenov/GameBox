@@ -26,7 +26,7 @@ namespace GameBox.Application.Categories.Commands.CreateCategory
             await this.context.Categories.AddAsync(entity);
             await this.context.SaveChangesAsync(cancellationToken);
 
-            return string.Format(Constants.Common.Success, nameof(Category), Constants.Common.Added);
+            return string.Format(Constants.Common.Success, nameof(Category), request.Name, Constants.Common.Added);
         }
     }
 }
