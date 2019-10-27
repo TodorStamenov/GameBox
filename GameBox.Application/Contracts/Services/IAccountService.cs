@@ -1,4 +1,4 @@
-﻿namespace GameBox.Application.Contracts
+﻿namespace GameBox.Application.Contracts.Services
 {
     public interface IAccountService
     {

@@ -5,6 +5,7 @@ using GameBox.Application.Categories.Commands.CreateCategory;
 using GameBox.Application.Contracts;
 using GameBox.Application.Infrastructure;
 using GameBox.Application.Infrastructure.AutoMapper;
+using GameBox.Application.Infrastructure.Extensions;
 using GameBox.Infrastructure;
 using GameBox.Persistence;
 using MediatR;
@@ -33,9 +34,9 @@ namespace GameBox.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(new Assembly[] { typeof(AutoMapperProfile).GetTypeInfo().Assembly });
+            services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
-            services.AddTransient<IAccountService, AccountService>();
+            services.AddDomainServices(typeof(AccountService).Assembly);
 
             services.AddMediatR(typeof(CreateCategoryCommandValidator).GetTypeInfo().Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));

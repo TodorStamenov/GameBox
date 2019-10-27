@@ -8,6 +8,7 @@ namespace GameBox.Domain.Entities
         public Game()
         {
             this.Orders = new HashSet<GameOrder>();
+            this.Wishlists = new HashSet<Wishlist>();
         }
 
         public Guid Id { get; set; }
@@ -35,5 +36,7 @@ namespace GameBox.Domain.Entities
         public Category Category { get; set; }
 
         public ICollection<GameOrder> Orders { get; private set; }
+
+        public ICollection<Wishlist> Wishlists { get; private set; }
     }
 }

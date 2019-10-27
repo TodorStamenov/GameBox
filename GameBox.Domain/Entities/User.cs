@@ -9,6 +9,7 @@ namespace GameBox.Domain.Entities
         {
             this.Roles = new HashSet<UserRoles>();
             this.Orders = new HashSet<Order>();
+            this.Wishlist = new HashSet<Wishlist>();
         }
 
         public Guid Id { get; set; }
@@ -24,5 +25,7 @@ namespace GameBox.Domain.Entities
         public ICollection<UserRoles> Roles { get; private set; }
 
         public ICollection<Order> Orders { get; private set; }
+
+        public ICollection<Wishlist> Wishlist { get; private set; }
     }
 }

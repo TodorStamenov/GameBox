@@ -1,10 +1,11 @@
 ﻿using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 namespace GameBox.Persistence
 {
@@ -17,34 +18,35 @@ namespace GameBox.Persistence
 
         private static readonly Random random = new Random();
 
-        public static void SeedDatabase(GameBoxDbContext db)
+        public static async Task SeedDatabaseAsync(GameBoxDbContext db)
         {
-            db.Database.EnsureCreated();
+            await db.Database.EnsureCreatedAsync();
 
-            SeedRoles(db, Constants.Common.Admin);
-            SeedUsers(db, AdminsCount, Constants.Common.Admin);
-            SeedUsers(db, UsersCount);
-            SeedCategories(db, CategoriesCount);
-            SeedGames(db, GamesCount);
-            SeedOrders(db);
+            await SeedRolesAsync(db, Constants.Common.Admin);
+            await SeedUsersAsync(db, UsersCount);
+            await SeedUsersAsync(db, AdminsCount, Constants.Common.Admin);
+            await SeedCategoriesAsync(db, CategoriesCount);
+            await SeedGamesAsync(db, GamesCount);
+            await SeedOrdersAsync(db);
+            await SeedWishlistsAsync(db);
         }
 
-        private static void SeedRoles(GameBoxDbContext db, string roleName)
+        private static async Task SeedRolesAsync(GameBoxDbContext db, string roleName)
         {
-            if (db.Roles.Any())
+            if (await db.Roles.AnyAsync())
             {
                 return;
             }
 
-            Role role = new Role { Name = roleName };
+            var role = new Role { Name = roleName };
 
-            db.Roles.Add(role);
-            db.SaveChanges();
+            await db.Roles.AddAsync(role);
+            await db.SaveChangesAsync();
         }
 
-        private static void SeedUsers(GameBoxDbContext db, int usersCount)
+        private static async Task SeedUsersAsync(GameBoxDbContext db, int usersCount)
         {
-            if (db.Users.Any(u => !u.Roles.Any()))
+            if (await db.Users.AnyAsync(u => !u.Roles.Any()))
             {
                 return;
             }
@@ -53,31 +55,31 @@ namespace GameBox.Persistence
             {
                 byte[] salt = GenerateSalt();
 
-                User user = new User
+                var user = new User
                 {
                     Username = $"User{i}",
                     Password = HashPassword("123", salt),
                     Salt = salt
                 };
 
-                db.Users.Add(user);
+                await db.Users.AddAsync(user);
             }
 
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
 
-        private static void SeedUsers(GameBoxDbContext db, int usersCount, string role)
+        private static async Task SeedUsersAsync(GameBoxDbContext db, int usersCount, string role)
         {
-            if (db.Users.Any(u => u.Roles.Any(r => r.Role.Name == role)))
+            if (await db.Users.AnyAsync(u => u.Roles.Any(r => r.Role.Name == role)))
             {
                 return;
             }
 
-            Guid roleId = db
+            Guid roleId = await db
                 .Roles
                 .Where(r => r.Name == role)
                 .Select(r => r.Id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (roleId == default(Guid))
             {
@@ -88,59 +90,67 @@ namespace GameBox.Persistence
             {
                 byte[] salt = GenerateSalt();
 
-                User user = new User
+                var user = new User
                 {
                     Username = $"{role}{i}",
                     Password = HashPassword("123", salt),
                     Salt = salt
                 };
 
-                user.Roles.Add(new UserRoles
+                var userRole = new UserRoles
                 {
                     RoleId = roleId
-                });
+                };
 
-                db.Users.Add(user);
+                user.Roles.Add(userRole);
+
+                await db.Users.AddAsync(user);
             }
 
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
 
-        private static void SeedCategories(GameBoxDbContext db, int categoriesCount)
+        private static async Task SeedCategoriesAsync(GameBoxDbContext db, int categoriesCount)
         {
-            if (db.Categories.Any())
+            if (await db.Categories.AnyAsync())
             {
                 return;
             }
 
             for (int i = 1; i <= categoriesCount; i++)
             {
-                db.Categories.Add(new Category
-                {
-                    Name = $"Category{i}"
-                });
+                var category = new Category { Name = $"Category{i}" };
+
+                await db.Categories.AddAsync(category);
             }
 
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
 
-        private static void SeedGames(GameBoxDbContext db, int gamesCount)
+        private static async Task SeedGamesAsync(GameBoxDbContext db, int gamesCount)
         {
-            if (db.Games.Any())
+            if (await db.Games.AnyAsync())
             {
                 return;
             }
 
-            List<Guid> categoryIds = db
+            var categoryIds = await db
                 .Categories
                 .Select(c => c.Id)
-                .ToList();
+                .ToListAsync();
 
             for (int i = 1; i <= gamesCount; i++)
             {
-                db.Games.Add(new Game
+                var game = new Game
                 {
                     Title = $"Title{i}",
+                    Price = random.Next(2000, 20000) / 100M,
+                    Size = random.Next(1, 230),
+                    ReleaseDate = DateTime.Now.AddMonths(-i),
+                    CategoryId = categoryIds[random.Next(0, categoryIds.Count)],
+                    VideoId = "pyZw_oqk7Q8",
+                    ViewCount = random.Next(10, 10000),
+                    OrderCount = random.Next(10, 10000),
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
                         "Suspendisse tellus ipsum, dignissim sit amet rutrum congue, vehicula in elit. " +
                         "Phasellus lorem urna, iaculis non egestas eu, sollicitudin nec risus. Nunc mollis nisi a orci vulputate molestie. " +
@@ -153,44 +163,34 @@ namespace GameBox.Persistence
                         "In ipsum mauris, dictum eu magna sed, tristique auctor lorem. " +
                         "Integer aliquet augue tellus, ac eleifend elit condimentum sed.Morbi luctus non lacus id facilisis.Vivamus vulputate elementum arcu, " +
                         "gravida malesuada ante facilisis eu.Vivamus in tellus ac urna tempor porta ut ac risus.Ut commodo ac arcu sed tincidunt.Mauris pharetra " +
-                        "lectus at massa convallis fringilla.Morbi commodo ex enim, nec interdum nisl viverra id.",
-                    Price = random.Next(2000, 20000) / 100M,
-                    Size = random.Next(1, 230),
-                    ReleaseDate = DateTime.Now.AddMonths(-i),
-                    CategoryId = categoryIds[random.Next(0, categoryIds.Count)],
-                    VideoId = "pyZw_oqk7Q8",
-                    ViewCount = random.Next(10, 10000),
-                    OrderCount = random.Next(10, 10000)
-                });
+                        "lectus at massa convallis fringilla.Morbi commodo ex enim, nec interdum nisl viverra id."
+                };
+
+                await db.Games.AddAsync(game);
             }
 
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
 
-        private static void SeedOrders(GameBoxDbContext db)
+        private static async Task SeedOrdersAsync(GameBoxDbContext db)
         {
-            if (db.Orders.Any())
+            if (await db.Orders.AnyAsync())
             {
                 return;
             }
 
-            List<User> users = db
-                .Users
-                .ToList();
-
-            List<Game> games = db
-                .Games
-                .ToList();
+            var users = await db.Users.ToListAsync();
+            var games = await db.Games.ToListAsync();
 
             foreach (var user in users)
             {
-                int ordersCount = random.Next(0, 4);
+                var ordersCount = random.Next(0, 4);
 
                 for (int i = 0; i < ordersCount; i++)
                 {
-                    Order order = new Order();
+                    var order = new Order();
 
-                    int gamesCount = random.Next(1, 6);
+                    var gamesCount = random.Next(1, 6);
 
                     for (int j = 0; j < gamesCount; j++)
                     {
@@ -202,11 +202,13 @@ namespace GameBox.Persistence
                             continue;
                         }
 
-                        order.Games.Add(new GameOrder
+                        var gameOrder = new GameOrder
                         {
                             Game = game,
                             GameId = game.Id
-                        });
+                        };
+
+                        order.Games.Add(gameOrder);
                     }
 
                     order.TimeStamp = DateTime.Now.AddMonths(-i).AddDays(-i);
@@ -215,7 +217,44 @@ namespace GameBox.Persistence
                 }
             }
 
-            db.SaveChanges();
+            await db.SaveChangesAsync();
+        }
+
+        private static async Task SeedWishlistsAsync(GameBoxDbContext db)
+        {
+            if (await db.Wishlists.AnyAsync())
+            {
+                return;
+            }
+
+            var users = await db.Users.ToListAsync();
+            var gameIds = await db.Games.Select(g => g.Id).ToListAsync();
+
+            foreach (var user in users)
+            {
+                var itemsCount = random.Next(0, 6);
+
+                for (int i = 0; i < itemsCount; i++)
+                {
+                    var gameId = gameIds[random.Next(0, gameIds.Count)];
+
+                    if (user.Wishlist.Any(g => g.GameId == gameId))
+                    {
+                        i--;
+                        continue;
+                    }
+
+                    var wishlistItem = new Wishlist 
+                    {
+                        UserId = user.Id,
+                        GameId = gameId
+                    };
+
+                    user.Wishlist.Add(wishlistItem);
+                }
+            }
+
+            await db.SaveChangesAsync();
         }
 
         private static byte[] GenerateSalt()

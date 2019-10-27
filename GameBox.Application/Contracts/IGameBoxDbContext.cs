@@ -19,6 +19,10 @@ namespace GameBox.Application.Contracts
 
         DbSet<Order> Orders { get; set; }
 
+        DbSet<Wishlist> Wishlists { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+
+        Task SeedAsync();
     }
 }

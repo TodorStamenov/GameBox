@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using GameBox.Application.Contracts.Mapping;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GameBox.Application.Infrastructure.AutoMapper
@@ -10,15 +9,14 @@ namespace GameBox.Application.Infrastructure.AutoMapper
     {
         public AutoMapperProfile()
         {
-            IEnumerable<Type> allTypes = AppDomain
+            var allTypes = AppDomain
                 .CurrentDomain
                 .GetAssemblies()
                 .Where(a => a.GetName().Name.Contains("GameBox"))
-                .SelectMany(a => a.GetTypes());
+                .SelectMany(a => a.DefinedTypes);
 
             allTypes
-                .Where(t => t.IsClass && !t.IsAbstract && t
-                    .GetInterfaces()
+                .Where(t => t.IsClass && !t.IsAbstract && t.GetInterfaces()
                     .Where(i => i.IsGenericType)
                     .Select(i => i.GetGenericTypeDefinition())
                     .Contains(typeof(IMapFrom<>)))

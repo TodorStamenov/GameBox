@@ -1,8 +1,8 @@
 ﻿using GameBox.Application.Contracts;
-using GameBox.Persistence;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace GameBox.Api
 {
@@ -14,10 +14,15 @@ namespace GameBox.Api
 
             using (var scope = host.Services.CreateScope())
             {
-                var context = scope.ServiceProvider.GetService<IGameBoxDbContext>();
-                var concreteContext = (GameBoxDbContext)context;
-
-                GameBoxDbInitializer.SeedDatabase(concreteContext);
+                Task.Run(async () => 
+                    {
+                        await scope
+                            .ServiceProvider
+                            .GetService<IGameBoxDbContext>()
+                            .SeedAsync();
+                    })
+                    .GetAwaiter()
+                    .GetResult();
             }
 
             host.Run();

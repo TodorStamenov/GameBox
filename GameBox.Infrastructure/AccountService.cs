@@ -1,4 +1,4 @@
-﻿using GameBox.Application.Contracts;
+﻿using GameBox.Application.Contracts.Services;
 using GameBox.Application.Infrastructure;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.IdentityModel.Tokens;

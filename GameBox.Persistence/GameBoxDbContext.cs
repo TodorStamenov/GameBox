@@ -1,6 +1,7 @@
 ﻿using GameBox.Application.Contracts;
 using GameBox.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace GameBox.Persistence
 {
@@ -23,9 +24,16 @@ namespace GameBox.Persistence
 
         public DbSet<Order> Orders { get; set; }
 
+        public DbSet<Wishlist> Wishlists { get; set; }
+
+        public async Task SeedAsync()
+        {
+            await GameBoxDbInitializer.SeedDatabaseAsync(this);
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfigurationsFromAssembly(typeof(GameBoxDbContext).Assembly);
+            builder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
         }
     }
 }
