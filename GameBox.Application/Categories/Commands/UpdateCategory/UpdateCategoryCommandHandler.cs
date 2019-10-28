@@ -3,7 +3,6 @@ using GameBox.Application.Exceptions;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,9 +19,7 @@ namespace GameBox.Application.Categories.Commands.UpdateCategory
 
         public async Task<string> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var entity = await this.context
-                .Categories
-                .SingleOrDefaultAsync(c => c.Id == request.Id);
+            var entity = await this.context.Categories.FindAsync(request.Id);
 
             if (entity == null)
             {

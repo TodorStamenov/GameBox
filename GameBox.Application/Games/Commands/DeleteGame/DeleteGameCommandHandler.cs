@@ -19,9 +19,7 @@ namespace GameBox.Application.Games.Commands.DeleteGame
 
         public async Task<string> Handle(DeleteGameCommand request, CancellationToken cancellationToken)
         {
-            var game = await this.context
-                .Games
-                .FindAsync(request.Id);
+            var game = await this.context.Games.FindAsync(request.Id);
 
             if (game == null)
             {

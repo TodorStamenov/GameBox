@@ -22,7 +22,6 @@ namespace GameBox.Application.Accounts.Commands.Register
         public async Task<RegisterViewModel> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
             var salt = this.accountService.GenerateSalt();
-
             var hashedPassword = this.accountService.HashPassword(request.Password, salt);
 
             var user = new User
@@ -35,14 +34,14 @@ namespace GameBox.Application.Accounts.Commands.Register
             await this.context.Users.AddAsync(user);
             await this.context.SaveChangesAsync(cancellationToken);
 
-            var token = this.accountService.GenerateJwtToken(request.Username);
+            var token = this.accountService.GenerateJwtToken(user.Username);
 
             return new RegisterViewModel
             {
-                Username = request.Username,
+                Username = user.Username,
                 Token = token,
                 IsAdmin = false,
-                Message = string.Format(Constants.Common.Success, nameof(User), request.Username, "Registered")
+                Message = string.Format(Constants.Common.Success, nameof(User), user.Username, "Registered")
             };
         }
     }

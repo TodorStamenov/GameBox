@@ -1,10 +1,12 @@
-﻿namespace GameBox.Application.Contracts.Services
+﻿using System;
+
+namespace GameBox.Application.Contracts.Services
 {
     public interface IAccountService
     {
-        string HashPassword(string password, byte[] salt);
-
         byte[] GenerateSalt();
+
+        string HashPassword(string password, byte[] salt);
 
         string GenerateJwtToken(string username, bool isAdmin = false);
     }

@@ -3,11 +3,14 @@ using FluentValidation.AspNetCore;
 using GameBox.Api.Filters;
 using GameBox.Application.Categories.Commands.CreateCategory;
 using GameBox.Application.Contracts;
+using GameBox.Application.GraphQL;
 using GameBox.Application.Infrastructure;
 using GameBox.Application.Infrastructure.AutoMapper;
 using GameBox.Application.Infrastructure.Extensions;
 using GameBox.Infrastructure;
 using GameBox.Persistence;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -37,6 +40,8 @@ namespace GameBox.Api
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
             services.AddDomainServices(typeof(AccountService).Assembly);
+
+            services.AddGraphQLServices();
 
             services.AddMediatR(typeof(CreateCategoryCommandValidator).GetTypeInfo().Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
@@ -78,6 +83,8 @@ namespace GameBox.Api
 
             app.UseAuthentication();
             app.UseCors("EnableCORS");
+            app.UseGraphQL<GameBoxSchema>();
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
             app.UseMvc();
         }
     }

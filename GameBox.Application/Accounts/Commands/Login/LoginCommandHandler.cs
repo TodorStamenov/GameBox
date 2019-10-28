@@ -29,6 +29,7 @@ namespace GameBox.Application.Accounts.Commands.Login
                 .Where(u => u.Username == request.Username)
                 .Select(u => new
                 {
+                    u.Id,
                     u.Username,
                     u.Password,
                     u.Salt,
@@ -45,7 +46,7 @@ namespace GameBox.Application.Accounts.Commands.Login
 
             if (userInfo.IsLocked)
             {
-                throw new AccountLockedException(request.Username);
+                throw new AccountLockedException(userInfo.Username);
             }
 
             var hashedPassword = this.accountService.HashPassword(request.Password, userInfo.Salt);
@@ -55,14 +56,14 @@ namespace GameBox.Application.Accounts.Commands.Login
                 throw new InvalidCredentialsException();
             }
 
-            var token = this.accountService.GenerateJwtToken(request.Username, userInfo.IsAdmin);
+            var token = this.accountService.GenerateJwtToken(userInfo.Username, userInfo.IsAdmin);
 
             return new LoginViewModel
             {
-                Username = request.Username,
+                Username = userInfo.Username,
                 Token = token,
                 IsAdmin = userInfo.IsAdmin,
-                Message = string.Format(Constants.Common.Success, nameof(User), request.Username, "Logged In")
+                Message = string.Format(Constants.Common.Success, nameof(User), userInfo.Username, "Logged In")
             };
         }
     }
