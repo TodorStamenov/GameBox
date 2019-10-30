@@ -61,7 +61,31 @@ namespace GameBox.Infrastructure
                 .Wishlists
                 .Where(w => w.UserId == userId)
                 .Select(w => w.Game)
+                .OrderBy(g => g.Title)
                 .ToListAsync();
-        }       
+        }
+
+        public async Task<IEnumerable<Guid>> ClearGamesFromWishlistAsync(string username)
+        {
+            var userId = await this.userService.GetUserIdAsync(username);
+
+            var result = new List<Guid>();
+
+            var games = await this.context
+                .Wishlists
+                .Where(w => w.UserId == userId)
+                .ToListAsync();
+
+            foreach (var game in games)
+            {
+                this.context.Wishlists.Remove(game);
+
+                result.Add(game.GameId);
+            }
+
+            await this.context.SaveChangesAsync();
+
+            return result;
+        }
     }
 }

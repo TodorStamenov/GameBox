@@ -44,6 +44,11 @@
             </a>
           </li>
           <li>
+            <a *ngIf="authHelperService.isAuthenticated()" class="nav-element" routerLink="/wishlist/items">
+              Wishlist
+            </a>
+          </li>
+          <li>
             <a class="nav-element" routerLink="/cart/items">
               Cart
             </a>
@@ -76,7 +81,7 @@
             </a>
           </li>
           <li>
-            <a class="nav-element btn" *ngIf="authHelperService.isAuthenticated()" (click)="logout()">
+            <a class="nav-element btn" *ngIf="authHelperService.isAuthenticated()" (click)="onLogout()">
               Logout
             </a>
           </li>

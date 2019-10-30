@@ -40,7 +40,7 @@
         [routerLink]="['/games/delete', game.id]">
         Delete
       </a>
-      <a (click)="addItem(game.id)" class="btn btn-sm btn-success action-button" routerLink="/cart/items">
+      <a (click)="onAddItem(game.id)" class="btn btn-sm btn-success action-button" routerLink="/cart/items">
         Buy
       </a>
       <a class="btn btn-sm btn-default action-button" routerLink="/">

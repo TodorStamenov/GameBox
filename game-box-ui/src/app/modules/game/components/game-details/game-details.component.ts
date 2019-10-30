@@ -44,7 +44,7 @@ export class GameDetailsComponent implements OnInit {
     );
   }
 
-  public addItem(id: string): void {
+  public onAddItem(id: string): void {
     this.cartService.addItem(id);
   }
 }

@@ -1,13 +1,19 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 
 import { AdminGuard } from './guards/admin.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/games' },
   { path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule) },
   { path: 'cart', loadChildren: () => import('./modules/cart/cart.module').then(m => m.CartModule) },
   { path: 'games', loadChildren: () => import('./modules/game/game.module').then(m => m.GameModule) },
+  {
+    path: 'wishlist',
+    loadChildren: () => import('./modules/wishlist/wishlist.module').then(m => m.WishlistModule),
+    canActivate: [AuthGuard]
+  },
   {
     path: 'categories',
     loadChildren: () => import('./modules/category/category.module').then(m => m.CategoryModule),
@@ -26,7 +32,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: PreloadAllModules
+    })
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

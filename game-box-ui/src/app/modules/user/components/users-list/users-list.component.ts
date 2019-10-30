@@ -33,25 +33,25 @@ export class UsersListComponent implements OnInit {
     this.getUsers(username);
   }
 
-  public lock(username: string): void {
+  public onLock(username: string): void {
     this.userService
       .lock$(username)
       .subscribe(() => this.getUsers(this.username));
   }
 
-  public unlock(username: string): void {
+  public onUnlock(username: string): void {
     this.userService
       .unlock$(username)
       .subscribe(() => this.getUsers(this.username));
   }
 
-  public addRole(username: string, roleName: string): void {
+  public onAddRole(username: string, roleName: string): void {
     this.userService
       .addRole$(username, roleName)
       .subscribe(() => this.getUsers(this.username));
   }
 
-  public removeRole(username: string, roleName: string): void {
+  public onRemoveRole(username: string, roleName: string): void {
     this.userService
       .removeRole$(username, roleName)
       .subscribe(() => this.getUsers(this.username));

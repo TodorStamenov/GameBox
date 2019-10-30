@@ -1,4 +1,4 @@
-export interface ICartItemsListModel {
+export interface IGameListItemModel {
   id: string;
   title: string;
   description: string;

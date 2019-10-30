@@ -1,3 +1,17 @@
+@media (max-width: 852px) {
+  .navbar-header {
+    float: none;
+  }
+
+  .navbar-toggle {
+    display: block;
+  }
+
+  .navbar-collapse.collapse {
+    display: none!important;
+  }
+}
+
 nav.navbar.navbar-default {
   font-size: 1em;
 }

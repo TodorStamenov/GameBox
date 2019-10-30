@@ -12,5 +12,7 @@ namespace GameBox.Application.Contracts.Services
         Task<Guid> RemoveGameFromWishlistAsync(string username, Guid gameId);
 
         Task<IEnumerable<Game>> GetWishlistGamesAsync(string username);
+
+        Task<IEnumerable<Guid>> ClearGamesFromWishlistAsync(string username);
     }
 }

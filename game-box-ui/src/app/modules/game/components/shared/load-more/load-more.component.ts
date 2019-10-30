@@ -33,4 +33,8 @@ export class LoadMoreComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     clearTimeout(this.id);
   }
+
+  public onLoadClick(): void {
+    this.loadClick.emit();
+  }
 }

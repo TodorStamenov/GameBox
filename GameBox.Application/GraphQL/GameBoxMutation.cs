@@ -2,6 +2,7 @@
 using GraphQL;
 using GraphQL.Types;
 using System;
+using System.Linq;
 using System.Security.Claims;
 
 namespace GameBox.Application.GraphQL
@@ -13,26 +14,22 @@ namespace GameBox.Application.GraphQL
             FieldAsync<IdGraphType>(
                 "addGameToWishlist",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "gameId" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "username" }),
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "gameId" }),
                 resolve: async ctx =>
                 {
                     var user = (ClaimsPrincipal)ctx.UserContext;
 
                     if (!user.Identity.IsAuthenticated)
                     {
-                        //ctx.Errors.Add(new ExecutionError("Not Authenticated"));
-                        //return Enumerable.Empty<GameType>();
+                        ctx.Errors.Add(new ExecutionError("Not Authenticated"));
+                        return default(Guid);
                     }
 
                     var gameId = ctx.GetArgument<Guid>("gameId");
-                    var username = ctx.GetArgument<string>("username");
-
-                    // user.Identity.Name;
 
                     try
                     {
-                        return await wishlistService.AddGameToWishlistAsync(username, gameId);
+                        return await wishlistService.AddGameToWishlistAsync(user.Identity.Name, gameId);
                     }
                     catch (Exception e)
                     {
@@ -45,28 +42,23 @@ namespace GameBox.Application.GraphQL
 
             FieldAsync<IdGraphType>(
                 "removeGameFromWishlist",
-
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "gameId" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "username" }),
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "gameId" }),
                 resolve: async ctx =>
                 {
                     var user = (ClaimsPrincipal)ctx.UserContext;
 
                     if (!user.Identity.IsAuthenticated)
                     {
-                        //ctx.Errors.Add(new ExecutionError("Not Authenticated"));
-                        //return Enumerable.Empty<GameType>();
+                        ctx.Errors.Add(new ExecutionError("Not Authenticated"));
+                        return default(Guid);
                     }
 
                     var gameId = ctx.GetArgument<Guid>("gameId");
-                    var username = ctx.GetArgument<string>("username");
-
-                    // user.Identity.Name;
 
                     try
                     {
-                        return await wishlistService.RemoveGameFromWishlistAsync(username, gameId);
+                        return await wishlistService.RemoveGameFromWishlistAsync(user.Identity.Name, gameId);
                     }
                     catch (Exception e)
                     {
@@ -75,6 +67,21 @@ namespace GameBox.Application.GraphQL
 
                         return default;
                     }
+                });
+
+            FieldAsync<ListGraphType<IdGraphType>>(
+                "clearGamesFromWishlist",
+                resolve: async ctx =>
+                {
+                    var user = (ClaimsPrincipal)ctx.UserContext;
+
+                    if (!user.Identity.IsAuthenticated)
+                    {
+                        ctx.Errors.Add(new ExecutionError("Not Authenticated"));
+                        return Enumerable.Empty<Guid>();
+                    }
+
+                    return await wishlistService.ClearGamesFromWishlistAsync(user.Identity.Name);
                 });
         }
     }

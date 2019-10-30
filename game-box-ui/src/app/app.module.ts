@@ -15,11 +15,7 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { AppComponent } from './app.component';
 import { CoreModule } from './modules/core/core.module';
 import { appReducers } from './store/app.reducers';
-import { CategoriesEffects } from './store/categories/categories.effects';
-import { OrdersEffects } from './store/orders/orders.effects';
-import { UsersEffects } from './store/users/users.effects';
-import { GamesEffects } from './store/games/games.effects';
-import { CartEffects } from './store/cart/cart.effects';
+import { appEffects } from './store/app.effects';
 
 @NgModule({
   declarations: [
@@ -33,31 +29,23 @@ import { CartEffects } from './store/cart/cart.effects';
     AppRoutingModule,
     ToastrModule.forRoot(),
     StoreModule.forRoot(appReducers),
-    EffectsModule.forRoot([
-      CategoriesEffects,
-      CartEffects,
-      OrdersEffects,
-      UsersEffects,
-      GamesEffects
-    ]),
+    EffectsModule.forRoot(appEffects),
     StoreDevtoolsModule.instrument({
       name: 'Game Box App Devtools',
       maxAge: 25,
       logOnly: environment.production
     })
   ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: JwtInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorInterceptor,
-      multi: true
-    }
-  ],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: JwtInterceptor,
+    multi: true
+  },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: ErrorInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

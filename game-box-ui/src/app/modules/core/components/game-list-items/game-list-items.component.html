@@ -1,0 +1,19 @@
+<div [@itemCard] *ngFor="let game of games" class="row game-card">  
+  <div class="col-sm-3">
+    <a routerLink="/games/details/{{ game.id }}">
+      <img class="img-responsive" src="{{ game.thumbnailUrl }}" (error)="changeSource($event, game.videoId)">
+    </a>
+  </div>
+  <div class="col-sm-7">
+    <h3>{{ game.title }}</h3>
+    <p>{{ game.description | sliceString:'450' }}</p>
+  </div>
+  <div class="col-sm-2">
+    <h2 class="price">
+      {{ game.price | currency }}
+    </h2>
+    <button (click)="onRemoveItem(game.id)" class="btn btn-danger btn-remove">
+      Remove
+    </button>
+  </div>
+</div>

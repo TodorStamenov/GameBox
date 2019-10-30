@@ -13,23 +13,17 @@ namespace GameBox.Application.GraphQL
         {
             FieldAsync<ListGraphType<GameType>>(
                 "wishlist",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "username" }),
                 resolve: async ctx =>
                 {
                     var user = (ClaimsPrincipal)ctx.UserContext;
 
                     if (!user.Identity.IsAuthenticated)
                     {
-                        //ctx.Errors.Add(new ExecutionError("Not Authenticated"));
-                        //return Enumerable.Empty<GameType>();
+                        ctx.Errors.Add(new ExecutionError("Not Authenticated"));
+                        return Enumerable.Empty<GameType>();
                     }
 
-                    var username = ctx.GetArgument<string>("username");
-
-                    // user.Identity.Name;
-
-                    return await wishlistService.GetWishlistGamesAsync(username);
+                    return await wishlistService.GetWishlistGamesAsync(user.Identity.Name);
                 });
         }
     }

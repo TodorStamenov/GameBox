@@ -26,13 +26,13 @@
             <button 
               *ngIf="!user.isLocked"
               class="btn btn-danger btn-sm"
-              (click)="lock(user.username)">
+              (click)="onLock(user.username)">
               Lock
             </button>
             <button
               *ngIf="user.isLocked"
               class="btn btn-success btn-sm"
-              (click)="unlock(user.username)">
+              (click)="onUnlock(user.username)">
               Unlock
             </button>
           </td>
@@ -40,13 +40,13 @@
             <button
               *ngIf="user.isAdmin"
               class="btn btn-danger btn-sm"
-              (click)="removeRole(user.username, 'Admin')">
+              (click)="onRemoveRole(user.username, 'Admin')">
               Remove Role
             </button>
             <button
               *ngIf="!user.isAdmin"
               class="btn btn-success btn-sm"
-              (click)="addRole(user.username, 'Admin')">
+              (click)="onAddRole(user.username, 'Admin')">
               Add Role
             </button>
           </td>

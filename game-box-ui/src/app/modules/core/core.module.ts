@@ -6,26 +6,25 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SliceStringPipe } from './pipes/sliceString.pipe';
+import { GameListItemsComponent } from './components/game-list-items/game-list-items.component';
 import { SearchFormComponent } from './components/search-form/search-form.component';
 
+const components = [
+  NavigationComponent,
+  FooterComponent,
+  SearchFormComponent,
+  GameListItemsComponent,
+  SliceStringPipe
+];
+
 @NgModule({
-  declarations: [
-    NavigationComponent,
-    FooterComponent,
-    SearchFormComponent,
-    SliceStringPipe
-  ],
+  declarations: [components],
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule
   ],
-  exports: [
-    NavigationComponent,
-    FooterComponent,
-    SearchFormComponent,
-    SliceStringPipe
-  ]
+  exports: [components]
 })
 export class CoreModule { }
