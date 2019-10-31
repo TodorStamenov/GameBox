@@ -13,7 +13,7 @@ export class AdminGuard implements CanActivate {
   ) { }
 
   public canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.authHelperService.isAdmin()) {
+    if (this.authHelperService.isAdmin) {
       return true;
     }
 

@@ -28,14 +28,14 @@
     </div>
     <div class="col-md-4">
       <a 
-        *ngIf="authHelperService.isAdmin()"
+        *ngIf="authHelperService.isAdmin"
         class="btn btn-sm btn-warning action-button"
         [routerLink]="['/games', 'edit']"
         [queryParams]="{ id: game.id }">
         Edit
       </a>
       <a
-        *ngIf="authHelperService.isAdmin()"
+        *ngIf="authHelperService.isAdmin"
         class="btn btn-sm btn-danger action-button"
         [routerLink]="['/games/delete', game.id]">
         Delete

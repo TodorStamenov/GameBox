@@ -21,7 +21,7 @@ namespace GameBox.Application.Contracts
 
         DbSet<Wishlist> Wishlists { get; set; }
 
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         Task SeedAsync();
     }

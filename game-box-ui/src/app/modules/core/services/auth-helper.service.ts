@@ -4,15 +4,15 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthHelperService {
-  get user() {
+  get user(): any {
     return JSON.parse(localStorage.getItem('currentUser'));
   }
 
-  public isAuthenticated(): boolean {
+  get isAuthed(): boolean {
     return localStorage.getItem('currentUser') !== null;
   }
 
-  public isAdmin(): boolean {
+  get isAdmin(): boolean {
     return this.user ? this.user.isAdmin : false;
   }
 }

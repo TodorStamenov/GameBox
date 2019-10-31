@@ -43,7 +43,7 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   public onCreateOrder(): void {
-    if (!this.authHelperService.isAuthenticated()) {
+    if (!this.authHelperService.isAuthed) {
       this.router.navigate(['/auth/login']);
       return;
     }

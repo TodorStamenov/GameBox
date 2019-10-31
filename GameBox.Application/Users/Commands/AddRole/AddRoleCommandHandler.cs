@@ -3,6 +3,7 @@ using GameBox.Application.Exceptions;
 using GameBox.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace GameBox.Application.Users.Commands.AddRole
                 .Select(u => u.Id)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (userId == default)
+            if (userId == default(Guid))
             {
                 throw new NotFoundException(nameof(User), request.Username);
             }
@@ -53,7 +54,7 @@ namespace GameBox.Application.Users.Commands.AddRole
                 .Select(r => r.Id)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (roleId == default)
+            if (roleId == default(Guid))
             {
                 throw new NotFoundException(nameof(Role), request.RoleName);
             }

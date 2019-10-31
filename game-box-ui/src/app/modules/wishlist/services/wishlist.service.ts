@@ -14,25 +14,19 @@ export class WishlistService {
   constructor(private http: HttpClient) { }
 
   public addItem$(id: string): Observable<void> {
-    const query = {
-
-    };
+    const query = { };
 
     return this.queryGraphQlEndpoint<void>(query);
   }
 
   public removeItem$(id: string): Observable<void> {
-    const query = {
-
-    };
+    const query = { };
 
     return this.queryGraphQlEndpoint<void>(query);
   }
 
   public clearItems$(): Observable<void> {
-    const query = {
-
-    };
+    const query = { };
 
     return this.queryGraphQlEndpoint<void>(query);
   }
@@ -42,7 +36,7 @@ export class WishlistService {
       query: '{ wishlist { id title price description thumbnailUrl videoId } }'
     };
 
-    return this.queryGraphQlEndpoint<IGameListItemModel[]>(query).pipe(
+    return this.queryGraphQlEndpoint<any>(query).pipe(
       map(res => res.data.wishlist)
     );
   }

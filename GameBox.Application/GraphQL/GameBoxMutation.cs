@@ -36,7 +36,7 @@ namespace GameBox.Application.GraphQL
                         var message = e.InnerException?.Message ?? e.Message;
                         ctx.Errors.Add(new ExecutionError(message));
 
-                        return default;
+                        return default(Guid);
                     }
                 });
 
@@ -65,7 +65,7 @@ namespace GameBox.Application.GraphQL
                         var message = e.InnerException?.Message ?? e.Message;
                         ctx.Errors.Add(new ExecutionError(message));
 
-                        return default;
+                        return default(Guid);
                     }
                 });
 

@@ -28,7 +28,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                 .Select(u => u.Id)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (userId == default)
+            if (userId == default(Guid))
             {
                 throw new NotFoundException(nameof(User), request.Username);
             }
