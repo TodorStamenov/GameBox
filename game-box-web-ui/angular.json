@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "game-box-ui": {
+    "game-box-web-ui": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/game-box-ui",
+            "outputPath": "dist/game-box-web-ui",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -59,18 +59,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "game-box-ui:build"
+            "browserTarget": "game-box-web-ui:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "game-box-ui:build:production"
+              "browserTarget": "game-box-web-ui:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "game-box-ui:build"
+            "browserTarget": "game-box-web-ui:build"
           }
         },
         "test": {
@@ -104,7 +104,7 @@
         }
       }
     },
-    "game-box-ui-e2e": {
+    "game-box-web-ui-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -112,11 +112,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "game-box-ui:serve"
+            "devServerTarget": "game-box-web-ui:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "game-box-ui:serve:production"
+              "devServerTarget": "game-box-web-ui:serve:production"
             }
           }
         },
@@ -132,5 +132,5 @@
       }
     }
   },
-  "defaultProject": "game-box-ui"
+  "defaultProject": "game-box-web-ui"
 }

@@ -25,6 +25,15 @@ namespace GameBox.Infrastructure
         {
             var userId = await this.userService.GetUserIdAsync(username);
 
+            var gameExists = await this.context
+                .Wishlists
+                .AnyAsync(w => w.UserId == userId && w.GameId == gameId);
+
+            if (gameExists)
+            {
+                return gameId;
+            }
+
             var wishlist = new Wishlist
             {
                 UserId = userId,

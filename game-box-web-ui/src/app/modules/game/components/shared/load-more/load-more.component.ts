@@ -27,7 +27,7 @@ export class LoadMoreComponent implements OnInit, OnDestroy {
     this.id = setTimeout(() => {
       this.showButton = true;
       this.cdr.markForCheck();
-    }, 1000);
+    }, 2000);
   }
 
   public ngOnDestroy(): void {
