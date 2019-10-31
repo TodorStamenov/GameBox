@@ -16,6 +16,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './modules/core/core.module';
 import { appReducers } from './store/app.reducers';
 import { appEffects } from './store/app.effects';
+import { GraphQLModule } from './graphql.module';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { appEffects } from './store/app.effects';
       name: 'Game Box App Devtools',
       maxAge: 25,
       logOnly: environment.production
-    })
+    }),
+    GraphQLModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

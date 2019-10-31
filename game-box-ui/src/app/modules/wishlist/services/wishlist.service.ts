@@ -2,16 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Apollo } from 'apollo-angular';
+import gql from 'graphql-tag';
 
 import { constants } from 'src/app/common';
 import { IGameListItemModel } from '../../core/models/game-list-item.model';
-import { map } from 'rxjs/operators';
+import { ApolloQueryResult } from 'apollo-client';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WishlistService {
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private apollo: Apollo
+  ) { }
 
   public addItem$(id: string): Observable<void> {
     const query = { };
@@ -33,12 +39,15 @@ export class WishlistService {
 
   public getItems$(): Observable<IGameListItemModel[]> {
     const query = {
-      query: '{ wishlist { id title price description thumbnailUrl videoId } }'
+      query: gql`{ wishlist { id title price description thumbnailUrl videoId } }`
     };
 
-    return this.queryGraphQlEndpoint<any>(query).pipe(
-      map(res => res.data.wishlist)
-    );
+    return this.apollo
+      .watchQuery(query)
+      .valueChanges
+      .pipe(
+        map(({ data }: any) => data.wishlist)
+      );
   }
 
   private queryGraphQlEndpoint<T>(query: any): Observable<T> {
