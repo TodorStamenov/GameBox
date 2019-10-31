@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Store, select } from '@ngrx/store';
 
@@ -8,6 +8,7 @@ import { tap, filter } from 'rxjs/operators';
 
 import { IGameDetailsModel } from '../../models/game-details.model';
 import { CartService } from '../../../cart/services/cart.service';
+import { WishlistService } from 'src/app/modules/wishlist/services/wishlist.service';
 import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.service';
 import { IAppState } from 'src/app/store/app.state';
 import { LoadGameDetail } from 'src/app/store/games/games.actions';
@@ -24,13 +25,15 @@ export class GameDetailsComponent implements OnInit {
   private gameId: string;
 
   constructor(
-    private router: ActivatedRoute,
+    private route: ActivatedRoute,
+    private router: Router,
     private sanitizer: DomSanitizer,
     private cartService: CartService,
+    private wishlistService: WishlistService,
     private store: Store<IAppState>,
     public authHelperService: AuthHelperService
   ) {
-    this.gameId = this.router.snapshot.params['id'];
+    this.gameId = this.route.snapshot.params['id'];
   }
 
   public ngOnInit(): void {
@@ -44,7 +47,14 @@ export class GameDetailsComponent implements OnInit {
     );
   }
 
-  public onAddItem(id: string): void {
+  public onAddItemToCart(id: string): void {
     this.cartService.addItem(id);
+    this.router.navigate(['/cart/items']);
+  }
+
+  public onAddItemToWishlist(id: string): void {
+    this.wishlistService
+      .addItem$(id)
+      .subscribe(() => this.router.navigate(['/wishlist/items']));
   }
 }

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { IAppState } from 'src/app/store/app.state';
 import { IGameListItemModel } from 'src/app/modules/core/models/game-list-item.model';
 import { LoadAllItems, ClearItems, RemoveItem } from 'src/app/store/wishlist/wishlist.actions';
+import { WishlistService } from '../../services/wishlist.service';
 
 @Component({
   selector: 'app-wishlist',
@@ -16,7 +17,10 @@ export class WishlistComponent implements OnInit, OnDestroy {
   public totalPrice: number;
   public games$: Observable<IGameListItemModel[]>;
 
-  constructor(private store: Store<IAppState>) { }
+  constructor(
+    private store: Store<IAppState>,
+    private wishlistService: WishlistService
+  ) { }
 
   public ngOnInit(): void {
     this.store.dispatch(new LoadAllItems());
@@ -26,14 +30,18 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.onClearItems();
-  }
-
-  public onClearItems(): void {
     this.store.dispatch(new ClearItems());
   }
 
+  public onClearItems(): void {
+    this.wishlistService
+      .clearItems$()
+      .subscribe(() => this.store.dispatch(new ClearItems()));
+  }
+
   public onRemoveItem(id: string): void {
-    this.store.dispatch(new RemoveItem(id));
+    this.wishlistService
+      .removeItem$(id)
+      .subscribe(() => this.store.dispatch(new RemoveItem(id)));
   }
 }

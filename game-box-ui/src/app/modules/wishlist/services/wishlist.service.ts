@@ -1,56 +1,80 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 
-import { constants } from 'src/app/common';
 import { IGameListItemModel } from '../../core/models/game-list-item.model';
-import { ApolloQueryResult } from 'apollo-client';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WishlistService {
-  constructor(
-    private http: HttpClient,
-    private apollo: Apollo
-  ) { }
+  private wishlistQuery = gql`{
+    wishlist {
+      id
+      title
+      price
+      description
+      thumbnailUrl
+      videoId
+    }
+  }`;
 
-  public addItem$(id: string): Observable<void> {
-    const query = { };
+  constructor(private apollo: Apollo) { }
 
-    return this.queryGraphQlEndpoint<void>(query);
+  public addItem$(id: string): Observable<any> {
+    const mutation = gql`mutation addGameToWishlist($gameId: ID!) {
+      addGameToWishlist(gameId: $gameId)
+    }`;
+
+    return this.apollo.mutate({
+      mutation,
+      variables: {
+        gameId: id
+      },
+      refetchQueries: [{
+        query: this.wishlistQuery
+      }]
+    });
   }
 
-  public removeItem$(id: string): Observable<void> {
-    const query = { };
+  public removeItem$(id: string): Observable<any> {
+    const mutation = gql`mutation removeGameFromWishlist($gameId: ID!) {
+      removeGameFromWishlist(gameId: $gameId)
+    }`;
 
-    return this.queryGraphQlEndpoint<void>(query);
+    return this.apollo.mutate({
+      mutation,
+      variables: {
+        gameId: id
+      },
+      refetchQueries: [{
+        query: this.wishlistQuery
+      }]
+    });
   }
 
-  public clearItems$(): Observable<void> {
-    const query = { };
+  public clearItems$(): Observable<any> {
+    const mutation = gql`mutation clearGamesFromWishlist {
+      clearGamesFromWishlist
+    }`;
 
-    return this.queryGraphQlEndpoint<void>(query);
+    return this.apollo.mutate({
+      mutation,
+      refetchQueries: [{
+        query: this.wishlistQuery
+      }]
+    });
   }
 
   public getItems$(): Observable<IGameListItemModel[]> {
-    const query = {
-      query: gql`{ wishlist { id title price description thumbnailUrl videoId } }`
-    };
-
     return this.apollo
-      .watchQuery(query)
+      .watchQuery({ query: this.wishlistQuery })
       .valueChanges
       .pipe(
         map(({ data }: any) => data.wishlist)
       );
-  }
-
-  private queryGraphQlEndpoint<T>(query: any): Observable<T> {
-    return this.http.post<T>(constants.graphQl, query);
   }
 }

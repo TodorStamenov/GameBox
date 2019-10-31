@@ -40,9 +40,19 @@
         [routerLink]="['/games/delete', game.id]">
         Delete
       </a>
-      <a (click)="onAddItem(game.id)" class="btn btn-sm btn-success action-button" routerLink="/cart/items">
+      <button
+        (click)="onAddItemToCart(game.id)"
+        class="btn btn-sm btn-success action-button"
+        routerLink="/cart/items">
         Buy
-      </a>
+      </button>
+      <button
+        *ngIf="authHelperService.isAuthed"
+        (click)="onAddItemToWishlist(game.id)"
+        class="btn btn-sm btn-default action-button"
+        routerLink="/wishlist/items">
+        Wishlist
+      </button>
       <a class="btn btn-sm btn-default action-button" routerLink="/">
         Back
       </a>
