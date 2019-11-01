@@ -5,6 +5,7 @@ using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -63,6 +64,7 @@ namespace GameBox.Application.Accounts.Commands.Login
                 Username = userInfo.Username,
                 Token = token,
                 IsAdmin = userInfo.IsAdmin,
+                ExpirationDate = DateTime.Now.AddDays(1),
                 Message = string.Format(Constants.Common.Success, nameof(User), userInfo.Username, "Logged In")
             };
         }

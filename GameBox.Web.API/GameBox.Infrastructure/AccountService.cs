@@ -54,7 +54,7 @@ namespace GameBox.Infrastructure
                 issuer: "http://localhost:5000",
                 audience: "http://localhost:5000",
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: signinCredentials);
 
             return new JwtSecurityTokenHandler().WriteToken(tokeOptions);

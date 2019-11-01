@@ -1,7 +1,3 @@
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { ToastrService } from 'ngx-toastr';
-
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -12,11 +8,18 @@ import {
   HttpRequest
 } from '@angular/common/http';
 
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+
+import { AuthHelperService } from '../modules/core/services/auth-helper.service';
+
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
   constructor(
+    private router: Router,
     private toastr: ToastrService,
-    private router: Router
+    private authService: AuthHelperService
   ) { }
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -65,10 +68,6 @@ export class JwtInterceptor implements HttpInterceptor {
   }
 
   private saveToken(data: any): void {
-    localStorage.setItem('currentUser', JSON.stringify({
-      username: data.username,
-      token: data.token,
-      isAdmin: data.isAdmin
-    }));
+    this.authService.user = data;
   }
 }

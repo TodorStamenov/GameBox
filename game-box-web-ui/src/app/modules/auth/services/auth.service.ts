@@ -8,6 +8,7 @@ import { IRegisterModel } from '../../auth/models/register.model';
 import { ILoginModel } from '../../auth/models/login.model';
 import { IChangePasswordModel } from '../../auth/models/change-password.model';
 import { constants } from '../../../common';
+import { AuthHelperService } from '../../core/services/auth-helper.service';
 
 const authUrl = constants.host + 'account/';
 
@@ -17,7 +18,8 @@ const authUrl = constants.host + 'account/';
 export class AuthService {
   constructor(
     private http: HttpClient,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthHelperService
   ) { }
 
   public register(body: IRegisterModel): Observable<void> {
@@ -29,7 +31,7 @@ export class AuthService {
   }
 
   public logout(): void {
-    localStorage.clear();
+    this.authService.logout();
     this.toastr.success('You have successfully logged out', 'Success!');
   }
 

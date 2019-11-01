@@ -1,4 +1,6 @@
-﻿namespace GameBox.Application.Accounts.Commands.Register
+﻿using System;
+
+namespace GameBox.Application.Accounts.Commands.Register
 {
     public class RegisterViewModel
     {
@@ -7,6 +9,8 @@
         public string Token { get; set; }
 
         public bool IsAdmin { get; set; }
+
+        public DateTime ExpirationDate { get; set; }
 
         public string Message { get; set; }
     }

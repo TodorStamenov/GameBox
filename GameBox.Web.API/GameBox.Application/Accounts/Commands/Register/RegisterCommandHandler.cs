@@ -3,6 +3,7 @@ using GameBox.Application.Contracts.Services;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,6 +42,7 @@ namespace GameBox.Application.Accounts.Commands.Register
                 Username = user.Username,
                 Token = token,
                 IsAdmin = false,
+                ExpirationDate = DateTime.Now.AddDays(1),
                 Message = string.Format(Constants.Common.Success, nameof(User), user.Username, "Registered")
             };
         }
