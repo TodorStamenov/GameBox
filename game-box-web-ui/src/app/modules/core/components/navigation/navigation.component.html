@@ -77,7 +77,7 @@
           </li>
           <li>
             <a class="nav-element" *ngIf="authHelperService.isAuthed" routerLink="/auth/changePassword">
-              Hello {{ authHelperService.user.username }}!
+              {{ authHelperService.user.username }}
             </a>
           </li>
           <li>
