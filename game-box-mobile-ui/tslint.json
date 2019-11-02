@@ -13,7 +13,7 @@
       true,
       "element",
       "",
-      "camelCase"
+      "kebab-case"
     ],
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
