@@ -1,7 +1,7 @@
 <ActivityIndicator class="activity-indicator" [busy]="loading"></ActivityIndicator>
 
-<ScrollView>
-  <StackLayout *ngIf="game">
+<ScrollView *ngIf="!loading">
+  <StackLayout>
     <WebView *ngIf="embedHtml" [src]="embedHtml"></WebView>
     <Label class="game-title" [text]="game.title" textWrap="true" textAlignment="center"></Label>
     <label class="game-description" [text]="game.description" textWrap="true" textAlignment="initial"></label>

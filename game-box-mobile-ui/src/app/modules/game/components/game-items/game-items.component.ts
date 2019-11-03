@@ -1,10 +1,15 @@
 import {
   Component,
   Input,
-  ChangeDetectionStrategy,
   Output,
-  EventEmitter
+  ChangeDetectionStrategy,
+  EventEmitter,
+  OnInit,
+  OnDestroy
 } from '@angular/core';
+
+import { Subject } from 'rxjs';
+import { debounceTime, takeWhile, tap } from 'rxjs/operators';
 
 import { IGamesListModel } from '../../models/games-list.model';
 
@@ -15,16 +20,33 @@ import { IGamesListModel } from '../../models/games-list.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   moduleId: module.id
 })
-export class GameItemsComponent {
+export class GameItemsComponent implements OnInit, OnDestroy {
+  private isActive = true;
+  private loadMore$$ = new Subject<void>();
+  private gamesLength = 0;
+
   @Input() public games: IGamesListModel[] = [];
   @Output() public loadTap = new EventEmitter<void>();
   @Output() public detailsTap = new EventEmitter<string>();
+
+  public ngOnInit(): void {
+    this.loadMore$$.asObservable().pipe(
+      takeWhile(() => this.isActive && this.gamesLength !== this.games.length)
+    ).subscribe(() => {
+      this.loadTap.emit();
+      this.gamesLength = this.games.length;
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.isActive = false;
+  }
 
   public onNavigateToDetails(id: string): void {
     this.detailsTap.emit(id);
   }
 
   public onLoadMoreGames(): void {
-    this.loadTap.emit();
+    this.loadMore$$.next();
   }
 }

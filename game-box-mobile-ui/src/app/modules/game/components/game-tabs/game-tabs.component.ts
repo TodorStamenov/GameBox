@@ -26,7 +26,7 @@ export class GamesTabsComponent implements OnInit {
   public ngOnInit(): void {
     forkJoin(
       this.gameService.getGames$(this.games.length),
-      this.gameService.getGames$(this.games.length) // change to getOwned$
+      this.gameService.getGames$(this.owned.length) // change to getOwned$
     ).pipe(
       map(([games, owned]) => {
         games = games.map(game => this.changeThumbnailUrls(game));
@@ -43,25 +43,15 @@ export class GamesTabsComponent implements OnInit {
   }
 
   public loadGames(): void {
-    this.loading = true;
-
     this.gameService.getGames$(this.games.length).pipe(
       map(games => games.map(game => this.changeThumbnailUrls(game)))
-    ).subscribe(games => {
-      this.games = [...this.games, ...games];
-      this.loading = false;
-    });
+    ).subscribe(games => this.games = [...this.games, ...games]);
   }
 
   public loadOwned(): void {
-    this.loading = true;
-
-    this.gameService.getGames$(this.games.length).pipe(
+    this.gameService.getGames$(this.owned.length).pipe(
       map(owned => owned.map(game => this.changeThumbnailUrls(game)))
-    ).subscribe(owned => {
-      this.owned = [...this.owned, ...owned];
-      this.loading = false;
-    });
+    ).subscribe(owned => this.owned = [...this.owned, ...owned]);
   }
 
   public navigateToDetails(id: string): void {
