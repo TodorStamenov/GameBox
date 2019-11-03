@@ -1,0 +1,24 @@
+@import '../../../../../app.scss';
+
+.game-container {
+  margin-top: 10px;
+
+  .game-title {
+    font-size: 16;
+    font-weight: bold;
+    color: $black;
+    padding-left: 5;
+    padding-top: 5;
+  }
+
+  .game-details {
+    color: $black;
+    font-weight: bold;
+    padding-left: 5;
+  }
+}
+
+.load-more-button {
+  color: $white;
+  background-color: $mainColor;
+}

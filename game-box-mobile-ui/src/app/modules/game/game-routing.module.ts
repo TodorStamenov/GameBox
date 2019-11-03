@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes } from '@angular/router';
 
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
-import { GamesListComponent } from './components/games-list/games-list.component';
+import { GamesTabsComponent } from './components/game-tabs/game-tabs.component';
+import { GameDetailsComponent } from './components/game-details/game-details.component';
 
 const routes: Routes = [
- { path: '', pathMatch: 'full', component: GamesListComponent }
+ { path: '', pathMatch: 'full', component: GamesTabsComponent },
+ { path: 'details/:id', component: GameDetailsComponent }
 ];
 
 @NgModule({

@@ -1,1 +1,9 @@
-@import '~nativescript-theme-core/css/core.light.css';
+$mainColor: #4e5d6c;
+$white: #FFF;
+$black: #000;
+
+.activity-indicator {
+  width: 70;
+  height: 70;
+  color: $mainColor;
+}

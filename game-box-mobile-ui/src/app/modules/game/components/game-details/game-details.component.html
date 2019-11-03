@@ -1,0 +1,19 @@
+<ActivityIndicator class="activity-indicator" [busy]="loading"></ActivityIndicator>
+
+<ScrollView>
+  <StackLayout *ngIf="game">
+    <WebView *ngIf="embedHtml" [src]="embedHtml"></WebView>
+    <Label class="game-title" [text]="game.title" textWrap="true" textAlignment="center"></Label>
+    <label class="game-description" [text]="game.description" textWrap="true" textAlignment="initial"></label>
+
+    <GridLayout class="actions-wrapper" rows="30, 30, 30, 30" columns="2*, *">
+      <Label row="0" col="0" [text]="'Price - ' + (game.price | currency)"></Label>
+      <Label row="1" col="0" [text]="'Size - ' + game.size + 'GB'"></Label>
+      <Label row="2" col="0" [text]="'Date - ' + (game.releaseDate | date)"></Label>
+      <Label row="3" col="0" [text]="'Views - ' + game.viewCount"></Label>
+
+      <Button class="action-button" row="0" col="1" rowSpan="2" text="Buy"></Button>
+      <Button class="action-button" row="2" col="1" rowSpan="2" text="Wishlist"></Button>
+    </GridLayout>
+  </StackLayout>
+</ScrollView>

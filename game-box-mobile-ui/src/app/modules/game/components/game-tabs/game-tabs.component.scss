@@ -1,0 +1,12 @@
+@import '../../../../../app.scss';
+
+.tabs {
+  background-color: $white;
+  highlight-color: $mainColor;
+
+  Label {
+    font-size: 16;
+    font-weight: bold;
+    color: $black;
+  }
+}

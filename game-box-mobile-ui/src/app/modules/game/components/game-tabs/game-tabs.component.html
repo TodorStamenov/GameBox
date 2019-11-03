@@ -1,0 +1,29 @@
+<ActivityIndicator class="activity-indicator" [busy]="loading"></ActivityIndicator>
+
+<Tabs>
+  <TabStrip class="tabs">
+    <TabStripItem>
+      <Label text="Games"></Label>
+    </TabStripItem>
+
+    <TabStripItem>
+      <Label text="Owned"></Label>
+    </TabStripItem>
+  </TabStrip>
+
+  <TabContentItem>
+    <app-game-items
+      (loadTap)="loadGames()"
+      (detailsTap)="navigateToDetails($event)"
+      [games]="games">
+    </app-game-items>
+  </TabContentItem>
+
+  <TabContentItem>
+    <app-game-items
+      (loadTap)="loadOwned()"
+      (detailsTap)="navigateToDetails($event)"
+      [games]="owned">
+    </app-game-items>
+  </TabContentItem>
+</Tabs>
