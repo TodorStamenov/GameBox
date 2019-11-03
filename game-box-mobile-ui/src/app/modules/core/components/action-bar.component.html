@@ -1,0 +1,7 @@
+<ActionBar class="action-bar" [title]="title">
+  <NavigationButton
+    *ngIf="canGoBack"
+    (tap)="onGoBack()"
+    icon="res://back_white">
+  </NavigationButton>
+</ActionBar>

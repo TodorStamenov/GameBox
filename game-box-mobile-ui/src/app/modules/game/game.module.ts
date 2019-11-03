@@ -5,6 +5,7 @@ import { GameRoutingModule } from './game-routing.module';
 import { GamesTabsComponent } from './components/game-tabs/game-tabs.component';
 import { GameItemsComponent } from './components/game-items/game-items.component';
 import { GameDetailsComponent } from './components/game-details/game-details.component';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { GameDetailsComponent } from './components/game-details/game-details.com
   ],
   imports: [
     NativeScriptCommonModule,
-    GameRoutingModule
+    GameRoutingModule,
+    CoreModule
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

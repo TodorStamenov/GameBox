@@ -56,10 +56,7 @@ export class GamesTabsComponent implements OnInit {
 
   public navigateToDetails(id: string): void {
     this.router.navigate(['/games/details', id], {
-      animated: true,
-      transition: {
-        name: 'slideLeft'
-      },
+      transition: { name: 'slideLeft' },
     });
   }
 

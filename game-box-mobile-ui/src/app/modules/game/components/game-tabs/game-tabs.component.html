@@ -1,6 +1,8 @@
+<ns-action-bar title="Games" [showBackButton]="false"></ns-action-bar>
+
 <ActivityIndicator class="activity-indicator" [busy]="loading"></ActivityIndicator>
 
-<Tabs>
+<Tabs *ngIf="!loading">
   <TabStrip class="tabs">
     <TabStripItem>
       <Label text="Games"></Label>
