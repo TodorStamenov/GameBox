@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { RouterExtensions } from 'nativescript-angular/router';
+import { UIService } from '../services/ui.service';
 
 @Component({
   selector: 'ns-action-bar',
@@ -13,7 +14,8 @@ export class ActionBarComponent {
   @Input() public showBackButton = true;
 
   constructor(
-    private router: RouterExtensions
+    private router: RouterExtensions,
+    private uiService: UIService
   ) { }
 
   get canGoBack(): boolean {
@@ -22,5 +24,9 @@ export class ActionBarComponent {
 
   public onGoBack(): void {
     this.router.backToPreviousPage();
+  }
+
+  public onToggleMenu(): void {
+    this.uiService.toggleDrawer();
   }
 }

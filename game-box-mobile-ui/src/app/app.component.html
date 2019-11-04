@@ -1,7 +1,13 @@
 <RadSideDrawer>
-  <StackLayout tkDrawerContent>
-    <Button text="Logout" class="btn"></Button>
-  </StackLayout>
+  <FlexboxLayout justifyContent="space-between" flexDirection="column" tkDrawerContent class="drawer-container">
+    <StackLayout>
+      <Button class="drawer-button" text="Login"></Button>
+      <Button class="drawer-button" text="Register"></Button>
+      <Button class="drawer-button" text="Wishlist"></Button>
+      <Button class="drawer-button" text="Cart"></Button>
+    </StackLayout>
+    <Button class="drawer-button" text="Logout"></Button>
+  </FlexboxLayout>
   <StackLayout tkMainContent>
     <page-router-outlet></page-router-outlet>
   </StackLayout>

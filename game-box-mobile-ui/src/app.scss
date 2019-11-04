@@ -7,3 +7,17 @@ $black: #000;
   height: 70;
   color: $mainColor;
 }
+
+.drawer-container {
+  background: $white;
+  padding-top: 110;
+  padding-bottom: 30;
+  padding-left: 35;
+  padding-right: 35;
+
+  .drawer-button {
+    color: $white;
+    background-color: $mainColor;
+    height: 55;
+  }
+}

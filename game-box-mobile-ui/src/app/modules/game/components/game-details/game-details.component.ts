@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { WebView } from 'tns-core-modules/ui/web-view';
 import { screen } from 'tns-core-modules/platform';
 import { GameService } from '../../services/game.service';
 import { IGameDetailsModel } from '../../models/game-details.model';
@@ -18,6 +19,9 @@ export class GameDetailsComponent implements OnInit {
   public embedHtml: string;
   public game: IGameDetailsModel;
 
+  @ViewChild('webView', { static: false })
+  public webView: ElementRef;
+
   constructor(
     private route: ActivatedRoute,
     private gameService: GameService
@@ -32,6 +36,9 @@ export class GameDetailsComponent implements OnInit {
         this.embedHtml = this.getHtmlEmbedTag(game.videoId);
 
         this.loading = false;
+
+        const webView: WebView = this.webView.nativeElement;
+        webView.android.getSetting().setBuiltInZoomControls(false);
       });
   }
 

@@ -4,7 +4,7 @@
 
 <ScrollView *ngIf="!loading">
   <StackLayout>
-    <WebView *ngIf="embedHtml" [src]="embedHtml"></WebView>
+    <WebView *ngIf="embedHtml" [src]="embedHtml" #webView></WebView>
     <Label class="game-title" [text]="game.title" textWrap="true" textAlignment="center"></Label>
     <label class="game-description" [text]="game.description" textWrap="true" textAlignment="initial"></label>
 
@@ -12,10 +12,10 @@
       <Button class="action-button" row="0" col="0" rowSpan="2" text="Buy"></Button>
       <Button class="action-button" row="2" col="0" rowSpan="2" text="Wishlist"></Button>
 
-      <Label row="0" col="1" [text]="'Price - ' + (game.price | currency)"></Label>
-      <Label row="1" col="1" [text]="'Size - ' + game.size + 'GB'"></Label>
-      <Label row="2" col="1" [text]="'Date - ' + (game.releaseDate | date)"></Label>
-      <Label row="3" col="1" [text]="'Views - ' + game.viewCount"></Label>
+      <Label class="game-details" row="0" col="1" [text]="'Price - ' + (game.price | currency)"></Label>
+      <Label class="game-details" row="1" col="1" [text]="'Size - ' + game.size + 'GB'"></Label>
+      <Label class="game-details" row="2" col="1" [text]="'Date - ' + (game.releaseDate | date)"></Label>
+      <Label class="game-details" row="3" col="1" [text]="'Views - ' + game.viewCount"></Label>
     </GridLayout>
   </StackLayout>
 </ScrollView>
