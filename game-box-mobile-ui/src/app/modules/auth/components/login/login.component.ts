@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
-
 import { AuthService } from '../../services/auth.service';
-import { FormService } from 'src/app/modules/core/services/form.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html'
+  selector: 'ns-login',
+  templateUrl: './login.component.html',
+  moduleId: module.id
 })
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
@@ -17,8 +16,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
-    public formService: FormService
+    private authService: AuthService
   ) { }
 
   public ngOnInit(): void {
