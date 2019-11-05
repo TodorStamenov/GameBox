@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
 import { AuthService } from '../../services/auth.service';
 import { FormService } from 'src/app/modules/core/services/form.service';
@@ -11,12 +12,21 @@ import { FormService } from 'src/app/modules/core/services/form.service';
 export class RegisterComponent implements OnInit {
   public registerForm: FormGroup;
 
-  get username() { return this.registerForm.get('username'); }
-  get password() { return this.registerForm.get('password'); }
-  get repeatPassword() { return this.registerForm.get('repeatPassword'); }
+  get username(): AbstractControl {
+    return this.registerForm.get('username');
+  }
+
+  get password(): AbstractControl {
+    return this.registerForm.get('password');
+  }
+
+  get repeatPassword(): AbstractControl {
+    return this.registerForm.get('repeatPassword');
+  }
 
   constructor(
     private fb: FormBuilder,
+    private router: Router,
     private authService: AuthService,
     public formService: FormService
   ) { }
@@ -30,7 +40,8 @@ export class RegisterComponent implements OnInit {
   }
 
   public register(): void {
-    this.authService.register(this.registerForm.value)
-      .subscribe();
+    this.authService
+      .register(this.registerForm.value)
+      .subscribe(() => this.router.navigate(['/']));
   }
 }

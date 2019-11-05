@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import {
   HttpResponse,
   HttpEvent,
@@ -17,7 +16,6 @@ import { AuthHelperService } from '../modules/core/services/auth-helper.service'
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
   constructor(
-    private router: Router,
     private toastrService: ToastrService,
     private authService: AuthHelperService
   ) { }
@@ -39,11 +37,10 @@ export class JwtInterceptor implements HttpInterceptor {
       .pipe(
         tap((res: any) => {
           if (res instanceof HttpResponse && res.body) {
-            if (res.body.token && (res.url.endsWith('login') || res.url.endsWith('register'))) {
+            if (res.body.token) {
               this.authService.user = res.body;
               this.toastrService.success(res.body.message, 'Success!');
-              this.router.navigate(['/']);
-            } else if (!res.url.endsWith('login') && !res.url.endsWith('register')) {
+            } else {
               if (typeof res.body === 'string') {
                 this.toastrService.success(res.body, 'Success!');
               } else if (res.body.message) {

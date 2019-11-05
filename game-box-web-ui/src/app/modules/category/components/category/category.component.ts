@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
 import { takeWhile, filter } from 'rxjs/operators';
@@ -22,7 +22,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   public categoryForm: FormGroup;
 
-  get name() { return this.categoryForm.get('name'); }
+  get name(): AbstractControl {
+    return this.categoryForm.get('name');
+  }
 
   constructor(
     private fb: FormBuilder,

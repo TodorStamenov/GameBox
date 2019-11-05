@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
@@ -27,14 +27,37 @@ export class GameComponent implements OnInit, OnDestroy {
   public categories$: Observable<ICategoryMenuModel[]>;
   public gameForm: FormGroup;
 
-  get title() { return this.gameForm.get('title'); }
-  get description() { return this.gameForm.get('description'); }
-  get thumbnailUrl() { return this.gameForm.get('thumbnailUrl'); }
-  get price() { return this.gameForm.get('price'); }
-  get size() { return this.gameForm.get('size'); }
-  get videoId() { return this.gameForm.get('videoId'); }
-  get releaseDate() { return this.gameForm.get('releaseDate'); }
-  get categoryId() { return this.gameForm.get('categoryId'); }
+  get title(): AbstractControl {
+    return this.gameForm.get('title');
+  }
+
+  get description(): AbstractControl {
+    return this.gameForm.get('description');
+  }
+
+  get thumbnailUrl(): AbstractControl {
+    return this.gameForm.get('thumbnailUrl');
+  }
+
+  get price(): AbstractControl {
+    return this.gameForm.get('price');
+  }
+
+  get size(): AbstractControl {
+    return this.gameForm.get('size');
+  }
+
+  get videoId(): AbstractControl {
+    return this.gameForm.get('videoId');
+  }
+
+  get releaseDate(): AbstractControl {
+    return this.gameForm.get('releaseDate');
+  }
+
+  get categoryId(): AbstractControl {
+    return this.gameForm.get('categoryId');
+  }
 
   constructor(
     private fb: FormBuilder,

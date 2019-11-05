@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 
 import { FormService } from 'src/app/modules/core/services/form.service';
 import { AuthService } from '../../services/auth.service';
@@ -12,9 +12,17 @@ import { AuthService } from '../../services/auth.service';
 export class ChangePasswordComponent implements OnInit {
   public changePasswordForm: FormGroup;
 
-  get oldPassword() { return this.changePasswordForm.get('oldPassword'); }
-  get newPassword() { return this.changePasswordForm.get('newPassword'); }
-  get repeatPassword() { return this.changePasswordForm.get('repeatPassword'); }
+  get oldPassword(): AbstractControl {
+    return this.changePasswordForm.get('oldPassword');
+  }
+
+  get newPassword(): AbstractControl {
+    return this.changePasswordForm.get('newPassword');
+  }
+
+  get repeatPassword(): AbstractControl {
+    return this.changePasswordForm.get('repeatPassword');
+  }
 
   constructor(
     private fb: FormBuilder,

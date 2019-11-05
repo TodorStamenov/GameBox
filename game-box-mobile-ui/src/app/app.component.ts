@@ -12,6 +12,7 @@ import { takeWhile } from 'rxjs/operators';
 import { UIService } from './modules/core/services/ui.service';
 import { RadSideDrawerComponent } from 'nativescript-ui-sidedrawer/angular/side-drawer-directives';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
+import { RouterExtensions } from 'nativescript-angular/router';
 
 @Component({
   selector: 'ns-app',
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   public drawerCompnent: RadSideDrawerComponent;
 
   constructor(
+    private router: RouterExtensions,
     private uiService: UIService,
     private cdr: ChangeDetectorRef
   ) { }
@@ -47,5 +49,32 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.active = false;
+  }
+
+  public onLoginTap(): void {
+    this.navigate('/auth/login');
+  }
+
+  public onRegisterTap(): void {
+    this.navigate('/auth/register');
+  }
+
+  public onWishlistTap(): void {
+
+  }
+
+  public onCartTap(): void {
+
+  }
+
+  public onLogoutTap(): void {
+
+  }
+
+  private navigate(path: string): void {
+    this.drawer.closeDrawer();
+    this.router.navigate([path], {
+      transition: { name: 'slideLeft' }
+    });
   }
 }

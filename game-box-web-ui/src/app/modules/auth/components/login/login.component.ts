@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 
 
 import { AuthService } from '../../services/auth.service';
@@ -12,12 +13,18 @@ import { FormService } from 'src/app/modules/core/services/form.service';
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
 
-  get username() { return this.loginForm.get('username'); }
-  get password() { return this.loginForm.get('password'); }
+  get username(): AbstractControl {
+    return this.loginForm.get('username');
+  }
+
+  get password(): AbstractControl {
+    return this.loginForm.get('password');
+  }
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private router: Router,
     public formService: FormService
   ) { }
 
@@ -29,7 +36,8 @@ export class LoginComponent implements OnInit {
   }
 
   public login(): void {
-    this.authService.login(this.loginForm.value)
-      .subscribe();
+    this.authService
+      .login(this.loginForm.value)
+      .subscribe(() => this.router.navigate(['/']));
   }
 }

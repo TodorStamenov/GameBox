@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { UserService } from '../../services/user.service';
@@ -12,9 +12,17 @@ import { FormService } from 'src/app/modules/core/services/form.service';
 export class CreateUserComponent implements OnInit {
   public createUserForm: FormGroup;
 
-  get username() { return this.createUserForm.get('username'); }
-  get password() { return this.createUserForm.get('password'); }
-  get repeatPassword() { return this.createUserForm.get('repeatPassword'); }
+  get username(): AbstractControl {
+    return this.createUserForm.get('username');
+  }
+
+  get password(): AbstractControl {
+    return this.createUserForm.get('password');
+  }
+
+  get repeatPassword(): AbstractControl {
+    return this.createUserForm.get('repeatPassword');
+  }
 
   constructor(
     private fb: FormBuilder,

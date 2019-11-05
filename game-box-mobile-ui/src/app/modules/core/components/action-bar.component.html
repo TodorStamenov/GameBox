@@ -1,4 +1,4 @@
-<ActionBar class="action-bar" [title]="title">
+<ActionBar class="action-bar">
   <NavigationButton
     *ngIf="canGoBack"
     (tap)="onGoBack()"
@@ -8,4 +8,5 @@
     icon="res://menu_white"
     (tap)="onToggleMenu()">
   </NavigationButton>
+  <Label class="action-bar-title" [text]="title"></Label>
 </ActionBar>
