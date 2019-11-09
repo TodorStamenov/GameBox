@@ -22,8 +22,6 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
     NativeScriptFormsModule,
     ReactiveFormsModule
   ],
-  exports: [
-  ],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class AuthModule { }

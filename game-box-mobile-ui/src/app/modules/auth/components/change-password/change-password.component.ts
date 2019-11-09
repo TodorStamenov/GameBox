@@ -7,7 +7,7 @@ import { UIService } from '~/app/modules/core/services/ui.service';
 import * as utils from 'tns-core-modules/utils/utils';
 
 @Component({
-  selector: 'ns-register',
+  selector: 'ns-change-password',
   templateUrl: './change-password.component.html',
   moduleId: module.id
 })

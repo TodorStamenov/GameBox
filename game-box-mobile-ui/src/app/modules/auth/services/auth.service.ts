@@ -9,8 +9,8 @@ import { ILoginModel } from '../models/login.model';
 import { IRegisterModel } from '../models/register.model';
 import { IUser } from '../models/user.mode';
 import { UIService } from '../../core/services/ui.service';
-import * as cacheService from 'tns-core-modules/application-settings';
 import { IChangePasswordModel } from '../models/change-password.model';
+import * as cacheService from 'tns-core-modules/application-settings';
 
 const authUrl = constants.host + 'account/';
 

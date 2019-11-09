@@ -7,6 +7,8 @@ import { AuthGuard } from './guards/auth.guard';
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/games' },
   { path: 'games', loadChildren: '~/app/modules/game/game.module#GameModule', canActivate: [AuthGuard] },
+  { path: 'cart', loadChildren: '~/app/modules/cart/cart.module#CartModule', canActivate: [AuthGuard] },
+  { path: 'wishlist', loadChildren: '~/app/modules/wishlist/wishlist.module#WishlistModule', canActivate: [AuthGuard] },
   { path: 'auth', loadChildren: '~/app/modules/auth/auth.module#AuthModule' }
 ];
 

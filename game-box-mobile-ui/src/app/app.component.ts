@@ -73,9 +73,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.navigate('/auth/register', true);
   }
 
-  public onWishlist(): void { }
+  public onWishlist(): void {
+    this.navigate('/wishlist/items');
+  }
 
-  public onCart(): void { }
+  public onCart(): void {
+    this.navigate('/cart/items');
+  }
 
   public onLogout(): void {
     this.authService.logout();

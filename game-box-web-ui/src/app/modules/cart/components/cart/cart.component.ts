@@ -38,10 +38,6 @@ export class CartComponent implements OnInit, OnDestroy {
     this.store.dispatch(new ClearItems());
   }
 
-  public changeSource(event: any, videoId: string): void {
-    event.target.src = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
-  }
-
   public onCreateOrder(): void {
     if (!this.authService.isAuthed) {
       this.router.navigate(['/auth/login']);
