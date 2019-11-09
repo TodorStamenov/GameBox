@@ -13,6 +13,7 @@ import { UIService } from './modules/core/services/ui.service';
 import { RadSideDrawerComponent } from 'nativescript-ui-sidedrawer/angular/side-drawer-directives';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 import { RouterExtensions } from 'nativescript-angular/router';
+import { AuthService } from './modules/auth/services/auth.service';
 
 @Component({
   selector: 'ns-app',
@@ -29,7 +30,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private router: RouterExtensions,
     private uiService: UIService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public authService: AuthService
   ) { }
 
   public ngOnInit(): void {
@@ -40,6 +42,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.drawer.toggleDrawerState();
       }
     });
+
+    this.uiService.drawerGestures$.pipe(
+      takeWhile(() => this.active)
+    ).subscribe(state => {
+      if (this.drawer) {
+        this.drawer.gesturesEnabled = state;
+      }
+    });
   }
 
   public ngAfterViewInit(): void {
@@ -47,33 +57,35 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
+  public onChangePassword(): void {
+    this.navigate('/auth/change-password');
+  }
+
   public ngOnDestroy(): void {
     this.active = false;
   }
 
-  public onLoginTap(): void {
-    this.navigate('/auth/login');
+  public onLogin(): void {
+    this.navigate('/auth/login', true);
   }
 
-  public onRegisterTap(): void {
-    this.navigate('/auth/register');
+  public onRegister(): void {
+    this.navigate('/auth/register', true);
   }
 
-  public onWishlistTap(): void {
+  public onWishlist(): void { }
 
+  public onCart(): void { }
+
+  public onLogout(): void {
+    this.authService.logout();
+    this.navigate('/auth/login', true);
   }
 
-  public onCartTap(): void {
-
-  }
-
-  public onLogoutTap(): void {
-
-  }
-
-  private navigate(path: string): void {
+  private navigate(path: string, clearHistory = false): void {
     this.drawer.closeDrawer();
     this.router.navigate([path], {
+      clearHistory: clearHistory,
       transition: { name: 'slideLeft' }
     });
   }

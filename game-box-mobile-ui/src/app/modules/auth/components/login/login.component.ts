@@ -3,6 +3,8 @@ import { FormGroup, Validators, AbstractControl, FormControl } from '@angular/fo
 
 import { RouterExtensions } from 'nativescript-angular/router';
 import { AuthService } from '../../services/auth.service';
+import { UIService } from '~/app/modules/core/services/ui.service';
+import * as utils from 'tns-core-modules/utils/utils';
 
 @Component({
   selector: 'ns-login',
@@ -13,6 +15,12 @@ export class LoginComponent implements OnInit {
   public loading = false;
   public loginForm: FormGroup;
 
+  constructor(
+    private authService: AuthService,
+    private router: RouterExtensions,
+    private uiService: UIService
+  ) { }
+
   get username(): AbstractControl {
     return this.loginForm.get('username');
   }
@@ -21,36 +29,45 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('password');
   }
 
-  constructor(
-    private authService: AuthService,
-    private router: RouterExtensions
-  ) { }
-
   public ngOnInit(): void {
     this.loginForm = new FormGroup({
       'username': new FormControl(null, {
-        updateOn: 'blur',
+        updateOn: 'change',
         validators: [Validators.required, Validators.minLength(3)]
       }),
       'password': new FormControl(null, {
-        updateOn: 'blur',
+        updateOn: 'change',
         validators: [Validators.required, Validators.minLength(3)]
       })
     });
   }
 
   public onLogin(): void {
+    if (this.username.invalid) {
+      this.uiService.showMessage('Username should be at least 3 symbols');
+      return;
+    }
+
+    if (this.password.invalid) {
+      this.uiService.showMessage('Password should be at least 3 symbols');
+      return;
+    }
+
     if (this.loginForm.invalid) {
       return;
     }
 
-    this.authService
-      .login(this.loginForm.value)
+    this.loading = true;
+    this.authService.login(this.loginForm.value)
       .subscribe(() => {
         this.router.navigate(['/'], {
           clearHistory: true,
           transition: { name: 'slideLeft' }
         });
-      });
+      }, () => this.loading = false);
+  }
+
+  public onFormTap(): void {
+    utils.ad.dismissSoftInput();
   }
 }

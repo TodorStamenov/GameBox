@@ -4,7 +4,8 @@
 
 <ScrollView *ngIf="!loading">
   <StackLayout>
-    <WebView *ngIf="embedHtml" [src]="embedHtml" #webView></WebView>
+    <WebView *ngIf="embedHtml" [src]="embedHtml" (loaded)="onWebViewLoaded($event)"></WebView>
+
     <Label class="game-title" [text]="game.title" textWrap="true" textAlignment="center"></Label>
     <label class="game-description" [text]="game.description" textWrap="true" textAlignment="initial"></label>
 

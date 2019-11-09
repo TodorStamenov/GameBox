@@ -8,12 +8,12 @@ import * as utils from 'tns-core-modules/utils/utils';
 
 @Component({
   selector: 'ns-register',
-  templateUrl: './register.component.html',
+  templateUrl: './change-password.component.html',
   moduleId: module.id
 })
-export class RegisterComponent implements OnInit {
+export class ChangePasswordComponent implements OnInit {
   public loading = false;
-  public registerForm: FormGroup;
+  public changePasswordForm: FormGroup;
 
   constructor(
     private authService: AuthService,
@@ -21,25 +21,25 @@ export class RegisterComponent implements OnInit {
     private uiService: UIService
   ) { }
 
-  get username(): AbstractControl {
-    return this.registerForm.get('username');
+  get oldPassword(): AbstractControl {
+    return this.changePasswordForm.get('oldPassword');
   }
 
-  get password(): AbstractControl {
-    return this.registerForm.get('password');
+  get newPassword(): AbstractControl {
+    return this.changePasswordForm.get('newPassword');
   }
 
   get repeatPassword(): AbstractControl {
-    return this.registerForm.get('repeatPassword');
+    return this.changePasswordForm.get('repeatPassword');
   }
 
   public ngOnInit(): void {
-    this.registerForm = new FormGroup({
-      'username': new FormControl(null, {
+    this.changePasswordForm = new FormGroup({
+      'oldPassword': new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required, Validators.minLength(3)]
       }),
-      'password': new FormControl(null, {
+      'newPassword': new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required, Validators.minLength(3)]
       }),
@@ -50,34 +50,32 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  public onRegister(): void {
-    if (this.username.invalid) {
-      this.uiService.showMessage('Username should be at least 3 symbols');
+  public onChangePassword(): void {
+    if (this.oldPassword.invalid) {
+      this.uiService.showMessage('Old Password should be at least 3 symbols');
       return;
     }
 
-    if (this.password.invalid) {
-      this.uiService.showMessage('Password should be at least 3 symbols');
+    if (this.newPassword.invalid) {
+      this.uiService.showMessage('New Password should be at least 3 symbols');
       return;
     }
 
-    if (this.repeatPassword.value !== this.password.value) {
-      this.uiService.showMessage('Password and Repeat password values should match');
+    if (this.repeatPassword.value !== this.newPassword.value) {
+      this.uiService.showMessage('New Password and Repeat password values should match');
       return;
     }
 
-    if (this.registerForm.invalid) {
+    if (this.changePasswordForm.invalid) {
       return;
     }
 
     this.loading = true;
-    this.authService.register(this.registerForm.value)
-      .subscribe(() => {
-        this.router.navigate(['/'], {
-          clearHistory: true,
-          transition: { name: 'slideLeft' }
-        });
-      }, () => this.loading = false);
+    this.authService.changePassword(this.changePasswordForm.value)
+      .subscribe(
+        () => this.router.backToPreviousPage(),
+        () => this.loading = false
+      );
   }
 
   public onFormTap(): void {

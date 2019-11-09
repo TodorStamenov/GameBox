@@ -27,6 +27,18 @@ export class GameComponent implements OnInit, OnDestroy {
   public categories$: Observable<ICategoryMenuModel[]>;
   public gameForm: FormGroup;
 
+  constructor(
+    private fb: FormBuilder,
+    private gameService: GameService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private store: Store<IAppState>,
+    public formService: FormService
+  ) {
+    this.actionType = ActionType[<string>this.route.snapshot.params['action']];
+    this.gameId = this.route.snapshot.queryParams['id'];
+  }
+
   get title(): AbstractControl {
     return this.gameForm.get('title');
   }
@@ -57,18 +69,6 @@ export class GameComponent implements OnInit, OnDestroy {
 
   get categoryId(): AbstractControl {
     return this.gameForm.get('categoryId');
-  }
-
-  constructor(
-    private fb: FormBuilder,
-    private gameService: GameService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private store: Store<IAppState>,
-    public formService: FormService
-  ) {
-    this.actionType = ActionType[<string>this.route.snapshot.params['action']];
-    this.gameId = this.route.snapshot.queryParams['id'];
   }
 
   public ngOnInit(): void {

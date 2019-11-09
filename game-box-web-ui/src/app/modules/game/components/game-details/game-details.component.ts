@@ -9,9 +9,9 @@ import { tap, filter } from 'rxjs/operators';
 import { IGameDetailsModel } from '../../models/game-details.model';
 import { CartService } from '../../../cart/services/cart.service';
 import { WishlistService } from 'src/app/modules/wishlist/services/wishlist.service';
-import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.service';
 import { IAppState } from 'src/app/store/app.state';
 import { LoadGameDetail } from 'src/app/store/games/games.actions';
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
 
 @Component({
   selector: 'app-game-details',
@@ -31,7 +31,7 @@ export class GameDetailsComponent implements OnInit {
     private cartService: CartService,
     private wishlistService: WishlistService,
     private store: Store<IAppState>,
-    public authHelperService: AuthHelperService
+    public authService: AuthService
   ) {
     this.gameId = this.route.snapshot.params['id'];
   }

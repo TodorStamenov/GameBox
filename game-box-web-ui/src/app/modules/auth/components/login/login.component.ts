@@ -13,6 +13,13 @@ import { FormService } from 'src/app/modules/core/services/form.service';
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
 
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    public formService: FormService
+  ) { }
+
   get username(): AbstractControl {
     return this.loginForm.get('username');
   }
@@ -20,13 +27,6 @@ export class LoginComponent implements OnInit {
   get password(): AbstractControl {
     return this.loginForm.get('password');
   }
-
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    public formService: FormService
-  ) { }
 
   public ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -36,8 +36,7 @@ export class LoginComponent implements OnInit {
   }
 
   public login(): void {
-    this.authService
-      .login(this.loginForm.value)
+    this.authService.login(this.loginForm.value)
       .subscribe(() => this.router.navigate(['/']));
   }
 }

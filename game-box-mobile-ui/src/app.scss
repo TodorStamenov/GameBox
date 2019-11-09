@@ -9,22 +9,53 @@ $black: #000;
 }
 
 .drawer-container {
+  margin-top: 56;
   background: $white;
-  padding-top: 110;
+  padding-top: 40;
   padding-bottom: 30;
-  padding-left: 35;
+  padding-left: 50;
   padding-right: 35;
 
-  .user-info {
-    font-size: 17;
+  .drawer-label {
+    font-size: 19;
     font-weight: bold;
     color: $mainColor;
-    margin-bottom: 10;
+    margin-bottom: 20;
+
+    &.username {
+      font-size: 20;
+      padding-bottom: 20;
+    }
+  }
+}
+
+.form {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+
+  .input-field {
+    width: 80%;
+
+    .label {
+      color: $mainColor;
+      font-size: 16;
+      margin-top: 50;
+    }
+
+    .input {
+      width: 100%;
+      border-bottom-width: 1;
+      border-bottom-color: $mainColor;
+    }
   }
 
-  .drawer-button {
+  .submit-button {
+    width: 81%;
     color: $white;
     background-color: $mainColor;
-    height: 55;
+    height: 60;
+    margin-top: 50;
   }
 }

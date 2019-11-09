@@ -1,4 +1,4 @@
-<ActionBar class="action-bar">
+<ActionBar class="action-bar" (tap)="onActionBarTap()">
   <NavigationButton
     *ngIf="canGoBack"
     (tap)="onGoBack()"

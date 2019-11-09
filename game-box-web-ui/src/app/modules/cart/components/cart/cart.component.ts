@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 import { IAppState } from 'src/app/store/app.state';
 import { IGameListItemModel } from '../../../core/models/game-list-item.model';
 import { CartService } from '../../services/cart.service';
-import { AuthHelperService } from 'src/app/modules/core/services/auth-helper.service';
 import { OrderService } from 'src/app/modules/order/services/order.service';
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { LoadAllItems, ClearItems, RemoveItem  } from 'src/app/store/cart/cart.actions';
 
 @Component({
@@ -20,7 +20,7 @@ export class CartComponent implements OnInit, OnDestroy {
   public games$: Observable<IGameListItemModel[]>;
 
   constructor(
-    private authHelperService: AuthHelperService,
+    private authService: AuthService,
     private cartService: CartService,
     private orderService: OrderService,
     private router: Router,
@@ -43,7 +43,7 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   public onCreateOrder(): void {
-    if (!this.authHelperService.isAuthed) {
+    if (!this.authService.isAuthed) {
       this.router.navigate(['/auth/login']);
       return;
     }

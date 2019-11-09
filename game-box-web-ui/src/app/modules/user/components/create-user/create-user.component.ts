@@ -12,6 +12,13 @@ import { FormService } from 'src/app/modules/core/services/form.service';
 export class CreateUserComponent implements OnInit {
   public createUserForm: FormGroup;
 
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private router: Router,
+    public formService: FormService
+  ) { }
+
   get username(): AbstractControl {
     return this.createUserForm.get('username');
   }
@@ -23,13 +30,6 @@ export class CreateUserComponent implements OnInit {
   get repeatPassword(): AbstractControl {
     return this.createUserForm.get('repeatPassword');
   }
-
-  constructor(
-    private fb: FormBuilder,
-    private userService: UserService,
-    private router: Router,
-    public formService: FormService
-  ) { }
 
   public ngOnInit(): void {
     this.createUserForm = this.fb.group({

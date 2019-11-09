@@ -76,7 +76,7 @@
     "no-unused-variable": true,
     "no-var-keyword": true,
     "radix": false,
-    "switch-default": true,
+    "switch-default": false,
     "triple-equals": [
       true,
       "allow-null-check"

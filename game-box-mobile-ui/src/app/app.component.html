@@ -1,14 +1,24 @@
 <RadSideDrawer>
   <FlexboxLayout justifyContent="space-between" flexDirection="column" tkDrawerContent class="drawer-container">
     <StackLayout>
-      <Label class="user-info" textWrap="true" textAlignment="center" [text]="'Username'"></Label>
-      <Button (tap)="onLoginTap()" class="drawer-button" text="Login"></Button>
-      <Button (tap)="onRegisterTap()" class="drawer-button" text="Register"></Button>
-      <Button (tap)="onWishlistTap()" class="drawer-button" text="Wishlist"></Button>
-      <Button (tap)="onCartTap()" class="drawer-button" text="Cart"></Button>
+      <Label
+        *ngIf="authService.isAuthed"
+        class="drawer-label username"
+        textAlignment="center"
+        textWrap="true"
+        [text]="authService.user.username"
+        (tap)="onChangePassword()">
+      </Label>
+      
+      <Label *ngIf="!authService.isAuthed" (tap)="onLogin()" class="drawer-label" text="Login"></Label>
+      <Label *ngIf="!authService.isAuthed" (tap)="onRegister()" class="drawer-label" text="Register"></Label>
+      <Label *ngIf="authService.isAuthed" (tap)="onWishlist()" class="drawer-label" text="Wishlist"></Label>
+      <Label *ngIf="authService.isAuthed" (tap)="onCart()" class="drawer-label" text="Cart"></Label>
     </StackLayout>
-    <Button (tap)="onLogoutTap()" class="drawer-button" text="Logout"></Button>
+
+    <Label *ngIf="authService.isAuthed" (tap)="onLogout()" class="drawer-label" text="Logout"></Label>
   </FlexboxLayout>
+  
   <StackLayout tkMainContent>
     <page-router-outlet></page-router-outlet>
   </StackLayout>

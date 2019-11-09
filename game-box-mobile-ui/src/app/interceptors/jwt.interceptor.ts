@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 import {
-  HttpResponse,
-  HttpEvent,
-  HttpHandler,
   HttpInterceptor,
-  HttpRequest
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpResponse
 } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
-import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../modules/auth/services/auth.service';
+import { UIService } from '../modules/core/services/ui.service';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
   constructor(
-    private toastrService: ToastrService,
+    private uiService: UIService,
     private authService: AuthService
   ) { }
 
@@ -38,9 +38,9 @@ export class JwtInterceptor implements HttpInterceptor {
         tap((res: any) => {
           if (res instanceof HttpResponse && res.body) {
             if (typeof res.body === 'string') {
-              this.toastrService.success(res.body, 'Success!');
+              this.uiService.showMessage(res.body);
             } else if (res.body.message) {
-              this.toastrService.success(res.body.message, 'Success!');
+              this.uiService.showMessage(res.body.message);
             }
           }
         })

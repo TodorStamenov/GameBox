@@ -10,11 +10,11 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { ToastrService } from 'ngx-toastr';
+import { UIService } from '../modules/core/services/ui.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private toastr: ToastrService) { }
+  constructor(private uiService: UIService) { }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
@@ -25,22 +25,22 @@ export class ErrorInterceptor implements HttpInterceptor {
               .map(e => err.error.errors[e])
               .join('\n');
 
-            this.toastr.error(message, 'Warning!');
+            this.uiService.showMessage(message);
             break;
 
           case 401:
-            this.toastr.error(err.error.message, 'Warning!');
+            this.uiService.showMessage(err.error.message);
             break;
 
           case 404:
-            this.toastr.error(err.error.error, 'Warning!');
+            this.uiService.showMessage(err.error.error);
             break;
 
           case 500:
             if (err.error.error) {
-              this.toastr.error(err.error.error, 'Warning!');
+              this.uiService.showMessage(err.error.error[0]);
             } else {
-              this.toastr.error(err.error, 'Warning!');
+              this.uiService.showMessage(err.error);
             }
             break;
         }

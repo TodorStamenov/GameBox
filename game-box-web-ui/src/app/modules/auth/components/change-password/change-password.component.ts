@@ -12,6 +12,13 @@ import { AuthService } from '../../services/auth.service';
 export class ChangePasswordComponent implements OnInit {
   public changePasswordForm: FormGroup;
 
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    public formService: FormService
+  ) { }
+
   get oldPassword(): AbstractControl {
     return this.changePasswordForm.get('oldPassword');
   }
@@ -23,13 +30,6 @@ export class ChangePasswordComponent implements OnInit {
   get repeatPassword(): AbstractControl {
     return this.changePasswordForm.get('repeatPassword');
   }
-
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    public formService: FormService
-  ) { }
 
   public ngOnInit(): void {
     this.changePasswordForm = this.fb.group({

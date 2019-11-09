@@ -19,9 +19,6 @@ export class GameDetailsComponent implements OnInit {
   public embedHtml: string;
   public game: IGameDetailsModel;
 
-  @ViewChild('webView', { static: false })
-  public webView: ElementRef;
-
   constructor(
     private route: ActivatedRoute,
     private gameService: GameService
@@ -33,13 +30,14 @@ export class GameDetailsComponent implements OnInit {
     this.gameService.getDetails$(this.gameId)
       .subscribe(game => {
         this.game = game;
-        this.embedHtml = this.getHtmlEmbedTag(game.videoId);
-
         this.loading = false;
+        this.embedHtml = this.getHtmlEmbedTag(game.videoId);
+      }, () => this.loading = false);
+  }
 
-        const webView: WebView = this.webView.nativeElement;
-        webView.android.getSetting().setBuiltInZoomControls(false);
-      });
+  public onWebViewLoaded(webargs: any): void {
+    const webview: WebView = webargs.object;
+    webview.android.getSettings().setDisplayZoomControls(false);
   }
 
   private getHtmlEmbedTag(gameId: string): string {

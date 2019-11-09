@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GameBox.Application.Accounts.Commands.ChangePassword
 {
-    public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, string>
+    public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, ChangePasswordViewModel>
     {
         private readonly IGameBoxDbContext context;
         private readonly IAccountService accountService;
@@ -21,7 +21,7 @@ namespace GameBox.Application.Accounts.Commands.ChangePassword
             this.accountService = accountService;
         }
 
-        public async Task<string> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+        public async Task<ChangePasswordViewModel> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
             var user = await this.context
                 .Users
@@ -48,7 +48,7 @@ namespace GameBox.Application.Accounts.Commands.ChangePassword
 
             await this.context.SaveChangesAsync(cancellationToken);
 
-            return "You have successfully updated your password!";
+            return new ChangePasswordViewModel { Message = "You have successfully updated your password!" };
         }
     }
 }

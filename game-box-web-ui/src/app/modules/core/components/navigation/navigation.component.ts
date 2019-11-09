@@ -5,7 +5,6 @@ import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
-import { AuthHelperService } from '../../services/auth-helper.service';
 import { ICategoryMenuModel } from 'src/app/modules/category/models/category-menu.model';
 import { IAppState } from 'src/app/store/app.state';
 import { LoadCategoryNames } from 'src/app/store/categories/categories.actions';
@@ -19,8 +18,7 @@ export class NavigationComponent implements OnInit {
   public categories$: Observable<ICategoryMenuModel[]>;
 
   constructor(
-    public authHelperService: AuthHelperService,
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router,
     private store: Store<IAppState>
   ) {

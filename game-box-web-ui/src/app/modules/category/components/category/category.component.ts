@@ -22,10 +22,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   public categoryForm: FormGroup;
 
-  get name(): AbstractControl {
-    return this.categoryForm.get('name');
-  }
-
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoryService,
@@ -36,6 +32,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   ) {
     this.actionType = ActionType[<string>this.route.snapshot.params['action']];
     this.categoryId = this.route.snapshot.queryParams['id'];
+  }
+
+  get name(): AbstractControl {
+    return this.categoryForm.get('name');
   }
 
   public ngOnInit(): void {

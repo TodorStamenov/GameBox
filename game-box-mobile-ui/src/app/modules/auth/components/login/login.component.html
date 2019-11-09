@@ -2,9 +2,9 @@
 
 <ActivityIndicator class="activity-indicator" [busy]="loading"></ActivityIndicator>
 
-<StackLayout class="form" [formGroup]="loginForm">
+<StackLayout (tap)="onFormTap()" class="form" [formGroup]="loginForm" *ngIf="!loading">
   <StackLayout class="input-field">
-    <Label class="label" text="Username" [ngClass.invalid]="username.invalid"></Label>
+    <Label class="label" text="Username"></Label>
 
     <TextField
       class="input"
@@ -31,9 +31,7 @@
 
   <Button
     text="Login" 
-    class="test"
-    (tap)="onLogin()"
-    [isEnabled]="loginForm.valid"
-    *ngIf="!isLoading">
+    class="submit-button"
+    (tap)="onLogin()">
   </Button>
 </StackLayout>

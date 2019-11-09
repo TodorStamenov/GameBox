@@ -39,12 +39,12 @@
             </ul>
           </li>
           <li>
-            <a *ngIf="authHelperService.isAuthed" class="nav-element" routerLink="/games/owned">
+            <a *ngIf="authService.isAuthed" class="nav-element" routerLink="/games/owned">
               Owned
             </a>
           </li>
           <li>
-            <a *ngIf="authHelperService.isAuthed" class="nav-element" routerLink="/wishlist/items">
+            <a *ngIf="authService.isAuthed" class="nav-element" routerLink="/wishlist/items">
               Wishlist
             </a>
           </li>
@@ -55,7 +55,7 @@
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li *ngIf="authHelperService.isAdmin" class="dropdown">
+          <li *ngIf="authService.isAdmin" class="dropdown">
             <a
               href="#"
               class="dropdown-toggle nav-element"
@@ -76,22 +76,22 @@
             </ul>
           </li>
           <li>
-            <a class="nav-element" *ngIf="authHelperService.isAuthed" routerLink="/auth/changePassword">
-              {{ authHelperService.user.username }}
+            <a class="nav-element" *ngIf="authService.isAuthed" routerLink="/auth/change-password">
+              {{ authService.user.username }}
             </a>
           </li>
           <li>
-            <a class="nav-element btn" *ngIf="authHelperService.isAuthed" (click)="onLogout()">
+            <a class="nav-element btn" *ngIf="authService.isAuthed" (click)="onLogout()">
               Logout
             </a>
           </li>
           <li>
-            <a class="nav-element" *ngIf="!authHelperService.isAuthed" routerLink="/auth/login">
+            <a class="nav-element" *ngIf="!authService.isAuthed" routerLink="/auth/login">
               Login
             </a>
           </li>
           <li>
-            <a class="nav-element" *ngIf="!authHelperService.isAuthed" routerLink="/auth/register">
+            <a class="nav-element" *ngIf="!authService.isAuthed" routerLink="/auth/register">
               Register
             </a>
           </li>

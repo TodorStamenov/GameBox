@@ -12,6 +12,13 @@ import { FormService } from 'src/app/modules/core/services/form.service';
 export class RegisterComponent implements OnInit {
   public registerForm: FormGroup;
 
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService,
+    public formService: FormService
+  ) { }
+
   get username(): AbstractControl {
     return this.registerForm.get('username');
   }
@@ -24,13 +31,6 @@ export class RegisterComponent implements OnInit {
     return this.registerForm.get('repeatPassword');
   }
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private authService: AuthService,
-    public formService: FormService
-  ) { }
-
   public ngOnInit(): void {
     this.registerForm = this.fb.group({
       'username': [null, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -40,8 +40,7 @@ export class RegisterComponent implements OnInit {
   }
 
   public register(): void {
-    this.authService
-      .register(this.registerForm.value)
+    this.authService.register(this.registerForm.value)
       .subscribe(() => this.router.navigate(['/']));
   }
 }

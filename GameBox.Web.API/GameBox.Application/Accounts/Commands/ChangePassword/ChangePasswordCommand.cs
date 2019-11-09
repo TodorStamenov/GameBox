@@ -2,7 +2,7 @@
 
 namespace GameBox.Application.Accounts.Commands.ChangePassword
 {
-    public class ChangePasswordCommand : IRequest<string>
+    public class ChangePasswordCommand : IRequest<ChangePasswordViewModel>
     {
         public string Username { get; set; }
 
