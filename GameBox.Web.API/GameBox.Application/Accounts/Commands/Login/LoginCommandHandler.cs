@@ -1,5 +1,6 @@
-﻿using GameBox.Application.Contracts;
-using GameBox.Application.Contracts.Services;
+﻿using GameBox.Application.Accounts.Queries.GenerateJwtToken;
+using GameBox.Application.Accounts.Queries.HashPassword;
+using GameBox.Application.Contracts;
 using GameBox.Application.Exceptions;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
@@ -14,13 +15,13 @@ namespace GameBox.Application.Accounts.Commands.Login
 {
     public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginViewModel>
     {
+        private readonly IMediator mediator;
         private readonly IGameBoxDbContext context;
-        private readonly IAccountService accountService;
 
-        public LoginCommandHandler(IGameBoxDbContext context, IAccountService accountService)
+        public LoginCommandHandler(IMediator mediator, IGameBoxDbContext context)
         {
+            this.mediator = mediator;
             this.context = context;
-            this.accountService = accountService;
         }
 
         public async Task<LoginViewModel> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -50,14 +51,22 @@ namespace GameBox.Application.Accounts.Commands.Login
                 throw new AccountLockedException(userInfo.Username);
             }
 
-            var hashedPassword = this.accountService.HashPassword(request.Password, userInfo.Salt);
+            var hashedPassword = await this.mediator.Send(new HashPasswordQuery
+            {
+                Password = request.Password,
+                Salt = userInfo.Salt
+            });
 
             if (userInfo.Password != hashedPassword)
             {
                 throw new InvalidCredentialsException();
             }
 
-            var token = this.accountService.GenerateJwtToken(userInfo.Username, userInfo.IsAdmin);
+            var token = await this.mediator.Send(new GenerateJwtTokenQuery
+            {
+                Username = userInfo.Username,
+                IsAdmin = userInfo.IsAdmin
+            });
 
             return new LoginViewModel
             {

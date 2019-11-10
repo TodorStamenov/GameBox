@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GameBox.Application\GameBox.Application.csproj" />
-    <ProjectReference Include="..\GameBox.Infrastructure\GameBox.Infrastructure.csproj" />
     <ProjectReference Include="..\GameBox.Persistence\GameBox.Persistence.csproj" />
   </ItemGroup>
 

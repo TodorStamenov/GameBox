@@ -1,5 +1,7 @@
-﻿using GameBox.Application.Contracts;
-using GameBox.Application.Contracts.Services;
+﻿using GameBox.Application.Accounts.Queries.GenerateJwtToken;
+using GameBox.Application.Accounts.Queries.GenerateSalt;
+using GameBox.Application.Accounts.Queries.HashPassword;
+using GameBox.Application.Contracts;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using MediatR;
@@ -11,19 +13,23 @@ namespace GameBox.Application.Accounts.Commands.Register
 {
     public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterViewModel>
     {
+        private readonly IMediator mediator;
         private readonly IGameBoxDbContext context;
-        private readonly IAccountService accountService;
 
-        public RegisterCommandHandler(IGameBoxDbContext context, IAccountService accountService)
+        public RegisterCommandHandler(IMediator mediator, IGameBoxDbContext context)
         {
+            this.mediator = mediator;
             this.context = context;
-            this.accountService = accountService;
         }
 
         public async Task<RegisterViewModel> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
-            var salt = this.accountService.GenerateSalt();
-            var hashedPassword = this.accountService.HashPassword(request.Password, salt);
+            var salt = await this.mediator.Send(new GenerateSaltQuery());
+            var hashedPassword = await this.mediator.Send(new HashPasswordQuery
+            {
+                Password = request.Password,
+                Salt = salt
+            });
 
             var user = new User
             {
@@ -35,7 +41,7 @@ namespace GameBox.Application.Accounts.Commands.Register
             await this.context.Users.AddAsync(user);
             await this.context.SaveChangesAsync(cancellationToken);
 
-            var token = this.accountService.GenerateJwtToken(user.Username);
+            var token = await this.mediator.Send(new GenerateJwtTokenQuery { Username = user.Username });
 
             return new RegisterViewModel
             {

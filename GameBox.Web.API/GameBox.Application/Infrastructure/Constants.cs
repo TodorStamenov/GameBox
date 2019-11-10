@@ -9,6 +9,7 @@
             public const string Admin = "Admin";
 
             public const string InvalidCredentials = "Invalid Credentials!";
+            public const string Unauthorised = "Unauthorised!";
 
             public const string Success = "{0} {1} successfully {2}.";
             public const string DuplicateEntry = "{0} {1} already exists in database!";

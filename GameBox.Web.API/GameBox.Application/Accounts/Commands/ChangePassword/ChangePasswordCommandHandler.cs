@@ -1,5 +1,6 @@
-﻿using GameBox.Application.Contracts;
-using GameBox.Application.Contracts.Services;
+﻿using GameBox.Application.Accounts.Queries.GenerateSalt;
+using GameBox.Application.Accounts.Queries.HashPassword;
+using GameBox.Application.Contracts;
 using GameBox.Application.Exceptions;
 using GameBox.Domain.Entities;
 using MediatR;
@@ -12,13 +13,13 @@ namespace GameBox.Application.Accounts.Commands.ChangePassword
 {
     public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, ChangePasswordViewModel>
     {
+        private readonly IMediator mediator;
         private readonly IGameBoxDbContext context;
-        private readonly IAccountService accountService;
 
-        public ChangePasswordCommandHandler(IGameBoxDbContext context, IAccountService accountService)
+        public ChangePasswordCommandHandler(IMediator mediator, IGameBoxDbContext context)
         {
+            this.mediator = mediator;
             this.context = context;
-            this.accountService = accountService;
         }
 
         public async Task<ChangePasswordViewModel> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
@@ -33,16 +34,24 @@ namespace GameBox.Application.Accounts.Commands.ChangePassword
                 throw new NotFoundException(nameof(User), request.Username);
             }
 
-            var oldHashedPassword = this.accountService.HashPassword(request.OldPassword, user.Salt);
+            var oldHashedPassword = await this.mediator.Send(new HashPasswordQuery
+            {
+                Password = request.OldPassword,
+                Salt = user.Salt
+            });
 
             if (oldHashedPassword != user.Password)
             {
                 throw new InvalidCredentialsException();
             }
 
-            user.Salt = this.accountService.GenerateSalt();
+            user.Salt = await this.mediator.Send(new GenerateSaltQuery());
 
-            var newHashedPassword = this.accountService.HashPassword(request.NewPassword, user.Salt);
+            var newHashedPassword = await this.mediator.Send(new HashPasswordQuery
+            {
+                Password = request.NewPassword,
+                Salt = user.Salt
+            });
 
             user.Password = newHashedPassword;
 

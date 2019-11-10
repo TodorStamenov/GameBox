@@ -7,7 +7,6 @@ using GameBox.Application.GraphQL;
 using GameBox.Application.Infrastructure;
 using GameBox.Application.Infrastructure.AutoMapper;
 using GameBox.Application.Infrastructure.Extensions;
-using GameBox.Infrastructure;
 using GameBox.Persistence;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
@@ -38,8 +37,6 @@ namespace GameBox.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-
-            services.AddDomainServices(typeof(AccountService).Assembly);
 
             services.AddGraphQLServices();
 
