@@ -1,26 +1,26 @@
 <PullToRefresh (refresh)="onPullToRefresh()">
-  <ListView [items]="games" separatorColor="#fff" (loadMoreItems)="onLoadMoreGames()">
+  <ListView [items]="games" separatorColor="#4e5d6c" (loadMoreItems)="onLoadMoreGames()">
     <ng-template let-game="item">
       <GridLayout
         (tap)="onNavigateToDetails(game.id)"
         class="game-container"
         rows="*, *, *"
         columns="*">
-        <Image row="0" [src]="game.thumbnailUrl" stretch="aspectFit"></Image>
-    
         <label
           class="game-title"
-          row="1"
+          row="0"
           [text]="game.title"
           textAlignment="center"
           textWrap="true">
         </label>
+
+        <Image row="1" [src]="game.thumbnailUrl" stretch="aspectFit"></Image>
     
         <label 
           textAlignment="center"
           class="game-details"
           row="2"
-          [text]="(game.price | currency) + ' ' + game.size + 'GB Hits: ' + game.viewCount">
+          [text]="(game.price | currency) + ' | ' + game.size + 'GB | ' + game.viewCount + ' Views'">
         </label>
       </GridLayout>
     </ng-template>

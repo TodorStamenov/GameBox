@@ -10,7 +10,7 @@
     <label class="game-description" [text]="game.description" textWrap="true" textAlignment="initial"></label>
 
     <GridLayout class="actions-wrapper" rows="30, 30, 30, 30" columns="*, 2*">
-      <Button class="action-button" row="0" col="0" rowSpan="2" text="Buy"></Button>
+      <Button (tap)="onAddToCart(game.id)" class="action-button" row="0" col="0" rowSpan="2" text="Buy"></Button>
       <Button class="action-button" row="2" col="0" rowSpan="2" text="Wishlist"></Button>
 
       <Label class="game-details" row="0" col="1" [text]="'Price - ' + (game.price | currency)"></Label>

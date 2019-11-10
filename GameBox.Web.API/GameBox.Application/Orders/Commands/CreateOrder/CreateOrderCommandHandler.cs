@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace GameBox.Application.Orders.Commands.CreateOrder
 {
-    public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, string>
+    public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, CreateOrderViewModel>
     {
         private readonly IGameBoxDbContext context;
 
@@ -20,7 +20,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
             this.context = context;
         }
 
-        public async Task<string> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+        public async Task<CreateOrderViewModel> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var userId = await this.context
                 .Users
@@ -66,7 +66,10 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
             await this.context.Orders.AddAsync(order);
             await this.context.SaveChangesAsync(cancellationToken);
 
-            return string.Format(Constants.Common.Success, nameof(Order), string.Empty, Constants.Common.Added);
+            return new CreateOrderViewModel
+            {
+                Message = string.Format(Constants.Common.Success, nameof(Order), string.Empty, Constants.Common.Added)
+            };
         }
     }
 }

@@ -1,3 +1,65 @@
 <ns-action-bar title="Cart"></ns-action-bar>
 
-<ActivityIndicator class="activity-indicator" [busy]="loading"></ActivityIndicator>
+<ActivityIndicator class="activity-indicator" [busy]="!(games$ | async)"></ActivityIndicator>
+
+<ScrollView *ngIf="games$ | async">
+  <StackLayout>
+    <GridLayout
+      class="games-container"
+      rows="*, *, *, *"
+      columns="3*, *"
+      *ngFor="let game of games$ | async">
+
+      <Label
+        class="game-title"
+        textAlignment="center"
+        textWrap="true"
+        row="0"
+        col="0"
+        colSpan="2"
+        [text]="game.title">
+      </Label>
+
+      <Image
+        class="game-image"
+        row="1"
+        col="0"
+        rowSpan="3"
+        [src]="game.thumbnailUrl"
+        stretch="aspectFit">
+      </Image>
+
+      <Label
+        class="game-price"
+        textAlignment="right"
+        textWrap="true"
+        horizontalAlignment="center"
+        verticalAlignment="center"
+        row="1"
+        col="1"
+        rowSpan="2"
+        [text]="game.price | currency">
+      </Label>
+
+      <Button
+        (tap)="onRemoveItem(game.id)"
+        class="action-button"
+        text="Remove"
+        row="3"
+        col="1">
+      </Button>
+    </GridLayout>
+
+    <GridLayout class="actions-container" columns="*, *" rows="60" *ngIf="(games$ | async)?.length !== 0">
+      <Button (tap)="onCreateOrder()" class="action-button" text="Order" col="0"></Button>
+      <Button (tap)="onClear()" class="action-button" text="Clear" col="1"></Button>
+    </GridLayout>
+
+    <Label
+      *ngIf="(games$ | async)?.length === 0"
+      textAlignment="center"
+      class="cart-empty"
+      text="Your cart is empty">
+    </Label>
+  </StackLayout>
+</ScrollView>

@@ -1,9 +1,11 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { WebView } from 'tns-core-modules/ui/web-view';
 import { screen } from 'tns-core-modules/platform';
 import { GameService } from '../../services/game.service';
+import { CartService } from '~/app/modules/cart/services/cart.service';
+import { RouterExtensions } from 'nativescript-angular/router';
 import { IGameDetailsModel } from '../../models/game-details.model';
 
 @Component({
@@ -21,7 +23,9 @@ export class GameDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private gameService: GameService
+    private router: RouterExtensions,
+    private gameService: GameService,
+    private cartService: CartService
   ) {
     this.gameId = this.route.snapshot.params['id'];
   }
@@ -33,6 +37,13 @@ export class GameDetailsComponent implements OnInit {
         this.loading = false;
         this.embedHtml = this.getHtmlEmbedTag(game.videoId);
       }, () => this.loading = false);
+  }
+
+  public onAddToCart(gameId: string): void {
+    this.cartService.addItem(gameId);
+    this.router.navigate(['/cart/items'], {
+      transition: { name: 'slideLeft' }
+    });
   }
 
   public onWebViewLoaded(webargs: any): void {

@@ -4,16 +4,17 @@
   padding: 5;
 
   .game-title {
-    font-size: 16;
+    font-size: 20;
     font-weight: bold;
     color: $black;
-    padding-top: 20;
+    padding-top: 15;
     padding-bottom: 20;
   }
 
   .game-details {
     color: $black;
     font-weight: bold;
+    padding-top: 15;
     padding-bottom: 15;
   }
 }

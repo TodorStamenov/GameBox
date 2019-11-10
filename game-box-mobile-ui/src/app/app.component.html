@@ -12,8 +12,8 @@
       
       <Label *ngIf="!authService.isAuthed" (tap)="onLogin()" class="drawer-label" text="Login"></Label>
       <Label *ngIf="!authService.isAuthed" (tap)="onRegister()" class="drawer-label" text="Register"></Label>
-      <Label *ngIf="authService.isAuthed" (tap)="onWishlist()" class="drawer-label" text="Wishlist"></Label>
       <Label *ngIf="authService.isAuthed" (tap)="onCart()" class="drawer-label" text="Cart"></Label>
+      <Label *ngIf="authService.isAuthed" (tap)="onWishlist()" class="drawer-label" text="Wishlist"></Label>
     </StackLayout>
 
     <Label *ngIf="authService.isAuthed" (tap)="onLogout()" class="drawer-label" text="Logout"></Label>

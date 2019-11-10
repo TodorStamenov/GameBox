@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 import { IGameListItemModel } from '~/app/modules/core/models/game-list-item.model';
 import { CartService } from '../../services/cart.service';
@@ -13,7 +13,8 @@ import { RouterExtensions } from 'nativescript-angular/router';
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit {
-  public loading = false;
+  private reloadGames$$ = new BehaviorSubject<void>(null);
+
   public games$: Observable<IGameListItemModel[]>;
 
   constructor(
@@ -22,31 +23,30 @@ export class CartComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.games$ = this.cartService.getCart$().pipe(
-      map(games => games = games.map(game => this.changeThumbnailUrls(game)))
+    this.games$ = this.reloadGames$$.asObservable().pipe(
+      switchMap(() => this.cartService.getCart$().pipe(
+        map(games => games.map(game => this.changeThumbnailUrls(game))),
+      ))
     );
   }
 
-  public changeSource(event: any, videoId: string): void {
-    event.target.src = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
-  }
-
   public onCreateOrder(): void {
-    this.cartService.createOrder$()
-      .subscribe(() => {
-        this.cartService.clear();
-        this.router.navigate(['/'], {
-          transition: { name: 'slideLeft' }
-        });
+    this.cartService.createOrder$().subscribe(() => {
+      this.cartService.clear();
+      this.router.navigate(['/'], {
+        transition: { name: 'slideLeft' }
       });
+    });
   }
 
   public onRemoveItem(id: string): void {
     this.cartService.removeItem(id);
+    this.reloadGames$$.next();
   }
 
   public onClear(): void {
     this.cartService.clear();
+    this.reloadGames$$.next();
   }
 
   public calculateTotalPrice(games: IGameListItemModel[]): number {

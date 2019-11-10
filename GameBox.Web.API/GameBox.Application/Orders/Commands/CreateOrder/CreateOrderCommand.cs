@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GameBox.Application.Orders.Commands.CreateOrder
 {
-    public class CreateOrderCommand : IRequest<string>
+    public class CreateOrderCommand : IRequest<CreateOrderViewModel>
     {
         public string Username { get; set; }
 
