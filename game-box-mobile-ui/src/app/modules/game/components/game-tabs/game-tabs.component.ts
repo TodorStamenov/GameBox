@@ -1,19 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, takeWhile } from 'rxjs/operators';
 
 import { IGamesListModel } from '../../models/games-list.model';
 import { GameService } from '../../services/game.service';
 import { RouterExtensions } from 'nativescript-angular/router';
 
 @Component({
-  selector: 'app-game-tabs',
+  selector: 'ns-game-tabs',
   templateUrl: './game-tabs.component.html',
   styleUrls: ['./game-tabs.component.scss'],
   moduleId: module.id
 })
-export class GamesTabsComponent implements OnInit {
+export class GamesTabsComponent implements OnInit, OnDestroy {
+  private isActive = true;
+
   public loading = true;
   public games: IGamesListModel[] = [];
   public owned: IGamesListModel[] = [];
@@ -24,10 +26,50 @@ export class GamesTabsComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
+   this.reloadGames();
+  }
+
+  public ngOnDestroy(): void {
+    this.isActive = false;
+  }
+
+  public loadGames(): void {
+    this.gameService.getGames$(this.games.length).pipe(
+      takeWhile(() => this.isActive),
+      map(games => games.map(game => this.changeThumbnailUrls(game)))
+    ).subscribe(
+      games => this.games = [...this.games, ...games],
+      () => this.loading = false
+    );
+  }
+
+  public loadOwned(): void {
+    this.gameService.getOwned$(this.owned.length).pipe(
+      takeWhile(() => this.isActive),
+      map(owned => owned.map(game => this.changeThumbnailUrls(game)))
+    ).subscribe(
+      owned => this.owned = [...this.owned, ...owned],
+      () => this.loading = false
+    );
+  }
+
+  public navigateToDetails(id: string): void {
+    this.router.navigate(['/games/details', id], {
+      transition: { name: 'slideLeft' }
+    });
+  }
+
+  public reloadGames(): void {
+    this.loading = true;
+
+    this.games = [];
+    this.owned = [];
+
     forkJoin(
       this.gameService.getGames$(this.games.length),
       this.gameService.getOwned$(this.owned.length)
     ).pipe(
+      takeWhile(() => this.isActive),
       map(([games, owned]) => {
         games = games.map(game => this.changeThumbnailUrls(game));
         owned = owned.map(game => this.changeThumbnailUrls(game));
@@ -40,30 +82,6 @@ export class GamesTabsComponent implements OnInit {
 
       this.loading = false;
     }, () => this.loading = false);
-  }
-
-  public loadGames(): void {
-    this.gameService.getGames$(this.games.length).pipe(
-      map(games => games.map(game => this.changeThumbnailUrls(game)))
-    ).subscribe(
-      games => this.games = [...this.games, ...games],
-      () => this.loading = false
-    );
-  }
-
-  public loadOwned(): void {
-    this.gameService.getOwned$(this.owned.length).pipe(
-      map(owned => owned.map(game => this.changeThumbnailUrls(game)))
-    ).subscribe(
-      owned => this.owned = [...this.owned, ...owned],
-      () => this.loading = false
-    );
-  }
-
-  public navigateToDetails(id: string): void {
-    this.router.navigate(['/games/details', id], {
-      transition: { name: 'slideLeft' }
-    });
   }
 
   private changeThumbnailUrls(game: IGamesListModel): IGamesListModel {

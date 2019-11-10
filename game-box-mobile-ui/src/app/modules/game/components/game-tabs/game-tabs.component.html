@@ -14,18 +14,20 @@
   </TabStrip>
 
   <TabContentItem>
-    <app-game-items
+    <ns-game-items
+      (pullToRefresh)="reloadGames()"
       (loadTap)="loadGames()"
       (detailsTap)="navigateToDetails($event)"
       [games]="games">
-    </app-game-items>
+    </ns-game-items>
   </TabContentItem>
-
+      
   <TabContentItem>
-    <app-game-items
+    <ns-game-items
+      (pullToRefresh)="reloadGames()"
       (loadTap)="loadOwned()"
       (detailsTap)="navigateToDetails($event)"
       [games]="owned">
-    </app-game-items>
+    </ns-game-items>
   </TabContentItem>
 </Tabs>

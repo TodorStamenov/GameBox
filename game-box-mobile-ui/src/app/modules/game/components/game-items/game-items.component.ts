@@ -9,12 +9,15 @@ import {
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
-import { debounceTime, takeWhile, tap } from 'rxjs/operators';
+import { takeWhile } from 'rxjs/operators';
 
 import { IGamesListModel } from '../../models/games-list.model';
 
+import { registerElement } from 'nativescript-angular/element-registry';
+registerElement('PullToRefresh', () => require('@nstudio/nativescript-pulltorefresh').PullToRefresh);
+
 @Component({
-  selector: 'app-game-items',
+  selector: 'ns-game-items',
   templateUrl: './game-items.component.html',
   styleUrls: ['./game-items.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,7 +29,9 @@ export class GameItemsComponent implements OnInit, OnDestroy {
   private gamesLength = 0;
 
   @Input() public games: IGamesListModel[] = [];
+
   @Output() public loadTap = new EventEmitter<void>();
+  @Output() public pullToRefresh = new EventEmitter<void>();
   @Output() public detailsTap = new EventEmitter<string>();
 
   public ngOnInit(): void {
@@ -40,6 +45,10 @@ export class GameItemsComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.isActive = false;
+  }
+
+  public onPullToRefresh(): void {
+    this.pullToRefresh.emit();
   }
 
   public onNavigateToDetails(id: string): void {

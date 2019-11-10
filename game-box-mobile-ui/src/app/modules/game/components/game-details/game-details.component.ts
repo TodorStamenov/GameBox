@@ -7,7 +7,7 @@ import { GameService } from '../../services/game.service';
 import { IGameDetailsModel } from '../../models/game-details.model';
 
 @Component({
-  selector: 'app-game-details',
+  selector: 'ns-game-details',
   templateUrl: './game-details.component.html',
   styleUrls: ['./game-details.component.scss'],
   moduleId: module.id

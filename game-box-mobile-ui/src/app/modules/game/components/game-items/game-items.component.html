@@ -1,22 +1,28 @@
-<ListView [items]="games" separatorColor="#4e5d6c" (loadMoreItems)="onLoadMoreGames()" rowHeight="95">
-  <ng-template let-game="item">
-    <GridLayout
-      (tap)="onNavigateToDetails(game.id)"
-      class="game-container"
-      height="90"
-      rows="2*, *"
-      columns="160, *">    
-      <Image row="0" col="0" rowSpan="2" [src]="game.thumbnailUrl" stretch="aspectFit"></Image>
-  
-      <label class="game-title" row="0" col="1" [text]="game.title" textWrap="true"></label>
-  
-      <label 
-        class="game-details"
-        row="1"
-        col="1"
-        [text]="(game.price | currency) + ' ' + game.size + 'GB Hits: ' + game.viewCount"
-        verticalAlignment="bottom">
-      </label>
-    </GridLayout>
-  </ng-template>
-</ListView>
+<PullToRefresh (refresh)="onPullToRefresh()">
+  <ListView [items]="games" separatorColor="#fff" (loadMoreItems)="onLoadMoreGames()">
+    <ng-template let-game="item">
+      <GridLayout
+        (tap)="onNavigateToDetails(game.id)"
+        class="game-container"
+        rows="*, *, *"
+        columns="*">
+        <Image row="0" [src]="game.thumbnailUrl" stretch="aspectFit"></Image>
+    
+        <label
+          class="game-title"
+          row="1"
+          [text]="game.title"
+          textAlignment="center"
+          textWrap="true">
+        </label>
+    
+        <label 
+          textAlignment="center"
+          class="game-details"
+          row="2"
+          [text]="(game.price | currency) + ' ' + game.size + 'GB Hits: ' + game.viewCount">
+        </label>
+      </GridLayout>
+    </ng-template>
+  </ListView>
+</PullToRefresh>
