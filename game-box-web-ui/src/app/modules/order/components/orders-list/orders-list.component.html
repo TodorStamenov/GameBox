@@ -30,8 +30,8 @@
         <tbody>
           <tr *ngFor="let order of orders$ | async">
             <td>{{ order.username }}</td>
-            <td>{{ order.timeStamp }}</td>
-            <td>${{ order.price.toFixed(2) }}</td>
+            <td>{{ order.timeStamp | date:'medium' }}</td>
+            <td>{{ order.price | currency }}</td>
             <td>{{ order.gamesCount }}</td>
           </tr>
         </tbody>
