@@ -35,8 +35,6 @@ export class WishlistService {
       removeGameFromWishlist(gameId: $gameId)
     }`;
 
-    console.log(id);
-
     return this.http.post<void>(wishlistUrl, {
       query: mutation,
       variables: { gameId: id }
