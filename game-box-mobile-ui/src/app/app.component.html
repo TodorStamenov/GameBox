@@ -1,6 +1,8 @@
 <RadSideDrawer>
   <FlexboxLayout justifyContent="space-between" flexDirection="column" tkDrawerContent class="drawer-container">
     <StackLayout>
+      <label textAlignment="center" class="drawer-label app-logo" text="GameBox"></label>
+
       <Label
         *ngIf="authService.isAuthed"
         class="drawer-label username"

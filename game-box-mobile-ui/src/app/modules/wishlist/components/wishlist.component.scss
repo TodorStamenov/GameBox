@@ -1,0 +1,40 @@
+@import '../../../../app.scss';
+
+.action-button {
+  color: $white;
+  background-color: $mainColor;
+}
+
+.actions-container {
+  margin-left: 5;
+  margin-right: 5;
+  margin-bottom: 10;
+}
+
+.wishlist-empty {
+  font-size: 20;
+  font-weight: bold;
+  color: $black;
+  margin-top: 25;
+}
+
+.games-container {
+  padding: 5;
+
+  .game-title {
+    font-size: 20;
+    font-weight: bold;
+    color: $black;
+    padding-top: 15;
+    padding-bottom: 20;
+  }
+
+  .game-image {
+    margin-bottom: 5;
+  }
+  
+  .game-price {
+    color: $black;
+    font-size: 18;
+  }
+}

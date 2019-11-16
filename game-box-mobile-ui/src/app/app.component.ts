@@ -12,7 +12,6 @@ import { takeWhile } from 'rxjs/operators';
 import { UIService } from './modules/core/services/ui.service';
 import { RadSideDrawerComponent } from 'nativescript-ui-sidedrawer/angular/side-drawer-directives';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
-import { RouterExtensions } from 'nativescript-angular/router';
 import { AuthService } from './modules/auth/services/auth.service';
 
 @Component({
@@ -28,7 +27,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   public drawerCompnent: RadSideDrawerComponent;
 
   constructor(
-    private router: RouterExtensions,
     private uiService: UIService,
     private cdr: ChangeDetectorRef,
     public authService: AuthService
@@ -88,9 +86,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private navigate(path: string, clearHistory = false): void {
     this.drawer.closeDrawer();
-    this.router.navigate([path], {
-      clearHistory: clearHistory,
-      transition: { name: 'slideLeft' }
-    });
+    this.uiService.navigate(path, [], clearHistory);
   }
 }

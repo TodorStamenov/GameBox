@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { constants } from '~/app/common';
 import { IGameListItemModel } from '../../core/models/game-list-item.model';
 import * as cacheService from 'tns-core-modules/application-settings';
+import { UIService } from '../../core/services/ui.service';
 
 const cartUrl = constants.host + 'cart/';
 const ordersUrl = constants.host + 'orders';
@@ -14,7 +16,10 @@ const ordersUrl = constants.host + 'orders';
   providedIn: 'root'
 })
 export class CartService {
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private uiService: UIService
+  ) { }
 
   get cart(): string[] {
     if (!cacheService.getString('cart')) {
@@ -25,7 +30,10 @@ export class CartService {
   }
 
   set cart(items: string[]) {
-    cacheService.setString('cart', JSON.stringify(Array.from(new Set(items))));
+    cacheService.setString(
+      'cart',
+      JSON.stringify(Array.from(new Set(items)))
+    );
   }
 
   public addItem(id: string): void {
@@ -48,7 +56,12 @@ export class CartService {
   }
 
   public getCart$(): Observable<IGameListItemModel[]> {
-    return this.http.post<IGameListItemModel[]>(cartUrl, this.cart);
+    return this.http.post<IGameListItemModel[]>(cartUrl, this.cart).pipe(
+      map(games => games.map(game => {
+        game.thumbnailUrl = this.uiService.changeThumbnailUrls(game.thumbnailUrl, game.videoId);
+        return game;
+      }))
+    );
   }
 
   public createOrder$(): Observable<void> {

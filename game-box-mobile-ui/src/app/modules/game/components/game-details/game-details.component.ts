@@ -5,8 +5,9 @@ import { WebView } from 'tns-core-modules/ui/web-view';
 import { screen } from 'tns-core-modules/platform';
 import { GameService } from '../../services/game.service';
 import { CartService } from '~/app/modules/cart/services/cart.service';
-import { RouterExtensions } from 'nativescript-angular/router';
 import { IGameDetailsModel } from '../../models/game-details.model';
+import { WishlistService } from '~/app/modules/wishlist/services/wishlist.service';
+import { UIService } from '~/app/modules/core/services/ui.service';
 
 @Component({
   selector: 'ns-game-details',
@@ -23,9 +24,10 @@ export class GameDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: RouterExtensions,
+    private uiService: UIService,
     private gameService: GameService,
-    private cartService: CartService
+    private cartService: CartService,
+    private wishlistService: WishlistService
   ) {
     this.gameId = this.route.snapshot.params['id'];
   }
@@ -41,9 +43,12 @@ export class GameDetailsComponent implements OnInit {
 
   public onAddToCart(gameId: string): void {
     this.cartService.addItem(gameId);
-    this.router.navigate(['/cart/items'], {
-      transition: { name: 'slideLeft' }
-    });
+    this.uiService.navigate('/cart/items');
+  }
+
+  public onAddToWishlist(gameId: string): void {
+    this.wishlistService.addItem$(gameId)
+      .subscribe(() => this.uiService.navigate('/wishlist/items'));
   }
 
   public onWebViewLoaded(webargs: any): void {

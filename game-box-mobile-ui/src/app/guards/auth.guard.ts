@@ -1,8 +1,8 @@
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Injectable } from '@angular/core';
 
 import { AuthService } from '../modules/auth/services/auth.service';
-import { RouterExtensions } from 'nativescript-angular/router';
-import { Injectable } from '@angular/core';
+import { UIService } from '../modules/core/services/ui.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 export class AuthGuard implements CanActivate {
   constructor(
     private authService: AuthService,
-    private router: RouterExtensions
+    private uiService: UIService
   ) { }
 
   public canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
@@ -18,11 +18,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    this.router.navigate(['/auth/login'], {
-      clearHistory: true,
-      transition: { name: 'slideLeft' }
-    });
-
+    this.uiService.navigate('/auth/login');
     return false;
   }
 }

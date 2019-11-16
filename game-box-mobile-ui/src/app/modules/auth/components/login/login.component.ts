@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, AbstractControl, FormControl } from '@angular/forms';
 
-import { RouterExtensions } from 'nativescript-angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UIService } from '~/app/modules/core/services/ui.service';
 import * as utils from 'tns-core-modules/utils/utils';
@@ -17,7 +16,6 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: RouterExtensions,
     private uiService: UIService
   ) { }
 
@@ -59,12 +57,10 @@ export class LoginComponent implements OnInit {
 
     this.loading = true;
     this.authService.login(this.loginForm.value)
-      .subscribe(() => {
-        this.router.navigate(['/'], {
-          clearHistory: true,
-          transition: { name: 'slideLeft' }
-        });
-      }, () => this.loading = false);
+      .subscribe(
+        () => this.uiService.navigate('/'),
+        () => this.loading = false
+      );
   }
 
   public onFormTap(): void {
