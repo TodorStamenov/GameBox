@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const models = require('../models');
+const auth = require('../modules/auth');
 
-router.get('/orders', (req, res, next) => {
+router.get('/orders', auth('Admin'), (req, res, next) => {
   let startDate = new Date(1970, 1, 1).toISOString();
   let endDate = new Date(2050, 1, 1).toISOString();
   
