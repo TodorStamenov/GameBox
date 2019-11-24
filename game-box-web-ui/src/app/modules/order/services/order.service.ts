@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
 import { constants } from 'src/app/common';
 import { IOrdersListModel } from '../models/orders-list.model';
 
-const ordersUrl = constants.nodeHost + 'orders';
+const nodeOrdersUrl = constants.nodeHost + 'orders';
+const coreOrdersUrl = constants.apiHost + 'orders';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +16,10 @@ export class OrderService {
   constructor(private http: HttpClient) { }
 
   public getOrders$(startDate: string, endDate: string): Observable<IOrdersListModel[]> {
-    return this.http.get<IOrdersListModel[]>(ordersUrl + '?startDate=' + startDate + '&endDate=' + endDate);
+    return this.http.get<IOrdersListModel[]>(nodeOrdersUrl + '?startDate=' + startDate + '&endDate=' + endDate);
   }
 
   public createOrder$(gameIds: string[]): Observable<void> {
-    return this.http.post<void>(ordersUrl, gameIds);
+    return this.http.post<void>(coreOrdersUrl, gameIds);
   }
 }

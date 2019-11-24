@@ -1,5 +1,6 @@
 ﻿using GameBox.Application.Contracts;
 using GameBox.Domain.Entities;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -26,9 +27,10 @@ namespace GameBox.Persistence
 
         public DbSet<Wishlist> Wishlists { get; set; }
 
-        public async Task SeedAsync()
+        public async Task SeedAsync(IMediator mediator)
         {
-            await GameBoxDbInitializer.SeedDatabaseAsync(this);
+            var initializer = new GameBoxDbInitializer(this, mediator);
+            await initializer.SeedDatabaseAsync();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

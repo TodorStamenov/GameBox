@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Persistence", "Game
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Api", "GameBox.Api\GameBox.Api.csproj", "{08D87C06-A42F-48FE-B00D-1E537BC0CF92}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBox.Infrastructure", "GameBox.Infrastructure\GameBox.Infrastructure.csproj", "{08D971F6-1E4B-446F-B470-7322B3621204}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{08D87C06-A42F-48FE-B00D-1E537BC0CF92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08D87C06-A42F-48FE-B00D-1E537BC0CF92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08D87C06-A42F-48FE-B00D-1E537BC0CF92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08D971F6-1E4B-446F-B470-7322B3621204}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08D971F6-1E4B-446F-B470-7322B3621204}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08D971F6-1E4B-446F-B470-7322B3621204}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08D971F6-1E4B-446F-B470-7322B3621204}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{EFFF8FB3-C985-4752-97FE-8AB430F3ED2A} = {DCE948C9-FA6F-4CC7-9F6F-4C57EC2A60B1}
 		{953F9324-E10B-426E-BC67-8EF67549CFD3} = {5DEB3C8A-A6A1-41B9-AB40-82CCB406B776}
 		{08D87C06-A42F-48FE-B00D-1E537BC0CF92} = {E1AE8A52-686C-4F47-AF8E-B49907768508}
+		{08D971F6-1E4B-446F-B470-7322B3621204} = {5DEB3C8A-A6A1-41B9-AB40-82CCB406B776}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3BB40197-01CF-401E-BFAA-D93B9AB1417F}

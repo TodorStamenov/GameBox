@@ -7,8 +7,8 @@ services:
   nosql.data:
     image: mongo
 
-#  rabbitmq:
-#    image: rabbitmq:3-management-alpine
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
 
   core.api:
     build:
@@ -16,6 +16,7 @@ services:
       dockerfile: GameBox.Web.API/GameBox.Api/Dockerfile
     depends_on:
       - sql.data
+      - rabbitmq
 
   node.api:
     build:
@@ -23,6 +24,7 @@ services:
       dockerfile: GameBox.Web.API/game-box-orders-api/Dockerfile
     depends_on:
       - nosql.data
+      - rabbitmq
 
   web.ui:
     build:

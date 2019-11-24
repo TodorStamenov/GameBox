@@ -1,4 +1,5 @@
 ﻿using GameBox.Domain.Entities;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +24,6 @@ namespace GameBox.Application.Contracts
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-        Task SeedAsync();
+        Task SeedAsync(IMediator mediator);
     }
 }

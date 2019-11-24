@@ -3,10 +3,12 @@ using FluentValidation.AspNetCore;
 using GameBox.Api.Filters;
 using GameBox.Application.Categories.Commands.CreateCategory;
 using GameBox.Application.Contracts;
+using GameBox.Application.Contracts.Services;
 using GameBox.Application.GraphQL;
 using GameBox.Application.Infrastructure;
 using GameBox.Application.Infrastructure.AutoMapper;
 using GameBox.Application.Infrastructure.Extensions;
+using GameBox.Infrastructure;
 using GameBox.Persistence;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
@@ -33,7 +35,6 @@ namespace GameBox.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
@@ -42,6 +43,10 @@ namespace GameBox.Api
 
             services.AddMediatR(typeof(CreateCategoryCommandValidator).GetTypeInfo().Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+
+            services.AddSingleton<IMessageQueueSenderService, MessageQueueSenderService>();
+
+            // services.AddDomainServices(typeof(MessageQueueSenderService).Assembly);
 
             var connString = "Server=tcp:192.168.99.100,5433;Initial Catalog=GameBoxCore;User Id=sa;Password=Your_password@123";
 
@@ -72,7 +77,6 @@ namespace GameBox.Api
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCategoryCommandValidator>());
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

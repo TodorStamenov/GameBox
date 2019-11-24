@@ -15,4 +15,5 @@ app.use((err, req, res) => {
 
 app.listen(config.port, () => {
   console.log(`Server listening on port ${config.port}`);
+  require('./modules/mq');
 });

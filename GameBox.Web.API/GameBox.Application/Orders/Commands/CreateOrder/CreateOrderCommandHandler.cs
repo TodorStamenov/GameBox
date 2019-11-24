@@ -1,4 +1,5 @@
 ﻿using GameBox.Application.Contracts;
+using GameBox.Application.Contracts.Services;
 using GameBox.Application.Exceptions;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
@@ -13,10 +14,12 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
 {
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, CreateOrderViewModel>
     {
+        private readonly IMediator mediator;
         private readonly IGameBoxDbContext context;
 
-        public CreateOrderCommandHandler(IGameBoxDbContext context)
+        public CreateOrderCommandHandler(IMediator mediator, IGameBoxDbContext context)
         {
+            this.mediator = mediator;
             this.context = context;
         }
 
@@ -65,6 +68,16 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
 
             await this.context.Orders.AddAsync(order);
             await this.context.SaveChangesAsync(cancellationToken);
+
+            var notification = new OrderCreated 
+            {
+                Username = request.Username,
+                Price = order.Price,
+                GamesCount = order.Games.Count,
+                TimeStamp = order.TimeStamp
+            };
+
+            await this.mediator.Publish(notification, cancellationToken);
 
             return new CreateOrderViewModel
             {

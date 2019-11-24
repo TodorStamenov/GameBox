@@ -44,8 +44,7 @@ export class CartComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.orderService
-      .createOrder$(this.cartService.cart)
+    this.orderService.createOrder$(this.cartService.cart)
       .subscribe(() => {
         this.cartService.clear();
         this.store.dispatch(new ClearItems());

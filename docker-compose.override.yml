@@ -12,9 +12,10 @@ services:
     ports:
       - "27018:27017"
 
-#  rabbitmq:
-#    ports:
-#      - "5682:5682"
+  rabbitmq:
+    ports:
+      - "15672:15672"
+      - "5672:5672"
 
   core.api:
     environment:

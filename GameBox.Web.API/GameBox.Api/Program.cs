@@ -1,4 +1,5 @@
 ﻿using GameBox.Application.Contracts;
+using MediatR;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,10 +17,14 @@ namespace GameBox.Api
             {
                 Task.Run(async () => 
                     {
+                        var mediator = scope
+                            .ServiceProvider
+                            .GetService<IMediator>();
+
                         await scope
                             .ServiceProvider
                             .GetService<IGameBoxDbContext>()
-                            .SeedAsync();
+                            .SeedAsync(mediator);
                     })
                     .GetAwaiter()
                     .GetResult();

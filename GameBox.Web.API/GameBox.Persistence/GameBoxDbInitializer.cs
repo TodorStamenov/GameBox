@@ -1,5 +1,7 @@
 ﻿using GameBox.Application.Infrastructure;
+using GameBox.Application.Orders.Commands.CreateOrder;
 using GameBox.Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,64 +20,73 @@ namespace GameBox.Persistence
 
         private static readonly Random random = new Random();
 
-        public static async Task SeedDatabaseAsync(GameBoxDbContext db)
-        {
-            await db.Database.EnsureCreatedAsync();
+        private readonly GameBoxDbContext db;
+        private readonly IMediator mediator;
 
-            await SeedRolesAsync(db, Constants.Common.Admin);
-            await SeedUsersAsync(db, UsersCount);
-            await SeedUsersAsync(db, AdminsCount, Constants.Common.Admin);
-            await SeedCategoriesAsync(db, CategoriesCount);
-            await SeedGamesAsync(db, GamesCount);
-            await SeedOrdersAsync(db);
-            await SeedWishlistsAsync(db);
+        public GameBoxDbInitializer(GameBoxDbContext db, IMediator mediator)
+        {
+            this.db = db;
+            this.mediator = mediator;
         }
 
-        private static async Task SeedRolesAsync(GameBoxDbContext db, string roleName)
+        public async Task SeedDatabaseAsync()
         {
-            if (await db.Roles.AnyAsync())
+            await this.db.Database.EnsureCreatedAsync();
+
+            await this.SeedRolesAsync(Constants.Common.Admin);
+            await this.SeedUsersAsync(UsersCount);
+            await this.SeedUsersAsync(AdminsCount, Constants.Common.Admin);
+            await this.SeedCategoriesAsync(CategoriesCount);
+            await this.SeedGamesAsync(GamesCount);
+            await this.SeedOrdersAsync();
+            await this.SeedWishlistsAsync();
+        }
+
+        private async Task SeedRolesAsync(string roleName)
+        {
+            if (await this.db.Roles.AnyAsync())
             {
                 return;
             }
 
             var role = new Role { Name = roleName };
 
-            await db.Roles.AddAsync(role);
-            await db.SaveChangesAsync();
+            await this.db.Roles.AddAsync(role);
+            await this.db.SaveChangesAsync();
         }
 
-        private static async Task SeedUsersAsync(GameBoxDbContext db, int usersCount)
+        private async Task SeedUsersAsync(int usersCount)
         {
-            if (await db.Users.AnyAsync(u => !u.Roles.Any()))
+            if (await this.db.Users.AnyAsync(u => !u.Roles.Any()))
             {
                 return;
             }
 
             for (int i = 1; i <= usersCount; i++)
             {
-                byte[] salt = GenerateSalt();
+                byte[] salt = this.GenerateSalt();
 
                 var user = new User
                 {
                     Username = $"User{i}",
-                    Password = HashPassword("123", salt),
+                    Password = this.HashPassword("123", salt),
                     Salt = salt
                 };
 
-                await db.Users.AddAsync(user);
+                await this.db.Users.AddAsync(user);
             }
 
-            await db.SaveChangesAsync();
+            await this.db.SaveChangesAsync();
         }
 
-        private static async Task SeedUsersAsync(GameBoxDbContext db, int usersCount, string role)
+        private async Task SeedUsersAsync(int usersCount, string role)
         {
-            if (await db.Users.AnyAsync(u => u.Roles.Any(r => r.Role.Name == role)))
+            if (await this.db.Users.AnyAsync(u => u.Roles.Any(r => r.Role.Name == role)))
             {
                 return;
             }
 
-            Guid roleId = await db
+            Guid roleId = await this.db
                 .Roles
                 .Where(r => r.Name == role)
                 .Select(r => r.Id)
@@ -88,12 +99,12 @@ namespace GameBox.Persistence
 
             for (int i = 1; i <= usersCount; i++)
             {
-                byte[] salt = GenerateSalt();
+                byte[] salt = this.GenerateSalt();
 
                 var user = new User
                 {
                     Username = $"{role}{i}",
-                    Password = HashPassword("123", salt),
+                    Password = this.HashPassword("123", salt),
                     Salt = salt
                 };
 
@@ -104,15 +115,15 @@ namespace GameBox.Persistence
 
                 user.Roles.Add(userRole);
 
-                await db.Users.AddAsync(user);
+                await this.db.Users.AddAsync(user);
             }
 
-            await db.SaveChangesAsync();
+            await this.db.SaveChangesAsync();
         }
 
-        private static async Task SeedCategoriesAsync(GameBoxDbContext db, int categoriesCount)
+        private async Task SeedCategoriesAsync(int categoriesCount)
         {
-            if (await db.Categories.AnyAsync())
+            if (await this.db.Categories.AnyAsync())
             {
                 return;
             }
@@ -121,20 +132,20 @@ namespace GameBox.Persistence
             {
                 var category = new Category { Name = $"Category{i}" };
 
-                await db.Categories.AddAsync(category);
+                await this.db.Categories.AddAsync(category);
             }
 
-            await db.SaveChangesAsync();
+            await this.db.SaveChangesAsync();
         }
 
-        private static async Task SeedGamesAsync(GameBoxDbContext db, int gamesCount)
+        private async Task SeedGamesAsync(int gamesCount)
         {
-            if (await db.Games.AnyAsync())
+            if (await this.db.Games.AnyAsync())
             {
                 return;
             }
 
-            var categoryIds = await db
+            var categoryIds = await this.db
                 .Categories
                 .Select(c => c.Id)
                 .ToListAsync();
@@ -166,21 +177,21 @@ namespace GameBox.Persistence
                         "lectus at massa convallis fringilla.Morbi commodo ex enim, nec interdum nisl viverra id."
                 };
 
-                await db.Games.AddAsync(game);
+                await this.db.Games.AddAsync(game);
             }
 
-            await db.SaveChangesAsync();
+            await this.db.SaveChangesAsync();
         }
 
-        private static async Task SeedOrdersAsync(GameBoxDbContext db)
+        private async Task SeedOrdersAsync()
         {
-            if (await db.Orders.AnyAsync())
+            if (await this.db.Orders.AnyAsync())
             {
                 return;
             }
 
-            var users = await db.Users.ToListAsync();
-            var games = await db.Games.ToListAsync();
+            var users = await this.db.Users.ToListAsync();
+            var games = await this.db.Games.ToListAsync();
 
             foreach (var user in users)
             {
@@ -217,18 +228,32 @@ namespace GameBox.Persistence
                 }
             }
 
-            await db.SaveChangesAsync();
+            await this.db.SaveChangesAsync();
+
+            var orders = this.db.Orders
+                .Select(o => new OrderCreated
+                {
+                    Username = o.User.Username,
+                    Price = o.Price,
+                    GamesCount = o.Games.Count,
+                    TimeStamp = o.TimeStamp
+                });
+
+            foreach (var order in orders)
+            {
+                await this.mediator.Publish(order);
+            }
         }
 
-        private static async Task SeedWishlistsAsync(GameBoxDbContext db)
+        private async Task SeedWishlistsAsync()
         {
-            if (await db.Wishlists.AnyAsync())
+            if (await this.db.Wishlists.AnyAsync())
             {
                 return;
             }
 
-            var users = await db.Users.ToListAsync();
-            var gameIds = await db.Games.Select(g => g.Id).ToListAsync();
+            var users = await this.db.Users.ToListAsync();
+            var gameIds = await this.db.Games.Select(g => g.Id).ToListAsync();
 
             foreach (var user in users)
             {
@@ -254,10 +279,10 @@ namespace GameBox.Persistence
                 }
             }
 
-            await db.SaveChangesAsync();
+            await this.db.SaveChangesAsync();
         }
 
-        private static byte[] GenerateSalt()
+        private byte[] GenerateSalt()
         {
             byte[] salt = new byte[128 / 8];
             using (var rng = RandomNumberGenerator.Create())
@@ -268,7 +293,7 @@ namespace GameBox.Persistence
             return salt;
         }
 
-        private static string HashPassword(string password, byte[] salt)
+        private string HashPassword(string password, byte[] salt)
         {
             return Convert.ToBase64String(
                 KeyDerivation.Pbkdf2(

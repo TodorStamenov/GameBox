@@ -8,6 +8,8 @@ COPY ["GameBox.Web.API/GameBox.Api/GameBox.Api.csproj", "GameBox.Api/"]
 COPY ["GameBox.Web.API/GameBox.Application/GameBox.Application.csproj", "GameBox.Application/"]
 COPY ["GameBox.Web.API/GameBox.Domain/GameBox.Domain.csproj", "GameBox.Domain/"]
 COPY ["GameBox.Web.API/GameBox.Persistence/GameBox.Persistence.csproj", "GameBox.Persistence/"]
+COPY ["GameBox.Web.API/GameBox.Infrastructure/GameBox.Infrastructure.csproj", "GameBox.Infrastructure/"]
+
 RUN dotnet restore "GameBox.Api/GameBox.Api.csproj"
 WORKDIR "/src/GameBox.Api"
 COPY . .
