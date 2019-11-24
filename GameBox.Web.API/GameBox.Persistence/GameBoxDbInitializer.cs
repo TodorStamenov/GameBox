@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace GameBox.Persistence
@@ -21,7 +20,6 @@ namespace GameBox.Persistence
 
         public static async Task SeedDatabaseAsync(GameBoxDbContext db)
         {
-            Thread.Sleep(3000);
             await db.Database.EnsureCreatedAsync();
 
             await SeedRolesAsync(db, Constants.Common.Admin);
