@@ -7,7 +7,7 @@ import { constants } from '../../../common';
 import { IUsersListModel } from '../models/users-list.model';
 import { ICreateUserModel } from '../models/create-user.model';
 
-const usersUrl = constants.host + 'users/';
+const usersUrl = constants.apiHost + 'users/';
 
 @Injectable({
   providedIn: 'root'

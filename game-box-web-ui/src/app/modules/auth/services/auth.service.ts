@@ -11,7 +11,7 @@ import { IChangePasswordModel } from '../../auth/models/change-password.model';
 import { constants } from '../../../common';
 import { IUser } from '../models/user.model';
 
-const authUrl = constants.host + 'account/';
+const authUrl = constants.apiHost + 'account/';
 
 @Injectable({
   providedIn: 'root'

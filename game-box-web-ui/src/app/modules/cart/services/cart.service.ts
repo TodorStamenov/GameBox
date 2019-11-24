@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { constants } from 'src/app/common';
 import { IGameListItemModel } from '../../core/models/game-list-item.model';
 
-const cartUrl = constants.host + 'cart/';
+const cartUrl = constants.apiHost + 'cart/';
 
 @Injectable({
   providedIn: 'root'

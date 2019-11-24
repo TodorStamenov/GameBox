@@ -9,7 +9,7 @@ import { IGamesListModel } from '../models/games-list.model';
 import { IGamesHomeListModel } from '../models/games-home-list.model';
 import { IGameDetailsModel } from '../models/game-details.model';
 
-const gamesUrl = constants.host + 'games/';
+const gamesUrl = constants.apiHost + 'games/';
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,5 @@
 export const constants = {
-  host: 'http://localhost:5000/api/',
-  ordersHost: 'http://localhost:1337/api/',
-  graphQl: 'http://localhost:5000/graphql'
+  apiHost: 'http://192.168.99.100:5000/api/',
+  nodeHost: 'http://192.168.99.100:1337/api/',
+  graphQl: 'http://192.168.99.100:5000/graphql'
 };

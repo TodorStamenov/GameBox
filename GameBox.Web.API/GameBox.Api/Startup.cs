@@ -43,8 +43,10 @@ namespace GameBox.Api
             services.AddMediatR(typeof(CreateCategoryCommandValidator).GetTypeInfo().Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
 
+            var connString = "Server=tcp:192.168.99.100,5433;Initial Catalog=GameBoxCore;User Id=sa;Password=Your_password@123";
+
             services.AddDbContext<IGameBoxDbContext, GameBoxDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(connString));
 
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

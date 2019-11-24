@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { constants } from 'src/app/common';
 import { IOrdersListModel } from '../models/orders-list.model';
 
-const ordersUrl = constants.ordersHost + 'orders';
+const ordersUrl = constants.nodeHost + 'orders';
 
 @Injectable({
   providedIn: 'root'

@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  sql.data:
+    environment:
+      SA_PASSWORD: "Your_password@123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "5433:1433"
+
+  nosql.data:
+    ports:
+      - "27018:27017"
+
+#  rabbitmq:
+#    ports:
+#      - "5682:5682"
+
+  core.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5000:80"
+
+  node.api:
+    ports:
+      - "1337:1337"
+
+# web.ui:
+#   ports:
+#     - "4242:4242"

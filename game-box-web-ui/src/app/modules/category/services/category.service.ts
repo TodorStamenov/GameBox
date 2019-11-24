@@ -8,7 +8,7 @@ import { ICategoriesListModel } from '../models/categories-list.model';
 import { ICategoryBindingModel } from '../models/category-binding.model';
 import { ICategoryMenuModel } from '../models/category-menu.model';
 
-const categoriesUrl = constants.host + 'categories/';
+const categoriesUrl = constants.apiHost + 'categories/';
 
 @Injectable({
   providedIn: 'root'
