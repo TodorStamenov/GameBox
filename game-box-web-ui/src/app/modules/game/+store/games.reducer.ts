@@ -10,8 +10,8 @@ const initialState: IGamesState = {
   allHome: [],
   byCategory: [],
   owned: [],
-  detail: null,
-  toEdit: null
+  details: null,
+  byId: null
 };
 
 function getAllGames(state: IGamesState, allGames: IGamesListModel[]): IGamesState {
@@ -45,14 +45,14 @@ function getAllOwnedGames(state: IGamesState, allOwnedGames: IGamesHomeListModel
 function getGameDetail(state: IGamesState, gameDetail: IGameDetailsModel): IGamesState {
   return {
     ...state,
-    detail: gameDetail
+    details: gameDetail
   };
 }
 
 function getGameToEdit(state: IGamesState, gameToEdit: IGameBindingModel): IGamesState {
   return {
     ...state,
-    toEdit: gameToEdit
+    byId: gameToEdit
   };
 }
 
@@ -91,10 +91,10 @@ export function gamesReducer(state = initialState, action: Types): IGamesState {
     case GameActionTypes.GetAllOwnedGames:
       return getAllOwnedGames(state, action.payload);
 
-    case GameActionTypes.GetGameDetail:
+    case GameActionTypes.GetGameDetails:
       return getGameDetail(state, action.payload);
 
-    case GameActionTypes.GetGameToEdit:
+    case GameActionTypes.GetGameById:
       return getGameToEdit(state, action.payload);
 
     case GameActionTypes.ClearGamesHome:

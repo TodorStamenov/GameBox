@@ -4,12 +4,12 @@ import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
 
-import { IAppState } from 'src/app/store/app.state';
+import { IState } from '../../+store/cart.state';
 import { IGameListItemModel } from '../../../core/models/game-list-item.model';
 import { CartService } from '../../services/cart.service';
 import { OrderService } from 'src/app/modules/order/services/order.service';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
-import { LoadAllItems, ClearItems, RemoveItem  } from 'src/app/store/cart/cart.actions';
+import { LoadAllItems, ClearItems, RemoveItem, UnloadItems, UnloadItem  } from 'src/app/modules/cart/+store/cart.actions';
 
 @Component({
   selector: 'app-cart',
@@ -24,7 +24,7 @@ export class CartComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private orderService: OrderService,
     private router: Router,
-    private store: Store<IAppState>
+    private store: Store<IState>
   ) { }
 
   public ngOnInit(): void {
@@ -46,20 +46,17 @@ export class CartComponent implements OnInit, OnDestroy {
 
     this.orderService.createOrder$(this.cartService.cart)
       .subscribe(() => {
-        this.cartService.clear();
-        this.store.dispatch(new ClearItems());
+        this.store.dispatch(new UnloadItems());
         this.router.navigate(['/games/owned']);
       });
   }
 
   public onRemoveItem(id: string): void {
-    this.store.dispatch(new RemoveItem(id));
-    this.cartService.removeItem(id);
+    this.store.dispatch(new UnloadItem(id));
   }
 
   public onClear(): void {
-    this.cartService.clear();
-    this.store.dispatch(new ClearItems());
+    this.store.dispatch(new UnloadItems());
   }
 
   public calculateTotalPrice(games: IGameListItemModel[]): number {

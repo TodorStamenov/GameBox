@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 
 import { IUsersListModel } from '../../models/users-list.model';
 import { UserService } from '../../services/user.service';
-import { IAppState } from 'src/app/store/app.state';
-import { LoadAllUsers } from 'src/app/store/users/users.actions';
+import { LoadAllUsers } from 'src/app/modules/user/+state/users.actions';
+import { IState } from '../../+state/users.state';
 
 @Component({
   selector: 'app-users-list',
@@ -18,7 +18,7 @@ export class UsersListComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private store: Store<IAppState>
+    private store: Store<IState>
   ) { }
 
   public ngOnInit(): void {

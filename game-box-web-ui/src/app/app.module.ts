@@ -14,9 +14,9 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { AppComponent } from './app.component';
 import { CoreModule } from './modules/core/core.module';
-import { appReducers } from './store/app.reducers';
-import { appEffects } from './store/app.effects';
 import { GraphQLModule } from './graphql.module';
+import { categoriesReducer } from './store/+store/category/categories.reducer';
+import { CategoriesEffects } from './store/+store/category/categories.effects';
 
 @NgModule({
   declarations: [
@@ -29,8 +29,12 @@ import { GraphQLModule } from './graphql.module';
     CoreModule,
     AppRoutingModule,
     ToastrModule.forRoot(),
-    StoreModule.forRoot(appReducers),
-    EffectsModule.forRoot(appEffects),
+    StoreModule.forRoot({
+      categories: categoriesReducer
+    }),
+    EffectsModule.forRoot([
+      CategoriesEffects
+    ]),
     StoreDevtoolsModule.instrument({
       name: 'Game Box App Devtools',
       maxAge: 25,

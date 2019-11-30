@@ -1,19 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
 import { GameService } from '../../services/game.service';
-import { IAppState } from 'src/app/store/app.state';
 import { IGameBindingModel } from '../../models/game-binding.model';
+import { IState } from '../../+store/games.state';
+import { filter, takeWhile } from 'rxjs/operators';
+import { LoadGameById } from '../../+store/games.actions';
 
 @Component({
   selector: 'app-delete-game',
   templateUrl: './delete-game.component.html'
 })
-export class DeleteGameComponent implements OnInit {
-  public gameId: string;
+export class DeleteGameComponent implements OnInit, OnDestroy {
+  private componentActive = true;
 
+  public gameId: string;
   public deleteGameForm: FormGroup;
 
   constructor(
@@ -21,12 +24,14 @@ export class DeleteGameComponent implements OnInit {
     private gameService: GameService,
     private router: Router,
     private route: ActivatedRoute,
-    private store: Store<IAppState>
+    private store: Store<IState>
   ) {
     this.gameId = this.route.snapshot.params['id'];
   }
 
   public ngOnInit(): void {
+    this.store.dispatch(new LoadGameById(this.gameId));
+
     this.deleteGameForm = this.fb.group({
       'title': new FormControl({ value: '', disabled: true }),
       'description': new FormControl({ value: '', disabled: true }),
@@ -38,28 +43,33 @@ export class DeleteGameComponent implements OnInit {
       'categoryId': new FormControl({ value: '', disabled: true })
     });
 
-    this.gameService
-      .getGame$(this.gameId)
-      .subscribe(() => {
-        this.store.pipe(
-          select(s => s.games.toEdit)
-        )
-        .subscribe((game: IGameBindingModel) => this.deleteGameForm.setValue({
-          title: game.title,
-          description: game.description,
-          thumbnailUrl: game.thumbnailUrl,
-          price: game.price,
-          size: game.size,
-          videoId: game.videoId,
-          releaseDate: game.releaseDate,
-          categoryId: game.categoryId
-        }));
-      });
+    this.store.pipe(
+      select(s => s.games.byId),
+      filter(g => !!g),
+      takeWhile(() => this.componentActive)
+    )
+    .subscribe((game: IGameBindingModel) => this.setupDeleteForm(game));
+  }
+
+  public ngOnDestroy(): void {
+    this.componentActive = false;
   }
 
   public deleteGame(): void {
-    this.gameService
-      .deleteGame$(this.gameId)
+    this.gameService.deleteGame$(this.gameId)
       .subscribe(() => this.router.navigate(['/games/all']));
+  }
+
+  private setupDeleteForm(game: IGameBindingModel): void {
+    this.deleteGameForm.setValue({
+      title: game.title,
+      description: game.description,
+      thumbnailUrl: game.thumbnailUrl,
+      price: game.price,
+      size: game.size,
+      videoId: game.videoId,
+      releaseDate: game.releaseDate,
+      categoryId: game.categoryId
+    });
   }
 }

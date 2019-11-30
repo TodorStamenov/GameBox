@@ -8,7 +8,9 @@
 
 <app-game-list-items
   [games]="games$ | async"
-  (removeItemClick)="onRemoveItem($event)">
+  [showBuyButton]="true"
+  (removeItemClick)="onRemoveItem($event)"
+  (buyItemClick)="onBuyItem($event)">
 </app-game-list-items>
 
 <div *ngIf="(games$ | async).length > 0" class="row">

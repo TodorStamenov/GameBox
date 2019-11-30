@@ -3,9 +3,9 @@ import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
 
-import { IAppState } from 'src/app/store/app.state';
 import { ICategoriesListModel } from '../../models/categories-list.model';
-import { LoadAllCategories } from 'src/app/store/categories/categories.actions';
+import { IAppState } from 'src/app/store/app.state';
+import { LoadAllCategories } from 'src/app/store/+store/category/categories.actions';
 
 @Component({
   selector: 'app-categories-list',

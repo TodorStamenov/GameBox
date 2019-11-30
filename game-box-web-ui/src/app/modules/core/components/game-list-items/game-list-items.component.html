@@ -12,6 +12,9 @@
     <h2 class="price">
       {{ game.price | currency }}
     </h2>
+    <button *ngIf="showBuyButton" (click)="onBuyItem(game.id)" class="btn btn-success">
+      Buy
+    </button>
     <button (click)="onRemoveItem(game.id)" class="btn btn-danger btn-remove">
       Remove
     </button>

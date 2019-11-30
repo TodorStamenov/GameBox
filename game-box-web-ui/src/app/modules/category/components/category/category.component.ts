@@ -9,7 +9,7 @@ import { CategoryService } from '../../services/category.service';
 import { FormService } from 'src/app/modules/core/services/form.service';
 import { ActionType } from '../../../core/enums/action-type.enum';
 import { IAppState } from 'src/app/store/app.state';
-import { LoadCategoryToEdit, LoadCategoryNames } from 'src/app/store/categories/categories.actions';
+import { LoadCategoryToEdit, LoadCategoryNames } from 'src/app/store/+store/category/categories.actions';
 
 @Component({
   selector: 'app-category',

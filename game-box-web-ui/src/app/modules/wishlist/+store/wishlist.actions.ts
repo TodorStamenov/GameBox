@@ -4,7 +4,9 @@ import { IGameListItemModel } from 'src/app/modules/core/models/game-list-item.m
 export enum WishlistActionTypes {
   LoadAllItems = '[WISHLIST] Load All Items',
   GetAllItems = '[WISHLIST] Get All Items',
+  UnloadItem = '[WISHLIST] Unload Item',
   RemoveItem = '[WISHLIST] Remove Item',
+  UnloadItems = '[WISHLIST] Unload Items',
   ClearItems = '[WISHLIST] Clear Items'
 }
 
@@ -17,9 +19,18 @@ export class GetAllItems implements Action {
   constructor(public payload: IGameListItemModel[]) { }
 }
 
+export class UnloadItem implements Action {
+  readonly type = WishlistActionTypes.UnloadItem;
+  constructor(public payload: string) { }
+}
+
 export class RemoveItem implements Action {
   readonly type = WishlistActionTypes.RemoveItem;
   constructor(public payload: string) { }
+}
+
+export class UnloadItems implements Action {
+  readonly type = WishlistActionTypes.UnloadItems;
 }
 
 export class ClearItems implements Action {
@@ -28,5 +39,7 @@ export class ClearItems implements Action {
 
 export type Types = LoadAllItems
   | GetAllItems
-  | ClearItems
-  | RemoveItem;
+  | UnloadItem
+  | RemoveItem
+  | UnloadItems
+  | ClearItems;

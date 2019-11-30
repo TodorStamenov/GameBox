@@ -4,7 +4,9 @@ import { IGameListItemModel } from 'src/app/modules/core/models/game-list-item.m
 export enum CartActionTypes {
   LoadAllItems = '[CART] Load All Items',
   GetAllItems = '[CART] Get All Items',
+  UnloadItem = '[CART] Unload Item',
   RemoveItem = '[CART] Remove Item',
+  UnloadItems = '[CART] Unload Items',
   ClearItems = '[CART] Clear Items'
 }
 
@@ -17,9 +19,18 @@ export class GetAllItems implements Action {
   constructor(public payload: IGameListItemModel[]) { }
 }
 
+export class UnloadItem implements Action {
+  readonly type = CartActionTypes.UnloadItem;
+  constructor(public payload: string) { }
+}
+
 export class RemoveItem implements Action {
   readonly type = CartActionTypes.RemoveItem;
   constructor(public payload: string) { }
+}
+
+export class UnloadItems implements Action {
+  readonly type = CartActionTypes.UnloadItems;
 }
 
 export class ClearItems implements Action {
@@ -28,5 +39,7 @@ export class ClearItems implements Action {
 
 export type Types = LoadAllItems
   | GetAllItems
+  | UnloadItem
   | ClearItems
+  | UnloadItems
   | RemoveItem;

@@ -14,10 +14,10 @@ export enum GameActionTypes {
   GetAllGamesByCategory = '[GAMES] Get All Games By Category',
   LoadAllOwnedGames = '[GAMES] Load All Owned Games',
   GetAllOwnedGames = '[GAMES] Get All Owned Games',
-  LoadGameDetail = '[GAMES] Load Detail',
-  GetGameDetail = '[GAMES] Get Detail',
-  LoadGameToEdit = '[GAMES] Load To Edit',
-  GetGameToEdit = '[GAMES] Get To Edit',
+  LoadGameDetails = '[GAMES] Load Detail',
+  GetGameDetails = '[GAMES] Get Detail',
+  LoadGameById = '[GAMES] Load Game By Id',
+  GetGameById = '[GAMES] Get Game By Id',
   ClearGamesHome = '[GAMES] Clear Games Home',
   ClearGamesByCategory = '[GAMES] Clear Games By Category',
   ClearOwnedGames = '[GAMES] Clear Owned Games',
@@ -63,23 +63,23 @@ export class GetAllOwnedGames implements Action {
   constructor(public payload: IGamesHomeListModel[]) { }
 }
 
-export class LoadGameDetail implements Action {
-  readonly type = GameActionTypes.LoadGameDetail;
+export class LoadGameDetails implements Action {
+  readonly type = GameActionTypes.LoadGameDetails;
   constructor(public payload: string) { }
 }
 
-export class GetGameDetail implements Action {
-  readonly type = GameActionTypes.GetGameDetail;
+export class GetGameDetails implements Action {
+  readonly type = GameActionTypes.GetGameDetails;
   constructor(public payload: IGameDetailsModel) { }
 }
 
-export class LoadGameToEdit implements Action {
-  readonly type = GameActionTypes.LoadGameToEdit;
+export class LoadGameById implements Action {
+  readonly type = GameActionTypes.LoadGameById;
   constructor(public payload: string) { }
 }
 
-export class GetGameToEdit implements Action {
-  readonly type = GameActionTypes.GetGameToEdit;
+export class GetGameById implements Action {
+  readonly type = GameActionTypes.GetGameById;
   constructor(public payload: IGameBindingModel) { }
 }
 
@@ -103,10 +103,10 @@ export type Types = LoadAllGames
   | GetAllGamesByCategory
   | LoadAllOwnedGames
   | GetAllOwnedGames
-  | LoadGameDetail
-  | GetGameDetail
-  | LoadGameToEdit
-  | GetGameToEdit
+  | LoadGameDetails
+  | GetGameDetails
+  | LoadGameById
+  | GetGameById
   | ClearGamesHome
   | ClearGamesByCategory
   | ClearOwnedGames;

@@ -9,9 +9,9 @@ import { tap, filter } from 'rxjs/operators';
 import { IGameDetailsModel } from '../../models/game-details.model';
 import { CartService } from '../../../cart/services/cart.service';
 import { WishlistService } from 'src/app/modules/wishlist/services/wishlist.service';
-import { IAppState } from 'src/app/store/app.state';
-import { LoadGameDetail } from 'src/app/store/games/games.actions';
+import { LoadGameDetails } from 'src/app/modules/game/+store/games.actions';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
+import { IState } from '../../+store/games.state';
 
 @Component({
   selector: 'app-game-details',
@@ -30,16 +30,16 @@ export class GameDetailsComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private cartService: CartService,
     private wishlistService: WishlistService,
-    private store: Store<IAppState>,
+    private store: Store<IState>,
     public authService: AuthService
   ) {
     this.gameId = this.route.snapshot.params['id'];
   }
 
   public ngOnInit(): void {
-    this.store.dispatch(new LoadGameDetail(this.gameId));
+    this.store.dispatch(new LoadGameDetails(this.gameId));
     this.game$ = this.store.pipe(
-      select(s => s.games.detail),
+      select(s => s.games.details),
       filter(g => !!g),
       tap((game: IGameDetailsModel) => {
         this.videoId = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${game.videoId}`);
@@ -48,13 +48,12 @@ export class GameDetailsComponent implements OnInit {
   }
 
   public onAddItemToCart(id: string): void {
-    this.cartService.addItem(id);
-    this.router.navigate(['/cart/items']);
+    this.cartService.addItem$(id)
+      .subscribe(() => this.router.navigate(['/cart/items']));
   }
 
   public onAddItemToWishlist(id: string): void {
-    this.wishlistService
-      .addItem$(id)
+    this.wishlistService.addItem$(id)
       .subscribe(() => this.router.navigate(['/wishlist/items']));
   }
 }

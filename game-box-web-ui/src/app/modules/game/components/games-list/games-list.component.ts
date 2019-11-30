@@ -3,9 +3,9 @@ import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
 
-import { IAppState } from 'src/app/store/app.state';
 import { IGamesListModel } from '../../models/games-list.model';
-import { LoadAllGames } from 'src/app/store/games/games.actions';
+import { LoadAllGames } from 'src/app/modules/game/+store/games.actions';
+import { IState } from '../../+store/games.state';
 
 @Component({
   selector: 'app-games-list',
@@ -15,7 +15,7 @@ import { LoadAllGames } from 'src/app/store/games/games.actions';
 export class GamesListComponent implements OnInit {
   public games$: Observable<IGamesListModel[]>;
 
-  constructor(private store: Store<IAppState>) { }
+  constructor(private store: Store<IState>) { }
 
   public ngOnInit(): void {
     this.searchGames('');

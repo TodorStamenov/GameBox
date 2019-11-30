@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { IGamesHomeListModel } from '../../models/games-home-list.model';
-import { IAppState } from 'src/app/store/app.state';
-import { LoadAllGamesByCategory, ClearGamesByCategory } from 'src/app/store/games/games.actions';
+import { LoadAllGamesByCategory, ClearGamesByCategory } from 'src/app/modules/game/+store/games.actions';
+import { IState } from '../../+store/games.state';
 
 @Component({
   selector: 'app-category-games',
@@ -21,7 +21,7 @@ export class CategoryGamesComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private store: Store<IAppState>
+    private store: Store<IState>
   ) {
     this.categoryId = this.route.snapshot.params['categoryId'];
   }

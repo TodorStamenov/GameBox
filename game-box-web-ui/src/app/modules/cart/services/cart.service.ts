@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { constants } from 'src/app/common';
 import { IGameListItemModel } from '../../core/models/game-list-item.model';
@@ -26,11 +26,12 @@ export class CartService {
     localStorage.setItem('cart', JSON.stringify(Array.from(new Set(items))));
   }
 
-  public addItem(id: string): void {
+  public addItem$(id: string): Observable<string> {
     this.cart = [...this.cart, id];
+    return of(id);
   }
 
-  public removeItem(id: string): void {
+  public removeItem$(id: string): Observable<string> {
     const items = new Set(this.cart);
 
     if (!items || !items.has(id)) {
@@ -39,10 +40,13 @@ export class CartService {
 
     items.delete(id);
     this.cart = Array.from(items);
+
+    return of(id);
   }
 
-  public clear(): void {
+  public clear$(): Observable<[]> {
     this.cart = [];
+    return of([]);
   }
 
   public getCart$(): Observable<IGameListItemModel[]> {

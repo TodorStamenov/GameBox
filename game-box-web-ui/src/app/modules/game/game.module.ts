@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 import { GameRoutingModule } from './game-routing.module';
 import { GamesListComponent } from './components/games-list/games-list.component';
@@ -13,6 +15,8 @@ import { GameCardListComponent } from './components/shared/game-card-list/game-c
 import { LoadMoreComponent } from './components/shared/load-more/load-more.component';
 import { CategoryGamesComponent } from './components/category-games/category-games.component';
 import { CoreModule } from '../core/core.module';
+import { gamesReducer } from './+store/games.reducer';
+import { GamesEffects } from './+store/games.effects';
 
 @NgModule({
   declarations: [
@@ -30,7 +34,9 @@ import { CoreModule } from '../core/core.module';
     CommonModule,
     CoreModule,
     ReactiveFormsModule,
-    GameRoutingModule
+    GameRoutingModule,
+    StoreModule.forFeature('games', gamesReducer),
+    EffectsModule.forFeature([GamesEffects])
   ]
 })
 export class GameModule { }

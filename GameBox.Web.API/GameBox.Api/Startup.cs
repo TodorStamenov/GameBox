@@ -3,7 +3,6 @@ using FluentValidation.AspNetCore;
 using GameBox.Api.Filters;
 using GameBox.Application.Categories.Commands.CreateCategory;
 using GameBox.Application.Contracts;
-using GameBox.Application.Contracts.Services;
 using GameBox.Application.GraphQL;
 using GameBox.Application.Infrastructure;
 using GameBox.Application.Infrastructure.AutoMapper;
@@ -44,14 +43,12 @@ namespace GameBox.Api
             services.AddMediatR(typeof(CreateCategoryCommandValidator).GetTypeInfo().Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
 
-            services.AddSingleton<IMessageQueueSenderService, MessageQueueSenderService>();
-
-            // services.AddDomainServices(typeof(MessageQueueSenderService).Assembly);
+            services.AddDomainServices(typeof(MessageQueueSenderService).Assembly);
 
             var connString = "Server=tcp:192.168.99.100,5433;Initial Catalog=GameBoxCore;User Id=sa;Password=Your_password@123";
+            // var connString = "Server=NINJA\\SQLEXPRESS;Database=GameBoxCore;Integrated Security=True;Trusted_Connection=True;MultipleActiveResultSets=true";
 
-            services.AddDbContext<IGameBoxDbContext, GameBoxDbContext>(options =>
-                options.UseSqlServer(connString));
+            services.AddDbContext<IGameBoxDbContext, GameBoxDbContext>(options => options.UseSqlServer(connString));
 
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

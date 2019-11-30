@@ -5,8 +5,8 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 import { IOrdersListModel } from '../../models/orders-list.model';
-import { IAppState } from 'src/app/store/app.state';
-import { LoadAllOrders } from 'src/app/store/orders/orders.actions';
+import { LoadAllOrders } from 'src/app/modules/order/+store/orders.actions';
+import { IState } from '../../+store/orders.state';
 
 @Component({
   selector: 'app-orders-list',
@@ -18,7 +18,7 @@ export class OrdersListComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private store: Store<IAppState>
+    private store: Store<IState>
   ) { }
 
   public ngOnInit(): void {

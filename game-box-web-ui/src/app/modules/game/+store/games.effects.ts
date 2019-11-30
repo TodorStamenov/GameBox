@@ -14,10 +14,10 @@ import {
   GetAllOwnedGames,
   LoadAllGames,
   GetAllGames,
-  LoadGameToEdit,
-  GetGameToEdit,
-  LoadGameDetail,
-  GetGameDetail
+  LoadGameById,
+  GetGameById,
+  LoadGameDetails,
+  GetGameDetails
 } from './games.actions';
 
 @Injectable()
@@ -62,17 +62,17 @@ export class GamesEffects {
 
   @Effect()
   getGameToEdit$ = this.actions$.pipe(
-    ofType(GameActionTypes.LoadGameToEdit),
-    mergeMap((action: LoadGameToEdit) => this.gameService.getGame$(action.payload).pipe(
-      map(game => new GetGameToEdit(game))
+    ofType(GameActionTypes.LoadGameById),
+    mergeMap((action: LoadGameById) => this.gameService.getGame$(action.payload).pipe(
+      map(game => new GetGameById(game))
     ))
   );
 
   @Effect()
   getGameDetails$ = this.actions$.pipe(
-    ofType(GameActionTypes.LoadGameDetail),
-    mergeMap((action: LoadGameDetail) => this.gameService.getDetails$(action.payload).pipe(
-      map(game => new GetGameDetail(game))
+    ofType(GameActionTypes.LoadGameDetails),
+    mergeMap((action: LoadGameDetails) => this.gameService.getDetails$(action.payload).pipe(
+      map(game => new GetGameDetails(game))
     ))
   );
 }

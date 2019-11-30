@@ -4,9 +4,9 @@ import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { IAppState } from 'src/app/store/app.state';
 import { IGamesHomeListModel } from '../../models/games-home-list.model';
-import { LoadAllOwnedGames, ClearOwnedGames } from 'src/app/store/games/games.actions';
+import { LoadAllOwnedGames, ClearOwnedGames } from 'src/app/modules/game/+store/games.actions';
+import { IState } from '../../+store/games.state';
 
 @Component({
   selector: 'app-owned-games',
@@ -17,7 +17,7 @@ export class OwnedGamesComponent implements OnInit, OnDestroy {
 
   public games$: Observable<IGamesHomeListModel[]>;
 
-  constructor(private store: Store<IAppState>) { }
+  constructor(private store: Store<IState>) { }
 
   public ngOnInit(): void {
     this.loadGames();

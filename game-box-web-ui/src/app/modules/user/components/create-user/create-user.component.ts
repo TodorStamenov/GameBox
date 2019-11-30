@@ -40,8 +40,7 @@ export class CreateUserComponent implements OnInit {
   }
 
   public createUser(): void {
-    this.userService
-      .createUser$(this.createUserForm.value)
+    this.userService.createUser$(this.createUserForm.value)
       .subscribe(() => this.router.navigate(['/users/all']));
   }
 }

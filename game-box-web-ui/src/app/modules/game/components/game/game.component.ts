@@ -6,14 +6,14 @@ import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, takeWhile } from 'rxjs/operators';
 
-import { IAppState } from 'src/app/store/app.state';
 import { GameService } from '../../services/game.service';
 import { FormService } from 'src/app/modules/core/services/form.service';
 import { ActionType } from '../../../core/enums/action-type.enum';
 import { IGameBindingModel } from '../../models/game-binding.model';
 import { ICategoryMenuModel } from '../../../category/models/category-menu.model';
-import { LoadCategoryNames } from 'src/app/store/categories/categories.actions';
-import { LoadGameToEdit } from 'src/app/store/games/games.actions';
+import { LoadGameById } from 'src/app/modules/game/+store/games.actions';
+import { IState } from '../../+store/games.state';
+import { LoadCategoryNames } from 'src/app/store/+store/category/categories.actions';
 
 @Component({
   selector: 'app-game',
@@ -32,7 +32,7 @@ export class GameComponent implements OnInit, OnDestroy {
     private gameService: GameService,
     private router: Router,
     private route: ActivatedRoute,
-    private store: Store<IAppState>,
+    private store: Store<IState>,
     public formService: FormService
   ) {
     this.actionType = ActionType[<string>this.route.snapshot.params['action']];
@@ -89,9 +89,9 @@ export class GameComponent implements OnInit, OnDestroy {
     });
 
     if (this.actionType === ActionType.edit) {
-      this.store.dispatch(new LoadGameToEdit(this.gameId));
+      this.store.dispatch(new LoadGameById(this.gameId));
       this.store.pipe(
-        select(s => s.games.toEdit),
+        select(s => s.games.byId),
         filter(g => !!g),
         takeWhile(() => this.componentActive)
       )
@@ -105,12 +105,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
   public saveGame(): void {
     if (this.actionType === ActionType.create) {
-      this.gameService
-        .addGame$(this.gameForm.value)
+      this.gameService.addGame$(this.gameForm.value)
         .subscribe(() => this.navigateToHome());
     } else if (this.actionType === ActionType.edit) {
-      this.gameService
-        .editGame$(this.gameId, this.gameForm.value)
+      this.gameService.editGame$(this.gameId, this.gameForm.value)
         .subscribe(() => this.navigateToHome());
     }
   }
@@ -119,7 +117,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.router.navigate(['/games/all']);
   }
 
-  private setupEditForm(game: IGameBindingModel) {
+  private setupEditForm(game: IGameBindingModel): void {
     this.gameForm.setValue({
       title: game.title,
       description: game.description,

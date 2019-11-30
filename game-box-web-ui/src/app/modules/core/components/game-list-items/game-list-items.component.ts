@@ -20,6 +20,9 @@ import { IGameListItemModel } from '../../models/game-list-item.model';
 })
 export class GameListItemsComponent {
   @Input() public games: IGameListItemModel[] = [];
+  @Input() public showBuyButton = false;
+
+  @Output() public buyItemClick = new EventEmitter<string>();
   @Output() public removeItemClick = new EventEmitter<string>();
 
   public changeSource(event: any, videoId: string): void {
@@ -28,5 +31,9 @@ export class GameListItemsComponent {
 
   public onRemoveItem(id: string): void {
     this.removeItemClick.emit(id);
+  }
+
+  public onBuyItem(id: string): void {
+    this.buyItemClick.emit(id);
   }
 }
