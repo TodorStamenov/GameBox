@@ -1,4 +1,4 @@
-FROM node:10-alpine as builder
+FROM node:12.14.0-alpine as builder
 EXPOSE 4242
 
 WORKDIR /app

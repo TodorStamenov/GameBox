@@ -1,8 +1,8 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80/tcp
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["GameBox.Web.API/GameBox.Api/GameBox.Api.csproj", "GameBox.Api/"]
 COPY ["GameBox.Web.API/GameBox.Application/GameBox.Application.csproj", "GameBox.Application/"]

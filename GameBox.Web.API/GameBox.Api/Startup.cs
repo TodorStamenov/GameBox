@@ -15,11 +15,12 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Reflection;
 using System.Text;
 
@@ -36,6 +37,11 @@ namespace GameBox.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
+
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
             services.AddGraphQLServices();
@@ -45,47 +51,51 @@ namespace GameBox.Api
 
             services.AddDomainServices(typeof(MessageQueueSenderService).Assembly);
 
-            var connString = "Server=tcp:192.168.99.100,5433;Initial Catalog=GameBoxCore;User Id=sa;Password=Your_password@123";
-            // var connString = "Server=NINJA\\SQLEXPRESS;Database=GameBoxCore;Integrated Security=True;Trusted_Connection=True;MultipleActiveResultSets=true";
+            services.AddDbContext<IGameBoxDbContext, GameBoxDbContext>(
+                options => options.UseSqlServer(
+                    Configuration["ConnectionString"],
+                    sqlOptions => sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null)));
 
-            services.AddDbContext<IGameBoxDbContext, GameBoxDbContext>(options => options.UseSqlServer(connString));
+            services.AddCors();
 
             services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddControllers(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCategoryCommandValidator>());
+
+            services
+                .AddAuthentication(opt => 
+                {
+                    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(opt =>
+                {
+                    opt.RequireHttpsMetadata = false;
+                    opt.SaveToken = true;
                     opt.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = "http://localhost:5000",
-                        ValidAudience = "http://localhost:5000",
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.Common.SymmetricSecurityKey))
-                    });
-
-            services.AddCors(options =>
-                options.AddPolicy("EnableCORS", builder =>
-                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials().Build()));
-
-            services
-                .AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCategoryCommandValidator>());
+                    };
+                });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseRouting();
+
+            app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthentication();
-            app.UseCors("EnableCORS");
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
+
             app.UseGraphQL<GameBoxSchema>();
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
-            app.UseMvc();
         }
     }
 }

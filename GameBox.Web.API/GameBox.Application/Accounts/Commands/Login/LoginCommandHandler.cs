@@ -73,7 +73,7 @@ namespace GameBox.Application.Accounts.Commands.Login
                 Username = userInfo.Username,
                 Token = token,
                 IsAdmin = userInfo.IsAdmin,
-                ExpirationDate = DateTime.Now.AddDays(1),
+                ExpirationDate = DateTime.UtcNow.AddDays(2),
                 Message = string.Format(Constants.Common.Success, nameof(User), userInfo.Username, "Logged In")
             };
         }
