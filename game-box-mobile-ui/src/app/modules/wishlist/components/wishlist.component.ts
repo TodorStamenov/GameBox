@@ -32,8 +32,12 @@ export class WishlistComponent implements OnInit {
   }
 
   public onAddItem(id: string): void {
-    this.cartService.addItem(id);
-    this.uiService.navigate('/cart/items');
+    this.wishlistService.removeItem$(id)
+      .subscribe(() => {
+        this.reloadGames$$.next();
+        this.cartService.addItem(id);
+        this.uiService.navigate('/cart/items');
+      });
   }
 
   public onRemoveItem(id: string): void {
