@@ -11,6 +11,7 @@ services:
     image: rabbitmq:3-management-alpine
 
   core.api:
+    restart: on-failure
     build:
       context: .
       dockerfile: GameBox.Web.API/GameBox.Api/Dockerfile
