@@ -31,7 +31,7 @@ namespace GameBox.Persistence
 
         public async Task SeedDatabaseAsync()
         {
-            await this.db.Database.MigrateAsync();
+            await this.db.Database.EnsureCreatedAsync();
 
             await this.SeedRolesAsync(Constants.Common.Admin);
             await this.SeedUsersAsync(UsersCount);
