@@ -13,7 +13,7 @@ app.use((err, req, res) => {
   res.status(500).send('Server Error');
 });
 
-app.listen(config.port, () => {
-  console.log(`Server listening on port ${config.port}`);
+app.listen(config.nodePort, () => {
+  console.log(`Server listening on port ${config.nodePort}`);
   require('./modules/mq');
 });

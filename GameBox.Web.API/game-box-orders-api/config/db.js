@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const config = require('./config');
 
 module.exports = mongoose
-  .connect('mongodb://192.168.99.100:27018/game-box', {
+  .connect(`mongodb://${config.dockerHostIp}:${config.mongoPort}/game-box`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });

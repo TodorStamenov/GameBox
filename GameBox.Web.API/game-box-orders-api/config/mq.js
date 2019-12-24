@@ -1,8 +1,9 @@
 const amqp = require('amqp');
+const config = require('./config');
 
 module.exports = amqp.createConnection({
-  host: '192.168.99.100',
-  port: 5672,
+  host: config.dockerHostIp,
+  port: config.rabbitMqPort,
   login: 'guest',
   password: 'guest'
 });

@@ -20,7 +20,7 @@ services:
   core.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=tcp:192.168.99.100,5433;Initial Catalog=GameBoxCore;User Id=sa;Password=Your_password@123
+      - ConnectionString=Server=tcp:172.17.0.1,5433;Initial Catalog=GameBoxCore;User Id=sa;Password=Your_password@123
     ports:
       - "5000:80"
 

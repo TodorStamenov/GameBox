@@ -1,4 +1,4 @@
-const baseHost = '192.168.99.100';
+const baseHost = '172.17.0.1';
 
 export const constants = {
   apiHost: `http://${baseHost}:5000/api/`,

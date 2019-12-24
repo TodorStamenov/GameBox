@@ -11,7 +11,7 @@ namespace GameBox.Infrastructure
         {
             var connectionFactory = new ConnectionFactory()
             {
-                HostName = "192.168.99.100",
+                HostName = "172.17.0.1",
                 UserName = "guest",
                 Password = "guest",
                 Port = 5672,
