@@ -3,11 +3,11 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { constants } from 'src/app/common';
 import { IOrdersListModel } from '../models/orders-list.model';
+import { environment } from 'src/environments/environment';
 
-const nodeOrdersUrl = constants.nodeHost + 'orders';
-const coreOrdersUrl = constants.apiHost + 'orders';
+const nodeOrdersUrl = environment.api.nodeUrl + 'orders';
+const coreOrdersUrl = environment.api.baseUrl + 'orders';
 
 @Injectable({
   providedIn: 'root'

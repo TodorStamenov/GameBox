@@ -3,13 +3,13 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { constants } from '../../../common';
 import { IGameBindingModel } from '../models/game-binding.model';
 import { IGamesListModel } from '../models/games-list.model';
 import { IGamesHomeListModel } from '../models/games-home-list.model';
 import { IGameDetailsModel } from '../models/game-details.model';
+import { environment } from 'src/environments/environment';
 
-const gamesUrl = constants.apiHost + 'games/';
+const gamesUrl = environment.api.baseUrl + 'games/';
 
 @Injectable({
   providedIn: 'root'

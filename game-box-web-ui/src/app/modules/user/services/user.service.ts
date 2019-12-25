@@ -3,11 +3,11 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { constants } from '../../../common';
 import { IUsersListModel } from '../models/users-list.model';
 import { ICreateUserModel } from '../models/create-user.model';
+import { environment } from 'src/environments/environment';
 
-const usersUrl = constants.apiHost + 'users/';
+const usersUrl = environment.api.baseUrl + 'users/';
 
 @Injectable({
   providedIn: 'root'

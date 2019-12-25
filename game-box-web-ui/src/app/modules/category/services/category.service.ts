@@ -3,12 +3,12 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { constants } from '../../../common';
 import { ICategoriesListModel } from '../models/categories-list.model';
 import { ICategoryBindingModel } from '../models/category-binding.model';
 import { ICategoryMenuModel } from '../models/category-menu.model';
+import { environment } from 'src/environments/environment';
 
-const categoriesUrl = constants.apiHost + 'categories/';
+const categoriesUrl = environment.api.baseUrl + 'categories/';
 
 @Injectable({
   providedIn: 'root'

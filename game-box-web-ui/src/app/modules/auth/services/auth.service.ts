@@ -8,10 +8,10 @@ import { ToastrService } from 'ngx-toastr';
 import { IRegisterModel } from '../../auth/models/register.model';
 import { ILoginModel } from '../../auth/models/login.model';
 import { IChangePasswordModel } from '../../auth/models/change-password.model';
-import { constants } from '../../../common';
 import { IUser } from '../models/user.model';
+import { environment } from 'src/environments/environment';
 
-const authUrl = constants.apiHost + 'account/';
+const authUrl = environment.api.baseUrl + 'account/';
 
 @Injectable({
   providedIn: 'root'

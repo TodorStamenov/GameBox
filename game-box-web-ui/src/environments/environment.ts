@@ -2,8 +2,15 @@
 // `ng build ---prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const baseHost = '172.17.0.1';
+
 export const environment = {
-  production: false
+  production: false,
+  api: {
+    baseUrl: `http://${baseHost}:5000/api/`,
+    nodeUrl: `http://${baseHost}:1337/api/`,
+    graphQlUrl: `http://${baseHost}:5000/graphql`
+  }
 };
 
 /*

@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 
-import { constants } from 'src/app/common';
 import { IGameListItemModel } from '../../core/models/game-list-item.model';
+import { environment } from 'src/environments/environment';
 
-const cartUrl = constants.apiHost + 'cart/';
+const cartUrl = environment.api.baseUrl + 'cart/';
 
 @Injectable({
   providedIn: 'root'
