@@ -4,6 +4,8 @@
     {
         public static class Common
         {
+            public const int TokenExpiration = 2;
+            public const string UserIdClaimKey = "UserId";
             public const string SymmetricSecurityKey = "superSecretKey@345";
 
             public const string Admin = "Admin";

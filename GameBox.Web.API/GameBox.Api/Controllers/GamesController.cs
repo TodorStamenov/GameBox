@@ -52,7 +52,7 @@ namespace GameBox.Api.Controllers
         {
             var query = new GetOwnedGamesQuery
             {
-                Username = User.Identity.Name,
+                UserId = UserId,
                 LoadedGames = loadedGames
             };
             

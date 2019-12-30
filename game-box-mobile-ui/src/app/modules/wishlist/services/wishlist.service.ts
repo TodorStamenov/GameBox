@@ -20,45 +20,58 @@ export class WishlistService {
   ) { }
 
   public addItem$(id: string): Observable<void> {
-    const mutation = `mutation addGameToWishlist($gameId: ID!) {
-      addGameToWishlist(gameId: $gameId)
+    const mutation = `mutation addGameToWishlist($gameId: ID!, $userId: ID!) {
+      addGameToWishlist(gameId: $gameId, userId: $userId)
     }`;
 
     return this.http.post<void>(wishlistUrl, {
+      operationName: 'addGameToWishlist',
       query: mutation,
       variables: { gameId: id }
     });
   }
 
   public removeItem$(id: string): Observable<void> {
-    const mutation = `mutation removeGameFromWishlist ($gameId: ID!) {
-      removeGameFromWishlist(gameId: $gameId)
+    const mutation = `mutation removeGameFromWishlist ($gameId: ID!, $userId: ID!) {
+      removeGameFromWishlist(gameId: $gameId, userId: $userId)
     }`;
 
     return this.http.post<void>(wishlistUrl, {
+      operationName: 'removeGameFromWishlist',
       query: mutation,
       variables: { gameId: id }
     });
   }
 
   public clearItems$(): Observable<void> {
-    const mutation = `mutation clearGamesFromWishlist { clearGamesFromWishlist }`;
+    const mutation = `mutation clearGamesFromWishlist($userId: ID!) {
+      clearGamesFromWishlist(userId: $userId)
+    }`;
 
-    return this.http.post<void>(wishlistUrl, { query: mutation });
+    return this.http.post<void>(wishlistUrl, {
+      operationName: 'clearGamesFromWishlist',
+      query: mutation,
+      variables: {}
+    });
   }
 
   public getItems$(): Observable<IGameListItemModel[]> {
-    const query = `{
-      wishlist {
-        id
-        title
-        price
-        thumbnailUrl
-        videoId
-      }
-    }`;
+    const query = `
+      query wishlist($userId: ID!) {
+        wishlist(userId: $userId) {
+          id
+          title
+          price
+          thumbnailUrl
+          videoId
+        }
+      }`;
 
-    return this.http.post<any>(wishlistUrl, { query }).pipe(
+    return this.http.post<any>(wishlistUrl, {
+      operationName: 'wishlist',
+      query,
+      variables: {}
+    }).pipe(
       map(res => res.data.wishlist),
       map((games: IGameListItemModel[]) => games.map(game => {
         game.thumbnailUrl = this.uiService.changeThumbnailUrls(game.thumbnailUrl, game.videoId);

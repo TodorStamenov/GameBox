@@ -1,38 +1,12 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnInit,
-  OnDestroy,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef
-} from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-load-more',
   templateUrl: './load-more.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoadMoreComponent implements OnInit, OnDestroy {
-  public showButton = false;
-  private id: any;
-
-  @Input() public gamesCount: number;
+export class LoadMoreComponent {
   @Output() public loadClick = new EventEmitter<void>();
-
-  constructor(private cdr: ChangeDetectorRef) { }
-
-  public ngOnInit(): void {
-    this.id = setTimeout(() => {
-      this.showButton = true;
-      this.cdr.markForCheck();
-    }, 2000);
-  }
-
-  public ngOnDestroy(): void {
-    clearTimeout(this.id);
-  }
 
   public onLoadClick(): void {
     this.loadClick.emit();

@@ -41,14 +41,18 @@ namespace GameBox.Application.Accounts.Commands.Register
             await this.context.Users.AddAsync(user);
             await this.context.SaveChangesAsync(cancellationToken);
 
-            var token = await this.mediator.Send(new GenerateJwtTokenQuery { Username = user.Username });
+            var token = await this.mediator.Send(new GenerateJwtTokenQuery
+            {
+                Id = user.Id.ToString(),
+                Username = user.Username
+            });
 
             return new RegisterViewModel
             {
                 Username = user.Username,
                 Token = token,
                 IsAdmin = false,
-                ExpirationDate = DateTime.Now.AddDays(1),
+                ExpirationDate = DateTime.UtcNow.AddDays(Constants.Common.TokenExpiration),
                 Message = string.Format(Constants.Common.Success, nameof(User), user.Username, "Registered")
             };
         }

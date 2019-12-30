@@ -64,6 +64,7 @@ namespace GameBox.Application.Accounts.Commands.Login
 
             var token = await this.mediator.Send(new GenerateJwtTokenQuery
             {
+                Id = userInfo.Id.ToString(),
                 Username = userInfo.Username,
                 IsAdmin = userInfo.IsAdmin
             });
@@ -73,7 +74,7 @@ namespace GameBox.Application.Accounts.Commands.Login
                 Username = userInfo.Username,
                 Token = token,
                 IsAdmin = userInfo.IsAdmin,
-                ExpirationDate = DateTime.UtcNow.AddDays(2),
+                ExpirationDate = DateTime.UtcNow.AddDays(Constants.Common.TokenExpiration),
                 Message = string.Format(Constants.Common.Success, nameof(User), userInfo.Username, "Logged In")
             };
         }

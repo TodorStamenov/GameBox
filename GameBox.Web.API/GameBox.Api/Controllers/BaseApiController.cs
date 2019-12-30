@@ -1,6 +1,9 @@
-﻿using MediatR;
+﻿using GameBox.Application.Infrastructure;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 
 namespace GameBox.Api.Controllers
 {
@@ -15,12 +18,15 @@ namespace GameBox.Api.Controllers
         {
             get
             {
-                if (this.mediator == null)
-                {
-                    this.mediator = HttpContext.RequestServices.GetService<IMediator>();
-                }
+                return this.mediator ?? (this.mediator = HttpContext.RequestServices.GetService<IMediator>());
+            }
+        }
 
-                return this.mediator;
+        protected Guid UserId
+        {
+            get
+            {
+                return new Guid(User.Claims.FirstOrDefault(c => c.Type == Constants.Common.UserIdClaimKey)?.Value);
             }
         }
     }

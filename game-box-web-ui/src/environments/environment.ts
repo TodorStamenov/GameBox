@@ -9,7 +9,7 @@ export const environment = {
   api: {
     baseUrl: `http://${baseHost}:5000/api/`,
     nodeUrl: `http://${baseHost}:1337/api/`,
-    graphQlUrl: `http://${baseHost}:5000/graphql`
+    graphQlUrl: `http://${baseHost}:5000/api/graphql`
   }
 };
 

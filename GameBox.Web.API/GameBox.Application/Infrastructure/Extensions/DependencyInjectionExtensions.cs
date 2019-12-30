@@ -1,6 +1,7 @@
 ﻿using GameBox.Application.GraphQL;
 using GraphQL;
 using GraphQL.Server;
+using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using System.Reflection;
@@ -29,12 +30,11 @@ namespace GameBox.Application.Infrastructure.Extensions
         public static IServiceCollection AddGraphQLServices(this IServiceCollection services)
         {
             services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
-            services.AddScoped<GameBoxSchema>();
+            services.AddScoped<ISchema, GameBoxSchema>();
 
             services
                 .AddGraphQL(o => o.ExposeExceptions = true)
-                .AddGraphTypes(ServiceLifetime.Scoped)
-                .AddUserContextBuilder(context => context.User);
+                .AddGraphTypes(ServiceLifetime.Scoped);
 
             return services;
         }

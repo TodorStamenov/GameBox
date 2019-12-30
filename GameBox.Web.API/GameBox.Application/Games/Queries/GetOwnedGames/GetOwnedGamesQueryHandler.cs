@@ -28,8 +28,10 @@ namespace GameBox.Application.Games.Queries.GetOwnedGames
         {
             return await this.context
                 .Users
-                .Where(u => u.Username == request.Username)
-                .SelectMany(u => u.Orders.SelectMany(o => o.Games.Select(g => g.Game)))
+                .Where(u => u.Id == request.UserId)
+                .SelectMany(u => u.Orders
+                    .OrderByDescending(o => o.TimeStamp)
+                    .SelectMany(o => o.Games.Select(g => g.Game)))
                 .Distinct()
                 .OrderBy(g => g.Title)
                 .Skip(request.LoadedGames)

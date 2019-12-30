@@ -20,7 +20,8 @@ namespace GameBox.Application.Accounts.Queries.GenerateJwtToken
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, request.Username)
+                new Claim(ClaimTypes.Name, request.Username),
+                new Claim("UserId", request.Id)
             };
 
             if (request.IsAdmin)
@@ -32,7 +33,7 @@ namespace GameBox.Application.Accounts.Queries.GenerateJwtToken
                 issuer: "http://localhost:5000",
                 audience: "http://localhost:5000",
                 claims: claims,
-                expires: DateTime.UtcNow.AddDays(1),
+                expires: DateTime.UtcNow.AddDays(Constants.Common.TokenExpiration),
                 signingCredentials: signinCredentials);
 
             return new JwtSecurityTokenHandler().WriteToken(tokeOptions);
