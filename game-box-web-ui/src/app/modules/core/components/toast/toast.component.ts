@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 
-import { Observable } from 'rxjs';
+import { Observable, merge } from 'rxjs';
 
 import { IAppState } from 'src/app/store/app.state';
 import { IToastModel } from '../../models/toast.model';
-import { tap } from 'rxjs/operators';
-import { HideToastMessage } from 'src/app/store/+store/core/core.actions';
+import { filter, tap, ignoreElements, debounceTime } from 'rxjs/operators';
 import { ToastType } from '../../enums/toast-type.enum';
+import { HideToastMessage } from 'src/app/store/+store/core/core.actions';
 
 @Component({
   selector: 'app-toast',
@@ -20,15 +20,17 @@ export class ToastComponent implements OnInit {
   constructor(private store: Store<IAppState>) { }
 
   public ngOnInit(): void {
-    this.toast$ = this.store.pipe(
-      select(s => s.core.toast),
-      tap(s => {
-        if (s) {
-          setTimeout(() => {
-            this.store.dispatch(new HideToastMessage());
-          }, 3000);
-        }
-      })
+    const outer = this.store.pipe(
+      select(t => t.core.toast)
     );
+
+    const inner = outer.pipe(
+      debounceTime(3000),
+      filter(t => !!t),
+      tap(() => this.store.dispatch(new HideToastMessage())),
+      ignoreElements()
+    );
+
+    this.toast$ = merge(outer, inner);
   }
 }
