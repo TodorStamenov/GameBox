@@ -11,8 +11,7 @@ import { LoadCategoryNames } from 'src/app/store/+store/category/categories.acti
 
 @Component({
   selector: 'app-navigation',
-  templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  templateUrl: './navigation.component.html'
 })
 export class NavigationComponent implements OnInit {
   public categories$: Observable<ICategoryMenuModel[]>;

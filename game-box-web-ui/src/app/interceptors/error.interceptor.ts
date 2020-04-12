@@ -6,15 +6,18 @@ import {
   HttpRequest,
   HttpErrorResponse
 } from '@angular/common/http';
+import { Store } from '@ngrx/store';
 
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { ToastrService } from 'ngx-toastr';
+import { IAppState } from '../store/app.state';
+import { DisplayToastMessage } from '../store/+store/core/core.actions';
+import { ToastType } from '../modules/core/enums/toast-type.enum';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private toastr: ToastrService) { }
+  constructor(private store: Store<IAppState>) { }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
@@ -25,22 +28,37 @@ export class ErrorInterceptor implements HttpInterceptor {
               .map(e => err.error.errors[e])
               .join('\n');
 
-            this.toastr.error(message, 'Warning!');
+            this.store.dispatch(new DisplayToastMessage({
+              message,
+              toastType: ToastType.failure
+            }));
             break;
 
           case 401:
-            this.toastr.error(err.error.message, 'Warning!');
+            this.store.dispatch(new DisplayToastMessage({
+              message: err.error.message,
+              toastType: ToastType.failure
+            }));
             break;
 
           case 404:
-            this.toastr.error(err.error.error, 'Warning!');
+            this.store.dispatch(new DisplayToastMessage({
+              message: err.error.error,
+              toastType: ToastType.failure
+            }));
             break;
 
           case 500:
             if (err.error.error) {
-              this.toastr.error(err.error.error, 'Warning!');
+              this.store.dispatch(new DisplayToastMessage({
+                message: err.error.error,
+                toastType: ToastType.failure
+              }));
             } else {
-              this.toastr.error(err.error, 'Warning!');
+              this.store.dispatch(new DisplayToastMessage({
+                message: err.error,
+                toastType: ToastType.failure
+              }));
             }
             break;
         }

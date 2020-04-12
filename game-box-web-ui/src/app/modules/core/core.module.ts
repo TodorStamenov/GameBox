@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
+import { ToastComponent } from './components/toast/toast.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SliceStringPipe } from './pipes/sliceString.pipe';
@@ -10,6 +11,7 @@ import { GameListItemsComponent } from './components/game-list-items/game-list-i
 import { SearchFormComponent } from './components/search-form/search-form.component';
 
 const components = [
+  ToastComponent,
   NavigationComponent,
   FooterComponent,
   SearchFormComponent,

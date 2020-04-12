@@ -13,7 +13,7 @@ export enum CategoryActionTypes {
   GetCategoryNames = '[CATEGORIES] Get Category Names'
 }
 
-export class LoadAllCategories {
+export class LoadAllCategories implements Action {
   readonly type = CategoryActionTypes.LoadAllCategories;
 }
 

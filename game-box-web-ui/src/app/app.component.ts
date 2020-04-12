@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
   template: `
     <app-navigation></app-navigation>
     <div class="container-fluid" style="margin-top: 70px; margin-bottom: 60px">
+      <app-toast></app-toast>
       <router-outlet></router-outlet>
     </div>
     <app-footer></app-footer>

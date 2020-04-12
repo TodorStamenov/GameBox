@@ -6,8 +6,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ToastrModule } from 'ngx-toastr';
-
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app.routing';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
@@ -15,6 +13,7 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { AppComponent } from './app.component';
 import { CoreModule } from './modules/core/core.module';
 import { GraphQLModule } from './graphql.module';
+import { coreReducer } from './store/+store/core/core.reducer';
 import { categoriesReducer } from './store/+store/category/categories.reducer';
 import { CategoriesEffects } from './store/+store/category/categories.effects';
 
@@ -28,8 +27,8 @@ import { CategoriesEffects } from './store/+store/category/categories.effects';
     HttpClientModule,
     CoreModule,
     AppRoutingModule,
-    ToastrModule.forRoot(),
     StoreModule.forRoot({
+      core: coreReducer,
       categories: categoriesReducer
     }),
     EffectsModule.forRoot([

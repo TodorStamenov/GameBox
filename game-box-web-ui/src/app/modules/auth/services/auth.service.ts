@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { ToastrService } from 'ngx-toastr';
 import { IRegisterModel } from '../../auth/models/register.model';
 import { ILoginModel } from '../../auth/models/login.model';
 import { IChangePasswordModel } from '../../auth/models/change-password.model';
 import { IUser } from '../models/user.model';
 import { environment } from 'src/environments/environment';
+import { IAppState } from 'src/app/store/app.state';
+import { ToastType } from '../../core/enums/toast-type.enum';
+import { DisplayToastMessage } from 'src/app/store/+store/core/core.actions';
 
 const authUrl = environment.api.baseUrl + 'account/';
 
@@ -21,7 +24,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private toastrService: ToastrService
+    private store: Store<IAppState>
   ) { }
 
   get user(): IUser {
@@ -64,6 +67,9 @@ export class AuthService {
   public logout(): void {
     this.currentUser = null;
     localStorage.clear();
-    this.toastrService.success('Logout successful', 'Success!');
+    this.store.dispatch(new DisplayToastMessage({
+      message: 'Logout successful',
+      toastType: ToastType.success
+    }));
   }
 }
