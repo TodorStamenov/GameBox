@@ -13,8 +13,7 @@ import { LoadAllItems, ClearItems, RemoveItem, UnloadItems, UnloadItem  } from '
 
 @Component({
   selector: 'app-cart',
-  templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.scss']
+  templateUrl: './cart.component.html'
 })
 export class CartComponent implements OnInit, OnDestroy {
   public games$: Observable<IGameListItemModel[]>;

@@ -9,8 +9,7 @@ import { IState } from '../../+store/games.state';
 
 @Component({
   selector: 'app-games-list',
-  templateUrl: './games-list.component.html',
-  styleUrls: ['./games-list.component.scss']
+  templateUrl: './games-list.component.html'
 })
 export class GamesListComponent implements OnInit {
   public games$: Observable<IGamesListModel[]>;

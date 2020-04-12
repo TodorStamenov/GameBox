@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-offset-3 col-md-3">
+  <div class="offset-md-3 col-md-3">
     <form [formGroup]="categoryForm" (ngSubmit)="saveCategory()">
       <div class="form-group">
         <label for="name">Name</label>
@@ -8,7 +8,7 @@
           {{ formService.getErrorMessage(name, 'Name') }}
         </div>
       </div>      
-      <button type="submit" class="btn btn-default" [disabled]="!categoryForm.valid">Save Category</button>
+      <button type="submit" class="btn btn-outline-dark" [disabled]="!categoryForm.valid">Save Category</button>
     </form>
   </div>
 </div>

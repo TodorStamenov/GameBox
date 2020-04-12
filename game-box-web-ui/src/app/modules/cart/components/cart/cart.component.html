@@ -10,16 +10,16 @@
 </app-game-list-items>
 
 <div *ngIf="(games$ | async).length > 0" class="row">
-  <div class="col-sm-9 text-right">
+  <div class="col-sm-9 text-right mt-3">
     <h1>
       <strong>Total Price - </strong>{{ calculateTotalPrice(games$ | async) | currency }}
     </h1>
   </div>
-  <div class="col-sm-3 action-buttons">
-    <button (click)="onClear()" class="btn btn-danger">
+  <div class="col-sm-3 mt-4">
+    <button (click)="onClear()" class="btn btn-outline-danger mr-3">
       Clear
     </button>
-    <button (click)="onCreateOrder()" class="btn btn-success">
+    <button (click)="onCreateOrder()" class="btn btn-outline-success">
       Order
     </button>
   </div>

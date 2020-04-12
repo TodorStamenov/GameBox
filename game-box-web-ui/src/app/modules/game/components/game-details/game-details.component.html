@@ -1,18 +1,18 @@
 <ng-container *ngIf="(game$ | async) as game">
   <div class="row">
     <div class="col-md-12 text-center">
-      <h1 class="game-title">{{ game.title }}</h1>
-      <iframe class="game-i-frame" [src]="videoId" frameborder="0" allowfullscreen>
+      <h1 class="mt-3">{{ game.title }}</h1>
+      <iframe class="game-i-frame my-2" [src]="videoId" frameborder="0" allowfullscreen>
       </iframe>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-offset-2 col-md-8">
+    <div class="offset-md-2 col-md-8 py-3">
       <p>{{ game.description }}</p>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-offset-4 col-md-2">
+    <div class="offset-md-4 col-md-2">
       <p>
         <strong>Price</strong> - {{ game.price | currency }}
       </p>
@@ -29,31 +29,31 @@
     <div class="col-md-4">
       <a 
         *ngIf="authService.isAdmin"
-        class="btn btn-sm btn-warning action-button"
+        class="btn btn-sm btn-outline-warning action-button"
         [routerLink]="['/games', 'edit']"
         [queryParams]="{ id: game.id }">
         Edit
       </a>
       <a
         *ngIf="authService.isAdmin"
-        class="btn btn-sm btn-danger action-button"
+        class="btn btn-sm btn-outline-danger action-button"
         [routerLink]="['/games/delete', game.id]">
         Delete
       </a>
       <button
         (click)="onAddItemToCart(game.id)"
-        class="btn btn-sm btn-success action-button"
+        class="btn btn-sm btn-outline-success action-button"
         routerLink="/cart/items">
         Buy
       </button>
       <button
         *ngIf="authService.isAuthed"
         (click)="onAddItemToWishlist(game.id)"
-        class="btn btn-sm btn-default action-button"
+        class="btn btn-sm btn-outline-dark action-button"
         routerLink="/wishlist/items">
         Wishlist
       </button>
-      <a class="btn btn-sm btn-default action-button" routerLink="/">
+      <a class="btn btn-sm btn-outline-dark action-button" routerLink="/">
         Back
       </a>
     </div>

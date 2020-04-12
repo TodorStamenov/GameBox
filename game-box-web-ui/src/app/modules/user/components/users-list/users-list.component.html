@@ -1,16 +1,16 @@
 <div class="row">
-  <div class="col-md-offset-2 col-md-6">
+  <div class="offset-md-2 col-md-6">
     <h2>Search Users</h2>
   </div>
 </div>
 <div class="row">
-  <div class="col-md-2 col-md-offset-2">
+  <div class="col-md-2 offset-md-2">
     <app-search-form [fieldName]="'username'" (textChange)="setUsername($event)"></app-search-form>
   </div>
 </div>
 <br />
 <div class="row">
-  <div class="col-md-8 col-md-offset-2">
+  <div class="col-md-8 offset-md-2">
     <table class="table">
       <thead>
         <tr>
@@ -25,13 +25,13 @@
           <td>
             <button 
               *ngIf="!user.isLocked"
-              class="btn btn-danger btn-sm"
+              class="btn btn-outline-warning btn-sm"
               (click)="onLock(user.username)">
               Lock
             </button>
             <button
               *ngIf="user.isLocked"
-              class="btn btn-success btn-sm"
+              class="btn btn-outline-success btn-sm"
               (click)="onUnlock(user.username)">
               Unlock
             </button>
@@ -39,13 +39,13 @@
           <td>
             <button
               *ngIf="user.isAdmin"
-              class="btn btn-danger btn-sm"
+              class="btn btn-outline-warning btn-sm"
               (click)="onRemoveRole(user.username, 'Admin')">
               Remove Role
             </button>
             <button
               *ngIf="!user.isAdmin"
-              class="btn btn-success btn-sm"
+              class="btn btn-outline-success btn-sm"
               (click)="onAddRole(user.username, 'Admin')">
               Add Role
             </button>

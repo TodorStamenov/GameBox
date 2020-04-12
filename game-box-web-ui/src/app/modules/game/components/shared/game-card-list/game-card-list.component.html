@@ -3,26 +3,24 @@
     <div class="card thumbnail" [@itemCard]>
       <a routerLink="/games/details/{{game.id}}">
         <img
-          class="card-image-top img-responsive"
+          class="img-fluid"
           src="{{ game.thumbnailUrl }}"
           (error)="changeSource($event, game.videoId)">
       </a>
-      <div class="game-card">
-        <div class="card-body">
-          <h4 class="card-title">{{ game.title }}</h4>
-          <p class="card-text">
-            <strong>Price</strong> - {{ game.price.toFixed(2) | currency }}
-          </p>
-          <p class="card-text">
-            <strong>Size</strong> - {{ game.size.toFixed(1) }} GB
-          </p>
-          <p class="card-text">
-            <strong>Views</strong> - {{ game.viewCount }}
-          </p>
-          <p class="card-text">
-            {{ game.description | sliceString }}
-          </p>
-        </div>
+      <div class="p-3">
+        <h4 class="pb-2">{{ game.title }}</h4>
+        <p>
+          <strong>Price</strong> - {{ game.price.toFixed(2) | currency }}
+        </p>
+        <p>
+          <strong>Size</strong> - {{ game.size.toFixed(1) }} GB
+        </p>
+        <p>
+          <strong>Views</strong> - {{ game.viewCount }}
+        </p>
+        <p class="mb-0">
+          {{ game.description | sliceString }}
+        </p>
       </div>
     </div>
   </div>

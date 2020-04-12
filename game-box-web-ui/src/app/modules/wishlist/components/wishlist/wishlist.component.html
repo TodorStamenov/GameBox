@@ -1,7 +1,8 @@
 <div class="row">
   <div class="col-12 text-center">
     <h1>
-      Your Wishlist <span *ngIf="(games$ | async).length === 0">is Empty</span>
+      Your Wishlist
+      <span *ngIf="(games$ | async).length === 0">is Empty</span>
     </h1>
   </div>
 </div>
@@ -14,8 +15,8 @@
 </app-game-list-items>
 
 <div *ngIf="(games$ | async).length > 0" class="row">
-  <div class="col-sm-offset-10 col-sm-2 action-button">
-    <button (click)="onClearItems()" class="btn btn-danger">
+  <div class="offset-sm-10 col-sm-2 action-button">
+    <button (click)="onClearItems()" class="btn btn-outline-danger">
       Clear
     </button>
   </div>

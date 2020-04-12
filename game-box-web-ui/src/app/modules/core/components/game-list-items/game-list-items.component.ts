@@ -6,7 +6,6 @@ import { IGameListItemModel } from '../../models/game-list-item.model';
 @Component({
   selector: 'app-game-list-items',
   templateUrl: './game-list-items.component.html',
-  styleUrls: ['./game-list-items.component.scss'],
   animations: [
     trigger('itemCard', [
       transition('* => void', [
