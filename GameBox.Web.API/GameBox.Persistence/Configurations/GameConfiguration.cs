@@ -20,6 +20,11 @@ namespace GameBox.Persistence.Configurations
             builder.Property(g => g.VideoId).HasMaxLength(Constants.Game.MaxVideoIdLength).IsFixedLength();
             builder.Property(g => g.Description).IsRequired();
             builder.Property(g => g.ReleaseDate).HasColumnType("date");
+
+            builder
+                .HasMany(g => g.Comments)
+                .WithOne(c => c.Game)
+                .HasForeignKey(c => c.GameId);
         }
     }
 }

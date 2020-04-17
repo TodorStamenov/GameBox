@@ -10,6 +10,7 @@ namespace GameBox.Domain.Entities
             this.Roles = new HashSet<UserRoles>();
             this.Orders = new HashSet<Order>();
             this.Wishlist = new HashSet<Wishlist>();
+            this.Comments = new HashSet<Comment>();
         }
 
         public string Username { get; set; }
@@ -25,5 +26,7 @@ namespace GameBox.Domain.Entities
         public ICollection<Order> Orders { get; private set; }
 
         public ICollection<Wishlist> Wishlist { get; private set; }
+
+        public ICollection<Comment> Comments { get; private set; }
     }
 }

@@ -21,6 +21,8 @@ namespace GameBox.Application.Contracts
 
         DbSet<Wishlist> Wishlists { get; set; }
 
+        DbSet<Comment> Comments { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

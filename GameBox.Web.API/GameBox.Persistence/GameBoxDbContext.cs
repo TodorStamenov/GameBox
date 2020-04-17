@@ -25,6 +25,8 @@ namespace GameBox.Persistence
 
         public DbSet<Wishlist> Wishlists { get; set; }
 
+        public DbSet<Comment> Comments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);

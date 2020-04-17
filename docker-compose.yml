@@ -14,7 +14,7 @@ services:
     restart: on-failure
     build:
       context: .
-      dockerfile: GameBox.Web.API/GameBox.Api/Dockerfile
+      dockerfile: GameBox.Web.API/GameBox.Bootstrap/Dockerfile
     depends_on:
       - sql.data
       - rabbitmq

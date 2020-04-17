@@ -1,15 +1,15 @@
 ﻿using GameBox.Application.Contracts.Services;
 using GameBox.Persistence;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
 namespace GameBox.Bootstrap
 {
     public static class Initializer
     {
-        public static IWebHost Initialize(this IWebHost host)
+        public static IHost Initialize(this IHost host)
         {
             using (var scope = host.Services.CreateScope())
             {

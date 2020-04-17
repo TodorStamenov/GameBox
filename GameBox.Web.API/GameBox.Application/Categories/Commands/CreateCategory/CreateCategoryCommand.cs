@@ -22,12 +22,12 @@ namespace GameBox.Application.Categories.Commands.CreateCategory
 
             public async Task<string> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
             {
-                var entity = new Category
+                var category = new Category
                 {
                     Name = request.Name
                 };
 
-                await this.context.Categories.AddAsync(entity);
+                await this.context.Categories.AddAsync(category);
                 await this.context.SaveChangesAsync(cancellationToken);
 
                 return string.Format(Constants.Common.Success, nameof(Category), request.Name, Constants.Common.Added);

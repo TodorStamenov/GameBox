@@ -14,20 +14,8 @@ namespace GameBox.Api.Controllers
     {
         private IMediator mediator;
 
-        protected IMediator Mediator
-        {
-            get
-            {
-                return this.mediator ?? (this.mediator = HttpContext.RequestServices.GetService<IMediator>());
-            }
-        }
+        protected IMediator Mediator => this.mediator ?? (this.mediator = HttpContext.RequestServices.GetService<IMediator>());
 
-        protected Guid UserId
-        {
-            get
-            {
-                return new Guid(User.Claims.FirstOrDefault(c => c.Type == Constants.Common.UserIdClaimKey)?.Value);
-            }
-        }
+        protected Guid UserId => new Guid(User.Claims.FirstOrDefault(c => c.Type == Constants.Common.UserIdClaimKey)?.Value);
     }
 }

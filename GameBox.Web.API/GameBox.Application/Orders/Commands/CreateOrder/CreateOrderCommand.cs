@@ -13,13 +13,15 @@ using System.Threading.Tasks;
 
 namespace GameBox.Application.Orders.Commands.CreateOrder
 {
-    public class CreateOrderCommand : IRequest<CreateOrderViewModel>
+    public class CreateOrderCommand : IRequest<string>
     {
+        public Guid UserId { get; set; }
+
         public string Username { get; set; }
 
         public IEnumerable<Guid> GameIds { get; set; }
 
-        public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, CreateOrderViewModel>
+        public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, string>
         {
             private readonly IMediator mediator;
             private readonly IDateTimeService dateTime;
@@ -32,19 +34,8 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                 this.context = context;
             }
 
-            public async Task<CreateOrderViewModel> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+            public async Task<string> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
             {
-                var userId = await this.context
-                    .Users
-                    .Where(u => u.Username == request.Username)
-                    .Select(u => u.Id)
-                    .FirstOrDefaultAsync(cancellationToken);
-
-                if (userId == default(Guid))
-                {
-                    throw new NotFoundException(nameof(User), request.Username);
-                }
-
                 var games = await this.context
                     .Games
                     .Where(g => request.GameIds.Contains(g.Id))
@@ -62,7 +53,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
 
                 var order = new Order
                 {
-                    UserId = userId,
+                    UserId = request.UserId,
                     TimeStamp = this.dateTime.UtcNow,
                     Price = games.Sum(g => g.Price)
                 };
@@ -88,10 +79,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
 
                 await this.mediator.Publish(notification, cancellationToken);
 
-                return new CreateOrderViewModel
-                {
-                    Message = string.Format(Constants.Common.Success, nameof(Order), string.Empty, Constants.Common.Added)
-                };
+                return string.Format(Constants.Common.Success, nameof(Order), string.Empty, Constants.Common.Added);
             }
         }
     }

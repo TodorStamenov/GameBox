@@ -26,14 +26,14 @@ namespace GameBox.Application.Categories.Commands.UpdateCategory
 
             public async Task<string> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
             {
-                var entity = await this.context.Categories.FindAsync(request.Id);
+                var category = await this.context.Categories.FindAsync(request.Id);
 
-                if (entity == null)
+                if (category == null)
                 {
                     throw new NotFoundException(nameof(Category), request.Id);
                 }
 
-                entity.Name = request.Name;
+                category.Name = request.Name;
 
                 await this.context.SaveChangesAsync(cancellationToken);
 

@@ -38,6 +38,7 @@ namespace GameBox.Persistence
             await SeedGamesAsync(GamesCount);
             await SeedOrdersAsync();
             await SeedWishlistsAsync();
+            await SeedCommentsAsync();
         }
 
         private static async Task SeedRolesAsync(string roleName)
@@ -247,7 +248,7 @@ namespace GameBox.Persistence
                     TimeStamp = order.TimeStamp
                 };
 
-                // messageQueue.Send(queueName: "orders", command);
+                messageQueue.Send(queueName: "orders", command);
             }
         }
 
@@ -269,7 +270,7 @@ namespace GameBox.Persistence
                 {
                     var gameId = gameIds[random.Next(0, gameIds.Count)];
 
-                    if (user.Wishlist.Any(g => g.GameId == gameId))
+                    if (user.Wishlist.Any(w => w.GameId == gameId))
                     {
                         i--;
                         continue;
@@ -282,6 +283,50 @@ namespace GameBox.Persistence
                     };
 
                     user.Wishlist.Add(wishlistItem);
+                }
+            }
+
+            await context.SaveChangesAsync();
+        }
+
+        private static async Task SeedCommentsAsync()
+        {
+            if (await context.Comments.AnyAsync())
+            {
+                return;
+            }
+
+            var games = await context.Games.ToListAsync();
+            var userIds = await context.Users.Select(u => u.Id).ToListAsync();
+
+            foreach (var game in games)
+            {
+                var commentsCount = random.Next(0, 4);
+
+                for (int i = 0; i < commentsCount; i++)
+                {
+                    var userId = userIds[random.Next(0, userIds.Count)];
+
+                    if (game.Comments.Any(c => c.UserId == userId))
+                    {
+                        i--;
+                        continue;
+                    }
+
+                    var comment = new Comment
+                    {
+                        GameId = game.Id,
+                        UserId = userId,
+                        TimeStamp = DateTime.Now.AddMonths(-i).AddDays(-i),
+                        Content = "Comment lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                            "Suspendisse tellus ipsum, dignissim sit amet rutrum congue, vehicula in elit. " +
+                            "Phasellus lorem urna, iaculis non egestas eu, sollicitudin nec risus. Nunc mollis nisi a orci vulputate molestie. " +
+                            "Nam hendrerit ex sit amet ligula sollicitudin, at placerat sapien auctor. " +
+                            "Suspendisse pulvinar imperdiet quam. Proin pellentesque efficitur dui. " +
+                            "Suspendisse commodo aliquam elit, consequat pellentesque ipsum dictum sed."
+                    };
+
+                    game.Comments.Add(comment);
                 }
             }
 
