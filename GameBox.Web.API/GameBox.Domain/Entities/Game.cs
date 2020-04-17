@@ -3,15 +3,13 @@ using System.Collections.Generic;
 
 namespace GameBox.Domain.Entities
 {
-    public class Game
+    public class Game : Entity<Guid>
     {
         public Game()
         {
             this.Orders = new HashSet<GameOrder>();
             this.Wishlists = new HashSet<Wishlist>();
         }
-
-        public Guid Id { get; set; }
 
         public string Title { get; set; }
 

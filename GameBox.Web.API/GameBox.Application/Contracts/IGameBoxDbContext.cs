@@ -1,5 +1,4 @@
 ﻿using GameBox.Domain.Entities;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +22,5 @@ namespace GameBox.Application.Contracts
         DbSet<Wishlist> Wishlists { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        Task SeedAsync(IMediator mediator);
     }
 }

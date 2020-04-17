@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameBox.Domain.Entities
 {
-    public class User
+    public class User : Entity<Guid>
     {
         public User()
         {
@@ -11,8 +11,6 @@ namespace GameBox.Domain.Entities
             this.Orders = new HashSet<Order>();
             this.Wishlist = new HashSet<Wishlist>();
         }
-
-        public Guid Id { get; set; }
 
         public string Username { get; set; }
 

@@ -1,26 +1,13 @@
-﻿using AutoMapper;
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using GameBox.Api.Filters;
+using GameBox.Application;
 using GameBox.Application.Categories.Commands.CreateCategory;
-using GameBox.Application.Contracts;
-using GameBox.Application.Infrastructure;
-using GameBox.Application.Infrastructure.AutoMapper;
-using GameBox.Application.Infrastructure.Extensions;
 using GameBox.Infrastructure;
 using GameBox.Persistence;
-using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Reflection;
-using System.Text;
 
 namespace GameBox.Api
 {
@@ -35,46 +22,16 @@ namespace GameBox.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-
-            services.AddGraphQLServices();
-
-            services.AddMediatR(typeof(CreateCategoryCommandValidator).GetTypeInfo().Assembly);
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
-
-            services.AddDomainServices(typeof(MessageQueueSenderService).Assembly);
-
-            services.AddDbContext<IGameBoxDbContext, GameBoxDbContext>(
-                options => options.UseSqlServer(
-                    Configuration["ConnectionString"],
-                    sqlOptions => sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null)));
-
-            services.AddCors();
+            services
+                .AddApplication()
+                .AddPersistence(this.Configuration)
+                .AddInfrastructure(this.Configuration);
 
             services
+                .AddCors()
                 .AddControllers(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
-                .AddNewtonsoftJson()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCategoryCommandValidator>());
-
-            services
-                .AddAuthentication(opt => 
-                {
-                    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(opt =>
-                {
-                    opt.RequireHttpsMetadata = false;
-                    opt.SaveToken = true;
-                    opt.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.Common.SymmetricSecurityKey))
-                    };
-                });
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCategoryCommandValidator>())
+                .AddNewtonsoftJson();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

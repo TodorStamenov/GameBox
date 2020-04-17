@@ -3,14 +3,12 @@ using System.Collections.Generic;
 
 namespace GameBox.Domain.Entities
 {
-    public class Role
+    public class Role : Entity<Guid>
     {
         public Role()
         {
             this.Users = new HashSet<UserRoles>();
         }
-
-        public Guid Id { get; set; }
 
         public string Name { get; set; }
 

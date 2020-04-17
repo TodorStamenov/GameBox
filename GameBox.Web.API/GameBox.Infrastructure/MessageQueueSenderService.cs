@@ -1,6 +1,7 @@
 ﻿using GameBox.Application.Contracts.Services;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
+using System;
 using System.Text;
 
 namespace GameBox.Infrastructure
@@ -15,7 +16,7 @@ namespace GameBox.Infrastructure
                 UserName = "guest",
                 Password = "guest",
                 Port = 5672,
-                RequestedConnectionTimeout = 3000
+                RequestedConnectionTimeout = TimeSpan.FromMilliseconds(3000)
             };
 
             using (var rabbitConnection = connectionFactory.CreateConnection())
