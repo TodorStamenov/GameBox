@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GameBox.Api
+namespace GameBox.Bootstrap
 {
     public class Startup
     {
@@ -25,7 +25,7 @@ namespace GameBox.Api
             services
                 .AddApplication()
                 .AddPersistence(this.Configuration)
-                .AddInfrastructure(this.Configuration);
+                .AddInfrastructure();
 
             services
                 .AddCors()

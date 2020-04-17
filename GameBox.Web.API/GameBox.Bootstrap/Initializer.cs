@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 
-namespace GameBox.Api
+namespace GameBox.Bootstrap
 {
     public static class Initializer
     {
@@ -16,11 +16,12 @@ namespace GameBox.Api
                 var services = scope.ServiceProvider;
 
                 var database = services.GetRequiredService<GameBoxDbContext>();
+                var account = services.GetRequiredService<IAccountService>();
                 var serviceBus = services.GetRequiredService<IMessageQueueSenderService>();
 
                 database.Database.Migrate();
 
-                Task.Run(async () => await GameBoxDbContextSeed.SeedDatabaseAsync(database, serviceBus))
+                Task.Run(async () => await GameBoxDbContextSeed.SeedDatabaseAsync(database, account, serviceBus))
                     .GetAwaiter()
                     .GetResult();
             }

@@ -2,11 +2,9 @@
 using GameBox.Application.Infrastructure;
 using GameBox.Application.Orders.Commands.CreateOrder;
 using GameBox.Domain.Entities;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace GameBox.Persistence
@@ -19,13 +17,18 @@ namespace GameBox.Persistence
         private const int GamesCount = CategoriesCount * 10;
 
         private static GameBoxDbContext context;
+        private static IAccountService accountService;
         private static IMessageQueueSenderService messageQueue;
 
         private static readonly Random random = new Random();
 
-        public static async Task SeedDatabaseAsync(GameBoxDbContext database, IMessageQueueSenderService serviceBus)
+        public static async Task SeedDatabaseAsync(
+            GameBoxDbContext database,
+            IAccountService account,
+            IMessageQueueSenderService serviceBus)
         {
             context = database;
+            accountService = account;
             messageQueue = serviceBus;
 
             await SeedRolesAsync(Constants.Common.Admin);
@@ -59,12 +62,12 @@ namespace GameBox.Persistence
 
             for (int i = 1; i <= usersCount; i++)
             {
-                byte[] salt = GenerateSalt();
+                byte[] salt = accountService.GenerateSalt();
 
                 var user = new User
                 {
                     Username = $"User{i}",
-                    Password = HashPassword("123", salt),
+                    Password = accountService.HashPassword("123", salt),
                     Salt = salt
                 };
 
@@ -94,12 +97,12 @@ namespace GameBox.Persistence
 
             for (int i = 1; i <= usersCount; i++)
             {
-                byte[] salt = GenerateSalt();
+                byte[] salt = accountService.GenerateSalt();
 
                 var user = new User
                 {
                     Username = $"{role}{i}",
-                    Password = HashPassword("123", salt),
+                    Password = accountService.HashPassword("123", salt),
                     Salt = salt
                 };
 
@@ -244,7 +247,7 @@ namespace GameBox.Persistence
                     TimeStamp = order.TimeStamp
                 };
 
-                messageQueue.Send(queueName: "orders", command);
+                // messageQueue.Send(queueName: "orders", command);
             }
         }
 
@@ -283,28 +286,6 @@ namespace GameBox.Persistence
             }
 
             await context.SaveChangesAsync();
-        }
-
-        private static byte[] GenerateSalt()
-        {
-            byte[] salt = new byte[128 / 8];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(salt);
-            }
-
-            return salt;
-        }
-
-        private static string HashPassword(string password, byte[] salt)
-        {
-            return Convert.ToBase64String(
-                KeyDerivation.Pbkdf2(
-                    password: password,
-                    salt: salt,
-                    prf: KeyDerivationPrf.HMACSHA1,
-                    iterationCount: 10000,
-                    numBytesRequested: 256 / 8));
         }
     }
 }

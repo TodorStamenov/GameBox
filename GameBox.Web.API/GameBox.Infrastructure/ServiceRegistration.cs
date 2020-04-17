@@ -1,7 +1,6 @@
 ﻿using GameBox.Application;
 using GameBox.Application.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -10,7 +9,7 @@ namespace GameBox.Infrastructure
 {
     public static class ServiceRegistration
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services
                 .AddDomainServices(typeof(ServiceRegistration).Assembly);

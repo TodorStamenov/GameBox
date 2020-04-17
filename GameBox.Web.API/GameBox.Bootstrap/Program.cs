@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace GameBox.Api
+namespace GameBox.Bootstrap
 {
     public class Program
     {

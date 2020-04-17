@@ -16,16 +16,12 @@ namespace GameBox.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            return services
+            services
                 .AddAutoMapper(Assembly.GetExecutingAssembly())
                 .AddMediatR(Assembly.GetExecutingAssembly())
-                .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
-        }
-
-        public static IServiceCollection AddGraphQLServices(this IServiceCollection services)
-        {
-            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
-            services.AddScoped<ISchema, GameBoxSchema>();
+                .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>))
+                .AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService))
+                .AddScoped<ISchema, GameBoxSchema>();
 
             services
                 .AddGraphQL(o => o.ExposeExceptions = true)

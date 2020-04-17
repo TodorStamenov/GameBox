@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Persistence", "Game
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Api", "GameBox.Api\GameBox.Api.csproj", "{08D87C06-A42F-48FE-B00D-1E537BC0CF92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBox.Infrastructure", "GameBox.Infrastructure\GameBox.Infrastructure.csproj", "{08D971F6-1E4B-446F-B470-7322B3621204}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Infrastructure", "GameBox.Infrastructure\GameBox.Infrastructure.csproj", "{08D971F6-1E4B-446F-B470-7322B3621204}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBox.Bootstrap", "GameBox.Bootstrap\GameBox.Bootstrap.csproj", "{280DC3C4-C3AF-4D64-BE29-2064A9DA1DAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{08D971F6-1E4B-446F-B470-7322B3621204}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08D971F6-1E4B-446F-B470-7322B3621204}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08D971F6-1E4B-446F-B470-7322B3621204}.Release|Any CPU.Build.0 = Release|Any CPU
+		{280DC3C4-C3AF-4D64-BE29-2064A9DA1DAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{280DC3C4-C3AF-4D64-BE29-2064A9DA1DAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{280DC3C4-C3AF-4D64-BE29-2064A9DA1DAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{280DC3C4-C3AF-4D64-BE29-2064A9DA1DAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
