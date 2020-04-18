@@ -20,12 +20,12 @@ import { LoadCategoryNames } from 'src/app/store/+store/category/categories.acti
   templateUrl: './game.component.html'
 })
 export class GameComponent implements OnInit, OnDestroy {
+  public categories$: Observable<ICategoryMenuModel[]>;
+  public gameForm: FormGroup;
+
   private componentActive = true;
   private gameId: string | undefined;
   private actionType: ActionType | undefined;
-
-  public categories$: Observable<ICategoryMenuModel[]>;
-  public gameForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,

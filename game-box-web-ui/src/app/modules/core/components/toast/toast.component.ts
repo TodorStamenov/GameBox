@@ -2,16 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 
 import { Observable, merge } from 'rxjs';
+import { filter, tap, ignoreElements, debounceTime } from 'rxjs/operators';
 
 import { IAppState } from 'src/app/store/app.state';
 import { IToastModel } from '../../models/toast.model';
-import { filter, tap, ignoreElements, debounceTime } from 'rxjs/operators';
 import { ToastType } from '../../enums/toast-type.enum';
 import { HideToastMessage } from 'src/app/store/+store/core/core.actions';
 
 @Component({
   selector: 'app-toast',
-  templateUrl: './toast.component.html'
+  templateUrl: './toast.component.html',
+  styleUrls: ['./toast.component.scss']
 })
 export class ToastComponent implements OnInit {
   public toastType = ToastType;

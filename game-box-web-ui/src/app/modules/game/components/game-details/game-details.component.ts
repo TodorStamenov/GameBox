@@ -95,6 +95,10 @@ export class GameDetailsComponent implements OnInit {
       .subscribe(() => {
         this.store.dispatch(new LoadGameComments(this.gameId));
         this.commentForm.reset();
+        this.commentForm.setValue({
+          gameId: this.gameId,
+          content: null
+        });
       });
   }
 

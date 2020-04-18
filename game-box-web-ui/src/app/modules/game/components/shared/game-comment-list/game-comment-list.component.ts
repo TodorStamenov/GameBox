@@ -1,10 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 import { IGameCommentModel } from '../../../models/game-comment.model';
 
 @Component({
   selector: 'app-game-comment-list',
-  templateUrl: './game-comment-list.component.html'
+  templateUrl: './game-comment-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameCommentListComponent {
   @Input() public isAdmin: boolean;
