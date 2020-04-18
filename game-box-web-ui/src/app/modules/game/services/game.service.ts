@@ -7,9 +7,12 @@ import { IGameBindingModel } from '../models/game-binding.model';
 import { IGamesListModel } from '../models/games-list.model';
 import { IGamesHomeListModel } from '../models/games-home-list.model';
 import { IGameDetailsModel } from '../models/game-details.model';
+import { IGameCommentModel } from '../models/game-comment.model';
+import { IGameCommentBindingModel } from '../models/game-comment-binding.model';
 import { environment } from 'src/environments/environment';
 
 const gamesUrl = environment.api.baseUrl + 'games/';
+const commentsUrl = environment.api.baseUrl + 'comments/';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +42,18 @@ export class GameService {
 
   public getDetails$(id: string): Observable<IGameDetailsModel> {
     return this.http.get<IGameDetailsModel>(gamesUrl + 'details/' + id);
+  }
+
+  public getComments$(id: string): Observable<IGameCommentModel[]> {
+    return this.http.get<IGameCommentModel[]>(commentsUrl + id);
+  }
+
+  public addComment$(body: IGameCommentBindingModel): Observable<void> {
+    return this.http.post<void>(commentsUrl, body);
+  }
+
+  public deleteComment$(id: string): Observable<void> {
+    return this.http.delete<void>(commentsUrl + id);
   }
 
   public addGame$(body: IGameBindingModel): Observable<void> {

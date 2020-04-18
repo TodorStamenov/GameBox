@@ -4,6 +4,7 @@ import { IGamesListModel } from 'src/app/modules/game/models/games-list.model';
 import { IGamesHomeListModel } from 'src/app/modules/game/models/games-home-list.model';
 import { IGameDetailsModel } from 'src/app/modules/game/models/game-details.model';
 import { IGameBindingModel } from 'src/app/modules/game/models/game-binding.model';
+import { IGameCommentModel } from '../models/game-comment.model';
 
 const initialState: IGamesState = {
   all: [],
@@ -11,6 +12,7 @@ const initialState: IGamesState = {
   byCategory: [],
   owned: [],
   details: null,
+  comments: [],
   byId: null
 };
 
@@ -46,6 +48,13 @@ function getGameDetail(state: IGamesState, gameDetail: IGameDetailsModel): IGame
   return {
     ...state,
     details: gameDetail
+  };
+}
+
+function GetGameComments(state: IGamesState, gameComments: IGameCommentModel[]): IGamesState {
+  return {
+    ...state,
+    comments: [...gameComments]
   };
 }
 
@@ -93,6 +102,9 @@ export function gamesReducer(state = initialState, action: Types): IGamesState {
 
     case GameActionTypes.GetGameDetails:
       return getGameDetail(state, action.payload);
+
+    case GameActionTypes.GetGameComments:
+      return GetGameComments(state, action.payload);
 
     case GameActionTypes.GetGameById:
       return getGameToEdit(state, action.payload);

@@ -1,4 +1,5 @@
 <ng-container *ngIf="(game$ | async) as game">
+
   <div class="row">
     <div class="col-md-12 text-center">
       <h1 class="mt-3">{{ game.title }}</h1>
@@ -6,11 +7,13 @@
       </iframe>
     </div>
   </div>
+
   <div class="row">
     <div class="offset-md-2 col-md-8 py-3">
       <p>{{ game.description }}</p>
     </div>
   </div>
+
   <div class="row">
     <div class="offset-md-4 col-md-2">
       <p>
@@ -20,12 +23,13 @@
         <strong>Size</strong> - {{ game.size }} GB
       </p>
       <p>
-        <strong>Release Date</strong> - {{ game.releaseDate | date}}
+        <strong>Release Date</strong> - {{ game.releaseDate | date }}
       </p>
       <p>
         <strong>Views</strong> - {{ game.viewCount }}
       </p>
     </div>
+
     <div class="col-md-4">
       <a 
         *ngIf="authService.isAdmin"
@@ -40,22 +44,52 @@
         [routerLink]="['/games/delete', game.id]">
         Delete
       </a>
-      <button
+      <a
         (click)="onAddItemToCart(game.id)"
         class="btn btn-sm btn-outline-success action-button"
         routerLink="/cart/items">
         Buy
-      </button>
-      <button
+      </a>
+      <a
         *ngIf="authService.isAuthed"
         (click)="onAddItemToWishlist(game.id)"
         class="btn btn-sm btn-outline-dark action-button"
         routerLink="/wishlist/items">
         Wishlist
-      </button>
-      <a class="btn btn-sm btn-outline-dark action-button" routerLink="/">
-        Back
       </a>
+      <button
+        *ngIf="authService.isAuthed"
+        (click)="onToggleCommentForm()"
+        class="btn btn-sm btn-outline-dark">
+        Add Comment
+      </button>
+      <button
+        *ngIf="authService.isAuthed && showCommentForm"
+        [disabled]="!commentForm.valid"
+        (click)="saveComment()"
+        class="btn btn-sm btn-outline-success ml-1">
+        Save Comment
+      </button>
     </div>
   </div>
+
+  <div class="row">
+    <div class="offset-md-3 col-md-6 py-3">
+      <form [formGroup]="commentForm" *ngIf="authService.isAuthed && showCommentForm">
+        <div class="form-group">
+          <textarea formControlName="content" class="form-control" placeholder="Add Comment..." rows="10"></textarea>
+          <div *ngIf="content.touched && content.invalid" class="alert alert-danger">
+            {{ formService.getErrorMessage(content, 'Content') }}
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <app-game-comment-list
+    [comments]="comments$ | async"
+    [isAdmin]="authService.isAdmin"
+    (deleteClick)="onDeleteClick($event)">
+  </app-game-comment-list>
+
 </ng-container>

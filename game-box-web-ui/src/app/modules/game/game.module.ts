@@ -12,6 +12,7 @@ import { GameDetailsComponent } from './components/game-details/game-details.com
 import { HomeComponent } from './components/home/home.component';
 import { OwnedGamesComponent } from './components/owned-games/owned-games.component';
 import { GameCardListComponent } from './components/shared/game-card-list/game-card-list.component';
+import { GameCommentListComponent } from './components/shared/game-comment-list/game-comment-list.component';
 import { LoadMoreComponent } from './components/shared/load-more/load-more.component';
 import { CategoryGamesComponent } from './components/category-games/category-games.component';
 import { CoreModule } from '../core/core.module';
@@ -27,6 +28,7 @@ import { GamesEffects } from './+store/games.effects';
     HomeComponent,
     OwnedGamesComponent,
     GameCardListComponent,
+    GameCommentListComponent,
     LoadMoreComponent,
     CategoryGamesComponent
   ],

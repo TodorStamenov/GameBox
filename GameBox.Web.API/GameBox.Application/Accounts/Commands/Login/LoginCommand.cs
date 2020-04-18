@@ -67,9 +67,10 @@ namespace GameBox.Application.Accounts.Commands.Login
 
                 return new LoginViewModel
                 {
+                    Id = userInfo.Id,
                     Username = userInfo.Username,
-                    Token = token,
                     IsAdmin = userInfo.IsAdmin,
+                    Token = token,
                     ExpirationDate = this.dateTime.UtcNow.AddDays(Constants.Common.TokenExpiration),
                     Message = string.Format(Constants.Common.Success, nameof(User), userInfo.Username, "Logged In")
                 };

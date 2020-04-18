@@ -7,7 +7,9 @@ namespace GameBox.Application.Comments.Queries.GetCommentsByGame
 {
     public class CommentsListViewModel : IHaveCustomMapping
     {
-         public Guid Id { get; set; }
+        public Guid Id { get; set; }
+
+        public Guid UserId { get; set; }
 
         public string Content { get; set; }
 

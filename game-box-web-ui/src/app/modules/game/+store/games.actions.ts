@@ -4,6 +4,7 @@ import { IGamesListModel } from 'src/app/modules/game/models/games-list.model';
 import { IGameBindingModel } from 'src/app/modules/game/models/game-binding.model';
 import { IGamesHomeListModel } from 'src/app/modules/game/models/games-home-list.model';
 import { IGameDetailsModel } from 'src/app/modules/game/models/game-details.model';
+import { IGameCommentModel } from 'src/app/modules/game/models/game-comment.model';
 
 export enum GameActionTypes {
   LoadAllGames = '[GAMES] Load All Games',
@@ -14,8 +15,10 @@ export enum GameActionTypes {
   GetAllGamesByCategory = '[GAMES] Get All Games By Category',
   LoadAllOwnedGames = '[GAMES] Load All Owned Games',
   GetAllOwnedGames = '[GAMES] Get All Owned Games',
-  LoadGameDetails = '[GAMES] Load Detail',
-  GetGameDetails = '[GAMES] Get Detail',
+  LoadGameDetails = '[GAMES] Load Game Details',
+  GetGameDetails = '[GAMES] Get Game Details',
+  LoadGameComments = '[GAMES] Load Game Comments',
+  GetGameComments = '[GAMES] Get Game Comments',
   LoadGameById = '[GAMES] Load Game By Id',
   GetGameById = '[GAMES] Get Game By Id',
   ClearGamesHome = '[GAMES] Clear Games Home',
@@ -73,6 +76,16 @@ export class GetGameDetails implements Action {
   constructor(public payload: IGameDetailsModel) { }
 }
 
+export class LoadGameComments implements Action {
+  readonly type = GameActionTypes.LoadGameComments;
+  constructor(public payload: string) { }
+}
+
+export class GetGameComments implements Action {
+  readonly type = GameActionTypes.GetGameComments;
+  constructor(public payload: IGameCommentModel[]) { }
+}
+
 export class LoadGameById implements Action {
   readonly type = GameActionTypes.LoadGameById;
   constructor(public payload: string) { }
@@ -105,6 +118,8 @@ export type Types = LoadAllGames
   | GetAllOwnedGames
   | LoadGameDetails
   | GetGameDetails
+  | LoadGameComments
+  | GetGameComments
   | LoadGameById
   | GetGameById
   | ClearGamesHome

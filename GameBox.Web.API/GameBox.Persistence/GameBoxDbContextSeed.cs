@@ -301,7 +301,7 @@ namespace GameBox.Persistence
 
             foreach (var game in games)
             {
-                var commentsCount = random.Next(0, 4);
+                var commentsCount = random.Next(0, 9);
 
                 for (int i = 0; i < commentsCount; i++)
                 {

@@ -17,7 +17,9 @@ import {
   LoadGameById,
   GetGameById,
   LoadGameDetails,
-  GetGameDetails
+  GetGameDetails,
+  LoadGameComments,
+  GetGameComments
 } from './games.actions';
 
 @Injectable()
@@ -73,6 +75,14 @@ export class GamesEffects {
     ofType(GameActionTypes.LoadGameDetails),
     mergeMap((action: LoadGameDetails) => this.gameService.getDetails$(action.payload).pipe(
       map(game => new GetGameDetails(game))
+    ))
+  );
+
+  @Effect()
+  getGameComments$ = this.actions$.pipe(
+    ofType(GameActionTypes.LoadGameComments),
+    mergeMap((action: LoadGameComments) => this.gameService.getComments$(action.payload).pipe(
+      map(games => new GetGameComments(games))
     ))
   );
 }

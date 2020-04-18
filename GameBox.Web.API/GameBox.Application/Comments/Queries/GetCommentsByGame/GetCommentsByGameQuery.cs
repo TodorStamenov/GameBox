@@ -31,6 +31,7 @@ namespace GameBox.Application.Comments.Queries.GetCommentsByGame
                 return await this.context
                     .Comments
                     .Where(c => c.GameId == request.GameId)
+                    .OrderByDescending(c => c.TimeStamp)
                     .ProjectTo<CommentsListViewModel>(this.mapper.ConfigurationProvider)
                     .ToListAsync(cancellationToken);
             }
