@@ -16,9 +16,9 @@ namespace GameBox.Api.Controllers
     public class CommentsController : BaseApiController
     {
         [HttpGet]
-        [Route("")]
+        [Route("game/{gameId}")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<CommentsListViewModel>>> GetComments(Guid gameId)
+        public async Task<ActionResult<IEnumerable<CommentsListViewModel>>> GetComments([FromRoute]Guid gameId)
         {
             return Ok(await Mediator.Send(new GetCommentsByGameQuery { GameId = gameId }));
         }
@@ -27,8 +27,8 @@ namespace GameBox.Api.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Get([FromRoute]Guid id)
         {
-            var command = new GetCommentQuery 
-            { 
+            var command = new GetCommentQuery
+            {
                 Id = id,
                 UserId = UserId,
                 IsAdmin = User.IsInRole(Constants.Common.Admin)
