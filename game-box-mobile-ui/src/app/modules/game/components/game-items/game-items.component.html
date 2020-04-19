@@ -1,5 +1,5 @@
 <PullToRefresh (refresh)="onPullToRefresh()">
-  <ListView [items]="games" separatorColor="#4e5d6c" (loadMoreItems)="onLoadMoreGames()">
+  <ListView [items]="games" separatorColor="#343a40" (loadMoreItems)="onLoadMoreGames()">
     <ng-template let-game="item">
       <GridLayout
         (tap)="onNavigateToDetails(game.id)"
