@@ -1,10 +1,11 @@
 <ng-container *ngIf="(game$ | async) as game">
 
   <div class="row">
-    <div class="col-md-12 text-center">
+    <div class="offset-md-2 col-md-8 text-center">
       <h1 class="mt-3">{{ game.title }}</h1>
-      <iframe class="game-i-frame my-2" [src]="videoId" frameborder="0" allowfullscreen>
-      </iframe>
+      <div class="wrapper">
+        <iframe [src]="videoId" frameborder="0" allowfullscreen></iframe>
+      </div>
     </div>
   </div>
 
