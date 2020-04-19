@@ -1,7 +1,7 @@
 @import '../../../../../app.scss';
 
 .game-title {
-  font-size: 19;
+  font-size: 25;
   font-weight: bold;
   color: $black;
   padding-top: 7;
@@ -12,6 +12,7 @@
   color: $black;
   padding-left: 10;
   padding-right: 10;
+  font-size: 16;
 }
 
 .actions-wrapper {
@@ -26,5 +27,9 @@
 
   .game-details {
     margin-left: 15;
+  }
+
+  .save-button {
+    margin-left: 10;
   }
 }

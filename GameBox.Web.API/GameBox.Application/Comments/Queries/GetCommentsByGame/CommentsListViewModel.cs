@@ -9,8 +9,6 @@ namespace GameBox.Application.Comments.Queries.GetCommentsByGame
     {
         public Guid Id { get; set; }
 
-        public Guid UserId { get; set; }
-
         public string Content { get; set; }
 
         public DateTime TimeStamp { get; set; }

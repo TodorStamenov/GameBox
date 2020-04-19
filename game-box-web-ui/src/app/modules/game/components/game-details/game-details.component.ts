@@ -88,7 +88,7 @@ export class GameDetailsComponent implements OnInit {
     this.showCommentForm = !this.showCommentForm;
   }
 
-  public saveComment(): void {
+  public onSaveComment(): void {
     this.showCommentForm = false;
 
     this.gameService.addComment$(this.commentForm.value)

@@ -7,9 +7,12 @@ import { map } from 'rxjs/operators';
 import { constants } from '~/app/common';
 import { IGamesListModel } from '../models/games-list.model';
 import { IGameDetailsModel } from '../models/game-details.model';
+import { IGameCommentModel } from '../models/game-comment.model';
+import { IGameCommentBindingModel } from '../models/game-comment-binding.model';
 import { UIService } from '../../core/services/ui.service';
 
 const gamesUrl = constants.host + 'games/';
+const commentsUrl = constants.host + 'comments/';
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +43,13 @@ export class GameService {
 
   public getDetails$(id: string): Observable<IGameDetailsModel> {
     return this.http.get<IGameDetailsModel>(gamesUrl + 'details/' + id);
+  }
+
+  public getComments$(id: string): Observable<IGameCommentModel[]> {
+    return this.http.get<IGameCommentModel[]>(commentsUrl + id);
+  }
+
+  public addComment$(body: IGameCommentBindingModel): Observable<void> {
+    return this.http.post<void>(commentsUrl, body);
   }
 }
