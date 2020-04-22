@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { RouterExtensions } from 'nativescript-angular/router';
-import { UIService } from '../services/ui.service';
+import { UIService } from '../../services/ui.service';
 import { Page } from 'tns-core-modules/ui/page';
 import * as utils from 'tns-core-modules/utils/utils';
 
