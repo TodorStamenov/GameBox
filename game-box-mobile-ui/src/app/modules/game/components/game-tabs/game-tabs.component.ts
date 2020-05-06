@@ -4,8 +4,8 @@ import { forkJoin } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 
 import { IGamesListModel } from '../../models/games-list.model';
-import { GameService } from '../../services/game.service';
-import { UIService } from '~/app/modules/core/services/ui.service';
+import { GameService } from '../../../../services/game.service';
+import { UIService } from '~/app/services/ui.service';
 
 @Component({
   selector: 'ns-game-tabs',

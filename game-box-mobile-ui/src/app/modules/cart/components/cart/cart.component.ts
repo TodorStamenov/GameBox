@@ -4,8 +4,8 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { IGameListItemModel } from '~/app/modules/core/models/game-list-item.model';
-import { CartService } from '../../services/cart.service';
-import { UIService } from '~/app/modules/core/services/ui.service';
+import { CartService } from '../../../../services/cart.service';
+import { UIService } from '~/app/services/ui.service';
 
 @Component({
   selector: 'ns-cart',

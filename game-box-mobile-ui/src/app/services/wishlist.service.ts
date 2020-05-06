@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { constants } from '~/app/common';
-import { IGameListItemModel } from '../../core/models/game-list-item.model';
-import { UIService } from '../../core/services/ui.service';
+import { IGameListItemModel } from '../modules/core/models/game-list-item.model';
+import { UIService } from './ui.service';
 
 const wishlistUrl = constants.graphQl;
 

@@ -7,11 +7,11 @@ import { takeWhile, switchMap } from 'rxjs/operators';
 
 import { WebView } from 'tns-core-modules/ui/web-view';
 import { screen } from 'tns-core-modules/platform';
-import { GameService } from '../../services/game.service';
-import { CartService } from '~/app/modules/cart/services/cart.service';
+import { GameService } from '../../../../services/game.service';
+import { CartService } from '~/app/services/cart.service';
 import { IGameDetailsModel } from '../../models/game-details.model';
-import { WishlistService } from '~/app/modules/wishlist/services/wishlist.service';
-import { UIService } from '~/app/modules/core/services/ui.service';
+import { WishlistService } from '~/app/services/wishlist.service';
+import { UIService } from '~/app/services/ui.service';
 import { IGameCommentModel } from '../../models/game-comment.model';
 import * as utils from 'tns-core-modules/utils/utils';
 

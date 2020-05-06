@@ -5,8 +5,8 @@ import { Store, select } from '@ngrx/store';
 
 import { takeWhile, filter } from 'rxjs/operators';
 
-import { CategoryService } from '../../services/category.service';
-import { FormService } from 'src/app/modules/core/services/form.service';
+import { CategoryService } from '../../../../services/category.service';
+import { FormService } from 'src/app/services/form.service';
 import { ActionType } from '../../../core/enums/action-type.enum';
 import { IAppState } from 'src/app/store/app.state';
 import { LoadCategoryToEdit, LoadCategoryNames } from 'src/app/store/+store/category/categories.actions';

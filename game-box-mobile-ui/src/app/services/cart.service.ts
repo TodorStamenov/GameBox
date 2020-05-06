@@ -5,9 +5,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { constants } from '~/app/common';
-import { IGameListItemModel } from '../../core/models/game-list-item.model';
+import { IGameListItemModel } from '../modules/core/models/game-list-item.model';
 import * as cacheService from 'tns-core-modules/application-settings';
-import { UIService } from '../../core/services/ui.service';
+import { UIService } from './ui.service';
 
 const cartUrl = constants.host + 'cart/';
 const ordersUrl = constants.host + 'orders';

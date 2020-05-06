@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 
-import { IGameListItemModel } from '../../core/models/game-list-item.model';
+import { IGameListItemModel } from '../modules/core/models/game-list-item.model';
 import { environment } from 'src/environments/environment';
 
 const cartUrl = environment.api.baseUrl + 'cart/';

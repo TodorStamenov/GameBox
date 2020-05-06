@@ -5,13 +5,13 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { IRegisterModel } from '../../auth/models/register.model';
-import { ILoginModel } from '../../auth/models/login.model';
-import { IChangePasswordModel } from '../../auth/models/change-password.model';
-import { IUser } from '../models/user.model';
+import { IRegisterModel } from '../modules/auth/models/register.model';
+import { ILoginModel } from '../modules/auth/models/login.model';
+import { IChangePasswordModel } from '../modules/auth/models/change-password.model';
+import { IUser } from '../modules/auth/models/user.model';
 import { environment } from 'src/environments/environment';
 import { IAppState } from 'src/app/store/app.state';
-import { ToastType } from '../../core/enums/toast-type.enum';
+import { ToastType } from '../modules/core/enums/toast-type.enum';
 import { DisplayToastMessage } from 'src/app/store/+store/core/core.actions';
 
 const authUrl = environment.api.baseUrl + 'account/';

@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 
-import { IGameListItemModel } from '../../core/models/game-list-item.model';
+import { IGameListItemModel } from '../modules/core/models/game-list-item.model';
 
 @Injectable({
   providedIn: 'root'

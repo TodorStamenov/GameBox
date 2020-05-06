@@ -4,9 +4,9 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { IGameListItemModel } from '../../core/models/game-list-item.model';
-import { WishlistService } from '../services/wishlist.service';
-import { CartService } from '../../cart/services/cart.service';
-import { UIService } from '../../core/services/ui.service';
+import { WishlistService } from '../../../services/wishlist.service';
+import { CartService } from '../../../services/cart.service';
+import { UIService } from '../../../services/ui.service';
 
 @Component({
   selector: 'ns-wishlist',

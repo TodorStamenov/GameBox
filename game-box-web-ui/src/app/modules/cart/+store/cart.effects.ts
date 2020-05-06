@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 
 import { mergeMap, map } from 'rxjs/operators';
 
-import { CartService } from 'src/app/modules/cart/services/cart.service';
+import { CartService } from 'src/app/services/cart.service';
 import { CartActionTypes, GetAllItems, UnloadItem, RemoveItem, ClearItems } from './cart.actions';
 
 @Injectable()

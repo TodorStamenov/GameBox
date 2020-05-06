@@ -3,12 +3,12 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { IGameBindingModel } from '../models/game-binding.model';
-import { IGamesListModel } from '../models/games-list.model';
-import { IGamesHomeListModel } from '../models/games-home-list.model';
-import { IGameDetailsModel } from '../models/game-details.model';
-import { IGameCommentModel } from '../models/game-comment.model';
-import { IGameCommentBindingModel } from '../models/game-comment-binding.model';
+import { IGameBindingModel } from '../modules/game/models/game-binding.model';
+import { IGamesListModel } from '../modules/game/models/games-list.model';
+import { IGamesHomeListModel } from '../modules/game/models/games-home-list.model';
+import { IGameDetailsModel } from '../modules/game/models/game-details.model';
+import { IGameCommentModel } from '../modules/game/models/game-comment.model';
+import { IGameCommentBindingModel } from '../modules/game/models/game-comment-binding.model';
 import { environment } from 'src/environments/environment';
 
 const gamesUrl = environment.api.baseUrl + 'games/';

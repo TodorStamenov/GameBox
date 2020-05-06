@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
 
-import { AuthService } from 'src/app/modules/auth/services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { ICategoryMenuModel } from 'src/app/modules/category/models/category-menu.model';
 import { IAppState } from 'src/app/store/app.state';
 import { LoadCategoryNames } from 'src/app/store/+store/category/categories.actions';

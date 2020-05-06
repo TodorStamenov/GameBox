@@ -6,8 +6,8 @@ import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, takeWhile } from 'rxjs/operators';
 
-import { GameService } from '../../services/game.service';
-import { FormService } from 'src/app/modules/core/services/form.service';
+import { GameService } from '../../../../services/game.service';
+import { FormService } from 'src/app/services/form.service';
 import { ActionType } from '../../../core/enums/action-type.enum';
 import { IGameBindingModel } from '../../models/game-binding.model';
 import { ICategoryMenuModel } from '../../../category/models/category-menu.model';

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { IOrdersListModel } from '../models/orders-list.model';
+import { IOrdersListModel } from '../modules/order/models/orders-list.model';
 import { environment } from 'src/environments/environment';
 
 const nodeOrdersUrl = environment.api.nodeUrl + 'orders';

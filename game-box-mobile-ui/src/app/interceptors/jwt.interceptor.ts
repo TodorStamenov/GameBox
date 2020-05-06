@@ -9,8 +9,8 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { AuthService } from '../modules/auth/services/auth.service';
-import { UIService } from '../modules/core/services/ui.service';
+import { AuthService } from '../services/auth.service';
+import { UIService } from '../services/ui.service';
 import { tap } from 'rxjs/operators';
 
 @Injectable()

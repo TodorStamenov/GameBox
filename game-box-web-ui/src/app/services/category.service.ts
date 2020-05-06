@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { ICategoriesListModel } from '../models/categories-list.model';
-import { ICategoryBindingModel } from '../models/category-binding.model';
-import { ICategoryMenuModel } from '../models/category-menu.model';
+import { ICategoriesListModel } from '../modules/category/models/categories-list.model';
+import { ICategoryBindingModel } from '../modules/category/models/category-binding.model';
+import { ICategoryMenuModel } from '../modules/category/models/category-menu.model';
 import { environment } from 'src/environments/environment';
 
 const categoriesUrl = environment.api.baseUrl + 'categories/';

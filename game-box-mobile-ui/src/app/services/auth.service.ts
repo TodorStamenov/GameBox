@@ -4,12 +4,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { constants } from '../../../common';
-import { ILoginModel } from '../models/login.model';
-import { IRegisterModel } from '../models/register.model';
-import { IUser } from '../models/user.mode';
-import { UIService } from '../../core/services/ui.service';
-import { IChangePasswordModel } from '../models/change-password.model';
+import { constants } from '../common';
+import { ILoginModel } from '../modules/auth/models/login.model';
+import { IRegisterModel } from '../modules/auth/models/register.model';
+import { IUser } from '../modules/auth/models/user.mode';
+import { UIService } from './ui.service';
+import { IChangePasswordModel } from '../modules/auth/models/change-password.model';
 import * as cacheService from 'tns-core-modules/application-settings';
 
 const authUrl = constants.host + 'account/';

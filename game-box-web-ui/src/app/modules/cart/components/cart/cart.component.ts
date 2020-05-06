@@ -6,10 +6,10 @@ import { Observable } from 'rxjs';
 
 import { IState } from '../../+store/cart.state';
 import { IGameListItemModel } from '../../../core/models/game-list-item.model';
-import { CartService } from '../../services/cart.service';
-import { OrderService } from 'src/app/modules/order/services/order.service';
-import { AuthService } from 'src/app/modules/auth/services/auth.service';
-import { LoadAllItems, ClearItems, RemoveItem, UnloadItems, UnloadItem  } from 'src/app/modules/cart/+store/cart.actions';
+import { CartService } from '../../../../services/cart.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { OrderService } from 'src/app/services/order.service';
+import { LoadAllItems, ClearItems, UnloadItems, UnloadItem  } from 'src/app/modules/cart/+store/cart.actions';
 
 @Component({
   selector: 'app-cart',

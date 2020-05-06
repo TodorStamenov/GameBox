@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { IUsersListModel } from '../../models/users-list.model';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../../../services/user.service';
 import { LoadAllUsers } from 'src/app/modules/user/+state/users.actions';
 import { IState } from '../../+state/users.state';
 

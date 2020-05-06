@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, AbstractControl, FormControl } from '@angular/forms';
 
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../../services/auth.service';
 import { RouterExtensions } from 'nativescript-angular/router';
-import { UIService } from '~/app/modules/core/services/ui.service';
+import { UIService } from '~/app/services/ui.service';
 import * as utils from 'tns-core-modules/utils/utils';
 
 @Component({

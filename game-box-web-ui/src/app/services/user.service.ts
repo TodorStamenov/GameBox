@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { IUsersListModel } from '../models/users-list.model';
-import { ICreateUserModel } from '../models/create-user.model';
+import { IUsersListModel } from '../modules/user/models/users-list.model';
+import { ICreateUserModel } from '../modules/user/models/create-user.model';
 import { environment } from 'src/environments/environment';
 
 const usersUrl = environment.api.baseUrl + 'users/';

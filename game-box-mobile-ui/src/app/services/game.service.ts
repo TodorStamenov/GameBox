@@ -5,11 +5,11 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { constants } from '~/app/common';
-import { IGamesListModel } from '../models/games-list.model';
-import { IGameDetailsModel } from '../models/game-details.model';
-import { IGameCommentModel } from '../models/game-comment.model';
-import { IGameCommentBindingModel } from '../models/game-comment-binding.model';
-import { UIService } from '../../core/services/ui.service';
+import { IGamesListModel } from '../modules/game/models/games-list.model';
+import { IGameDetailsModel } from '../modules/game/models/game-details.model';
+import { IGameCommentModel } from '../modules/game/models/game-comment.model';
+import { IGameCommentBindingModel } from '../modules/game/models/game-comment-binding.model';
+import { UIService } from './ui.service';
 
 const gamesUrl = constants.host + 'games/';
 const commentsUrl = constants.host + 'comments/';

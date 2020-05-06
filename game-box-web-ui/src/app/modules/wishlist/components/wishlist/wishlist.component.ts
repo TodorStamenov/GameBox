@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { IGameListItemModel } from 'src/app/modules/core/models/game-list-item.model';
 import { LoadAllItems, ClearItems, UnloadItem, UnloadItems } from 'src/app/modules/wishlist/+store/wishlist.actions';
 import { IState } from '../../+store/wishlist.state';
-import { CartService } from 'src/app/modules/cart/services/cart.service';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-wishlist',

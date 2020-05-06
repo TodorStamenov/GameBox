@@ -9,10 +9,10 @@ import {
 
 import { takeWhile } from 'rxjs/operators';
 
-import { UIService } from './modules/core/services/ui.service';
+import { UIService } from './services/ui.service';
 import { RadSideDrawerComponent } from 'nativescript-ui-sidedrawer/angular/side-drawer-directives';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
-import { AuthService } from './modules/auth/services/auth.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'ns-app',

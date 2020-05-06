@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 
 import { mergeMap, map } from 'rxjs/operators';
 
-import { CategoryService } from 'src/app/modules/category/services/category.service';
+import { CategoryService } from 'src/app/services/category.service';
 import {
   CategoryActionTypes,
   GetAllCategories,

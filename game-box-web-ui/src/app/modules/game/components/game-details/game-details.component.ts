@@ -9,12 +9,12 @@ import { tap, filter } from 'rxjs/operators';
 
 import { IGameDetailsModel } from '../../models/game-details.model';
 import { IGameCommentModel } from '../../models/game-comment.model';
-import { CartService } from '../../../cart/services/cart.service';
-import { GameService } from '../../services/game.service';
-import { WishlistService } from 'src/app/modules/wishlist/services/wishlist.service';
+import { CartService } from '../../../../services/cart.service';
+import { GameService } from '../../../../services/game.service';
+import { WishlistService } from 'src/app/services/wishlist.service';
 import { LoadGameDetails, LoadGameComments } from 'src/app/modules/game/+store/games.actions';
-import { AuthService } from 'src/app/modules/auth/services/auth.service';
-import { FormService } from 'src/app/modules/core/services/form.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { FormService } from 'src/app/services/form.service';
 import { IState } from '../../+store/games.state';
 
 @Component({

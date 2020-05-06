@@ -10,7 +10,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { UIService } from '../modules/core/services/ui.service';
+import { UIService } from '../services/ui.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {

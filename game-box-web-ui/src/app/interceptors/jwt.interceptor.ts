@@ -11,7 +11,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { AuthService } from '../modules/auth/services/auth.service';
+import { AuthService } from '../services/auth.service';
 import { IAppState } from '../store/app.state';
 import { DisplayToastMessage } from '../store/+store/core/core.actions';
 import { ToastType } from '../modules/core/enums/toast-type.enum';

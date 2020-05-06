@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 
 import { mergeMap, map } from 'rxjs/operators';
 
-import { GameService } from 'src/app/modules/game/services/game.service';
+import { GameService } from 'src/app/services/game.service';
 import {
   GameActionTypes,
   LoadAllGamesHome,

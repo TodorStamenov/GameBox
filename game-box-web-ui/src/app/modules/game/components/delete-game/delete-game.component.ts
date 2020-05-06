@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
-import { GameService } from '../../services/game.service';
+import { GameService } from '../../../../services/game.service';
 import { IGameBindingModel } from '../../models/game-binding.model';
 import { IState } from '../../+store/games.state';
 import { filter, takeWhile } from 'rxjs/operators';

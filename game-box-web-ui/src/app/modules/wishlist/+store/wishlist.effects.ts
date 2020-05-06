@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 
 import { mergeMap, map } from 'rxjs/operators';
 
-import { WishlistService } from 'src/app/modules/wishlist/services/wishlist.service';
+import { WishlistService } from 'src/app/services/wishlist.service';
 import { WishlistActionTypes, GetAllItems, RemoveItem, UnloadItem, ClearItems } from './wishlist.actions';
 
 @Injectable()
