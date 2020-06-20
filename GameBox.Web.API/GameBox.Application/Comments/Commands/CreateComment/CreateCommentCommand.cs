@@ -38,7 +38,7 @@ namespace GameBox.Application.Comments.Commands.CreateComment
                     TimeStamp = this.dateTime.UtcNow
                 };
 
-                await this.context.Comments.AddAsync(comment);
+                await this.context.Set<Comment>().AddAsync(comment);
                 await this.context.SaveChangesAsync();
 
                 return string.Format(Constants.Common.Success, nameof(Comment), string.Empty, Constants.Common.Added);

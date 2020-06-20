@@ -41,7 +41,7 @@ namespace GameBox.Application.Accounts.Commands.Register
                     Salt = salt
                 };
 
-                await this.context.Users.AddAsync(user);
+                await this.context.Set<User>().AddAsync(user);
                 await this.context.SaveChangesAsync(cancellationToken);
 
                 var token = this.account.GenerateJwtToken(user.Id.ToString(), user.Username, false);

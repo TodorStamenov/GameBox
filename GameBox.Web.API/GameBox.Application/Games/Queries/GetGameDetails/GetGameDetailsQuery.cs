@@ -27,7 +27,7 @@ namespace GameBox.Application.Games.Queries.GetGameDetails
             public async Task<GameDetailsViewModel> Handle(GetGameDetailsQuery request, CancellationToken cancellationToken)
             {
                 var game = await this.context
-                    .Games
+                    .Set<Game>()
                     .FindAsync(request.Id);
 
                 if (game == null)

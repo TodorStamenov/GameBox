@@ -1,6 +1,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
+using GameBox.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,7 +30,7 @@ namespace GameBox.Application.Comments.Queries.GetCommentsByGame
             public async Task<IEnumerable<CommentsListViewModel>> Handle(GetCommentsByGameQuery request, CancellationToken cancellationToken)
             {
                 return await this.context
-                    .Comments
+                    .Set<Comment>()
                     .Where(c => c.GameId == request.GameId)
                     .OrderByDescending(c => c.TimeStamp)
                     .ProjectTo<CommentsListViewModel>(this.mapper.ConfigurationProvider)

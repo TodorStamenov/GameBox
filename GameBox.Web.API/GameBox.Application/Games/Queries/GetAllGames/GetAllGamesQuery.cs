@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
+using GameBox.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace GameBox.Application.Games.Queries.GetAllGames
             public async Task<IEnumerable<GamesListViewModel>> Handle(GetAllGamesQuery request, CancellationToken cancellationToken)
             {
                 return await this.context
-                    .Games
+                    .Set<Game>()
                     .OrderByDescending(g => g.ReleaseDate)
                     .ThenByDescending(g => g.ViewCount)
                     .ThenBy(g => g.Title)

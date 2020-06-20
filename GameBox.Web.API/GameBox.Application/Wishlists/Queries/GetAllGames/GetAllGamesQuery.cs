@@ -26,7 +26,7 @@ namespace GameBox.Application.Wishlists.Queries.GetAllGames
             public async Task<IEnumerable<Game>> Handle(GetAllGamesQuery request, CancellationToken cancellationToken)
             {
                 return await this.context
-                    .Wishlists
+                    .Set<Wishlist>()
                     .Where(w => w.UserId == request.UserId)
                     .Select(w => w.Game)
                     .OrderBy(g => g.Title)

@@ -30,7 +30,7 @@ namespace GameBox.Application.Games.Queries.GetGamesByTitle
 
             public async Task<IEnumerable<GamesListByTitleViewModel>> Handle(GetGamesByTitleQuery request, CancellationToken cancellationToken)
             {
-                IQueryable<Game> query = this.context.Games;
+                IQueryable<Game> query = this.context.Set<Game>();
 
                 if (!string.IsNullOrWhiteSpace(request.Title))
                 {

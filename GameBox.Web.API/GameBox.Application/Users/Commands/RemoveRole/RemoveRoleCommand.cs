@@ -1,5 +1,6 @@
 ﻿using GameBox.Application.Contracts;
 using GameBox.Application.Exceptions;
+using GameBox.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace GameBox.Application.Users.Commands.RemoveRole
             public async Task<string> Handle(RemoveRoleCommand request, CancellationToken cancellationToken)
             {
                 var userRole = await this.context
-                    .UserRoles
+                    .Set<UserRoles>()
                     .Where(ur => ur.Role.Name == request.RoleName)
                     .Where(ur => ur.User.Username == request.Username)
                     .FirstOrDefaultAsync(cancellationToken);
@@ -36,7 +37,7 @@ namespace GameBox.Application.Users.Commands.RemoveRole
                     throw new RoleEditException(request.Username, request.RoleName, false);
                 }
 
-                this.context.UserRoles.Remove(userRole);
+                this.context.Set<UserRoles>().Remove(userRole);
                 await this.context.SaveChangesAsync(cancellationToken);
 
                 return $"User {request.RoleName} successfully removed from {request.Username} role.";

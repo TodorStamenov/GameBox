@@ -34,7 +34,7 @@ namespace GameBox.Application.Accounts.Commands.ChangePassword
             public async Task<ChangePasswordViewModel> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
             {
                 var user = await this.context
-                    .Users
+                    .Set<User>()
                     .Where(u => u.Username == request.Username)
                     .FirstOrDefaultAsync(cancellationToken);
 

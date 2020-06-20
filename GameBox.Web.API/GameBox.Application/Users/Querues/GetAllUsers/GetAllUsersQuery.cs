@@ -30,7 +30,7 @@ namespace GameBox.Application.Users.Querues.GetAllUsers
 
             public async Task<IEnumerable<UsersListViewModel>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
             {
-                IQueryable<User> query = this.context.Users;
+                IQueryable<User> query = this.context.Set<User>();
 
                 if (!string.IsNullOrWhiteSpace(request.QueryString))
                 {

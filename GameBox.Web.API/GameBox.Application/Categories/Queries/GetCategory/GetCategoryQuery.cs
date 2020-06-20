@@ -30,7 +30,7 @@ namespace GameBox.Application.Categories.Queries.GetCategory
             public async Task<CategoryViewModel> Handle(GetCategoryQuery request, CancellationToken cancellationToken)
             {
                 var category = await this.context
-                    .Categories
+                    .Set<Category>()
                     .Where(c => c.Id == request.Id)
                     .ProjectTo<CategoryViewModel>(this.mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);

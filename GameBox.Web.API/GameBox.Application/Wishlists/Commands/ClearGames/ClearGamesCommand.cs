@@ -1,4 +1,5 @@
 ﻿using GameBox.Application.Contracts;
+using GameBox.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -27,13 +28,13 @@ namespace GameBox.Application.Wishlists.Commands.ClearGames
                 var result = new List<Guid>();
 
                 var games = await this.context
-                    .Wishlists
+                    .Set<Wishlist>()
                     .Where(w => w.UserId == request.UserId)
                     .ToListAsync(cancellationToken);
 
                 foreach (var game in games)
                 {
-                    this.context.Wishlists.Remove(game);
+                    this.context.Set<Wishlist>().Remove(game);
 
                     result.Add(game.GameId);
                 }

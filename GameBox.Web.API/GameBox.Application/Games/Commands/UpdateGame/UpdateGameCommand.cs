@@ -52,7 +52,7 @@ namespace GameBox.Application.Games.Commands.UpdateGame
                     });
                 }
 
-                var game = await this.context.Games.FindAsync(request.Id);
+                var game = await this.context.Set<Game>().FindAsync(request.Id);
 
                 if (game == null)
                 {

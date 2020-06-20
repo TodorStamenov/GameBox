@@ -37,7 +37,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
             public async Task<string> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
             {
                 var games = await this.context
-                    .Games
+                    .Set<Game>()
                     .Where(g => request.GameIds.Contains(g.Id))
                     .ToListAsync(cancellationToken);
 
@@ -66,7 +66,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                     });
                 }
 
-                await this.context.Orders.AddAsync(order);
+                await this.context.Set<Order>().AddAsync(order);
                 await this.context.SaveChangesAsync(cancellationToken);
 
                 var notification = new OrderCreated

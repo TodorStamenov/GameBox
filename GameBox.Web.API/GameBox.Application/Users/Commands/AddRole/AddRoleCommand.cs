@@ -28,7 +28,7 @@ namespace GameBox.Application.Users.Commands.AddRole
             public async Task<string> Handle(AddRoleCommand request, CancellationToken cancellationToken)
             {
                 var userRoleInfo = await this.context
-                    .UserRoles
+                    .Set<UserRoles>()
                     .Where(ur => ur.Role.Name == request.RoleName)
                     .Where(ur => ur.User.Username == request.Username)
                     .Select(ur => new
@@ -44,7 +44,7 @@ namespace GameBox.Application.Users.Commands.AddRole
                 }
 
                 var userId = await this.context
-                    .Users
+                    .Set<User>()
                     .Where(u => u.Username == request.Username)
                     .Select(u => u.Id)
                     .FirstOrDefaultAsync(cancellationToken);
@@ -55,7 +55,7 @@ namespace GameBox.Application.Users.Commands.AddRole
                 }
 
                 var roleId = await this.context
-                    .Roles
+                    .Set<Role>()
                     .Where(r => r.Name == request.RoleName)
                     .Select(r => r.Id)
                     .FirstOrDefaultAsync(cancellationToken);
@@ -71,7 +71,7 @@ namespace GameBox.Application.Users.Commands.AddRole
                     UserId = userId
                 };
 
-                await this.context.UserRoles.AddAsync(userRole);
+                await this.context.Set<UserRoles>().AddAsync(userRole);
                 await this.context.SaveChangesAsync(cancellationToken);
 
                 return $"User {request.Username} successfully added to {request.RoleName} role.";

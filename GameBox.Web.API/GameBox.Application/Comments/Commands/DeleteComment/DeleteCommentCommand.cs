@@ -25,14 +25,14 @@ namespace GameBox.Application.Comments.Commands.DeleteComment
 
             public async Task<string> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
             {
-                var comment = await this.context.Comments.FindAsync(request.Id);
+                var comment = await this.context.Set<Comment>().FindAsync(request.Id);
 
                 if (comment == null)
                 {
                     throw new NotFoundException(nameof(Comment), request.Id);
                 }
 
-                this.context.Comments.Remove(comment);
+                this.context.Set<Comment>().Remove(comment);
                 await this.context.SaveChangesAsync(cancellationToken);
 
                 return string.Format(Constants.Common.Success, nameof(Comment), string.Empty, Constants.Common.Deleted);

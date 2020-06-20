@@ -33,7 +33,7 @@ namespace GameBox.Application.Accounts.Commands.Login
             public async Task<LoginViewModel> Handle(LoginCommand request, CancellationToken cancellationToken)
             {
                 var userInfo = await this.context
-                    .Users
+                    .Set<User>()
                     .Where(u => u.Username == request.Username)
                     .Select(u => new
                     {

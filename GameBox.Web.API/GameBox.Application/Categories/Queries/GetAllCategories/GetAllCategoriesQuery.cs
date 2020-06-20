@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
+using GameBox.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace GameBox.Application.Categories.Queries.GetAllCategories
             public async Task<IEnumerable<CategoriesListViewModel>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
             {
                 return await this.context
-                    .Categories
+                    .Set<Category>()
                     .OrderBy(c => c.Name)
                     .ProjectTo<CategoriesListViewModel>(this.mapper.ConfigurationProvider)
                     .ToListAsync(cancellationToken);

@@ -50,7 +50,7 @@ namespace GameBox.Application.Games.Commands.CreateGame
                     });
                 }
 
-                await this.context.Games.AddAsync(new Game
+                await this.context.Set<Game>().AddAsync(new Game
                 {
                     Title = request.Title,
                     Description = request.Description,

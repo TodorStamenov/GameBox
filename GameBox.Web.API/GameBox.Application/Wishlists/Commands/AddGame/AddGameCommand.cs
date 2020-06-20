@@ -26,7 +26,7 @@ namespace GameBox.Application.Wishlists.Commands.AddGame
             public async Task<Guid> Handle(AddGameCommand request, CancellationToken cancellationToken)
             {
                 var gameExists = await this.context
-                    .Wishlists
+                    .Set<Wishlist>()
                     .AnyAsync(w => w.UserId == request.UserId && w.GameId == request.GameId);
 
                 if (gameExists)
@@ -40,7 +40,7 @@ namespace GameBox.Application.Wishlists.Commands.AddGame
                     GameId = request.GameId
                 };
 
-                await this.context.Wishlists.AddAsync(wishlist);
+                await this.context.Set<Wishlist>().AddAsync(wishlist);
                 await this.context.SaveChangesAsync(cancellationToken);
 
                 return request.GameId;

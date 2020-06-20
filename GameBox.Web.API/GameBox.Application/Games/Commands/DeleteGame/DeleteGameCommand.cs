@@ -24,14 +24,14 @@ namespace GameBox.Application.Games.Commands.DeleteGame
 
             public async Task<string> Handle(DeleteGameCommand request, CancellationToken cancellationToken)
             {
-                var game = await this.context.Games.FindAsync(request.Id);
+                var game = await this.context.Set<Game>().FindAsync(request.Id);
 
                 if (game == null)
                 {
                     throw new NotFoundException(nameof(Game), request.Id);
                 }
 
-                this.context.Games.Remove(game);
+                this.context.Set<Game>().Remove(game);
                 await this.context.SaveChangesAsync(cancellationToken);
 
                 return string.Format(Constants.Common.Success, nameof(Game), game.Title, Constants.Common.Deleted);

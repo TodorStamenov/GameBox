@@ -25,14 +25,14 @@ namespace GameBox.Application.Wishlists.Commands.RemoveGame
 
             public async Task<Guid> Handle(RemoveGameCommand request, CancellationToken cancellationToken)
             {
-                var wishlist = await this.context.Wishlists.FindAsync(request.UserId, request.GameId);
+                var wishlist = await this.context.Set<Wishlist>().FindAsync(request.UserId, request.GameId);
 
                 if (wishlist == null)
                 {
                     throw new NotFoundException(nameof(Game), request.GameId);
                 }
 
-                this.context.Wishlists.Remove(wishlist);
+                this.context.Set<Wishlist>().Remove(wishlist);
                 await this.context.SaveChangesAsync(cancellationToken);
 
                 return request.GameId;

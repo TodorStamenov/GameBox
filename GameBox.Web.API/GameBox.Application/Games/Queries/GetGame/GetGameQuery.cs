@@ -30,7 +30,7 @@ namespace GameBox.Application.Games.Queries.GetGame
             public async Task<GameViewModel> Handle(GetGameQuery request, CancellationToken cancellationToken)
             {
                 var game = await this.context
-                    .Games
+                    .Set<Game>()
                     .Where(g => g.Id == request.Id)
                     .ProjectTo<GameViewModel>(this.mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);

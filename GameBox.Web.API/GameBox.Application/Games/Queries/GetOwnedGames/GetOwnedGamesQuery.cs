@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts;
 using GameBox.Application.Games.Queries.GetAllGames;
+using GameBox.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -34,7 +35,7 @@ namespace GameBox.Application.Games.Queries.GetOwnedGames
             public async Task<IEnumerable<GamesListViewModel>> Handle(GetOwnedGamesQuery request, CancellationToken cancellationToken)
             {
                 return await this.context
-                    .Users
+                    .Set<User>()
                     .Where(u => u.Id == request.UserId)
                     .SelectMany(u => u.Orders
                         .OrderByDescending(o => o.TimeStamp)

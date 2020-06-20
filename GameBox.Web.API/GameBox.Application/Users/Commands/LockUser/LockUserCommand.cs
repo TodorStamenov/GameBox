@@ -26,7 +26,7 @@ namespace GameBox.Application.Users.Commands.LockUser
             public async Task<string> Handle(LockUserCommand request, CancellationToken cancellationToken)
             {
                 var user = await this.context
-                    .Users
+                    .Set<User>()
                     .Where(u => u.Username == request.Username)
                     .FirstOrDefaultAsync(cancellationToken);
 
