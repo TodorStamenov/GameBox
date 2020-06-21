@@ -69,7 +69,7 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    this.authService.register(this.registerForm.value)
+    this.authService.register$(this.registerForm.value)
       .subscribe(
         () => this.uiService.navigate('/'),
         () => this.loading = false

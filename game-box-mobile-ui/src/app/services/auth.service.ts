@@ -2,22 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, take } from 'rxjs/operators';
 
-import { constants } from '../common';
 import { ILoginModel } from '../modules/auth/models/login.model';
 import { IRegisterModel } from '../modules/auth/models/register.model';
 import { IUser } from '../modules/auth/models/user.mode';
-import { UIService } from './ui.service';
 import { IChangePasswordModel } from '../modules/auth/models/change-password.model';
+import { UIService } from './ui.service';
+import { constants } from '../common';
 import * as cacheService from 'tns-core-modules/application-settings';
-
-const authUrl = constants.host + 'account/';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private authUrl = constants.gameBoxApiUrl + 'account/';
   private currentUser: IUser;
 
   constructor(
@@ -43,20 +42,22 @@ export class AuthService {
     return Date.now() < new Date(this.user.expirationDate).getTime();
   }
 
-  public login(body: ILoginModel): Observable<IUser> {
-    return this.http.post<IUser>(authUrl + 'login', body).pipe(
+  public login$(body: ILoginModel): Observable<IUser> {
+    return this.http.post<IUser>(this.authUrl + 'login', body).pipe(
+      take(1),
       tap(user => this.user = user)
     );
   }
 
-  public register(body: IRegisterModel): Observable<IUser> {
-    return this.http.post<IUser>(authUrl + 'register', body).pipe(
+  public register$(body: IRegisterModel): Observable<IUser> {
+    return this.http.post<IUser>(this.authUrl + 'register', body).pipe(
+      take(1),
       tap(user => this.user = user)
     );
   }
 
-  public changePassword(body: IChangePasswordModel): Observable<any> {
-    return this.http.post<any>(authUrl + 'changePassword', body);
+  public changePassword$(body: IChangePasswordModel): Observable<any> {
+    return this.http.post<any>(this.authUrl + 'changePassword', body).pipe(take(1));
   }
 
   public logout(): void {

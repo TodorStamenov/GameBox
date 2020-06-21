@@ -71,7 +71,7 @@ export class ChangePasswordComponent implements OnInit {
     }
 
     this.loading = true;
-    this.authService.changePassword(this.changePasswordForm.value)
+    this.authService.changePassword$(this.changePasswordForm.value)
       .subscribe(
         () => this.router.backToPreviousPage(),
         () => this.loading = false

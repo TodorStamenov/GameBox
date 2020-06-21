@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
   }
 
   public register(): void {
-    this.authService.register(this.registerForm.value)
+    this.authService.register$(this.registerForm.value)
       .subscribe(() => this.router.navigate(['/']));
   }
 }

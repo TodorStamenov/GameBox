@@ -94,8 +94,7 @@ export class GameComponent implements OnInit, OnDestroy {
         select(s => s.games.byId),
         filter(g => !!g),
         takeWhile(() => this.componentActive)
-      )
-      .subscribe(game => this.setupEditForm(game));
+      ).subscribe(game => this.setupEditForm(game));
     }
   }
 

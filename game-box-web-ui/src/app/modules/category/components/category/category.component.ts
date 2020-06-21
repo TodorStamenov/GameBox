@@ -49,8 +49,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
         select(s => s.categories.toEdit),
         filter(c => !!c),
         takeWhile(() => this.componentActive)
-      )
-      .subscribe(category => this.categoryForm.setValue({
+      ).subscribe(category => this.categoryForm.setValue({
         name: category.name
       }));
     }
@@ -62,12 +61,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   public saveCategory(): void {
     if (this.actionType === ActionType.create) {
-      this.categoryService
-        .createCategory$(this.categoryForm.value)
+      this.categoryService.createCategory$(this.categoryForm.value)
         .subscribe(() => this.navigateToAllCategories());
     } else if (this.actionType === ActionType.edit) {
-      this.categoryService
-        .editCategory$(this.categoryId, this.categoryForm.value)
+      this.categoryService.editCategory$(this.categoryId, this.categoryForm.value)
         .subscribe(() => this.navigateToAllCategories());
     }
   }

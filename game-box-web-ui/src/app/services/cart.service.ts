@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 import { IGameListItemModel } from '../modules/core/models/game-list-item.model';
 import { environment } from 'src/environments/environment';
-
-const cartUrl = environment.api.baseUrl + 'cart/';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
+  private cartUrl = environment.api.gameBoxApiUrl + 'cart/';
+
   constructor(private http: HttpClient) { }
 
   get cart(): string[] {
@@ -50,6 +51,6 @@ export class CartService {
   }
 
   public getCart$(): Observable<IGameListItemModel[]> {
-    return this.http.post<IGameListItemModel[]>(cartUrl, this.cart);
+    return this.http.post<IGameListItemModel[]>(this.cartUrl, this.cart).pipe(take(1));
   }
 }

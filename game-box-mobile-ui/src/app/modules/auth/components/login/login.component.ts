@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
-    this.authService.login(this.loginForm.value)
+    this.authService.login$(this.loginForm.value)
       .subscribe(
         () => this.uiService.navigate('/'),
         () => this.loading = false

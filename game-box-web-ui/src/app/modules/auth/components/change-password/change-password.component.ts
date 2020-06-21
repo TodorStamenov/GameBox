@@ -2,8 +2,8 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 
-import { FormService } from 'src/app/services/form.service';
 import { AuthService } from '../../../../services/auth.service';
+import { FormService } from 'src/app/services/form.service';
 
 @Component({
   selector: 'app-change-password',
@@ -40,8 +40,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   public changePassword(): void {
-    this.authService
-      .changePassword(this.changePasswordForm.value)
+    this.authService.changePassword$(this.changePasswordForm.value)
       .subscribe(() => this.router.navigate(['/']));
   }
 }

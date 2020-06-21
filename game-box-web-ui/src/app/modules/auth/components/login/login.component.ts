@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 
-
 import { AuthService } from '../../../../services/auth.service';
 import { FormService } from 'src/app/services/form.service';
 
@@ -36,7 +35,7 @@ export class LoginComponent implements OnInit {
   }
 
   public login(): void {
-    this.authService.login(this.loginForm.value)
+    this.authService.login$(this.loginForm.value)
       .subscribe(() => this.router.navigate(['/']));
   }
 }

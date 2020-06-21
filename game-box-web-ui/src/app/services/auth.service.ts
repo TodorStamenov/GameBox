@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, take } from 'rxjs/operators';
 
 import { IRegisterModel } from '../modules/auth/models/register.model';
 import { ILoginModel } from '../modules/auth/models/login.model';
@@ -14,12 +14,11 @@ import { IAppState } from 'src/app/store/app.state';
 import { ToastType } from '../modules/core/enums/toast-type.enum';
 import { DisplayToastMessage } from 'src/app/store/+store/core/core.actions';
 
-const authUrl = environment.api.baseUrl + 'account/';
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private authUrl = environment.api.gameBoxApiUrl + 'account/';
   private currentUser: IUser;
 
   constructor(
@@ -48,20 +47,22 @@ export class AuthService {
     return this.isAuthed && this.user.isAdmin;
   }
 
-  public login(body: ILoginModel): Observable<IUser> {
-    return this.http.post<IUser>(authUrl + 'login', body).pipe(
+  public login$(body: ILoginModel): Observable<IUser> {
+    return this.http.post<IUser>(this.authUrl + 'login', body).pipe(
+      take(1),
       tap(user => this.user = user)
     );
   }
 
-  public register(body: IRegisterModel): Observable<IUser> {
-    return this.http.post<IUser>(authUrl + 'register', body).pipe(
+  public register$(body: IRegisterModel): Observable<IUser> {
+    return this.http.post<IUser>(this.authUrl + 'register', body).pipe(
+      take(1),
       tap(user => this.user = user)
     );
   }
 
-  public changePassword(body: IChangePasswordModel): Observable<void> {
-    return this.http.post<void>(authUrl + 'changePassword', body);
+  public changePassword$(body: IChangePasswordModel): Observable<void> {
+    return this.http.post<void>(this.authUrl + 'changePassword', body).pipe(take(1));
   }
 
   public logout(): void {
