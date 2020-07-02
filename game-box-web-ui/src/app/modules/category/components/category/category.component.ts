@@ -34,10 +34,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.categoryId = this.route.snapshot.queryParams['id'];
   }
 
-  get name(): AbstractControl {
-    return this.categoryForm.get('name');
-  }
-
   public ngOnInit(): void {
     this.categoryForm = this.fb.group({
       'name': [null, [Validators.required, Validators.minLength(3)]]
@@ -57,6 +53,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.componentActive = false;
+  }
+
+  public getField(name: string): AbstractControl {
+    return this.categoryForm.get(name);
   }
 
   public saveCategory(): void {

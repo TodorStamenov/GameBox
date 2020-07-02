@@ -3,12 +3,21 @@
     <form [formGroup]="categoryForm" (ngSubmit)="saveCategory()">
       <div class="form-group">
         <label for="name">Name</label>
-        <input formControlName="name" type="text" class="form-control" id="name" placeholder="Name">
-        <div *ngIf="name.touched && name.invalid" class="alert alert-danger">
-          {{ formService.getErrorMessage(name, 'Name') }}
+        <input
+          formControlName="name"
+          type="text"
+          class="form-control"
+          id="name"
+          placeholder="Name">
+        <div
+          *ngIf="getField('name').touched && getField('name').invalid"
+          class="alert alert-danger">
+          {{ formService.getErrorMessage(getField('name'), 'Name') }}
         </div>
       </div>      
-      <button type="submit" class="btn btn-outline-dark" [disabled]="!categoryForm.valid">Save Category</button>
+      <button type="submit" class="btn btn-outline-dark" [disabled]="!categoryForm.valid">
+        Save Category
+      </button>
     </form>
   </div>
 </div>

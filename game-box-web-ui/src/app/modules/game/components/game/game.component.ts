@@ -39,38 +39,6 @@ export class GameComponent implements OnInit, OnDestroy {
     this.gameId = this.route.snapshot.queryParams['id'];
   }
 
-  get title(): AbstractControl {
-    return this.gameForm.get('title');
-  }
-
-  get description(): AbstractControl {
-    return this.gameForm.get('description');
-  }
-
-  get thumbnailUrl(): AbstractControl {
-    return this.gameForm.get('thumbnailUrl');
-  }
-
-  get price(): AbstractControl {
-    return this.gameForm.get('price');
-  }
-
-  get size(): AbstractControl {
-    return this.gameForm.get('size');
-  }
-
-  get videoId(): AbstractControl {
-    return this.gameForm.get('videoId');
-  }
-
-  get releaseDate(): AbstractControl {
-    return this.gameForm.get('releaseDate');
-  }
-
-  get categoryId(): AbstractControl {
-    return this.gameForm.get('categoryId');
-  }
-
   public ngOnInit(): void {
     this.store.dispatch(new LoadCategoryNames());
     this.categories$ = this.store.pipe(
@@ -100,6 +68,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.componentActive = false;
+  }
+
+  public getField(name: string): AbstractControl {
+    return this.gameForm.get(name);
   }
 
   public saveGame(): void {

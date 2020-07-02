@@ -19,24 +19,16 @@ export class RegisterComponent implements OnInit {
     public formService: FormService
   ) { }
 
-  get username(): AbstractControl {
-    return this.registerForm.get('username');
-  }
-
-  get password(): AbstractControl {
-    return this.registerForm.get('password');
-  }
-
-  get repeatPassword(): AbstractControl {
-    return this.registerForm.get('repeatPassword');
-  }
-
   public ngOnInit(): void {
     this.registerForm = this.fb.group({
       'username': [null, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       'password': [null, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       'repeatPassword': [null]
     });
+  }
+
+  public getField(name: string): AbstractControl {
+    return this.registerForm.get(name);
   }
 
   public register(): void {

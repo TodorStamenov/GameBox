@@ -19,24 +19,16 @@ export class ChangePasswordComponent implements OnInit {
     public formService: FormService
   ) { }
 
-  get oldPassword(): AbstractControl {
-    return this.changePasswordForm.get('oldPassword');
-  }
-
-  get newPassword(): AbstractControl {
-    return this.changePasswordForm.get('newPassword');
-  }
-
-  get repeatPassword(): AbstractControl {
-    return this.changePasswordForm.get('repeatPassword');
-  }
-
   public ngOnInit(): void {
     this.changePasswordForm = this.fb.group({
       'oldPassword': [null, [Validators.required]],
       'newPassword': [null, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       'repeatPassword': [null]
     });
+  }
+
+  public getField(name: string): AbstractControl {
+    return this.changePasswordForm.get(name);
   }
 
   public changePassword(): void {

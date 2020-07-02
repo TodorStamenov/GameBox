@@ -3,19 +3,35 @@
     <form [formGroup]="loginForm" (ngSubmit)="login()">
       <div class="form-group">
         <label for="username">Username</label>
-        <input formControlName="username" type="text" class="form-control" id="username" placeholder="Username">
-        <div *ngIf="username.touched && username.invalid" class="alert alert-danger">
-          {{ formService.getErrorMessage(username, 'Username') }}
+        <input
+          formControlName="username"
+          type="text"
+          class="form-control"
+          id="username"
+          placeholder="Username">
+        <div
+          *ngIf="getField('username').touched && getField('username').invalid"
+          class="alert alert-danger">
+          {{ formService.getErrorMessage(getField('username'), 'Username') }}
         </div>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input formControlName="password" type="password" class="form-control" id="password" placeholder="Password">
-        <div *ngIf="password.touched && password.invalid" class="alert alert-danger">
-          {{ formService.getErrorMessage(password, 'Password') }}
+        <input
+          formControlName="password"
+          type="password"
+          class="form-control"
+          id="password"
+          placeholder="Password">
+        <div
+          *ngIf="getField('password').touched && getField('password').invalid"
+          class="alert alert-danger">
+          {{ formService.getErrorMessage(getField('password'), 'Password') }}
         </div>
       </div>
-      <button type="submit" class="btn btn-outline-dark" [disabled]="!loginForm.valid">Login</button>
+      <button type="submit" class="btn btn-outline-dark" [disabled]="!loginForm.valid">
+        Login
+      </button>
     </form>
   </div>
 </div>

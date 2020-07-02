@@ -19,24 +19,16 @@ export class CreateUserComponent implements OnInit {
     public formService: FormService
   ) { }
 
-  get username(): AbstractControl {
-    return this.createUserForm.get('username');
-  }
-
-  get password(): AbstractControl {
-    return this.createUserForm.get('password');
-  }
-
-  get repeatPassword(): AbstractControl {
-    return this.createUserForm.get('repeatPassword');
-  }
-
   public ngOnInit(): void {
     this.createUserForm = this.fb.group({
       'username': [null, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       'password': [null, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       'repeatPassword': [null]
     });
+  }
+
+  public getField(name: string): AbstractControl {
+    return this.createUserForm.get(name);
   }
 
   public createUser(): void {

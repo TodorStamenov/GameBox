@@ -48,10 +48,6 @@ export class GameDetailsComponent implements OnInit {
     this.gameId = this.route.snapshot.params['id'];
   }
 
-  get content(): AbstractControl {
-    return this.commentForm.get('content');
-  }
-
   public ngOnInit(): void {
     this.store.dispatch(new LoadGameDetails(this.gameId));
     this.store.dispatch(new LoadGameComments(this.gameId));
@@ -72,6 +68,10 @@ export class GameDetailsComponent implements OnInit {
       'gameId': this.gameId,
       'content': [null, [Validators.required, Validators.minLength(3)]]
     });
+  }
+
+  public getField(name: string): AbstractControl {
+    return this.commentForm.get(name);
   }
 
   public onAddItemToCart(id: string): void {

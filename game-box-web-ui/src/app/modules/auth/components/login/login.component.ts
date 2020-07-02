@@ -19,19 +19,15 @@ export class LoginComponent implements OnInit {
     public formService: FormService
   ) { }
 
-  get username(): AbstractControl {
-    return this.loginForm.get('username');
-  }
-
-  get password(): AbstractControl {
-    return this.loginForm.get('password');
-  }
-
   public ngOnInit(): void {
     this.loginForm = this.fb.group({
       'username': [null, [Validators.required, Validators.minLength(3)]],
       'password': [null, [Validators.required, Validators.minLength(3)]]
     });
+  }
+
+  public getField(name: string): AbstractControl {
+    return this.loginForm.get(name);
   }
 
   public login(): void {
