@@ -1,4 +1,4 @@
-FROM node:12.14.0
+FROM node:12.18.2-alpine
 EXPOSE 1337
 
 WORKDIR /app
@@ -10,4 +10,4 @@ RUN npm install
 
 COPY GameBox.Web.API/game-box-orders-api .
 
-CMD ["node", "index.js"]
+ENTRYPOINT ["node", "index.js"]

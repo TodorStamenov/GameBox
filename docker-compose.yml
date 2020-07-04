@@ -1,16 +1,20 @@
-version: "3.4"
+version: "3.7"
 
 services:
   sql.data:
+    container_name: sqlserver
     image: mcr.microsoft.com/mssql/server
 
   nosql.data:
+    container_name: mongoserver
     image: mongo
 
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:3-management-alpine
 
   core.api:
+    container_name: coreapi
     restart: on-failure
     build:
       context: .
@@ -20,6 +24,7 @@ services:
       - rabbitmq
 
   node.api:
+    container_name: ordersapi
     build:
       context: .
       dockerfile: GameBox.Web.API/game-box-orders-api/Dockerfile
@@ -28,9 +33,14 @@ services:
       - rabbitmq
 
   web.ui:
+    container_name: webui
     build:
       context: .
       dockerfile: game-box-web-ui/Dockerfile
+
+networks: 
+  gamebox-network:
+    name: gamebox-network
   
 volumes:
   sql-data:

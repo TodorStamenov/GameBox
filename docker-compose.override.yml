@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.7"
 
 services:
   sql.data:
@@ -7,35 +7,47 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - "5433:1433"
+    networks:
+      - gamebox-network
     volumes: 
       - "sql-data:/var/opt/mssql"
 
   nosql.data:
     ports:
-      - "27018:27017"
+      - "27017:27017"
+    networks:
+      - gamebox-network
     volumes: 
-      - "nosql-data:/data/mongodb"
+      - "nosql-data:/data/db"
 
   rabbitmq:
     ports:
       - "15672:15672"
       - "5672:5672"
+    networks:
+      - gamebox-network
     volumes: 
-      - "rabbitmq-data:/data/rabbitmq"
+      - "rabbitmq-data:/var/lib/rabbitmq"
 
   core.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=tcp:172.17.0.1,5433;Initial Catalog=GameBoxCore;User Id=sa;Password=Your_password@123
+      - ConnectionString=Server=sqlserver;Database=GameBoxCore;User Id=sa;Password=Your_password@123
     ports:
       - "5000:80"
+    networks:
+      - gamebox-network
 
   node.api:
     ports:
       - "1337:1337"
+    networks:
+      - gamebox-network
 
   web.ui:
-    volumes:
-      - "web-server-data:/data/webserver"
     ports:
       - "4200:80"
+    networks:
+      - gamebox-network
+    volumes:
+      - "web-server-data:/data/webserver"
