@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   sql.data:
@@ -7,15 +7,21 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - "5433:1433"
+    volumes: 
+      - "sql-data:/var/opt/mssql"
 
   nosql.data:
     ports:
       - "27018:27017"
+    volumes: 
+      - "nosql-data:/data/mongodb"
 
   rabbitmq:
     ports:
       - "15672:15672"
       - "5672:5672"
+    volumes: 
+      - "rabbitmq-data:/data/rabbitmq"
 
   core.api:
     environment:
@@ -30,7 +36,6 @@ services:
 
   web.ui:
     volumes:
-      - '.:/app'
-      - '/app/node_modules'
+      - "web-server-data:/data/webserver"
     ports:
-      - "4242:80"
+      - "4200:80"
