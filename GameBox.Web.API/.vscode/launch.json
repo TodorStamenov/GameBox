@@ -49,10 +49,13 @@
             }
         },
         {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
+            "name": "NodeJS Launch Orders API",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/game-box-orders-api/index.js",
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
         }
     ]
 }
