@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
-import { AuthService } from '../../../../services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { NotificationsService } from 'src/app/services/notifications.service';
 import { FormService } from 'src/app/services/form.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class RegisterComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
+    private notificationService: NotificationsService,
     public formService: FormService
   ) { }
 
@@ -33,6 +35,9 @@ export class RegisterComponent implements OnInit {
 
   public register(): void {
     this.authService.register$(this.registerForm.value)
-      .subscribe(() => this.router.navigate(['/']));
+      .subscribe(() => {
+        this.router.navigate(['/']);
+        this.notificationService.subscribeForNotifications(this.authService.user.token);
+      });
   }
 }

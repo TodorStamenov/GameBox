@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 
-import { AuthService } from '../../../../services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { NotificationsService } from 'src/app/services/notifications.service';
 import { FormService } from 'src/app/services/form.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private notificationService: NotificationsService,
     public formService: FormService
   ) { }
 
@@ -32,6 +34,9 @@ export class LoginComponent implements OnInit {
 
   public login(): void {
     this.authService.login$(this.loginForm.value)
-      .subscribe(() => this.router.navigate(['/']));
+      .subscribe(() => {
+        this.router.navigate(['/']);
+        this.notificationService.subscribeForNotifications(this.authService.user.token);
+      });
   }
 }

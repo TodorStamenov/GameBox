@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
-import { tap, take } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 
 import { IRegisterModel } from '../modules/auth/models/register.model';
 import { ILoginModel } from '../modules/auth/models/login.model';
