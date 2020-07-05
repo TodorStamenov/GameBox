@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Api", "GameBox.Api\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Infrastructure", "GameBox.Infrastructure\GameBox.Infrastructure.csproj", "{08D971F6-1E4B-446F-B470-7322B3621204}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBox.Bootstrap", "GameBox.Bootstrap\GameBox.Bootstrap.csproj", "{280DC3C4-C3AF-4D64-BE29-2064A9DA1DAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Bootstrap", "GameBox.Bootstrap\GameBox.Bootstrap.csproj", "{280DC3C4-C3AF-4D64-BE29-2064A9DA1DAB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Notification", "GameBox.Notification\GameBox.Notification.csproj", "{FA113416-6CE6-4570-830F-950818A5E227}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{280DC3C4-C3AF-4D64-BE29-2064A9DA1DAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{280DC3C4-C3AF-4D64-BE29-2064A9DA1DAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{280DC3C4-C3AF-4D64-BE29-2064A9DA1DAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA113416-6CE6-4570-830F-950818A5E227}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA113416-6CE6-4570-830F-950818A5E227}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA113416-6CE6-4570-830F-950818A5E227}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA113416-6CE6-4570-830F-950818A5E227}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

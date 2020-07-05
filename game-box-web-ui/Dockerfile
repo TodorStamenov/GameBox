@@ -1,5 +1,5 @@
 FROM node:12.18.2-alpine as builder
-EXPOSE 4242
+EXPOSE 4200
 
 WORKDIR /app
 
