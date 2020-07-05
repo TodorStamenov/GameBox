@@ -1,3 +1,4 @@
+using GameBox.Notification.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +12,7 @@ namespace GameBox.Notification.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services
+                .AddHostedService<GameCreatedConsumer>()
                 .AddAuthentication(authentication =>
                 {
                     authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

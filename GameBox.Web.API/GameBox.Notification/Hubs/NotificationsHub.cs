@@ -18,12 +18,9 @@ namespace GameBox.Notification.Hubs
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            if (this.Context.User.Identity.IsAuthenticated)
-            {
-                await this.Groups.RemoveFromGroupAsync(
-                    this.Context.ConnectionId,
-                    Constants.AuthenticatedUsersGroup);
-            }
+            await this.Groups.RemoveFromGroupAsync(
+                this.Context.ConnectionId,
+                Constants.AuthenticatedUsersGroup);
         }
     }
 }

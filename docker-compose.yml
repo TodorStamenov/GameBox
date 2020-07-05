@@ -25,6 +25,7 @@ services:
       
   notification.api:
     container_name: notificationapi
+    restart: on-failure
     build:
       context: ./GameBox.Web.API
       dockerfile: GameBox.Notification/Dockerfile

@@ -10,7 +10,7 @@ namespace GameBox.Infrastructure
     {
         public void Send<T>(string queueName, T command) where T : class
         {
-            var connectionFactory = new ConnectionFactory()
+            var connectionFactory = new ConnectionFactory
             {
                 HostName = "172.17.0.1",
                 UserName = "guest",
