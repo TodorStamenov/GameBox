@@ -25,9 +25,7 @@ namespace GameBox.Bootstrap
             services
                 .AddApplication()
                 .AddPersistence(this.Configuration)
-                .AddInfrastructure();
-
-            services
+                .AddInfrastructure()
                 .AddCors()
                 .AddControllers(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCategoryCommandValidator>())
@@ -36,14 +34,12 @@ namespace GameBox.Bootstrap
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseRouting();
-
-            app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app
+                .UseRouting()
+                .UseCors(cors => cors.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
+                .UseAuthentication()
+                .UseAuthorization()
+                .UseEndpoints(endpoints => endpoints.MapControllers());
 
             // app.UseGraphQL<GameBoxSchema>("/api/graphql");
             // app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());

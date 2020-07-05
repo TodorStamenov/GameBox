@@ -229,26 +229,19 @@ namespace GameBox.Persistence
 
             await context.SaveChangesAsync();
 
-            var orders = context.Orders
-                .Select(o => new OrderCreated
+            var orders = await context.Orders
+                .Select(o => new OrderCreatedMessage
                 {
                     Username = o.User.Username,
                     Price = o.Price,
                     GamesCount = o.Games.Count,
                     TimeStamp = o.TimeStamp
-                });
+                })
+                .ToListAsync();
 
             foreach (var order in orders)
             {
-                var command = new OrderCreated 
-                {
-                    Username = order.Username,
-                    Price = order.Price,
-                    GamesCount = order.GamesCount,
-                    TimeStamp = order.TimeStamp
-                };
-
-                messageQueue.Send(queueName: "orders", command);
+                messageQueue.Send(queueName: "orders", order);
             }
         }
 

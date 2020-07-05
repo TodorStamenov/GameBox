@@ -26,12 +26,18 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
             private readonly IMediator mediator;
             private readonly IDateTimeService dateTime;
             private readonly IGameBoxDbContext context;
+            private readonly IMessageQueueSenderService queue;
 
-            public CreateOrderCommandHandler(IMediator mediator, IDateTimeService dateTime, IGameBoxDbContext context)
+            public CreateOrderCommandHandler(
+                IMediator mediator,
+                IDateTimeService dateTime,
+                IGameBoxDbContext context,
+                IMessageQueueSenderService queue)
             {
                 this.mediator = mediator;
                 this.dateTime = dateTime;
                 this.context = context;
+                this.queue = queue;
             }
 
             public async Task<string> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -69,7 +75,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                 await this.context.Set<Order>().AddAsync(order);
                 await this.context.SaveChangesAsync(cancellationToken);
 
-                var notification = new OrderCreated
+                var notification = new OrderCreatedMessage
                 {
                     Username = request.Username,
                     Price = order.Price,
@@ -77,7 +83,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                     TimeStamp = order.TimeStamp
                 };
 
-                await this.mediator.Publish(notification, cancellationToken);
+                this.queue.Send(queueName: "orders", notification);
 
                 return string.Format(Constants.Common.Success, nameof(Order), string.Empty, Constants.Common.Added);
             }

@@ -46,7 +46,7 @@ services:
     networks:
       - gamebox-network
 
-  node.api:
+  orders.api:
     ports:
       - "1337:1337"
     networks:

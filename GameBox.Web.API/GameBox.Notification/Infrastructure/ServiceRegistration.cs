@@ -1,18 +1,16 @@
-﻿using GameBox.Application;
-using GameBox.Application.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace GameBox.Infrastructure
+namespace GameBox.Notification.Infrastructure
 {
     public static class ServiceRegistration
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services
-                .AddDomainServices(typeof(ServiceRegistration).Assembly)
                 .AddAuthentication(authentication =>
                 {
                     authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -28,7 +26,24 @@ namespace GameBox.Infrastructure
                         ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.Common.SymmetricSecurityKey))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.SymmetricSecurityKey))
+                    };
+
+                    bearer.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                path.StartsWithSegments("/notifications"))
+                            {
+                                context.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 

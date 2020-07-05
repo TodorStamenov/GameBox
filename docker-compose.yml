@@ -31,7 +31,7 @@ services:
     depends_on:
       - rabbitmq
 
-  node.api:
+  orders.api:
     container_name: ordersapi
     build:
       context: ./GameBox.Web.API
