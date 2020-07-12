@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GameBox.Notification.Hubs
 {
-    public class GameCreatedConsumer : BackgroundService
+    public class GameCreatedConsumer : IHostedService
     {
         private IModel channel;
         private IConnection connection;
@@ -19,14 +19,13 @@ namespace GameBox.Notification.Hubs
         public GameCreatedConsumer(IHubContext<NotificationsHub> hub)
         {
             this.hub = hub;
-            this.InitRabbitMQ();
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
-            stoppingToken.ThrowIfCancellationRequested();
-
+            this.InitRabbitMQ();
             var consumer = new EventingBasicConsumer(this.channel);
+
             consumer.Received += async (ch, ea) =>
             {
                 var content = ea.Body.ToArray();
@@ -41,7 +40,13 @@ namespace GameBox.Notification.Hubs
             };
 
             this.channel.BasicConsume("games", false, consumer);
+            return Task.CompletedTask;
+        }
 
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            this.channel.Close();  
+            this.connection.Close();
             return Task.CompletedTask;
         }
 
@@ -66,12 +71,5 @@ namespace GameBox.Notification.Hubs
                 autoDelete: true,
                 arguments: null);
         }
-
-        public override void Dispose()  
-        {  
-            this.channel.Close();  
-            this.connection.Close();  
-            base.Dispose();  
-        }  
     }
 }

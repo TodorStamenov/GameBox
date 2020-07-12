@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
     this.authService.register$(this.registerForm.value)
       .subscribe(() => {
         this.router.navigate(['/']);
-        this.notificationService.subscribeForNotifications(this.authService.user.token);
+        this.notificationService.subscribeForNotifications();
       });
   }
 }

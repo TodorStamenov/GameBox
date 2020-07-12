@@ -5,6 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { AuthService } from 'src/app/services/auth.service';
+import { NotificationsService } from 'src/app/services/notifications.service';
 import { ICategoryMenuModel } from 'src/app/modules/category/models/category-menu.model';
 import { IAppState } from 'src/app/store/app.state';
 import { LoadCategoryNames } from 'src/app/store/+store/category/categories.actions';
@@ -18,6 +19,7 @@ export class NavigationComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
+    private notificationService: NotificationsService,
     private router: Router,
     private store: Store<IAppState>
   ) {
@@ -29,6 +31,10 @@ export class NavigationComponent implements OnInit {
     this.categories$ = this.store.pipe(
       select(s => s.categories.names)
     );
+
+    if (this.authService.isAuthed) {
+      this.notificationService.subscribeForNotifications();
+    }
   }
 
   public onLogout(): void {

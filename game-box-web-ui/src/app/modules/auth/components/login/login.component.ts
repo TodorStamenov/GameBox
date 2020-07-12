@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
     this.authService.login$(this.loginForm.value)
       .subscribe(() => {
         this.router.navigate(['/']);
-        this.notificationService.subscribeForNotifications(this.authService.user.token);
+        this.notificationService.subscribeForNotifications();
       });
   }
 }

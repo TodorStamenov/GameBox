@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as signalR from '@aspnet/signalr';
 
+import { AuthService } from './auth.service';
 import { IAppState } from 'src/app/store/app.state';
 import { ToastType } from '../modules/core/enums/toast-type.enum';
 import { DisplayToastMessage } from 'src/app/store/+store/core/core.actions';
@@ -14,11 +15,14 @@ export class NotificationsService {
   private categoriesUrl = environment.api.notificationsUrl;
   private hubConnection: signalR.HubConnection;
 
-  constructor(private store: Store<IAppState>) { }
+  constructor(
+    private authService: AuthService,
+    private store: Store<IAppState>
+  ) { }
 
-  public subscribeForNotifications(authToken: string): void {
+  public subscribeForNotifications(): void {
     const options = {
-      accessTokenFactory: () => authToken
+      accessTokenFactory: () => this.authService.user.token
     };
 
     this.hubConnection = new signalR
