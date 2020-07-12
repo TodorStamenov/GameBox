@@ -20,7 +20,7 @@ namespace GameBox.Application.Infrastructure
 
         public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
-            var context = new ValidationContext(request);
+            var context = new ValidationContext<TRequest>(request);
 
             var failures = this.validators
                 .Select(v => v.Validate(context))
