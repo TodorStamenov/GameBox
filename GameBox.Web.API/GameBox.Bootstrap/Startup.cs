@@ -1,4 +1,5 @@
-﻿using FluentValidation.AspNetCore;
+﻿using System.Reflection;
+using FluentValidation.AspNetCore;
 using GameBox.Api.Filters;
 using GameBox.Application;
 using GameBox.Application.Categories.Commands.CreateCategory;
@@ -23,7 +24,7 @@ namespace GameBox.Bootstrap
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddApplication()
+                .AddApplication(Assembly.GetAssembly(typeof(AccountService)), Assembly.GetAssembly(typeof(DataService)))
                 .AddPersistence(this.Configuration)
                 .AddInfrastructure()
                 .AddCors()

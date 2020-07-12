@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using GameBox.Application.Contracts;
+using GameBox.Application.Contracts.Services;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -16,9 +15,9 @@ namespace GameBox.Application.Categories.Queries.GetAllCategories
         public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, IEnumerable<CategoriesListViewModel>>
         {
             private readonly IMapper mapper;
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public GetAllCategoriesQueryHandler(IMapper mapper, IGameBoxDbContext context)
+            public GetAllCategoriesQueryHandler(IMapper mapper, IDataService context)
             {
                 this.mapper = mapper;
                 this.context = context;
@@ -26,11 +25,11 @@ namespace GameBox.Application.Categories.Queries.GetAllCategories
 
             public async Task<IEnumerable<CategoriesListViewModel>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
             {
-                return await this.context
-                    .Set<Category>()
+                return await Task.FromResult(this.context
+                    .All<Category>()
                     .OrderBy(c => c.Name)
                     .ProjectTo<CategoriesListViewModel>(this.mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);
+                    .ToList());
             }
         }
     }

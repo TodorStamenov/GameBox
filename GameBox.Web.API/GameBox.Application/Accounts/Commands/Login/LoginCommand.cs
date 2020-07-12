@@ -1,10 +1,8 @@
-﻿using GameBox.Application.Contracts;
-using GameBox.Application.Contracts.Services;
+﻿using GameBox.Application.Contracts.Services;
 using GameBox.Application.Exceptions;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,9 +19,9 @@ namespace GameBox.Application.Accounts.Commands.Login
         {
             private readonly IAccountService account;
             private readonly IDateTimeService dateTime;
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public LoginCommandHandler(IAccountService account, IDateTimeService dateTime, IGameBoxDbContext context)
+            public LoginCommandHandler(IAccountService account, IDateTimeService dateTime, IDataService context)
             {
                 this.account = account;
                 this.dateTime = dateTime;
@@ -32,8 +30,8 @@ namespace GameBox.Application.Accounts.Commands.Login
 
             public async Task<LoginViewModel> Handle(LoginCommand request, CancellationToken cancellationToken)
             {
-                var userInfo = await this.context
-                    .Set<User>()
+                var userInfo = this.context
+                    .All<User>()
                     .Where(u => u.Username == request.Username)
                     .Select(u => new
                     {
@@ -44,7 +42,7 @@ namespace GameBox.Application.Accounts.Commands.Login
                         u.IsLocked,
                         IsAdmin = u.Roles.Any(r => r.Role.Name == Constants.Common.Admin)
                     })
-                    .FirstOrDefaultAsync(cancellationToken);
+                    .FirstOrDefault();
 
                 if (userInfo == null)
                 {
@@ -65,7 +63,7 @@ namespace GameBox.Application.Accounts.Commands.Login
 
                 var token = this.account.GenerateJwtToken(userInfo.Id.ToString(), userInfo.Username, userInfo.IsAdmin);
 
-                return new LoginViewModel
+                return await Task.FromResult(new LoginViewModel
                 {
                     Id = userInfo.Id,
                     Username = userInfo.Username,
@@ -73,7 +71,7 @@ namespace GameBox.Application.Accounts.Commands.Login
                     Token = token,
                     ExpirationDate = this.dateTime.UtcNow.AddDays(Constants.Common.TokenExpiration),
                     Message = string.Format(Constants.Common.Success, nameof(User), userInfo.Username, "Logged In")
-                };
+                });
             }
         }
     }

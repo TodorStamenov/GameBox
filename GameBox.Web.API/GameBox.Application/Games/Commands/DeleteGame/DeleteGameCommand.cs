@@ -1,9 +1,10 @@
-﻿using GameBox.Application.Contracts;
+﻿using GameBox.Application.Contracts.Services;
 using GameBox.Application.Exceptions;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using MediatR;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,24 +16,27 @@ namespace GameBox.Application.Games.Commands.DeleteGame
 
         public class DeleteGameCommandHandler : IRequestHandler<DeleteGameCommand, string>
         {
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public DeleteGameCommandHandler(IGameBoxDbContext context)
+            public DeleteGameCommandHandler(IDataService context)
             {
                 this.context = context;
             }
 
             public async Task<string> Handle(DeleteGameCommand request, CancellationToken cancellationToken)
             {
-                var game = await this.context.Set<Game>().FindAsync(request.Id);
+                var game = this.context
+                    .All<Game>()
+                    .Where(g => g.Id == request.Id)
+                    .FirstOrDefault();
 
                 if (game == null)
                 {
                     throw new NotFoundException(nameof(Game), request.Id);
                 }
 
-                this.context.Set<Game>().Remove(game);
-                await this.context.SaveChangesAsync(cancellationToken);
+                await this.context.DeleteAsync(game);
+                await this.context.SaveAsync(cancellationToken);
 
                 return string.Format(Constants.Common.Success, nameof(Game), game.Title, Constants.Common.Deleted);
             }

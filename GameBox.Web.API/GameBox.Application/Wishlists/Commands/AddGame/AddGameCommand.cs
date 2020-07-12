@@ -1,8 +1,8 @@
-﻿using GameBox.Application.Contracts;
+﻿using GameBox.Application.Contracts.Services;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,18 +16,18 @@ namespace GameBox.Application.Wishlists.Commands.AddGame
 
         public class AddGameCommandHandler : IRequestHandler<AddGameCommand, Guid>
         {
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public AddGameCommandHandler(IGameBoxDbContext context)
+            public AddGameCommandHandler(IDataService context)
             {
                 this.context = context;
             }
 
             public async Task<Guid> Handle(AddGameCommand request, CancellationToken cancellationToken)
             {
-                var gameExists = await this.context
-                    .Set<Wishlist>()
-                    .AnyAsync(w => w.UserId == request.UserId && w.GameId == request.GameId);
+                var gameExists = this.context
+                    .All<Wishlist>()
+                    .Any(w => w.UserId == request.UserId && w.GameId == request.GameId);
 
                 if (gameExists)
                 {
@@ -40,8 +40,8 @@ namespace GameBox.Application.Wishlists.Commands.AddGame
                     GameId = request.GameId
                 };
 
-                await this.context.Set<Wishlist>().AddAsync(wishlist);
-                await this.context.SaveChangesAsync(cancellationToken);
+                await this.context.AddAsync(wishlist);
+                await this.context.SaveAsync(cancellationToken);
 
                 return request.GameId;
             }

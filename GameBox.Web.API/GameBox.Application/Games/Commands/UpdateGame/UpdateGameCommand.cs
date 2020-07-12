@@ -1,11 +1,12 @@
 ﻿using FluentValidation.Results;
-using GameBox.Application.Contracts;
+using GameBox.Application.Contracts.Services;
 using GameBox.Application.Exceptions;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,9 +34,9 @@ namespace GameBox.Application.Games.Commands.UpdateGame
 
         public class UpdateGameCommandHandler : IRequestHandler<UpdateGameCommand, string>
         {
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public UpdateGameCommandHandler(IGameBoxDbContext context)
+            public UpdateGameCommandHandler(IDataService context)
             {
                 this.context = context;
             }
@@ -52,7 +53,10 @@ namespace GameBox.Application.Games.Commands.UpdateGame
                     });
                 }
 
-                var game = await this.context.Set<Game>().FindAsync(request.Id);
+                var game = this.context
+                    .All<Game>()
+                    .Where(g => g.Id == request.Id)
+                    .FirstOrDefault();
 
                 if (game == null)
                 {
@@ -68,7 +72,7 @@ namespace GameBox.Application.Games.Commands.UpdateGame
                 game.ReleaseDate = releaseDate;
                 game.CategoryId = request.CategoryId;
 
-                await this.context.SaveChangesAsync(cancellationToken);
+                await this.context.SaveAsync(cancellationToken);
 
                 return string.Format(Constants.Common.Success, nameof(Game), request.Title, Constants.Common.Edited);
             }

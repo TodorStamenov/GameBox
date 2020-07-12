@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using GameBox.Application.Contracts;
+using GameBox.Application.Contracts.Services;
 using GameBox.Application.Exceptions;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;
@@ -19,9 +18,9 @@ namespace GameBox.Application.Games.Queries.GetGame
         public class GetGameQueryHandler : IRequestHandler<GetGameQuery, GameViewModel>
         {
             private readonly IMapper mapper;
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public GetGameQueryHandler(IMapper mapper, IGameBoxDbContext context)
+            public GetGameQueryHandler(IMapper mapper, IDataService context)
             {
                 this.mapper = mapper;
                 this.context = context;
@@ -29,18 +28,18 @@ namespace GameBox.Application.Games.Queries.GetGame
 
             public async Task<GameViewModel> Handle(GetGameQuery request, CancellationToken cancellationToken)
             {
-                var game = await this.context
-                    .Set<Game>()
+                var game = this.context
+                    .All<Game>()
                     .Where(g => g.Id == request.Id)
                     .ProjectTo<GameViewModel>(this.mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(cancellationToken);
+                    .FirstOrDefault();
 
                 if (game == null)
                 {
                     throw new NotFoundException(nameof(Game), request.Id);
                 }
 
-                return game;
+                return await Task.FromResult(game);
             }
         }
     }

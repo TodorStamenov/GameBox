@@ -1,9 +1,10 @@
-﻿using GameBox.Application.Contracts;
+﻿using GameBox.Application.Contracts.Services;
 using GameBox.Application.Exceptions;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using MediatR;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,16 +18,19 @@ namespace GameBox.Application.Categories.Commands.UpdateCategory
 
         public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, string>
         {
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public UpdateCategoryCommandHandler(IGameBoxDbContext context)
+            public UpdateCategoryCommandHandler(IDataService context)
             {
                 this.context = context;
             }
 
             public async Task<string> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
             {
-                var category = await this.context.Set<Category>().FindAsync(request.Id);
+                var category = this.context
+                    .All<Category>()
+                    .Where(c => c.Id == request.Id)
+                    .FirstOrDefault();
 
                 if (category == null)
                 {
@@ -35,7 +39,7 @@ namespace GameBox.Application.Categories.Commands.UpdateCategory
 
                 category.Name = request.Name;
 
-                await this.context.SaveChangesAsync(cancellationToken);
+                await this.context.SaveAsync(cancellationToken);
 
                 return string.Format(Constants.Common.Success, nameof(Category), request.Name, Constants.Common.Edited);
             }

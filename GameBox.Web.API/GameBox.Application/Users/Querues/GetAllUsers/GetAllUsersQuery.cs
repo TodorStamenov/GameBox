@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using GameBox.Application.Contracts;
+using GameBox.Application.Contracts.Services;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -20,9 +19,9 @@ namespace GameBox.Application.Users.Querues.GetAllUsers
             private const int UsersOnPage = 15;
 
             private readonly IMapper mapper;
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public GetAllUsersQueryHandler(IMapper mapper, IGameBoxDbContext context)
+            public GetAllUsersQueryHandler(IMapper mapper, IDataService context)
             {
                 this.mapper = mapper;
                 this.context = context;
@@ -30,18 +29,18 @@ namespace GameBox.Application.Users.Querues.GetAllUsers
 
             public async Task<IEnumerable<UsersListViewModel>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
             {
-                IQueryable<User> query = this.context.Set<User>();
+                IQueryable<User> query = this.context.All<User>();
 
                 if (!string.IsNullOrWhiteSpace(request.QueryString))
                 {
                     query = query.Where(u => u.Username.ToLower().Contains(request.QueryString.ToLower()));
                 }
 
-                return await query
+                return await Task.FromResult(query
                     .OrderBy(u => u.Username)
                     .Take(UsersOnPage)
                     .ProjectTo<UsersListViewModel>(this.mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);
+                    .ToList());
             }
         }
     }

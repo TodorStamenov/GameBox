@@ -1,8 +1,7 @@
-﻿using GameBox.Application.Contracts;
+﻿using GameBox.Application.Contracts.Services;
 using GameBox.Application.Exceptions;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;
@@ -18,17 +17,17 @@ namespace GameBox.Application.Users.Commands.AddRole
 
         public class AddRoleCommandHandler : IRequestHandler<AddRoleCommand, string>
         {
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public AddRoleCommandHandler(IGameBoxDbContext context)
+            public AddRoleCommandHandler(IDataService context)
             {
                 this.context = context;
             }
 
             public async Task<string> Handle(AddRoleCommand request, CancellationToken cancellationToken)
             {
-                var userRoleInfo = await this.context
-                    .Set<UserRoles>()
+                var userRoleInfo = this.context
+                    .All<UserRoles>()
                     .Where(ur => ur.Role.Name == request.RoleName)
                     .Where(ur => ur.User.Username == request.Username)
                     .Select(ur => new
@@ -36,29 +35,29 @@ namespace GameBox.Application.Users.Commands.AddRole
                         ur.RoleId,
                         ur.UserId
                     })
-                    .FirstOrDefaultAsync(cancellationToken);
+                    .FirstOrDefault();
 
                 if (userRoleInfo != null)
                 {
                     throw new RoleEditException(request.Username, request.RoleName, true);
                 }
 
-                var userId = await this.context
-                    .Set<User>()
+                var userId = this.context
+                    .All<User>()
                     .Where(u => u.Username == request.Username)
                     .Select(u => u.Id)
-                    .FirstOrDefaultAsync(cancellationToken);
+                    .FirstOrDefault();
 
                 if (userId == default(Guid))
                 {
                     throw new NotFoundException(nameof(User), request.Username);
                 }
 
-                var roleId = await this.context
-                    .Set<Role>()
+                var roleId = this.context
+                    .All<Role>()
                     .Where(r => r.Name == request.RoleName)
                     .Select(r => r.Id)
-                    .FirstOrDefaultAsync(cancellationToken);
+                    .FirstOrDefault();
 
                 if (roleId == default(Guid))
                 {
@@ -71,8 +70,8 @@ namespace GameBox.Application.Users.Commands.AddRole
                     UserId = userId
                 };
 
-                await this.context.Set<UserRoles>().AddAsync(userRole);
-                await this.context.SaveChangesAsync(cancellationToken);
+                await this.context.AddAsync(userRole);
+                await this.context.SaveAsync(cancellationToken);
 
                 return $"User {request.Username} successfully added to {request.RoleName} role.";
             }

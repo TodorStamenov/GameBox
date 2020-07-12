@@ -1,9 +1,7 @@
-﻿using GameBox.Application.Contracts;
-using GameBox.Application.Contracts.Services;
+﻿using GameBox.Application.Contracts.Services;
 using GameBox.Application.Exceptions;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,9 +21,9 @@ namespace GameBox.Application.Accounts.Commands.ChangePassword
         public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, ChangePasswordViewModel>
         {
             private readonly IAccountService account;
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public ChangePasswordCommandHandler(IAccountService account, IGameBoxDbContext context)
+            public ChangePasswordCommandHandler(IAccountService account, IDataService context)
             {
                 this.account = account;
                 this.context = context;
@@ -33,10 +31,10 @@ namespace GameBox.Application.Accounts.Commands.ChangePassword
 
             public async Task<ChangePasswordViewModel> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
             {
-                var user = await this.context
-                    .Set<User>()
+                var user = this.context
+                    .All<User>()
                     .Where(u => u.Username == request.Username)
-                    .FirstOrDefaultAsync(cancellationToken);
+                    .FirstOrDefault();
 
                 if (user == null)
                 {
@@ -56,7 +54,7 @@ namespace GameBox.Application.Accounts.Commands.ChangePassword
 
                 user.Password = newHashedPassword;
 
-                await this.context.SaveChangesAsync(cancellationToken);
+                await this.context.SaveAsync(cancellationToken);
 
                 return new ChangePasswordViewModel { Message = "You have successfully updated your password!" };
             }

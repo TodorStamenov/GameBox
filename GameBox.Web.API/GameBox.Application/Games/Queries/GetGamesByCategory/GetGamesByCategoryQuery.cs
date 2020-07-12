@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using GameBox.Application.Contracts;
+using GameBox.Application.Contracts.Services;
 using GameBox.Application.Games.Queries.GetAllGames;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +23,9 @@ namespace GameBox.Application.Games.Queries.GetGamesByCategory
             private const int GameCardsCount = 9;
 
             private readonly IMapper mapper;
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public GetGamesByCategoryQueryHandler(IMapper mapper, IGameBoxDbContext context)
+            public GetGamesByCategoryQueryHandler(IMapper mapper, IDataService context)
             {
                 this.mapper = mapper;
                 this.context = context;
@@ -34,8 +33,8 @@ namespace GameBox.Application.Games.Queries.GetGamesByCategory
 
             public async Task<IEnumerable<GamesListViewModel>> Handle(GetGamesByCategoryQuery request, CancellationToken cancellationToken)
             {
-                return await this.context
-                    .Set<Game>()
+                return await Task.FromResult(this.context
+                    .All<Game>()
                     .Where(g => g.CategoryId == request.CategoryId)
                     .OrderByDescending(g => g.ReleaseDate)
                     .ThenByDescending(g => g.ViewCount)
@@ -43,7 +42,7 @@ namespace GameBox.Application.Games.Queries.GetGamesByCategory
                     .Skip(request.LoadedGames)
                     .Take(GameCardsCount)
                     .ProjectTo<GamesListViewModel>(this.mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);
+                    .ToList());
             }
         }
     }

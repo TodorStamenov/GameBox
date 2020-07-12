@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class NotificationsService {
-  private categoriesUrl = environment.api.gameBoxApiUrl + 'notifications/';
+  private categoriesUrl = environment.api.notificationsUrl;
   private hubConnection: signalR.HubConnection;
 
   constructor(private store: Store<IAppState>) { }
@@ -32,7 +32,6 @@ export class NotificationsService {
       .catch(err => console.log('Error while starting connection: ' + err));
 
     this.hubConnection.on('ReceiveNotification', data => {
-      console.log(data);
       this.store.dispatch(new DisplayToastMessage({
         message: `${data.title} is now available in store!`,
         toastType: ToastType.success

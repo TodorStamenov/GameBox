@@ -1,10 +1,8 @@
-﻿using GameBox.Application.Contracts;
-using GameBox.Application.Contracts.Services;
+﻿using GameBox.Application.Contracts.Services;
 using GameBox.Application.Exceptions;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,13 +23,13 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
         {
             private readonly IMediator mediator;
             private readonly IDateTimeService dateTime;
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
             private readonly IMessageQueueSenderService queue;
 
             public CreateOrderCommandHandler(
                 IMediator mediator,
                 IDateTimeService dateTime,
-                IGameBoxDbContext context,
+                IDataService context,
                 IMessageQueueSenderService queue)
             {
                 this.mediator = mediator;
@@ -42,10 +40,10 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
 
             public async Task<string> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
             {
-                var games = await this.context
-                    .Set<Game>()
+                var games = this.context
+                    .All<Game>()
                     .Where(g => request.GameIds.Contains(g.Id))
-                    .ToListAsync(cancellationToken);
+                    .ToList();
 
                 if (!games.Any())
                 {
@@ -72,8 +70,8 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                     });
                 }
 
-                await this.context.Set<Order>().AddAsync(order);
-                await this.context.SaveChangesAsync(cancellationToken);
+                await this.context.AddAsync(order);
+                await this.context.SaveAsync(cancellationToken);
 
                 var notification = new OrderCreatedMessage
                 {

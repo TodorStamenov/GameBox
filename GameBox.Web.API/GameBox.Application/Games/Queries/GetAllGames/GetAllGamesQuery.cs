@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using GameBox.Application.Contracts;
+using GameBox.Application.Contracts.Services;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -20,9 +19,9 @@ namespace GameBox.Application.Games.Queries.GetAllGames
             private const int GameCardsCount = 9;
 
             private readonly IMapper mapper;
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public GetAllGamesQueryHandler(IMapper mapper, IGameBoxDbContext context)
+            public GetAllGamesQueryHandler(IMapper mapper, IDataService context)
             {
                 this.mapper = mapper;
                 this.context = context;
@@ -30,15 +29,15 @@ namespace GameBox.Application.Games.Queries.GetAllGames
 
             public async Task<IEnumerable<GamesListViewModel>> Handle(GetAllGamesQuery request, CancellationToken cancellationToken)
             {
-                return await this.context
-                    .Set<Game>()
+                return await Task.FromResult(this.context
+                    .All<Game>()
                     .OrderByDescending(g => g.ReleaseDate)
                     .ThenByDescending(g => g.ViewCount)
                     .ThenBy(g => g.Title)
                     .Skip(request.LoadedGames)
                     .Take(GameCardsCount)
                     .ProjectTo<GamesListViewModel>(this.mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);
+                    .ToList());
             }
         }
     }

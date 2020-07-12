@@ -12,7 +12,7 @@
 <div *ngIf="(games$ | async).length > 0" class="row">
   <div class="col-sm-9 text-right mt-3">
     <h1>
-      <strong>Total Price - </strong>{{ calculateTotalPrice(games$ | async) | currency }}
+      <strong>Total Price: </strong>{{ calculateTotalPrice(games$ | async) | currency }}
     </h1>
   </div>
   <div class="col-sm-3 mt-4">

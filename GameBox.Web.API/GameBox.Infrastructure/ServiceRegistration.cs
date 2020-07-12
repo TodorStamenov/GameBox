@@ -1,5 +1,4 @@
-﻿using GameBox.Application;
-using GameBox.Application.Infrastructure;
+﻿using GameBox.Application.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -12,7 +11,6 @@ namespace GameBox.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services
-                .AddDomainServices(typeof(ServiceRegistration).Assembly)
                 .AddAuthentication(authentication =>
                 {
                     authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

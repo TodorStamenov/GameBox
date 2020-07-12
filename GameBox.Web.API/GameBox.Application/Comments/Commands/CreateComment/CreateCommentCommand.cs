@@ -1,4 +1,3 @@
-using GameBox.Application.Contracts;
 using GameBox.Application.Contracts.Services;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
@@ -19,10 +18,10 @@ namespace GameBox.Application.Comments.Commands.CreateComment
 
         public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand, string>
         {
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
             private readonly IDateTimeService dateTime;
 
-            public CreateCommentCommandHandler(IGameBoxDbContext context, IDateTimeService dateTime)
+            public CreateCommentCommandHandler(IDataService context, IDateTimeService dateTime)
             {
                 this.context = context;
                 this.dateTime = dateTime;
@@ -38,8 +37,8 @@ namespace GameBox.Application.Comments.Commands.CreateComment
                     TimeStamp = this.dateTime.UtcNow
                 };
 
-                await this.context.Set<Comment>().AddAsync(comment);
-                await this.context.SaveChangesAsync();
+                await this.context.AddAsync(comment);
+                await this.context.SaveAsync();
 
                 return string.Format(Constants.Common.Success, nameof(Comment), string.Empty, Constants.Common.Added);
             }

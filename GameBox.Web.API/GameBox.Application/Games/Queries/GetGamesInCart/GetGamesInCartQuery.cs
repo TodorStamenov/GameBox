@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using GameBox.Application.Contracts;
+using GameBox.Application.Contracts.Services;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +18,9 @@ namespace GameBox.Application.Games.Queries.GetGamesInCart
         public class GetGamesInCartQueryHandler : IRequestHandler<GetGamesInCartQuery, IEnumerable<GamesListCartViewModel>>
         {
             private readonly IMapper mapper;
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public GetGamesInCartQueryHandler(IMapper mapper, IGameBoxDbContext context)
+            public GetGamesInCartQueryHandler(IMapper mapper, IDataService context)
             {
                 this.mapper = mapper;
                 this.context = context;
@@ -29,13 +28,13 @@ namespace GameBox.Application.Games.Queries.GetGamesInCart
 
             public async Task<IEnumerable<GamesListCartViewModel>> Handle(GetGamesInCartQuery request, CancellationToken cancellationToken)
             {
-                return await this.context
-                    .Set<Game>()
+                return await Task.FromResult(this.context
+                    .All<Game>()
                     .Where(g => request.GameIds.Contains(g.Id))
                     .OrderByDescending(g => g.Price)
                     .Distinct()
                     .ProjectTo<GamesListCartViewModel>(this.mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);
+                    .ToList());
             }
         }
     }

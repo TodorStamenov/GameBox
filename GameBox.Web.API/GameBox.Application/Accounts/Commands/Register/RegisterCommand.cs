@@ -1,5 +1,4 @@
-﻿using GameBox.Application.Contracts;
-using GameBox.Application.Contracts.Services;
+﻿using GameBox.Application.Contracts.Services;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using MediatR;
@@ -20,9 +19,9 @@ namespace GameBox.Application.Accounts.Commands.Register
         {
             private readonly IAccountService account;
             private readonly IDateTimeService dateTime;
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public RegisterCommandHandler(IAccountService account, IDateTimeService dateTime, IGameBoxDbContext context)
+            public RegisterCommandHandler(IAccountService account, IDateTimeService dateTime, IDataService context)
             {
                 this.account = account;
                 this.dateTime = dateTime;
@@ -41,8 +40,8 @@ namespace GameBox.Application.Accounts.Commands.Register
                     Salt = salt
                 };
 
-                await this.context.Set<User>().AddAsync(user);
-                await this.context.SaveChangesAsync(cancellationToken);
+                await this.context.AddAsync(user);
+                await this.context.SaveAsync(cancellationToken);
 
                 var token = this.account.GenerateJwtToken(user.Id.ToString(), user.Username, false);
 

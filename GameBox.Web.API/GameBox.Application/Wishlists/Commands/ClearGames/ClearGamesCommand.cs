@@ -1,7 +1,6 @@
-﻿using GameBox.Application.Contracts;
+﻿using GameBox.Application.Contracts.Services;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +15,9 @@ namespace GameBox.Application.Wishlists.Commands.ClearGames
 
         public class ClearGamesCommandHandler : IRequestHandler<ClearGamesCommand, IEnumerable<Guid>>
         {
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public ClearGamesCommandHandler(IGameBoxDbContext context)
+            public ClearGamesCommandHandler(IDataService context)
             {
                 this.context = context;
             }
@@ -27,19 +26,18 @@ namespace GameBox.Application.Wishlists.Commands.ClearGames
             {
                 var result = new List<Guid>();
 
-                var games = await this.context
-                    .Set<Wishlist>()
+                var games = this.context
+                    .All<Wishlist>()
                     .Where(w => w.UserId == request.UserId)
-                    .ToListAsync(cancellationToken);
+                    .ToList();
 
                 foreach (var game in games)
                 {
-                    this.context.Set<Wishlist>().Remove(game);
-
+                    await this.context.DeleteAsync(game);
                     result.Add(game.GameId);
                 }
 
-                await this.context.SaveChangesAsync(cancellationToken);
+                await this.context.SaveAsync(cancellationToken);
 
                 return result;
             }

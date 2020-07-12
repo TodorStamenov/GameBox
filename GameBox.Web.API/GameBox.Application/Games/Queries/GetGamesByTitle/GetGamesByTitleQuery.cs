@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using GameBox.Application.Contracts;
+using GameBox.Application.Contracts.Services;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -20,9 +19,9 @@ namespace GameBox.Application.Games.Queries.GetGamesByTitle
             private const int GamesOnPage = 15;
 
             private readonly IMapper mapper;
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public GetGamesByTitleQueryHandler(IMapper mapper, IGameBoxDbContext context)
+            public GetGamesByTitleQueryHandler(IMapper mapper, IDataService context)
             {
                 this.mapper = mapper;
                 this.context = context;
@@ -30,7 +29,7 @@ namespace GameBox.Application.Games.Queries.GetGamesByTitle
 
             public async Task<IEnumerable<GamesListByTitleViewModel>> Handle(GetGamesByTitleQuery request, CancellationToken cancellationToken)
             {
-                IQueryable<Game> query = this.context.Set<Game>();
+                IQueryable<Game> query = this.context.All<Game>();
 
                 if (!string.IsNullOrWhiteSpace(request.Title))
                 {
@@ -38,11 +37,11 @@ namespace GameBox.Application.Games.Queries.GetGamesByTitle
                         .Where(g => g.Title.ToLower().Contains(request.Title.ToLower()));
                 }
 
-                return await query
+                return await Task.FromResult(query
                     .OrderBy(g => g.Title)
                     .Take(GamesOnPage)
                     .ProjectTo<GamesListByTitleViewModel>(this.mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);
+                    .ToList());
             }
         }
     }

@@ -1,10 +1,9 @@
-﻿using GameBox.Application.Contracts;
-using GameBox.Domain.Entities;
+﻿using GameBox.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameBox.Persistence
 {
-    public class GameBoxDbContext : DbContext, IGameBoxDbContext
+    public class GameBoxDbContext : DbContext
     {
         public GameBoxDbContext(DbContextOptions<GameBoxDbContext> options)
             : base(options)

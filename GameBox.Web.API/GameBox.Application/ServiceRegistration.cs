@@ -14,12 +14,13 @@ namespace GameBox.Application
 {
     public static class ServiceRegistration
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
+        public static IServiceCollection AddApplication(this IServiceCollection services, params Assembly[] assemblies)
         {
             services
                 .AddAutoMapper(Assembly.GetExecutingAssembly())
                 .AddMediatR(Assembly.GetExecutingAssembly())
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>))
+                .AddDomainServices(assemblies)
                 .AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService))
                 .AddScoped<ISchema, GameBoxSchema>();
 
@@ -30,14 +31,14 @@ namespace GameBox.Application
             return services;
         }
 
-        public static IServiceCollection AddDomainServices(this IServiceCollection services, Assembly assembly)
+        public static IServiceCollection AddDomainServices(this IServiceCollection services, Assembly[] assemblies)
         {
             var transientServiceInterfaceType = typeof(ITransientService);
             var singletonServiceInterfaceType = typeof(ISingletonService);
             var scopedServiceInterfaceType = typeof(IScopedService);
 
-            var types = assembly
-                .GetExportedTypes()
+            var types = assemblies
+                .SelectMany(a => a.GetExportedTypes())
                 .Where(t => t.IsClass && !t.IsAbstract && t.Name.ToLower().EndsWith("service"))
                 .Where(t => t.GetInterfaces().Any(i => i.Name == $"I{t.Name}"))
                 .Select(t => new

@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using GameBox.Application.Contracts;
+using GameBox.Application.Contracts.Services;
 using GameBox.Application.Exceptions;
 using GameBox.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;
@@ -19,9 +18,9 @@ namespace GameBox.Application.Categories.Queries.GetCategory
         public class GetCategoryQueryHandler : IRequestHandler<GetCategoryQuery, CategoryViewModel>
         {
             private readonly IMapper mapper;
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public GetCategoryQueryHandler(IMapper mapper, IGameBoxDbContext context)
+            public GetCategoryQueryHandler(IMapper mapper, IDataService context)
             {
                 this.mapper = mapper;
                 this.context = context;
@@ -29,18 +28,18 @@ namespace GameBox.Application.Categories.Queries.GetCategory
 
             public async Task<CategoryViewModel> Handle(GetCategoryQuery request, CancellationToken cancellationToken)
             {
-                var category = await this.context
-                    .Set<Category>()
+                var category = this.context
+                    .All<Category>()
                     .Where(c => c.Id == request.Id)
                     .ProjectTo<CategoryViewModel>(this.mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(cancellationToken);
+                    .FirstOrDefault();
 
                 if (category == null)
                 {
                     throw new NotFoundException(nameof(Category), request.Id);
                 }
 
-                return category;
+                return await Task.FromResult(category);
             }
         }
     }

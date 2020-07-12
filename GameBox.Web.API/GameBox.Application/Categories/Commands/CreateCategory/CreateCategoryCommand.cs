@@ -1,4 +1,4 @@
-﻿using GameBox.Application.Contracts;
+﻿using GameBox.Application.Contracts.Services;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using MediatR;
@@ -13,9 +13,9 @@ namespace GameBox.Application.Categories.Commands.CreateCategory
 
         public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, string>
         {
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
 
-            public CreateCategoryCommandHandler(IGameBoxDbContext context)
+            public CreateCategoryCommandHandler(IDataService context)
             {
                 this.context = context;
             }
@@ -27,8 +27,8 @@ namespace GameBox.Application.Categories.Commands.CreateCategory
                     Name = request.Name
                 };
 
-                await this.context.Set<Category>().AddAsync(category);
-                await this.context.SaveChangesAsync(cancellationToken);
+                await this.context.AddAsync(category);
+                await this.context.SaveAsync(cancellationToken);
 
                 return string.Format(Constants.Common.Success, nameof(Category), request.Name, Constants.Common.Added);
             }

@@ -1,5 +1,4 @@
-﻿using GameBox.Application.Contracts;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -15,11 +14,9 @@ namespace GameBox.Persistence
                     configuration["ConnectionString"],
                     sqlOptions => 
                     {
-                        sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null);
                         sqlOptions.MigrationsAssembly(typeof(GameBoxDbContext).Assembly.FullName);
+                        sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                     }));
-
-            services.AddScoped<IGameBoxDbContext>(provider => provider.GetService<GameBoxDbContext>());
 
             return services;
         }

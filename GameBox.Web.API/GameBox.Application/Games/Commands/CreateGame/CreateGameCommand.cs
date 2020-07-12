@@ -1,5 +1,4 @@
 ﻿using FluentValidation.Results;
-using GameBox.Application.Contracts;
 using GameBox.Application.Contracts.Services;
 using GameBox.Application.Exceptions;
 using GameBox.Application.Infrastructure;
@@ -32,11 +31,11 @@ namespace GameBox.Application.Games.Commands.CreateGame
 
         public class CreateGameCommandHandler : IRequestHandler<CreateGameCommand, string>
         {
-            private readonly IGameBoxDbContext context;
+            private readonly IDataService context;
             private readonly IMessageQueueSenderService queue;
 
             public CreateGameCommandHandler(
-                IGameBoxDbContext context,
+                IDataService context,
                 IMessageQueueSenderService queue)
             {
                 this.context = context;
@@ -55,7 +54,7 @@ namespace GameBox.Application.Games.Commands.CreateGame
                     });
                 }
 
-                await this.context.Set<Game>().AddAsync(new Game
+                await this.context.AddAsync(new Game
                 {
                     Title = request.Title,
                     Description = request.Description,
@@ -67,7 +66,7 @@ namespace GameBox.Application.Games.Commands.CreateGame
                     CategoryId = request.CategoryId
                 });
 
-                await this.context.SaveChangesAsync(cancellationToken);
+                await this.context.SaveAsync(cancellationToken);
 
                 this.queue.Send("games", new GameCreatedMessage { Title = request.Title });
 
