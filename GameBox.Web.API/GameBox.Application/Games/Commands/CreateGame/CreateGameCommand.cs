@@ -66,9 +66,13 @@ namespace GameBox.Application.Games.Commands.CreateGame
                     CategoryId = request.CategoryId
                 });
 
-                await this.context.SaveAsync(cancellationToken);
+                var queueName = "games";
+                var messageData = new GameCreatedMessage { Title = request.Title };
+                var message = new Message(queueName, messageData);
 
-                this.queue.Send("games", new GameCreatedMessage { Title = request.Title });
+                await this.context.SaveAsync(cancellationToken, message);
+                this.queue.Send(queueName, messageData);
+                await this.context.MarkMessageAsPublished(message.Id);
 
                 return string.Format(Constants.Common.Success, nameof(Game), request.Title, Constants.Common.Added);
             }

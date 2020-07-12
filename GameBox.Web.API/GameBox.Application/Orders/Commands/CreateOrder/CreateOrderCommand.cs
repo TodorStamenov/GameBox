@@ -71,9 +71,8 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                 }
 
                 await this.context.AddAsync(order);
-                await this.context.SaveAsync(cancellationToken);
 
-                var notification = new OrderCreatedMessage
+                var messageData = new OrderCreatedMessage
                 {
                     Username = request.Username,
                     Price = order.Price,
@@ -81,7 +80,12 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                     TimeStamp = order.TimeStamp
                 };
 
-                this.queue.Send(queueName: "orders", notification);
+                var queueName = "orders";
+                var message = new Message(queueName, messageData);
+
+                await this.context.SaveAsync(cancellationToken);
+                this.queue.Send(queueName, messageData);
+                await this.context.MarkMessageAsPublished(message.Id);
 
                 return string.Format(Constants.Common.Success, nameof(Order), string.Empty, Constants.Common.Added);
             }

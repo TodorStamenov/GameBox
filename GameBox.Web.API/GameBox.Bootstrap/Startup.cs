@@ -26,7 +26,7 @@ namespace GameBox.Bootstrap
             services
                 .AddApplication(Assembly.GetAssembly(typeof(AccountService)), Assembly.GetAssembly(typeof(DataService)))
                 .AddPersistence(this.Configuration)
-                .AddInfrastructure()
+                .AddInfrastructure(this.Configuration)
                 .AddCors()
                 .AddControllers(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCategoryCommandValidator>())

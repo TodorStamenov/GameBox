@@ -1,7 +1,8 @@
+using GameBox.Application.Contracts.Services;
+using GameBox.Domain.Entities;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GameBox.Application.Contracts.Services;
 
 namespace GameBox.Persistence
 {
@@ -34,8 +35,20 @@ namespace GameBox.Persistence
             await Task.FromResult(this.Context.Set<TEntity>().Remove(entity));
         }
 
-        public async Task<int> SaveAsync(CancellationToken cancellationToken = default)
+        public async Task MarkMessageAsPublished<TKey>(TKey id)
         {
+            var message = await this.Context.Set<Message>().FindAsync(id);
+            message.MarkAsPublished();
+            await this.Context.SaveChangesAsync();
+        }
+
+        public async Task<int> SaveAsync(CancellationToken cancellationToken = default(CancellationToken), params Message[] messages)
+        {
+            foreach (var message in messages)
+            {
+                this.Context.Set<Message>().Add(message);
+            }
+
             return await this.Context.SaveChangesAsync();
         }
     }

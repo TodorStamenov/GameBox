@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using GameBox.Domain.Entities;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,6 +15,8 @@ namespace GameBox.Application.Contracts.Services
 
         Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class;
 
-        Task<int> SaveAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task MarkMessageAsPublished<TKey>(TKey id);
+
+        Task<int> SaveAsync(CancellationToken cancellationToken = default(CancellationToken), params Message[] messages);
     }
 }
