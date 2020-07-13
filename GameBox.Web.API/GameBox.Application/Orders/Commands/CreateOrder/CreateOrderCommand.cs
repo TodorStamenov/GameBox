@@ -83,7 +83,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                 var queueName = "orders";
                 var message = new Message(queueName, messageData);
 
-                await this.context.SaveAsync(cancellationToken);
+                await this.context.SaveAsync(cancellationToken, message);
                 this.queue.Send(queueName, messageData);
                 await this.context.MarkMessageAsPublished(message.Id);
 
