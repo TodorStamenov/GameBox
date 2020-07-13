@@ -4,14 +4,16 @@ using GameBox.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameBox.Persistence.Migrations
 {
     [DbContext(typeof(GameBoxDbContext))]
-    partial class GameBoxDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200713102736_AddedMessagesTable")]
+    partial class AddedMessagesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

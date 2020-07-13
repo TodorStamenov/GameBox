@@ -1,5 +1,4 @@
 ﻿using GameBox.Application.Infrastructure;
-using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,16 +30,6 @@ namespace GameBox.Infrastructure
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.Common.SymmetricSecurityKey))
                     };
                 });
-                
-                services.AddHangfire(config => config
-                    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                    .UseSimpleAssemblyNameTypeSerializer()
-                    .UseRecommendedSerializerSettings()
-                    .UseSqlServerStorage(configuration["ConnectionString"]));
-
-                services.AddHangfireServer();
-
-                services.AddHostedService<MessagesHostedService>();
 
             return services;
         }
