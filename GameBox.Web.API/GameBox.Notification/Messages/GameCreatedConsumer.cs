@@ -39,7 +39,7 @@ namespace GameBox.Notification.Hubs
                 this.channel.BasicAck(ea.DeliveryTag, false);
             };
 
-            this.channel.BasicConsume("games", false, consumer);
+            this.channel.BasicConsume(queue: "games", false, consumer);
             return Task.CompletedTask;
         }
 

@@ -32,11 +32,11 @@ namespace GameBox.Application.Games.Commands.CreateGame
         public class CreateGameCommandHandler : IRequestHandler<CreateGameCommand, string>
         {
             private readonly IDataService context;
-            private readonly IMessageQueueSenderService queue;
+            private readonly IQueueSenderService queue;
 
             public CreateGameCommandHandler(
                 IDataService context,
-                IMessageQueueSenderService queue)
+                IQueueSenderService queue)
             {
                 this.context = context;
                 this.queue = queue;
@@ -71,7 +71,7 @@ namespace GameBox.Application.Games.Commands.CreateGame
                 var message = new Message(queueName, messageData);
 
                 await this.context.SaveAsync(cancellationToken, message);
-                this.queue.Send(queueName, messageData);
+                this.queue.PostQueueMessage(queueName, messageData);
                 await this.context.MarkMessageAsPublished(message.Id);
 
                 return string.Format(Constants.Common.Success, nameof(Game), request.Title, Constants.Common.Added);

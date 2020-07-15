@@ -18,14 +18,14 @@ namespace GameBox.Persistence
 
         private static GameBoxDbContext context;
         private static IAccountService accountService;
-        private static IMessageQueueSenderService messageQueue;
+        private static IQueueSenderService messageQueue;
 
         private static readonly Random random = new Random();
 
         public static async Task SeedDatabaseAsync(
             GameBoxDbContext database,
             IAccountService account,
-            IMessageQueueSenderService serviceBus)
+            IQueueSenderService serviceBus)
         {
             context = database;
             accountService = account;
@@ -241,7 +241,7 @@ namespace GameBox.Persistence
 
             foreach (var order in orders)
             {
-                messageQueue.Send(queueName: "orders", order);
+                messageQueue.PostQueueMessage(queueName: "orders", order);
             }
         }
 

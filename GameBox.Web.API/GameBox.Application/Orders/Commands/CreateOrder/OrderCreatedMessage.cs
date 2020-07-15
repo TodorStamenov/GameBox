@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using GameBox.Application.Model;
+using Newtonsoft.Json;
 using System;
 
 namespace GameBox.Application.Orders.Commands.CreateOrder
 {
-    public class OrderCreatedMessage
+    public class OrderCreatedMessage : QueueMessageModel
     {
         [JsonProperty("username")]
         public string Username { get; set; }

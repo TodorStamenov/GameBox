@@ -24,13 +24,13 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
             private readonly IMediator mediator;
             private readonly IDateTimeService dateTime;
             private readonly IDataService context;
-            private readonly IMessageQueueSenderService queue;
+            private readonly IQueueSenderService queue;
 
             public CreateOrderCommandHandler(
                 IMediator mediator,
                 IDateTimeService dateTime,
                 IDataService context,
-                IMessageQueueSenderService queue)
+                IQueueSenderService queue)
             {
                 this.mediator = mediator;
                 this.dateTime = dateTime;
@@ -84,7 +84,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                 var message = new Message(queueName, messageData);
 
                 await this.context.SaveAsync(cancellationToken, message);
-                this.queue.Send(queueName, messageData);
+                this.queue.PostQueueMessage(queueName, messageData);
                 await this.context.MarkMessageAsPublished(message.Id);
 
                 return string.Format(Constants.Common.Success, nameof(Order), string.Empty, Constants.Common.Added);

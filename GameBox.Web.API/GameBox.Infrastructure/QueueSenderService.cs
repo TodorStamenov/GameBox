@@ -1,14 +1,15 @@
 ﻿using GameBox.Application.Contracts.Services;
-using Newtonsoft.Json;
+using GameBox.Application.Model;
 using RabbitMQ.Client;
 using System;
 using System.Text;
+using System.Text.Json;
 
 namespace GameBox.Infrastructure
 {
-    public class MessageQueueSenderService : IMessageQueueSenderService
+    public class QueueSenderService : IQueueSenderService
     {
-        public void Send<T>(string queueName, T command) where T : class
+        public void PostQueueMessage<T>(string queueName, T command) where T : QueueMessageModel
         {
             var connectionFactory = new ConnectionFactory
             {
@@ -23,7 +24,7 @@ namespace GameBox.Infrastructure
             {
                 using (var channel = rabbitConnection.CreateModel())
                 {
-                    var message = JsonConvert.SerializeObject(command);
+                    var message = JsonSerializer.Serialize(command);
                     var body = Encoding.UTF8.GetBytes(message);
 
                     channel.QueueDeclare(

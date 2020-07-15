@@ -17,7 +17,7 @@ namespace GameBox.Bootstrap
 
                 var database = services.GetRequiredService<GameBoxDbContext>();
                 var account = services.GetRequiredService<IAccountService>();
-                var serviceBus = services.GetRequiredService<IMessageQueueSenderService>();
+                var serviceBus = services.GetRequiredService<IQueueSenderService>();
 
                 database.Database.Migrate();
 
