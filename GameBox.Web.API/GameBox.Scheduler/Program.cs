@@ -4,16 +4,21 @@ using GameBox.Scheduler.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Threading.Tasks;
 
 namespace GameBox.Scheduler
 {
     public class Program
     {
-        public static async Task Main()
+        public static void Main(string[] args)
         {
-            var hostBuilder = new HostBuilder()
-                .ConfigureAppConfiguration(context =>
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host
+                .CreateDefaultBuilder(args)
+                .ConfigureHostConfiguration(context =>
                 {
                     context
                         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -22,19 +27,24 @@ namespace GameBox.Scheduler
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddOptions();
-                    services.AddSingleton<IQueueSenderService, QueueSenderService>();
-                    services.AddHostedService<SchedulerHostedService>();
-                    services.Configure<Settings>(options => {
-                        options.ConnectionString = context.Configuration.GetValue<string>("ConnectionString");
-                        options.RabbitMQHost = context.Configuration.GetValue<string>("RabbitMQ:Host");
-                        options.RabbitMQPort = context.Configuration.GetValue<int>("RabbitMQ:Port");
-                        options.RabbitMQUsername = context.Configuration.GetValue<string>("RabbitMQ:Username");
-                        options.RabbitMQPassword = context.Configuration.GetValue<string>("RabbitMQ:Password");
-                    });
-                });
+                    var configuration = context.Configuration;
 
-            await hostBuilder.RunConsoleAsync();
+                    var settings = new Settings
+                    {
+                        ConnectionString = configuration.GetValue<string>("ConnectionString"),
+                        RabbitMQHost = configuration.GetValue<string>("RabbitMQ:Host"),
+                        RabbitMQPort = configuration.GetValue<int>("RabbitMQ:Port"),
+                        RabbitMQUsername = configuration.GetValue<string>("RabbitMQ:Username"),
+                        RabbitMQPassword = configuration.GetValue<string>("RabbitMQ:Password")
+                    };
+
+                    services
+                        .AddOptions()
+                        .AddLogging()
+                        .AddSingleton<Settings>(_ => settings)
+                        .AddSingleton<IQueueSenderService, QueueSenderService>()
+                        .AddHostedService<SchedulerHostedService>();
+                });
         }
     }
 }

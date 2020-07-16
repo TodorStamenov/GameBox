@@ -2,7 +2,7 @@ using Dapper;
 using GameBox.Scheduler.Contracts;
 using GameBox.Scheduler.Model;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Data.SqlClient;
 using System.Threading;
@@ -10,53 +10,49 @@ using System.Threading.Tasks;
 
 namespace GameBox.Scheduler.Services
 {
-    public class SchedulerHostedService : IHostedService, IDisposable
+    public class SchedulerHostedService : BackgroundService
     {
-        private Timer timer;
-        private readonly IOptions<Settings> settings;
+        private readonly Settings settings;
+        private readonly ILogger<SchedulerHostedService> logger;
         private readonly IQueueSenderService queueService;
 
-        public SchedulerHostedService(IOptions<Settings> settings, IQueueSenderService queueService)
+        public SchedulerHostedService(
+            Settings settings,
+            ILogger<SchedulerHostedService> logger,
+            IQueueSenderService queueService)
         {
             this.settings = settings;
+            this.logger = logger;
             this.queueService = queueService;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            this.timer = new Timer(ProcessMessages, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
-            return Task.CompletedTask;
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await this.ProcessMessages();
+                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+            }
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            this.timer?.Change(Timeout.Infinite, 0);
-            return Task.CompletedTask;
-        }
-
-        public void Dispose()
-        {
-            this.timer.Dispose();
-        }
-
-        private void ProcessMessages(object state)
+        private async Task ProcessMessages()
         {
             try
             {
-                using (var connection = new SqlConnection(this.settings.Value.ConnectionString))
+                using (var connection = new SqlConnection(this.settings.ConnectionString))
                 {
-                    var messages = connection.Query<Message>("SELECT Id, QueueName, SerializedData [serializedData] FROM Messages WHERE Published = 0");
+                    var messages = await connection.QueryAsync<Message>("SELECT Id, QueueName, SerializedData [serializedData] FROM Messages WHERE Published = 0");
 
                     foreach (var message in messages)
                     {
                         this.queueService.PostQueueMessage(message.QueueName, message.SerializedData);
-                        connection.Execute("UPDATE Messages SET Published = 1 WHERE Id = @MessageId", new { MessageId = message.Id });
+                        await connection.ExecuteAsync("UPDATE Messages SET Published = 1 WHERE Id = @MessageId", new { MessageId = message.Id });
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Post messages on queue failed: {ex.Message}");
+                this.logger.LogInformation($"Post messages on queue failed: {ex.Message}");
             }
         }
     }

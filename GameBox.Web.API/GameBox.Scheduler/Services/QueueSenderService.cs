@@ -1,6 +1,5 @@
 using GameBox.Scheduler.Contracts;
 using GameBox.Scheduler.Model;
-using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using System;
 using System.Text;
@@ -9,9 +8,9 @@ namespace GameBox.Scheduler.Services
 {
     public class QueueSenderService : IQueueSenderService
     {
-        private readonly IOptions<Settings> settings;
+        private readonly Settings settings;
         
-        public QueueSenderService(IOptions<Settings> settings)
+        public QueueSenderService(Settings settings)
         {
             this.settings = settings;
         }
@@ -20,10 +19,10 @@ namespace GameBox.Scheduler.Services
         {
             var connectionFactory = new ConnectionFactory
             {
-                HostName = this.settings.Value.RabbitMQHost,
-                UserName = this.settings.Value.RabbitMQUsername,
-                Password = this.settings.Value.RabbitMQPassword,
-                Port = this.settings.Value.RabbitMQPort,
+                HostName = this.settings.RabbitMQHost,
+                UserName = this.settings.RabbitMQUsername,
+                Password = this.settings.RabbitMQPassword,
+                Port = this.settings.RabbitMQPort,
                 RequestedConnectionTimeout = TimeSpan.FromMilliseconds(3000)
             };
 
