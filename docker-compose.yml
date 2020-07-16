@@ -2,19 +2,19 @@ version: "3.7"
 
 services:
   sql.data:
-    container_name: sqlserver
+    container_name: sql-server
     image: mcr.microsoft.com/mssql/server
 
   nosql.data:
-    container_name: mongoserver
+    container_name: mongo-server
     image: mongo
 
   rabbitmq:
-    container_name: rabbitmq
+    container_name: RabbitMQ
     image: rabbitmq:3-management-alpine
 
   core.api:
-    container_name: coreapi
+    container_name: core-api
     restart: on-failure
     build:
       context: ./GameBox.Web.API
@@ -24,7 +24,7 @@ services:
       - rabbitmq
       
   notification.api:
-    container_name: notificationapi
+    container_name: notification-api
     restart: on-failure
     build:
       context: ./GameBox.Web.API
@@ -32,8 +32,18 @@ services:
     depends_on:
       - rabbitmq
 
+  scheduler:
+    container_name: scheduler
+    restart: on-failure
+    build:
+      context: ./GameBox.Web.API
+      dockerfile: GameBox.Scheduler/Dockerfile
+    depends_on:
+      - sql.data
+      - rabbitmq
+
   orders.api:
-    container_name: ordersapi
+    container_name: orders-api
     build:
       context: ./GameBox.Web.API
       dockerfile: game-box-orders-api/Dockerfile
@@ -42,7 +52,7 @@ services:
       - rabbitmq
 
   web.ui:
-    container_name: webui
+    container_name: web-ui
     build:
       context: .
       dockerfile: game-box-web-ui/Dockerfile

@@ -32,7 +32,7 @@ services:
   core.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqlserver;Database=GameBoxCore;User Id=sa;Password=Your_password@123
+      - ConnectionString=Server=sql-server;Database=GameBoxCore;User Id=sa;Password=Your_password@123
     ports:
       - "5000:80"
     networks:
@@ -43,6 +43,13 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "5001:80"
+    networks:
+      - gamebox-network
+
+  scheduler:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sql-server;Database=GameBoxCore;User Id=sa;Password=Your_password@123
     networks:
       - gamebox-network
 

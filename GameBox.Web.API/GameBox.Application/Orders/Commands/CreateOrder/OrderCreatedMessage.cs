@@ -1,21 +1,21 @@
 ﻿using GameBox.Application.Model;
-using Newtonsoft.Json;
 using System;
+using System.Text.Json.Serialization;
 
 namespace GameBox.Application.Orders.Commands.CreateOrder
 {
     public class OrderCreatedMessage : QueueMessageModel
     {
-        [JsonProperty("username")]
+        [JsonPropertyName("username")]
         public string Username { get; set; }
 
-        [JsonProperty("price")]
+        [JsonPropertyName("price")]
         public decimal Price { get; set; }
 
-        [JsonProperty("gamesCount")]
+        [JsonPropertyName("gamesCount")]
         public int GamesCount { get; set; }
 
-        [JsonProperty("timeStamp")]
+        [JsonPropertyName("timeStamp")]
         public DateTime TimeStamp { get; set; }
     }
 }

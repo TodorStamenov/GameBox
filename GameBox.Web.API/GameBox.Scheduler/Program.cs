@@ -1,85 +1,40 @@
-﻿using Dapper;
-using Hangfire;
-using RabbitMQ.Client;
-using System;
-using System.Data.SqlClient;
-using System.Text;
+﻿using GameBox.Scheduler.Contracts;
+using GameBox.Scheduler.Model;
+using GameBox.Scheduler.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Threading.Tasks;
 
 namespace GameBox.Scheduler
 {
     public class Program
     {
-        public static void Main()
+        public static async Task Main()
         {
-            var connectionString = "Server=.;Database=GameBoxCore;Integrated Security=True;Trusted_Connection=True;MultipleActiveResultSets=true";
-
-            GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
-
-            using (var server = new BackgroundJobServer())
-            {
-                RecurringJob.AddOrUpdate(
-                    nameof(Program),
-                    () => ProcessMessages(connectionString),
-                    Cron.Minutely);
-
-                Console.ReadKey();
-            }
-        }
-
-        public static void ProcessMessages(string connectionString)
-        {
-            using (var connection = new SqlConnection(connectionString))
-            {
-                var messages = connection.Query<Message>("SELECT Id, QueueName, SerializedData [serializedData] FROM Messages WHERE Published = 0");
-
-                foreach (var message in messages)
+            var hostBuilder = new HostBuilder()
+                .ConfigureAppConfiguration(context =>
                 {
-                    Send(message.QueueName, message.SerializedData);
-                    connection.Execute("UPDATE Messages SET Published = 1 WHERE Id = @MessageId", new { MessageId = message.Id });
-                }
-            }
-        }
-
-        private static void Send(string queueName, string message)
-        {
-            var connectionFactory = new ConnectionFactory
-            {
-                HostName = "172.17.0.1",
-                UserName = "guest",
-                Password = "guest",
-                Port = 5672,
-                RequestedConnectionTimeout = TimeSpan.FromMilliseconds(3000)
-            };
-
-            using (var rabbitConnection = connectionFactory.CreateConnection())
-            {
-                using (var channel = rabbitConnection.CreateModel())
+                    context
+                        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                        .AddEnvironmentVariables()
+                        .Build();
+                })
+                .ConfigureServices((context, services) =>
                 {
-                    var body = Encoding.UTF8.GetBytes(message);
+                    services.AddOptions();
+                    services.AddSingleton<IQueueSenderService, QueueSenderService>();
+                    services.AddHostedService<SchedulerHostedService>();
+                    services.Configure<Settings>(options => {
+                        options.ConnectionString = context.Configuration.GetValue<string>("ConnectionString");
+                        options.RabbitMQHost = context.Configuration.GetValue<string>("RabbitMQHost");
+                        options.RabbitMQPort = context.Configuration.GetValue<int>("RabbitMQPort");
+                        options.RabbitMQUsername = context.Configuration.GetValue<string>("RabbitMQUsername");
+                        options.RabbitMQPassword = context.Configuration.GetValue<string>("RabbitMQPassword");
+                    });
+                });
 
-                    channel.QueueDeclare(
-                        queue: queueName,
-                        durable: false,
-                        exclusive: false,
-                        autoDelete: true,
-                        arguments: null);
-
-                    channel.BasicPublish(
-                        exchange: string.Empty,
-                        routingKey: queueName,
-                        basicProperties: null,
-                        body: body);
-                }
-            }
+            await hostBuilder.RunConsoleAsync();
         }
-    }
-
-    public class Message
-    {
-        public Guid Id { get; set; }
-
-        public string QueueName { get; set; }
-
-        public string SerializedData { get; set; }
     }
 }
