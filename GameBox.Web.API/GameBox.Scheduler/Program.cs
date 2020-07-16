@@ -27,10 +27,10 @@ namespace GameBox.Scheduler
                     services.AddHostedService<SchedulerHostedService>();
                     services.Configure<Settings>(options => {
                         options.ConnectionString = context.Configuration.GetValue<string>("ConnectionString");
-                        options.RabbitMQHost = context.Configuration.GetValue<string>("RabbitMQHost");
-                        options.RabbitMQPort = context.Configuration.GetValue<int>("RabbitMQPort");
-                        options.RabbitMQUsername = context.Configuration.GetValue<string>("RabbitMQUsername");
-                        options.RabbitMQPassword = context.Configuration.GetValue<string>("RabbitMQPassword");
+                        options.RabbitMQHost = context.Configuration.GetValue<string>("RabbitMQ:Host");
+                        options.RabbitMQPort = context.Configuration.GetValue<int>("RabbitMQ:Port");
+                        options.RabbitMQUsername = context.Configuration.GetValue<string>("RabbitMQ:Username");
+                        options.RabbitMQPassword = context.Configuration.GetValue<string>("RabbitMQ:Password");
                     });
                 });
 
