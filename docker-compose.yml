@@ -17,7 +17,7 @@ services:
     container_name: core-api
     restart: on-failure
     build:
-      context: ./GameBox.Web.API
+      context: ./Server
       dockerfile: GameBox.Bootstrap/Dockerfile
     depends_on:
       - sql.data
@@ -27,7 +27,7 @@ services:
     container_name: notification-api
     restart: on-failure
     build:
-      context: ./GameBox.Web.API
+      context: ./Server
       dockerfile: GameBox.Notification/Dockerfile
     depends_on:
       - rabbitmq
@@ -36,7 +36,7 @@ services:
     container_name: scheduler
     restart: on-failure
     build:
-      context: ./GameBox.Web.API
+      context: ./Server
       dockerfile: GameBox.Scheduler/Dockerfile
     depends_on:
       - sql.data
@@ -45,7 +45,7 @@ services:
   orders.api:
     container_name: orders-api
     build:
-      context: ./GameBox.Web.API
+      context: ./Server
       dockerfile: game-box-orders-api/Dockerfile
     depends_on:
       - nosql.data
@@ -54,7 +54,7 @@ services:
   web.ui:
     container_name: web-ui
     build:
-      context: .
+      context: ./Client
       dockerfile: game-box-web-ui/Dockerfile
 
 networks: 
