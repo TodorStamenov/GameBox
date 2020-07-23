@@ -42,7 +42,7 @@ namespace GameBox.Persistence
             await this.Context.SaveChangesAsync();
         }
 
-        public async Task<int> SaveAsync(CancellationToken cancellationToken = default(CancellationToken), params Message[] messages)
+        public async Task<int> SaveAsync(CancellationToken cancellationToken = default, params Message[] messages)
         {
             foreach (var message in messages)
             {

@@ -2,15 +2,16 @@
 using GameBox.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace GameBox.Persistence.Configurations
 {
-    public class GameConfiguration : IEntityTypeConfiguration<Game>
+    public class GameConfiguration : BaseConfiguration<Guid, Game>
     {
-        public void Configure(EntityTypeBuilder<Game> builder)
+        public override void Configure(EntityTypeBuilder<Game> builder)
         {
-            builder.HasKey(g => g.Id);
-            builder.Property(g => g.Id).ValueGeneratedOnAdd();
+            base.Configure(builder);
+
             builder.HasIndex(g => g.Title).IsUnique();
             builder.Property(g => g.Title).IsRequired();
             builder.Property(g => g.Title).HasMaxLength(Constants.Game.TitleMaxLength);

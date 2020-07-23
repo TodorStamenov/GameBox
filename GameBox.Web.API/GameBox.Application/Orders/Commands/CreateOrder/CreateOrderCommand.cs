@@ -58,7 +58,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                 var order = new Order
                 {
                     UserId = request.UserId,
-                    TimeStamp = this.dateTime.UtcNow,
+                    DateAdded = this.dateTime.UtcNow,
                     Price = games.Sum(g => g.Price)
                 };
 
@@ -77,7 +77,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                     Username = request.Username,
                     Price = order.Price,
                     GamesCount = order.Games.Count,
-                    TimeStamp = order.TimeStamp
+                    TimeStamp = order.DateAdded
                 };
 
                 var queueName = "orders";

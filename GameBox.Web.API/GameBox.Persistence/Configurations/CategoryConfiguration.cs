@@ -1,16 +1,16 @@
 ﻿using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace GameBox.Persistence.Configurations
 {
-    public class CategoryConfiguration : IEntityTypeConfiguration<Category>
+    public class CategoryConfiguration : BaseConfiguration<Guid, Category>
     {
-        public void Configure(EntityTypeBuilder<Category> builder)
+        public override void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.HasKey(c => c.Id);
-            builder.Property(c => c.Id).ValueGeneratedOnAdd();
+            base.Configure(builder);
+
             builder.HasIndex(c => c.Name).IsUnique();
             builder.Property(c => c.Name).IsRequired();
             builder.Property(c => c.Name).HasMaxLength(Constants.Category.NameMaxLength);

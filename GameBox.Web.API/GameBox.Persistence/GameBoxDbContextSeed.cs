@@ -91,7 +91,7 @@ namespace GameBox.Persistence
                 .Select(r => r.Id)
                 .FirstOrDefaultAsync();
 
-            if (roleId == default(Guid))
+            if (roleId == default)
             {
                 return;
             }
@@ -221,7 +221,7 @@ namespace GameBox.Persistence
                         order.Games.Add(gameOrder);
                     }
 
-                    order.TimeStamp = DateTime.Now.AddMonths(-i).AddDays(-i);
+                    order.DateAdded = DateTime.Now.AddMonths(-i).AddDays(-i);
                     order.Price = order.Games.Sum(g => g.Game.Price);
                     user.Orders.Add(order);
                 }
@@ -235,7 +235,7 @@ namespace GameBox.Persistence
                     Username = o.User.Username,
                     Price = o.Price,
                     GamesCount = o.Games.Count,
-                    TimeStamp = o.TimeStamp
+                    TimeStamp = o.DateAdded
                 })
                 .ToListAsync();
 
@@ -310,7 +310,7 @@ namespace GameBox.Persistence
                     {
                         GameId = game.Id,
                         UserId = userId,
-                        TimeStamp = DateTime.Now.AddMonths(-i).AddDays(-i),
+                        DateAdded = DateTime.Now.AddMonths(-i).AddDays(-i),
                         Content = "Comment lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
                             "Suspendisse tellus ipsum, dignissim sit amet rutrum congue, vehicula in elit. " +
                             "Phasellus lorem urna, iaculis non egestas eu, sollicitudin nec risus. Nunc mollis nisi a orci vulputate molestie. " +

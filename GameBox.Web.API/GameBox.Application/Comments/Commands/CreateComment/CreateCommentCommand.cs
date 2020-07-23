@@ -34,7 +34,7 @@ namespace GameBox.Application.Comments.Commands.CreateComment
                     GameId = request.GameId,
                     UserId = request.UserId,
                     Content = request.Content,
-                    TimeStamp = this.dateTime.UtcNow
+                    DateAdded = this.dateTime.UtcNow
                 };
 
                 await this.context.AddAsync(comment);

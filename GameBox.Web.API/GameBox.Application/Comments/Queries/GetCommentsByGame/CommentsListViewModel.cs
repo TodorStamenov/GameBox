@@ -11,7 +11,7 @@ namespace GameBox.Application.Comments.Queries.GetCommentsByGame
 
         public string Content { get; set; }
 
-        public DateTime TimeStamp { get; set; }
+        public DateTime DateAdded { get; set; }
 
         public string Username { get; set; }
 

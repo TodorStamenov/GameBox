@@ -1,15 +1,14 @@
-using System;
 using GameBox.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace GameBox.Persistence.Configurations
 {
-    public class MessageConfiguration : IEntityTypeConfiguration<Message>
+    public class MessageConfiguration : BaseConfiguration<Guid, Message>
     {
-        public void Configure(EntityTypeBuilder<Message> builder)
+        public override void Configure(EntityTypeBuilder<Message> builder)
         {
-            builder.HasKey(m => m.Id);
+            base.Configure(builder);
 
             builder
                 .Property("serializedData")

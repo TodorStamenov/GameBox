@@ -2,6 +2,8 @@
 {
     public abstract class Entity<TKey>
     {
-        public virtual TKey Id { get; set; }
+        public TKey Id { get; set; }
+
+        public byte[] TimeStamp { get; set; }
     }
 }

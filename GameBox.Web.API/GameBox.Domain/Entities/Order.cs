@@ -14,9 +14,9 @@ namespace GameBox.Domain.Entities
 
         public User User { get; set; }
 
-        public DateTime TimeStamp { get; set; }
-
         public decimal Price { get; set; }
+
+        public DateTime DateAdded { get; set; }
 
         public ICollection<GameOrder> Games { get; private set; }
     }
