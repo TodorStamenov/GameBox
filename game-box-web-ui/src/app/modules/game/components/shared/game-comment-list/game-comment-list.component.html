@@ -2,7 +2,7 @@
   <div class="offset-md-3 col-md-6 py-3">
     <h5>{{ comment.username }}</h5>
     <div>{{ comment.content }}</div>
-    <small class="float-right">{{ comment.timeStamp | date:'medium' }}</small>
+    <small class="float-right">{{ comment.dateAdded | date:'medium' }}</small>
   </div>
   <div class="col-md-1 py-3">
     <button

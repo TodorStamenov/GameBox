@@ -1,6 +1,6 @@
 export interface IGameCommentModel {
   id: string;
   content: string;
-  timeStamp: Date;
+  dateAdded: Date;
   username: string;
 }
