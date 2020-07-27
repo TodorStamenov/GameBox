@@ -71,23 +71,23 @@
           <a class="dropdown-item" routerLink="/users/create">Add User</a>
         </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link font-weight-bold text-white" *ngIf="authService.isAuthed" routerLink="/auth/change-password">
+      <li class="nav-item" *ngIf="authService.isAuthed">
+        <a class="nav-link font-weight-bold text-white" routerLink="/auth/change-password">
           {{ authService.user.username }}
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link font-weight-bold text-white" *ngIf="authService.isAuthed" (click)="onLogout()">
+      <li class="nav-item" *ngIf="authService.isAuthed">
+        <a class="nav-link font-weight-bold text-white" (click)="onLogout()">
           Logout
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link font-weight-bold text-white" *ngIf="!authService.isAuthed" routerLink="/auth/login">
+      <li class="nav-item" *ngIf="!authService.isAuthed">
+        <a class="nav-link font-weight-bold text-white" routerLink="/auth/login">
           Login
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link font-weight-bold text-white" *ngIf="!authService.isAuthed" routerLink="/auth/register">
+      <li class="nav-item" *ngIf="!authService.isAuthed">
+        <a class="nav-link font-weight-bold text-white" routerLink="/auth/register">
           Register
         </a>
       </li>
