@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace GameBox.Admin.UI.Pages.Login
 {
+    [Route("/auth/login")]
     public partial class Login : ComponentBase
     {
         public LoginFormModel loginForm = new LoginFormModel();

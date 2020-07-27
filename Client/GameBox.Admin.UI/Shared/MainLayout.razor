@@ -1,4 +1,7 @@
 ﻿@inherits LayoutComponentBase
+@inject IAuthService AuthService
+@inject ConfigurationSettings configuration
+@inject NavigationManager NavigationManager
 
 <Navigation />
 
@@ -7,3 +10,22 @@
 </div>
 
 <Footer />
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await this.CheckUser();
+        this.AuthService.OnUserUpdatedAsync += this.CheckUser;
+    }
+
+    private async Task CheckUser()
+    {
+        var isAdmin = await this.AuthService.IsAdmin();
+        var loginUrl = configuration.BaseAppUrl + "auth/login";
+
+        if(!isAdmin && this.NavigationManager.Uri != loginUrl)
+        {
+            NavigationManager.NavigateTo("/auth/login");
+        }
+    }
+}

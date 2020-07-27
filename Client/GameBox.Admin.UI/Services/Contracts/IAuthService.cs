@@ -9,6 +9,8 @@ namespace GameBox.Admin.UI.Services.Contracts
         event Func<Task> OnUserUpdatedAsync;
 
         Task<bool> IsAuthed();
+        
+        Task<bool> IsAdmin();
 
         Task<UserModel> GetCurrentUser();
 

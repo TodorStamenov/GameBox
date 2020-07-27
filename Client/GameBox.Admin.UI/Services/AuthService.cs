@@ -36,8 +36,11 @@ namespace GameBox.Admin.UI.Services
             }
 
             if (await this.localStorage.ContainKeyAsync("currentUser"))
-            {                
-                return await this.localStorage.GetItemAsync<UserModel>("currentUser");
+            {
+                var user = await this.localStorage.GetItemAsync<UserModel>("currentUser");
+                this.currentUser = user;
+
+                return user;
             }
 
             return null;
@@ -49,12 +52,23 @@ namespace GameBox.Admin.UI.Services
             return user != null && DateTime.Now < user.ExpirationDate;
         }
 
+        public async Task<bool> IsAdmin()
+        {
+            return await this.IsAuthed() && this.currentUser.IsAdmin;
+        }
+
         public async Task LoginAsync(LoginFormModel body)
         {
             var result = await this.http.PostAsJsonAsync($"{this.authUrl}login", body);
 
             result.EnsureSuccessStatusCode();
             this.currentUser = await result.Content.ReadFromJsonAsync<UserModel>();
+
+            if (!this.currentUser.IsAdmin)
+            {
+                // display toast
+                throw new Exception("User is not admin");
+            }
 
             await this.localStorage.SetItemAsync("currentUser", this.currentUser);
             await this.OnUserUpdatedAsync?.Invoke();

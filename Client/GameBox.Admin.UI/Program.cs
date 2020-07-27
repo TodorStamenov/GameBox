@@ -25,6 +25,7 @@ namespace GameBox.Admin.UI
 
             builder.Services.AddScoped(sp => new ConfigurationSettings
             {
+                BaseAppUrl = builder.Configuration["BaseAppUrl"],
                 OrdersApiUrl = builder.Configuration["OrdersApiUrl"],
                 GameBoxApiUrl = builder.Configuration["GameBoxApiUrl"]
             });
