@@ -1,0 +1,31 @@
+@page "/auth/login"
+
+<div class="row">
+    <div class="offset-md-3 col-md-3">
+        <EditForm Model="@loginForm" OnValidSubmit="OnLoginAsync">
+            <DataAnnotationsValidator />
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <InputText
+                    type="text"
+                    class="form-control"
+                    placeholder="Username"
+                    @bind-Value="loginForm.Username" />
+                <ValidationMessage For="@(() => loginForm.Username)" />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <InputText
+                    type="password"
+                    class="form-control"
+                    placeholder="Password"
+                    @bind-Value="loginForm.Password" />
+                <ValidationMessage For="@(() => loginForm.Password)" />
+            </div>
+
+            <button type="submit" class="btn btn-outline-dark">Login</button>
+        </EditForm>
+    </div>
+</div>

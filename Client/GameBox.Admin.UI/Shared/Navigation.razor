@@ -1,3 +1,6 @@
+@implements IDisposable
+@inject IAuthService authService
+
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand nav-element font-weight-bold" href="/">Admin Portal</a>
     <button
@@ -14,45 +17,75 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
         <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item dropdown">
-                <a
-                    class="nav-link dropdown-toggle font-weight-bold text-white"
-                    href="#"
-                    id="adminDropdown"
-                    role="button"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false">
-                    Options
-                </a>
-                <div class="dropdown-menu" aria-labelledby="adminDropdown">
-                    <a class="dropdown-item" href="/games/create">Add Game</a>
-                    <a class="dropdown-item" href="/games/all">Games</a>
-                    <a class="dropdown-item" href="/categories/all">Categories</a>
-                    <a class="dropdown-item" href="/orders/all">Orders</a>
-                    <a class="dropdown-item" href="/users/all">Users</a>
-                    <a class="dropdown-item" href="/users/create">Add User</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link font-weight-bold text-white" href="/auth/change-password">
-                    Username
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link font-weight-bold text-white">
-                    Logout
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link font-weight-bold text-white" href="/auth/login">
-                    Login
-                </a>
-            </li>
+           @if (isAuthed)
+            {
+                <li class="nav-item dropdown">
+                    <a
+                        class="nav-link dropdown-toggle font-weight-bold text-white"
+                        href="#"
+                        id="adminDropdown"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                        Options
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="adminDropdown">
+                        <a class="dropdown-item" href="/games/create">Add Game</a>
+                        <a class="dropdown-item" href="/games/all">Games</a>
+                        <a class="dropdown-item" href="/categories/all">Categories</a>
+                        <a class="dropdown-item" href="/orders/all">Orders</a>
+                        <a class="dropdown-item" href="/users/all">Users</a>
+                        <a class="dropdown-item" href="/users/create">Add User</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link font-weight-bold text-white">
+                        @currentUser?.Username
+                    </a>
+                </li> 
+                <li class="nav-item" @onclick="OnLogout">
+                    <a class="nav-link font-weight-bold text-white">
+                        Logout
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link font-weight-bold text-white" href="/auth/login">
+                        Login
+                    </a>
+                </li>
+            }
         </ul>
     </div>
 </nav>
 
 @code {
+    public bool isAuthed;
+    public UserModel currentUser;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await this.OnUpdateUserAsync();
+        this.authService.OnUserUpdatedAsync += this.OnUpdateUserAsync;
+    }
+
+    public async Task OnLogout()
+    {
+        await this.authService.LogoutAsync();
+    }
+
+    public void Dispose()
+    {
+        this.authService.OnUserUpdatedAsync -= this.OnUpdateUserAsync;
+    }
+
+    private async Task OnUpdateUserAsync()
+    {
+        this.isAuthed = await this.authService.IsAuthed(); 
+        this.currentUser = await this.authService.GetCurrentUser();
+        this.StateHasChanged();
+    }
 }
