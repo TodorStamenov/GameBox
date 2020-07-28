@@ -1,12 +1,13 @@
 ﻿@inherits LayoutComponentBase
 @inject IAuthService AuthService
-@inject ConfigurationSettings configuration
-@inject NavigationManager NavigationManager
+@inject ConfigurationSettings Configuration
+@inject NavigationManager Router
 
 <Navigation />
 
 <div class="container-fluid" style="margin-top: 70px; margin-bottom: 60px">
     @Body
+    <BlazoredToasts Position="ToastPosition.BottomRight" Timeout="3" />
 </div>
 
 <Footer />
@@ -14,18 +15,23 @@
 @code {
     protected override async Task OnInitializedAsync()
     {
-        await this.CheckUser();
-        this.AuthService.OnUserUpdatedAsync += this.CheckUser;
+        await this.CheckUserAsync();
+        this.AuthService.OnUserUpdatedAsync += this.CheckUserAsync;
+        this.Router.LocationChanged += async (s, a) => await this.CheckUserAsync();
     }
 
-    private async Task CheckUser()
+    private async Task CheckUserAsync()
     {
-        var isAdmin = await this.AuthService.IsAdmin();
-        var loginUrl = configuration.BaseAppUrl + "auth/login";
-
-        if(!isAdmin && this.NavigationManager.Uri != loginUrl)
+        var loginUrl = this.Configuration.BaseAppUrl + "auth/login";
+        if (this.Router.Uri == loginUrl)
         {
-            NavigationManager.NavigateTo("/auth/login");
+            return;
+        }
+
+        var isAdmin = await this.AuthService.IsAdmin();
+        if(!isAdmin)
+        {
+            this.Router.NavigateTo("/auth/login");
         }
     }
 }

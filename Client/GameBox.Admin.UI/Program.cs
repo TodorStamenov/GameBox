@@ -1,4 +1,5 @@
 using Blazored.LocalStorage;
+using Blazored.Toast;
 using GameBox.Admin.UI.Model;
 using GameBox.Admin.UI.Services;
 using GameBox.Admin.UI.Services.Contracts;
@@ -16,12 +17,14 @@ namespace GameBox.Admin.UI
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
+            builder.Services.AddBlazoredToast();
             builder.Services.AddBlazoredLocalStorage();
 
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IGameService, GameService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IHttpClientService, HttpClientService>();
 
             builder.Services.AddScoped(sp => new ConfigurationSettings
             {

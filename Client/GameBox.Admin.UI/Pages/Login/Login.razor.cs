@@ -12,12 +12,9 @@ namespace GameBox.Admin.UI.Pages.Login
 
         [Inject] public IAuthService AuthService { get; set; }
 
-        [Inject] public NavigationManager Router { get; set; }
-
         public async Task OnLoginAsync()
         {
             await this.AuthService.LoginAsync(this.loginForm);
-            this.Router.NavigateTo("/");
         }
     }
 }

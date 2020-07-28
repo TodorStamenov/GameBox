@@ -1,9 +1,9 @@
 using Blazored.LocalStorage;
+using Blazored.Toast.Services;
 using GameBox.Admin.UI.Model;
 using GameBox.Admin.UI.Services.Contracts;
+using Microsoft.AspNetCore.Components;
 using System;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace GameBox.Admin.UI.Services
@@ -15,15 +15,21 @@ namespace GameBox.Admin.UI.Services
         private UserModel currentUser;
 
         private readonly string authUrl;
-        private readonly HttpClient http;
+        private readonly IHttpClientService http;
+        private readonly NavigationManager router;
+        private readonly IToastService toastService;
         private readonly ILocalStorageService localStorage;
 
         public AuthService(
-            HttpClient http,
+            IHttpClientService http,
+            NavigationManager router,
+            IToastService toastService,
             ILocalStorageService localStorage,
             ConfigurationSettings config)
         {
             this.http = http;
+            this.router = router;
+            this.toastService = toastService;
             this.localStorage = localStorage;
             this.authUrl = $"{config.GameBoxApiUrl}account/";
         }
@@ -59,23 +65,23 @@ namespace GameBox.Admin.UI.Services
 
         public async Task LoginAsync(LoginFormModel body)
         {
-            var result = await this.http.PostAsJsonAsync($"{this.authUrl}login", body);
+            var user = await this.http.PostAsync<UserModel>($"{this.authUrl}login", body);
 
-            result.EnsureSuccessStatusCode();
-            this.currentUser = await result.Content.ReadFromJsonAsync<UserModel>();
-
-            if (!this.currentUser.IsAdmin)
+            if (!user.IsAdmin)
             {
-                // display toast
-                throw new Exception("User is not admin");
+                this.toastService.ShowError($"{user?.Username} is not in role Admin!");
+                return;
             }
 
+            this.currentUser = user;
             await this.localStorage.SetItemAsync("currentUser", this.currentUser);
             await this.OnUserUpdatedAsync?.Invoke();
+            this.router.NavigateTo("/");
         }
 
         public async Task LogoutAsync()
         {
+            this.toastService.ShowSuccess($"{this.currentUser.Username} logged out successfully!");
             this.currentUser = null;
             await this.localStorage.ClearAsync();
             await this.OnUserUpdatedAsync?.Invoke();
