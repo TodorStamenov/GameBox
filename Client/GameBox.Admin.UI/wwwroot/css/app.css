@@ -7,3 +7,7 @@ html, body {
 .validation-message {
     color: red;
 }
+
+.blazored-toast {
+    margin-top: 3rem !important;
+}
