@@ -15,12 +15,11 @@
 @code {
     protected override async Task OnInitializedAsync()
     {
-        await this.CheckUserAsync();
-        this.AuthService.OnUserUpdatedAsync += this.CheckUserAsync;
-        this.Router.LocationChanged += async (s, a) => await this.CheckUserAsync();
+        await this.ProtectRoutesAsync();
+        this.Router.LocationChanged += async (sender, args) => await this.ProtectRoutesAsync();
     }
 
-    private async Task CheckUserAsync()
+    private async Task ProtectRoutesAsync()
     {
         var loginUrl = this.Configuration.BaseAppUrl + "auth/login";
         if (this.Router.Uri == loginUrl)
@@ -29,7 +28,11 @@
         }
 
         var isAdmin = await this.AuthService.IsAdmin();
-        if(!isAdmin)
+        if (isAdmin && this.Router.Uri == this.Configuration.BaseAppUrl)
+        {
+            this.Router.NavigateTo("/games/all");
+        }
+        else if(!isAdmin && this.Router.Uri != loginUrl)
         {
             this.Router.NavigateTo("/auth/login");
         }

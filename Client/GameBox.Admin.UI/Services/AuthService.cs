@@ -76,7 +76,7 @@ namespace GameBox.Admin.UI.Services
             this.currentUser = user;
             await this.localStorage.SetItemAsync("currentUser", this.currentUser);
             await this.OnUserUpdatedAsync?.Invoke();
-            this.router.NavigateTo("/");
+            this.router.NavigateTo("/games/all");
         }
 
         public async Task LogoutAsync()
@@ -85,6 +85,7 @@ namespace GameBox.Admin.UI.Services
             this.currentUser = null;
             await this.localStorage.ClearAsync();
             await this.OnUserUpdatedAsync?.Invoke();
+            this.router.NavigateTo("/auth/login");
         }
     }
 }

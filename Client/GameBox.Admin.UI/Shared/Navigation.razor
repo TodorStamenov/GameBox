@@ -2,7 +2,7 @@
 @inject IAuthService authService
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand nav-element font-weight-bold" href="/">Admin Portal</a>
+    <a class="navbar-brand nav-element font-weight-bold" href="/games/all">Admin Portal</a>
     <button
         class="navbar-toggler"
         type="button"
@@ -32,7 +32,6 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="adminDropdown">
                         <a class="dropdown-item" href="/games/create">Add Game</a>
-                        <a class="dropdown-item" href="/games/all">Games</a>
                         <a class="dropdown-item" href="/categories/all">Categories</a>
                         <a class="dropdown-item" href="/orders/all">Orders</a>
                         <a class="dropdown-item" href="/users/all">Users</a>
@@ -40,12 +39,12 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link font-weight-bold text-white" href="#">
+                    <a class="nav-link font-weight-bold text-white">
                         @currentUser?.Username
                     </a>
                 </li> 
                 <li class="nav-item" @onclick="OnLogout">
-                    <a class="nav-link font-weight-bold text-white" href="#">
+                    <a class="nav-link font-weight-bold text-white">
                         Logout
                     </a>
                 </li>
