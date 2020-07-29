@@ -19,5 +19,8 @@ namespace GameBox.Admin.UI.Model
 
         [JsonPropertyName("isAdmin")]
         public bool IsAdmin { get; set; }
+
+        [JsonPropertyName("message")]
+        public string Message { get; set; }
     }
 }

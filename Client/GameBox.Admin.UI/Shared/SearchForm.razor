@@ -1,0 +1,11 @@
+<form>    
+    <input
+        type="text"
+        class="form-control"
+        placeholder="Search..."
+        @oninput="e => OnTextChange.InvokeAsync(e.Value.ToString())"/>
+</form>
+
+@code {
+    [Parameter] public EventCallback<string> OnTextChange { get; set; }
+}

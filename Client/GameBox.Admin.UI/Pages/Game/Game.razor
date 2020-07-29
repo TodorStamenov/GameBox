@@ -1,0 +1,84 @@
+<div class="row">
+    <div class="offset-md-3 col-md-5">
+        <EditForm Model="@gameForm" OnValidSubmit="OnSaveGameAsync">
+            <DataAnnotationsValidator />
+            
+            <div class="form-group">
+                <label for="title">Title</label>
+                <InputText
+                    class="form-control"
+                    id="title"
+                    placeholder="Title"
+                    @bind-Value="gameForm.Title" />
+                <ValidationMessage For="@(() => gameForm.Title)" />
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <InputTextArea
+                    class="form-control"
+                    id="description"
+                    placeholder="Description"
+                    rows="5"
+                    @bind-Value="gameForm.Description" />
+                <ValidationMessage For="@(() => gameForm.Description)" />
+            </div>
+            <div class="form-group">
+                <label for="thumbnailUrl">Thumbnail</label>
+                <InputText
+                    class="form-control"
+                    id="thumbnailUrl"
+                    placeholder="Thumbnail Url"
+                    @bind-Value="gameForm.ThumbnailUrl"/>
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <InputNumber
+                    class="form-control"
+                    id="price"
+                    placeholder="Price"
+                    @bind-Value="gameForm.Price"/>
+                <ValidationMessage For="@(() => gameForm.Price)" />
+            </div>
+            <div class="form-group">
+                <label for="size">Size</label>
+                <InputNumber
+                    class="form-control"
+                    id="size"
+                    placeholder="Size"
+                    @bind-Value="gameForm.Size" />
+                <ValidationMessage For="@(() => gameForm.Size)" />
+            </div>
+            <div class="form-group">
+                <label for="videoId">YouTube Video URL</label>
+                <InputText
+                    class="form-control"
+                    id="videoId"
+                    placeholder="YouTube Video URL"
+                    @bind-Value="gameForm.VideoId" />
+                <ValidationMessage For="@(() => gameForm.VideoId)" />
+            </div>
+            <div class="form-group">
+                <label for="releaseDate">Release Date</label>
+                <InputDate
+                    class="form-control"
+                    id="releaseDate"
+                    placeholder="Release Date"
+                    @bind-Value="gameForm.ReleaseDate" />
+                <ValidationMessage For="@(() => gameForm.ReleaseDate)" />
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <InputSelect class="form-control" id="category" @bind-Value="gameForm.CategoryId">
+                    <option value="none" selected="selected">--Select Category--</option>
+                    @foreach (var category in categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>                        
+                    }
+                </InputSelect>
+            </div>
+            <button type="submit" class="btn btn-outline-dark">
+                Save Game
+            </button>
+        </EditForm>
+    </div>
+</div>

@@ -26,49 +26,63 @@ namespace GameBox.Admin.UI.Services
             this.localStorage = localStorage;
         }
 
-        public Task<T> GetAsync<T>(string url)
+        public async Task<T> GetAsync<T>(string url)
         {
-            throw new System.NotImplementedException();
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            return await this.SendRequest<T>(request);
         }
 
         public async Task<T> PostAsync<T>(string url, object body)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, url);
+            return await this.SendRequest<T>(request, body);
+        }
 
+        public async Task<T> PutAsync<T>(string url, object body)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Put, url);
+            return await this.SendRequest<T>(request, body);
+        }
+
+        public async Task<T> DeleteAsync<T>(string url) 
+        {
+            var request = new HttpRequestMessage(HttpMethod.Delete, url);
+            return await this.SendRequest<T>(request);
+        }
+
+        private async Task<T> SendRequest<T>(HttpRequestMessage request, object body = null)
+        {
             var token = await this.GetTokenAsync();
 
-            if (token != null)
+            if (!string.IsNullOrWhiteSpace(token))
             {
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);                
             }
 
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Content = new StringContent(JsonSerializer.Serialize(body));
-            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            if (body != null)
+            {
+                request.Content = new StringContent(JsonSerializer.Serialize(body));
+                request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");                
+            }
 
             var response = await this.http.SendAsync(request);
-
-            if (response.IsSuccessStatusCode)
-            {
-                await this.HandleSuccessResponse(response);
-            }
-            else
-            {
-                await this.HandleErrorResponse(response);
-            }
-
             var responseAsString = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                this.toastService.ShowError(responseAsString);
+                throw new Exception(responseAsString);
+            }
+
+            if (typeof(T).Name == typeof(string).Name)
+            {
+                this.toastService.ShowSuccess(responseAsString);
+                return default;
+            }
+
             return JsonSerializer.Deserialize<T>(responseAsString);
-        }
-
-        public Task<T> PutAsync<T>(string url, object body)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<T> DeleteAsync<T>(string url)
-        {
-            throw new System.NotImplementedException();
         }
 
         private async Task<string> GetTokenAsync()
@@ -79,34 +93,7 @@ namespace GameBox.Admin.UI.Services
                 return user.Token;
             }
 
-            return null;
-        }
-
-        private async Task HandleSuccessResponse(HttpResponseMessage responseMessage)
-        {
-            var responseAsString = await responseMessage.Content.ReadAsStringAsync();
-            var response = JsonSerializer.Deserialize<SuccessResponseModel>(responseAsString);
-
-            this.toastService.ShowSuccess(response.Message);
-        }
-
-        private async Task HandleErrorResponse(HttpResponseMessage responseMessage)
-        {
-            var statusCode = (int)responseMessage.StatusCode;
-            var responseAsString = await responseMessage.Content.ReadAsStringAsync();
-            var response = JsonSerializer.Deserialize<ErrorResponseModel>(responseAsString);
-
-            switch (statusCode)
-            {
-                case 400:
-                case 401:
-                case 404:
-                case 500:
-                    this.toastService.ShowError(string.Join(string.Empty, response.Error));
-                    break;
-            }
-
-            throw new Exception($"Requested API returned status code {statusCode}");
+            return string.Empty;
         }
     }
 }

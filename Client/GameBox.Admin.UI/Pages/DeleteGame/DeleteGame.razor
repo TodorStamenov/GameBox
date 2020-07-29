@@ -1,0 +1,85 @@
+<div class="row">
+    <div class="offset-md-3 col-md-5">
+        <EditForm Model="@gameForm">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <InputText
+                    disabled="disabled"
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    @bind-Value="gameForm.Title" />
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <InputTextArea
+                    disabled="disabled"
+                    type="text"
+                    class="form-control"
+                    id="description"
+                    rows="5"
+                    @bind-Value="gameForm.Description" />
+            </div>
+            <div class="form-group">
+                <label for="thumbnailUrl">Thumbnail</label>
+                <InputText
+                    disabled="disabled"
+                    type="text"
+                    class="form-control"
+                    id="thumbnailUrl"
+                    @bind-Value="gameForm.ThumbnailUrl" />
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <InputNumber
+                    disabled="disabled"
+                    type="number"
+                    class="form-control"
+                    id="price"
+                    @bind-Value="gameForm.Price" />
+            </div>
+            <div class="form-group">
+                <label for="size">Size</label>
+                <InputNumber
+                    disabled="disabled"
+                    type="number"
+                    class="form-control"
+                    id="size"
+                    @bind-Value="gameForm.Size" />
+            </div>
+            <div class="form-group">
+                <label for="videoId">YouTube Video URL</label>
+                <InputText
+                    disabled="disabled"
+                    type="text"
+                    class="form-control"
+                    id="videoId"
+                    @bind-Value="gameForm.VideoId" />
+            </div>
+            <div class="form-group">
+                <label for="releaseDate">Release Date</label>
+                <InputDate
+                    disabled="disabled"
+                    type="text"
+                    class="form-control"
+                    id="releaseDate"
+                    @bind-Value="gameForm.ReleaseDate" />
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <InputText
+                    disabled="disabled"
+                    type="text"
+                    class="form-control"
+                    id="category"
+                    @bind-Value="gameForm.CategoryId" />
+            </div>
+            <button
+                type="submit"
+                class="btn btn-outline-danger"
+                @onclick="OnDeleteGameAsync">
+                Delete Game
+            </button>
+        </EditForm>
+    </div>
+</div>

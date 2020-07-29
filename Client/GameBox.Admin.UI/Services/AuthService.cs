@@ -15,19 +15,19 @@ namespace GameBox.Admin.UI.Services
         private UserModel currentUser;
 
         private readonly string authUrl;
-        private readonly IHttpClientService http;
+        private readonly IHttpClientService httpClient;
         private readonly NavigationManager router;
         private readonly IToastService toastService;
         private readonly ILocalStorageService localStorage;
 
         public AuthService(
-            IHttpClientService http,
+            IHttpClientService httpClient,
             NavigationManager router,
             IToastService toastService,
             ILocalStorageService localStorage,
             ConfigurationSettings config)
         {
-            this.http = http;
+            this.httpClient = httpClient;
             this.router = router;
             this.toastService = toastService;
             this.localStorage = localStorage;
@@ -65,7 +65,7 @@ namespace GameBox.Admin.UI.Services
 
         public async Task LoginAsync(LoginFormModel body)
         {
-            var user = await this.http.PostAsync<UserModel>($"{this.authUrl}login", body);
+            var user = await this.httpClient.PostAsync<UserModel>($"{this.authUrl}login", body);
 
             if (!user.IsAdmin)
             {
@@ -77,6 +77,7 @@ namespace GameBox.Admin.UI.Services
             await this.localStorage.SetItemAsync("currentUser", this.currentUser);
             await this.OnUserUpdatedAsync?.Invoke();
             this.router.NavigateTo("/games/all");
+            this.toastService.ShowSuccess(user.Message);
         }
 
         public async Task LogoutAsync()

@@ -9,8 +9,7 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 
-import { Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-form',
@@ -18,7 +17,7 @@ import { debounceTime } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchFormComponent implements OnInit, OnDestroy {
-  private subscription = new Subscription();
+  private componentActive = true;
   public searchForm: FormGroup;
 
   @Input() public fieldName: string;
@@ -31,16 +30,13 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       [this.fieldName]: [null]
     });
 
-    this.subscription.add(
-      this.searchForm.get(this.fieldName).valueChanges
-        .pipe(
-          debounceTime(500)
-        )
-        .subscribe(() => this.textChange.emit(this.searchForm.get(this.fieldName).value))
-    );
+    this.searchForm.get(this.fieldName).valueChanges.pipe(
+      takeWhile(() => this.componentActive),
+      debounceTime(500)
+    ).subscribe(value => this.textChange.emit(value));
   }
 
   public ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.componentActive = false;
   }
 }
