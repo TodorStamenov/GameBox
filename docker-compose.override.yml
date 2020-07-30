@@ -64,8 +64,6 @@ services:
       - gamebox-network
 
   admin.ui:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "5400:80"
     networks:
