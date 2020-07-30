@@ -26,7 +26,7 @@ namespace GameBox.Notification
 
             app
                 .UseRouting()
-                .UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials())
+                .UseCors(options => options.WithOrigins("http://172.17.0.1:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials())
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseEndpoints(endpoints => endpoints.MapHub<NotificationsHub>("/notifications"));
