@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
@@ -29,7 +30,8 @@ export class NavigationComponent implements OnInit {
   public ngOnInit(): void {
     this.store.dispatch(new LoadCategoryNames());
     this.categories$ = this.store.pipe(
-      select(s => s.categories.names)
+      select(s => s.categories.names),
+      map(categories => categories.filter(c => c.hasGames))
     );
 
     if (this.authService.isAuthed) {

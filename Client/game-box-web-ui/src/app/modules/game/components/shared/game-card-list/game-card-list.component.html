@@ -1,9 +1,9 @@
 <div class="row card-row">
-  <div *ngFor="let game of games" class="col-md-4 game-col">
+  <div *ngFor="let game of games" class="col-md-4 game-col mb-3">
     <div class="card thumbnail" [@itemCard]>
       <a routerLink="/games/details/{{game.id}}">
         <img
-          class="img-fluid"
+          class="img-fluid card-image"
           src="{{ game.thumbnailUrl }}"
           (error)="changeSource($event, game.videoId)">
       </a>

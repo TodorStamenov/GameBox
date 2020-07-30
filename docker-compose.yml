@@ -60,16 +60,13 @@ services:
 networks: 
   gamebox-network:
     name: gamebox-network
-  
+
 volumes:
   sql-data:
     name: GameBoxCoreSQL
-
   nosql-data:
     name: OrdersMongo
-
   web-server-data:
-    name: WebServerData
-  
+    name: WebServerData  
   rabbitmq-data:
     name: RabbitMQData

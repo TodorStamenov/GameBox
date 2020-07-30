@@ -33,7 +33,7 @@ namespace GameBox.Admin.UI.Model
         public string VideoId { get; set; }
         
         [JsonPropertyName("releaseDate")]
-        public DateTime ReleaseDate { get; set; }
+        public DateTime ReleaseDate { get; set; } = DateTime.Now;
         
         [Required(ErrorMessage = "CategoryId is required!")]
         [JsonPropertyName("categoryId")]

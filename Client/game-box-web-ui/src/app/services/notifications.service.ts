@@ -5,14 +5,16 @@ import * as signalR from '@aspnet/signalr';
 import { AuthService } from './auth.service';
 import { IAppState } from 'src/app/store/app.state';
 import { ToastType } from '../modules/core/enums/toast-type.enum';
+import { LoadAllGamesHome, ClearGamesHome } from '../modules/game/+store/games.actions';
 import { DisplayToastMessage } from 'src/app/store/+store/core/core.actions';
+import { LoadCategoryNames } from '../store/+store/category/categories.actions';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationsService {
-  private categoriesUrl = environment.api.notificationsUrl;
+  private notificationsUrl = environment.api.notificationsUrl;
   private hubConnection: signalR.HubConnection;
 
   constructor(
@@ -27,7 +29,7 @@ export class NotificationsService {
 
     this.hubConnection = new signalR
       .HubConnectionBuilder()
-      .withUrl(this.categoriesUrl, options)
+      .withUrl(this.notificationsUrl, options)
       .build();
 
     this.hubConnection
@@ -36,6 +38,9 @@ export class NotificationsService {
       .catch(err => console.log('Error while starting connection: ' + err));
 
     this.hubConnection.on('ReceiveNotification', data => {
+      this.store.dispatch(new ClearGamesHome());
+      this.store.dispatch(new LoadCategoryNames());
+      this.store.dispatch(new LoadAllGamesHome(0));
       this.store.dispatch(new DisplayToastMessage({
         message: `${data.title} is now available in store!`,
         toastType: ToastType.success

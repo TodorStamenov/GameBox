@@ -3,11 +3,13 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
+import { filter, takeWhile } from 'rxjs/operators';
+
 import { GameService } from '../../../../services/game.service';
 import { IGameBindingModel } from '../../models/game-binding.model';
 import { IState } from '../../+store/games.state';
-import { filter, takeWhile } from 'rxjs/operators';
 import { LoadGameById } from '../../+store/games.actions';
+import { LoadCategoryNames } from 'src/app/store/+store/category/categories.actions';
 
 @Component({
   selector: 'app-delete-game',
@@ -57,7 +59,10 @@ export class DeleteGameComponent implements OnInit, OnDestroy {
 
   public deleteGame(): void {
     this.gameService.deleteGame$(this.gameId)
-      .subscribe(() => this.router.navigate(['/games/all']));
+      .subscribe(() => {
+        this.router.navigate(['/games/all']);
+        this.store.dispatch(new LoadCategoryNames());
+      });
   }
 
   private setupDeleteForm(game: IGameBindingModel): void {

@@ -1,0 +1,40 @@
+<div>
+    <div class='row'>
+        <div class='col-md-6 offset-md-2'>
+            <h2>
+                All Categories - 
+                <a class='btn btn-outline-dark' href='/categories/create'>Create new Category</a>
+            </h2>
+        </div>
+    </div>
+    <br />
+    <div class='row'>
+        <div class="col-md-8 offset-md-2">
+            <table class='table'>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Games Count</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var category in categories)
+                {
+                    <tr>
+                        <td>@category.Name</td>
+                        <td>@category.GamesCount</td>
+                        <td>
+                            <a
+                                class='btn btn-outline-warning btn-sm'
+                                href="/categories/edit?categoryId=@category.Id">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>                    
+                }
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>

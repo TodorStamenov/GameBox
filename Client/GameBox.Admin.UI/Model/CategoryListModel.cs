@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace GameBox.Admin.UI.Model
 {
-    public class CategoryMenuModel
+    public class CategoryListModel
     {
         [JsonPropertyName("id")]
         public string Id { get; set; }
@@ -10,7 +10,7 @@ namespace GameBox.Admin.UI.Model
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("hasGames")]
-        public bool HasGames { get; set; }
+        [JsonPropertyName("games")]
+        public int GamesCount { get; set; }
     }
 }

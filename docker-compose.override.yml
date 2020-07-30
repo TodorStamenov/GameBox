@@ -37,7 +37,9 @@ services:
       - "5000:80"
     networks:
       - gamebox-network
-      
+    volumes:
+      - ./.aspnet/statistics/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+
   notification.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -45,6 +47,8 @@ services:
       - "5001:80"
     networks:
       - gamebox-network
+    volumes:
+      - ./.aspnet/statistics/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
 
   scheduler:
     environment:

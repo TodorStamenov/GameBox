@@ -15,7 +15,7 @@ namespace GameBox.Admin.UI.Model
         public string Token { get; set; }
 
         [JsonPropertyName("expirationDate")]
-        public DateTime ExpirationDate { get; set; }
+        public DateTime ExpirationDate { get; set; } = DateTime.Now;
 
         [JsonPropertyName("isAdmin")]
         public bool IsAdmin { get; set; }

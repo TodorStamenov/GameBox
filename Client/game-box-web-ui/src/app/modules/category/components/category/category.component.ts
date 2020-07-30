@@ -36,7 +36,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.categoryForm = this.fb.group({
-      'name': [null, [Validators.required, Validators.minLength(3)]]
+      'name': [null, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]]
     });
 
     if (this.actionType === ActionType.edit) {

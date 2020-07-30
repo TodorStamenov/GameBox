@@ -85,6 +85,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   private navigateToHome(): void {
+    this.store.dispatch(new LoadCategoryNames());
     this.router.navigate(['/games/all']);
   }
 
