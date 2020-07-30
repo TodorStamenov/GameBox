@@ -63,7 +63,7 @@ namespace GameBox.Admin.UI.Services
             return await this.IsAuthed() && this.currentUser.IsAdmin;
         }
 
-        public async Task LoginAsync(LoginFormModel body)
+        public async Task Login(LoginFormModel body)
         {
             var user = await this.httpClient.PostAsync<UserModel>($"{this.authUrl}login", body);
 
@@ -80,7 +80,7 @@ namespace GameBox.Admin.UI.Services
             this.toastService.ShowSuccess(user.Message);
         }
 
-        public async Task LogoutAsync()
+        public async Task Logout()
         {
             this.toastService.ShowSuccess($"{this.currentUser.Username} logged out successfully!");
             this.currentUser = null;

@@ -12,9 +12,9 @@ namespace GameBox.Admin.UI.Pages.Login
 
         [Inject] public IAuthService AuthService { get; set; }
 
-        public async Task OnLoginAsync()
+        public async Task OnLogin()
         {
-            await this.AuthService.LoginAsync(this.loginForm);
+            await this.AuthService.Login(this.loginForm);
         }
     }
 }

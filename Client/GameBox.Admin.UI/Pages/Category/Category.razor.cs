@@ -26,7 +26,7 @@ namespace GameBox.Admin.UI.Pages.Category
             }
         }
 
-        public async Task OnSaveCategoryAsync()
+        public async Task OnSaveCategory()
         {
             if (this.Action.ToLower() == "edit" && !string.IsNullOrWhiteSpace(this.categoryId))
             {

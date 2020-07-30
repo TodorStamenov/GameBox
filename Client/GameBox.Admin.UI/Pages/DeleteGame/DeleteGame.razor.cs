@@ -21,7 +21,7 @@ namespace GameBox.Admin.UI.Pages.DeleteGame
             this.gameForm = await this.GameService.GetGame(this.GameId);
         }
 
-        public async Task OnDeleteGameAsync()
+        public async Task OnDeleteGame()
         {
             await this.GameService.DeleteGame(this.GameId);
             this.Router.NavigateTo("/games/all");

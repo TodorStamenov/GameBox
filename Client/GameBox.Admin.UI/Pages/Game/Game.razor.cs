@@ -34,7 +34,7 @@ namespace GameBox.Admin.UI.Pages.Game
             this.Router.LocationChanged -= ReRender;
         }
 
-        public async Task OnSaveGameAsync()
+        public async Task OnSaveGame()
         {
             if (this.Action.ToLower() == "edit" && !string.IsNullOrWhiteSpace(this.gameId))
             {

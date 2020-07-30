@@ -14,8 +14,8 @@ namespace GameBox.Admin.UI.Services.Contracts
 
         Task<UserModel> GetCurrentUser();
 
-        Task LoginAsync(LoginFormModel login);
+        Task Login(LoginFormModel login);
 
-        Task LogoutAsync();
+        Task Logout();
     }
 }
