@@ -27,8 +27,8 @@ services:
     container_name: notification-api
     restart: on-failure
     build:
-      context: ./Server
-      dockerfile: GameBox.Notification/Dockerfile
+      context: ./Server/GameBox.Notification
+      dockerfile: Dockerfile
     depends_on:
       - rabbitmq
 
@@ -36,8 +36,8 @@ services:
     container_name: scheduler
     restart: on-failure
     build:
-      context: ./Server
-      dockerfile: GameBox.Scheduler/Dockerfile
+      context: ./Server/GameBox.Scheduler
+      dockerfile: Dockerfile
     depends_on:
       - sql.data
       - rabbitmq
@@ -51,11 +51,17 @@ services:
       - nosql.data
       - rabbitmq
 
+  admin.ui:
+    container_name: admin-ui
+    build:
+      context: ./Client/GameBox.Admin.UI
+      dockerfile: Dockerfile
+
   web.ui:
     container_name: web-ui
     build:
-      context: ./Client
-      dockerfile: game-box-web-ui/Dockerfile
+      context: ./Client/game-box-web-ui
+      dockerfile: Dockerfile
 
 networks: 
   gamebox-network:
@@ -66,7 +72,9 @@ volumes:
     name: GameBoxCoreSQL
   nosql-data:
     name: OrdersMongo
-  web-server-data:
-    name: WebServerData  
+  admin-ui-server-data:
+    name: AdminUIServerData
+  web-ui-server-data:
+    name: WebUIServerData  
   rabbitmq-data:
     name: RabbitMQData

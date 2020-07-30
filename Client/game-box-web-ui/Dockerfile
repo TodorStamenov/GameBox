@@ -3,12 +3,12 @@ EXPOSE 4200
 
 WORKDIR /app
 
-COPY game-box-web-ui/package.json .
-COPY game-box-web-ui/package-lock.json .
+COPY package.json .
+COPY package-lock.json .
 RUN npm install
 
-COPY game-box-web-ui .
+COPY . .
 RUN npm run build
 
-FROM nginx:1.17.6-alpine
+FROM nginx:1.19.1-alpine
 COPY --from=builder /app/dist/game-box-web-ui /usr/share/nginx/html

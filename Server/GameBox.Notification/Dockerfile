@@ -4,11 +4,11 @@ EXPOSE 80/tcp
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["GameBox.Notification/GameBox.Notification.csproj", "GameBox.Notification/"]
+COPY GameBox.Notification.csproj .
 
-RUN dotnet restore "GameBox.Notification/GameBox.Notification.csproj"
+RUN dotnet restore GameBox.Notification.csproj
 COPY . .
-WORKDIR "/src/GameBox.Notification"
+WORKDIR /src
 RUN dotnet build "GameBox.Notification.csproj" -c Release -o /app/build
 
 FROM build AS publish

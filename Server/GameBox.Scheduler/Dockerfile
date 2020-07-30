@@ -3,11 +3,11 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["GameBox.Scheduler/GameBox.Scheduler.csproj", "GameBox.Scheduler/"]
+COPY GameBox.Scheduler.csproj .
 
-RUN dotnet restore "GameBox.Scheduler/GameBox.Scheduler.csproj"
+RUN dotnet restore GameBox.Scheduler.csproj
 COPY . .
-WORKDIR "/src/GameBox.Scheduler"
+WORKDIR /src
 RUN dotnet build "GameBox.Scheduler.csproj" -c Release -o /app/build
 
 FROM build AS publish
