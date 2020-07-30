@@ -24,6 +24,7 @@ namespace GameBox.Admin.UI
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IGameService, GameService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IHttpClientService, HttpClientService>();
 
             builder.Services.AddScoped(sp => new ConfigurationSettings
