@@ -1,4 +1,3 @@
-using Blazored.LocalStorage;
 using Blazored.Toast;
 using GameBox.Admin.UI.Model;
 using GameBox.Admin.UI.Services;
@@ -18,8 +17,8 @@ namespace GameBox.Admin.UI
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddBlazoredToast();
-            builder.Services.AddBlazoredLocalStorage();
 
+            builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IGameService, GameService>();

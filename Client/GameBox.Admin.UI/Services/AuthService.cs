@@ -1,4 +1,3 @@
-using Blazored.LocalStorage;
 using Blazored.Toast.Services;
 using GameBox.Admin.UI.Model;
 using GameBox.Admin.UI.Services.Contracts;
@@ -41,7 +40,7 @@ namespace GameBox.Admin.UI.Services
                 return this.currentUser;
             }
 
-            if (await this.localStorage.ContainKeyAsync("currentUser"))
+            if (await this.localStorage.ContainsKeyAsync("currentUser"))
             {
                 var user = await this.localStorage.GetItemAsync<UserModel>("currentUser");
                 this.currentUser = user;
