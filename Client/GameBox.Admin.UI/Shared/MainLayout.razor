@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@implements IDisposable
+@inherits LayoutComponentBase
 @inject IAuthService AuthService
 @inject ConfigurationSettings Configuration
 @inject NavigationManager Router
@@ -6,17 +7,31 @@
 <Navigation />
 
 <div class="container-fluid" style="margin-top: 70px; margin-bottom: 60px">
-    @Body
+    @if (shouldRenderBody)
+    {
+        @Body        
+    }
+
     <BlazoredToasts Position="ToastPosition.TopRight" Timeout="3" />
 </div>
 
 <Footer />
 
 @code {
+    public bool shouldRenderBody = false;
+    private event EventHandler<LocationChangedEventArgs> protectRoute;
+
     protected override async Task OnInitializedAsync()
     {
         await this.ProtectRoutesAsync();
-        this.Router.LocationChanged += async (sender, args) => await this.ProtectRoutesAsync();
+        this.protectRoute = async (sender, args) => await this.ProtectRoutesAsync();
+        this.Router.LocationChanged += this.protectRoute;
+        this.shouldRenderBody = true;
+    }
+
+    public void Dispose()
+    {
+        this.Router.LocationChanged -= this.protectRoute;
     }
 
     private async Task ProtectRoutesAsync()
