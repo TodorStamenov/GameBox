@@ -5,6 +5,6 @@ namespace GameBox.Admin.UI.Model
     public class ErrorResponseModel
     {
         [JsonPropertyName("error")]
-        public string[] Error { get; set; }
+        public string[] Errors { get; set; }
     }
 }

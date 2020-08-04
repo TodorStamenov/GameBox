@@ -71,11 +71,15 @@ namespace GameBox.Admin.UI.Services
 
             if (!response.IsSuccessStatusCode)
             {
-                this.toastService.ShowError(responseAsString);
+                var errors = JsonSerializer.Deserialize<ErrorResponseModel>(responseAsString).Errors;
+                var errorsAsString = string.Join(Environment.NewLine, errors);
+
+                this.toastService.ShowError(errorsAsString);
+
                 throw new Exception(responseAsString);
             }
 
-            if (typeof(T).Name == typeof(string).Name)
+            if (typeof(T).Name == typeof(string).Name && responseAsString.Length > 0)
             {
                 this.toastService.ShowSuccess(responseAsString);
                 return default;

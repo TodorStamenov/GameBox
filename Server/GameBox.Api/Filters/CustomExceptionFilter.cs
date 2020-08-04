@@ -1,8 +1,9 @@
-﻿using System;
-using System.Net;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using GameBox.Application.Exceptions;
+using System;
+using System.Net;
+using System.Linq;
 
 namespace GameBox.Api.Filters
 {
@@ -15,7 +16,9 @@ namespace GameBox.Api.Filters
             {
                 context.HttpContext.Response.ContentType = "application/json";
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                context.Result = new JsonResult(((ValidationException)context.Exception).Failures);
+                context.Result = new JsonResult(new {
+                    error = ((ValidationException)context.Exception).Failures.Values.ToArray()
+                });
 
                 return;
             }
@@ -26,8 +29,7 @@ namespace GameBox.Api.Filters
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 context.Result = new JsonResult(new
                 {
-                    error = new[] { context.Exception.Message },
-                    stackTrace = context.Exception.StackTrace
+                    error = new[] { context.Exception.Message }
                 });
 
                 return;
@@ -44,8 +46,7 @@ namespace GameBox.Api.Filters
             context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             context.Result = new JsonResult(new
             {
-                error = new[] { message },
-                stackTrace = context.Exception.StackTrace
+                error = new[] { message }
             });
         }
     }

@@ -24,16 +24,15 @@ namespace GameBox.Admin.UI
             builder.Services.AddScoped<IGameService, GameService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
-            builder.Services.AddScoped<IHttpClientService, HttpClientService>();
 
-            builder.Services.AddScoped(sp => new ConfigurationSettings
+            builder.Services.AddScoped(_ => new ConfigurationSettings
             {
-                BaseAppUrl = builder.Configuration["BaseAppUrl"],
+                BaseAppUrl = builder.HostEnvironment.BaseAddress,
                 OrdersApiUrl = builder.Configuration["OrdersApiUrl"],
                 GameBoxApiUrl = builder.Configuration["GameBoxApiUrl"]
             });
 
-            builder.Services.AddScoped(sp => new HttpClient());
+            builder.Services.AddHttpClient<IHttpClientService, HttpClientService>();
 
             await builder.Build().RunAsync();
         }
