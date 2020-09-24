@@ -3,8 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
+import { Apollo, gql } from 'apollo-angular';
 
 import { IGameListItemModel } from '../modules/core/models/game-list-item.model';
 
