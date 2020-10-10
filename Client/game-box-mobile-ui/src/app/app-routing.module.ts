@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, PreloadAllModules } from '@angular/router';
+import { NativeScriptRouterModule } from '@nativescript/angular';
 
-import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [

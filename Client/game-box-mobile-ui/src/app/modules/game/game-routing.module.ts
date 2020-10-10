@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes } from '@angular/router';
+import { NativeScriptRouterModule } from '@nativescript/angular';
 
-import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { GamesTabsComponent } from './components/game-tabs/game-tabs.component';
 import { GameDetailsComponent } from './components/game-details/game-details.component';
 

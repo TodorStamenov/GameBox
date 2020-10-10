@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes } from '@angular/router';
+import { NativeScriptRouterModule } from '@nativescript/angular';
 
-import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { CartComponent } from './components/cart/cart.component';
 
 const routes: Routes = [

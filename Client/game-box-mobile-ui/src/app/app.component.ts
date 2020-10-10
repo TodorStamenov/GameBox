@@ -10,8 +10,8 @@ import {
 import { takeWhile } from 'rxjs/operators';
 
 import { UIService } from './services/ui.service';
-import { RadSideDrawerComponent } from 'nativescript-ui-sidedrawer/angular/side-drawer-directives';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
+import { RadSideDrawerComponent } from 'nativescript-ui-sidedrawer/angular';
 import { AuthService } from './services/auth.service';
 
 @Component({

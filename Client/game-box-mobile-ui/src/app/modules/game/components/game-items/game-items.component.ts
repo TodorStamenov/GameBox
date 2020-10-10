@@ -7,13 +7,13 @@ import {
   OnInit,
   OnDestroy
 } from '@angular/core';
+import { registerElement } from '@nativescript/angular';
 
 import { Subject } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 
 import { IGamesListModel } from '../../models/games-list.model';
 
-import { registerElement } from 'nativescript-angular/element-registry';
 registerElement('PullToRefresh', () => require('@nstudio/nativescript-pulltorefresh').PullToRefresh);
 
 @Component({

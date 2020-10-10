@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, AbstractControl, FormControl } from '@angular/forms';
+import { Utils } from '@nativescript/core';
 
 import { AuthService } from '../../../../services/auth.service';
 import { UIService } from '~/app/services/ui.service';
-import * as utils from 'tns-core-modules/utils/utils';
 
 @Component({
   selector: 'ns-login',
@@ -64,6 +64,6 @@ export class LoginComponent implements OnInit {
   }
 
   public onFormTap(): void {
-    utils.ad.dismissSoftInput();
+    Utils.ad.dismissSoftInput();
   }
 }

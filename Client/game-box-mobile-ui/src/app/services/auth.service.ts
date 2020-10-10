@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import * as cacheService from '@nativescript/core/application-settings';
 
 import { Observable } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
@@ -10,7 +11,6 @@ import { IUser } from '../modules/auth/models/user.mode';
 import { IChangePasswordModel } from '../modules/auth/models/change-password.model';
 import { UIService } from './ui.service';
 import { constants } from '../common';
-import * as cacheService from 'tns-core-modules/application-settings';
 
 @Injectable({
   providedIn: 'root'

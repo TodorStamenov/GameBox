@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { RouterExtensions } from '@nativescript/angular';
 
 import { Subject, BehaviorSubject } from 'rxjs';
 
 import { Toasty, ToastDuration, ToastPosition } from 'nativescript-toasty';
-import { RouterExtensions } from 'nativescript-angular/router';
 
 @Injectable({
   providedIn: 'root'

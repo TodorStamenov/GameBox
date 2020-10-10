@@ -1,19 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { WebView, Screen, Utils } from '@nativescript/core';
 
 import { forkJoin } from 'rxjs';
 import { takeWhile, switchMap } from 'rxjs/operators';
 
-import { WebView } from 'tns-core-modules/ui/web-view';
-import { screen } from 'tns-core-modules/platform';
 import { GameService } from '../../../../services/game.service';
 import { CartService } from '~/app/services/cart.service';
 import { IGameDetailsModel } from '../../models/game-details.model';
 import { WishlistService } from '~/app/services/wishlist.service';
 import { UIService } from '~/app/services/ui.service';
 import { IGameCommentModel } from '../../models/game-comment.model';
-import * as utils from 'tns-core-modules/utils/utils';
 
 @Component({
   selector: 'ns-game-details',
@@ -89,7 +87,7 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
   }
 
   public dismissKeyboard(): void {
-    utils.ad.dismissSoftInput();
+    Utils.ad.dismissSoftInput();
   }
 
   public onToggleCommentForm(): void {
@@ -129,7 +127,7 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
           <iframe
             src='https://www.youtube.com/embed/${gameId}'
             width="100%"
-            height="${screen.mainScreen.widthDIPs / 1.7}"
+            height="${Screen.mainScreen.widthDIPs / 1.7}"
             frameborder="0"
             allowfullscreen>
           </iframe>

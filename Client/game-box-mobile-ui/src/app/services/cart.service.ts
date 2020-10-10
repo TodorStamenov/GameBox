@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import * as cacheService from '@nativescript/core/application-settings';
 
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -7,7 +8,6 @@ import { map, take } from 'rxjs/operators';
 import { IGameListItemModel } from '../modules/core/models/game-list-item.model';
 import { UIService } from './ui.service';
 import { constants } from '~/app/common';
-import * as cacheService from 'tns-core-modules/application-settings';
 
 @Injectable({
   providedIn: 'root'

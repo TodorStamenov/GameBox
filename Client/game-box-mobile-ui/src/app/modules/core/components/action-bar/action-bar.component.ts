@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { RouterExtensions } from '@nativescript/angular';
+import { Page, Utils } from '@nativescript/core';
 
-import { RouterExtensions } from 'nativescript-angular/router';
 import { UIService } from '../../../../services/ui.service';
-import { Page } from 'tns-core-modules/ui/page';
-import * as utils from 'tns-core-modules/utils/utils';
 
 @Component({
   selector: 'ns-action-bar',
@@ -42,6 +41,6 @@ export class ActionBarComponent implements OnInit {
   }
 
   public onActionBarTap(): void {
-    utils.ad.dismissSoftInput();
+    Utils.ad.dismissSoftInput();
   }
 }
