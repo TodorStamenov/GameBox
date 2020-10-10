@@ -61,10 +61,10 @@ export class GamesTabsComponent implements OnInit, OnDestroy {
     this.games = [];
     this.owned = [];
 
-    forkJoin(
+    forkJoin([
       this.gameService.getGames$(this.games.length),
       this.gameService.getOwned$(this.owned.length)
-    ).pipe(
+    ]).pipe(
       takeWhile(() => this.isActive)
     ).subscribe(([games, owned]) => {
       this.games = [...this.games, ...games];

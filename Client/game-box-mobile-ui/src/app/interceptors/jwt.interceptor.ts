@@ -8,10 +8,10 @@ import {
 } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { AuthService } from '../services/auth.service';
 import { UIService } from '../services/ui.service';
-import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {

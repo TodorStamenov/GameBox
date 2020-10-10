@@ -37,10 +37,10 @@ export class UIService {
   }
 
   public showMessage(message: string): void {
-    new Toasty({
-      text: message,
-      duration: ToastDuration.LONG,
-      position: ToastPosition.CENTER
-    }).show();
+    // new Toasty({
+    //   text: message,
+    //   duration: ToastDuration.LONG,
+    //   position: ToastPosition.CENTER
+    // }).show();
   }
 }

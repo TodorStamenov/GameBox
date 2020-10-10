@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { WebView, Screen, Utils } from '@nativescript/core';
+import { Screen, WebView, Utils } from '@nativescript/core';
 
 import { forkJoin } from 'rxjs';
 import { takeWhile, switchMap } from 'rxjs/operators';
@@ -46,10 +46,10 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    forkJoin(
+    forkJoin([
       this.gameService.getDetails$(this.gameId),
       this.gameService.getComments$(this.gameId)
-    ).pipe(
+    ]).pipe(
       takeWhile(() => this.isActive)
     ).subscribe(([game, comments]) => {
       this.game = game;
