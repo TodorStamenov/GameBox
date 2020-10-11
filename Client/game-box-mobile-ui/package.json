@@ -30,7 +30,7 @@
     "@nstudio/nativescript-pulltorefresh": "^3.0.1",
     "codelyzer": "^5.2.0",
     "core-js": "^2.6.9",
-    "nativescript-toasty": "^3.0.0-alpha.2",
+    "nativescript-toasty-ns-7": "^14.0.0",
     "nativescript-ui-sidedrawer": "^9.0.3",
     "node-sass": "^4.14.1",
     "reflect-metadata": "~0.1.12",

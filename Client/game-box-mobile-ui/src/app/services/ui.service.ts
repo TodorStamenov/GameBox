@@ -3,7 +3,7 @@ import { RouterExtensions } from '@nativescript/angular';
 
 import { Subject, BehaviorSubject } from 'rxjs';
 
-import { Toasty, ToastDuration, ToastPosition } from 'nativescript-toasty';
+import { Toasty, ToastDuration, ToastPosition } from 'nativescript-toasty-ns-7';
 
 @Injectable({
   providedIn: 'root'
@@ -37,10 +37,10 @@ export class UIService {
   }
 
   public showMessage(message: string): void {
-    // new Toasty({
-    //   text: message,
-    //   duration: ToastDuration.LONG,
-    //   position: ToastPosition.CENTER
-    // }).show();
+    new Toasty({
+      text: message,
+      duration: ToastDuration.LONG,
+      position: ToastPosition.CENTER
+    }).show();
   }
 }
