@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
 
 namespace GameBox.Domain.Entities
@@ -27,7 +26,6 @@ namespace GameBox.Domain.Entities
             this.Published = true;
         }
 
-        [NotMapped]
         public object Data
         {
             get 

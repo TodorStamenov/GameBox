@@ -11,9 +11,12 @@ namespace GameBox.Persistence.Configurations
             base.Configure(builder);
 
             builder
-                .Property("serializedData")
+                .Ignore(m => m.Data);
+
+            builder
+                .Property(nameof(Message.serializedData))
                 .IsRequired()
-                .HasField("serializedData");
+                .HasField(nameof(Message.serializedData));
 
             builder
                 .Property(m => m.QueueName)
