@@ -38,7 +38,7 @@ services:
     networks:
       - gamebox-network
     volumes:
-      - ./.aspnet/statistics/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+      - data-protection:/root/.aspnet/DataProtection-Keys
 
   notification.api:
     environment:
@@ -48,7 +48,7 @@ services:
     networks:
       - gamebox-network
     volumes:
-      - ./.aspnet/statistics/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+      - data-protection:/root/.aspnet/DataProtection-Keys
 
   scheduler:
     environment:

@@ -78,3 +78,5 @@ volumes:
     name: WebUIServerData  
   rabbitmq-data:
     name: RabbitMQData
+  data-protection:
+    name: "DataProtection"
