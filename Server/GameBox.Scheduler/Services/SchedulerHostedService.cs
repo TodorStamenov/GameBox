@@ -1,8 +1,10 @@
 using Dapper;
 using GameBox.Scheduler.Contracts;
 using GameBox.Scheduler.Model;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Data.SqlClient;
 using System.Threading;
@@ -12,17 +14,20 @@ namespace GameBox.Scheduler.Services
 {
     public class SchedulerHostedService : BackgroundService
     {
-        private readonly Settings settings;
+        private readonly string connectionString;
+        private readonly RabbitMQSettings settings;
         private readonly ILogger<SchedulerHostedService> logger;
         private readonly IQueueSenderService queueService;
 
         public SchedulerHostedService(
-            Settings settings,
-            ILogger<SchedulerHostedService> logger,
-            IQueueSenderService queueService)
+            IConfiguration configuration,
+            IQueueSenderService queueService,
+            IOptions<RabbitMQSettings> settings,
+            ILogger<SchedulerHostedService> logger)
         {
-            this.settings = settings;
+            this.connectionString = configuration.GetValue<string>("ConnectionString");
             this.logger = logger;
+            this.settings = settings.Value;
             this.queueService = queueService;
         }
 
@@ -39,7 +44,7 @@ namespace GameBox.Scheduler.Services
         {
             try
             {
-                using (var connection = new SqlConnection(this.settings.ConnectionString))
+                using (var connection = new SqlConnection(this.connectionString))
                 {
                     var messages = await connection.QueryAsync<Message>("SELECT Id, QueueName, SerializedData [serializedData] FROM Messages WHERE Published = 0");
 

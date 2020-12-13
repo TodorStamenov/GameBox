@@ -9,9 +9,12 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/GameBox.Scheduler/bin/Debug/netcoreapp3.1/GameBox.Scheduler.dll",
+            "program": "${workspaceFolder}/GameBox.Scheduler/bin/Debug/net5.0/GameBox.Scheduler.dll",
             "args": [],
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/GameBox.Scheduler",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
             "stopAtEntry": false,
             "console": "internalConsole"
         },
@@ -21,7 +24,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/GameBox.Bootstrap/bin/Debug/netcoreapp3.1/GameBox.Bootstrap.dll",
+            "program": "${workspaceFolder}/GameBox.Bootstrap/bin/Debug/net5.0/GameBox.Bootstrap.dll",
             "args": [],
             "cwd": "${workspaceFolder}/GameBox.Bootstrap",
             "stopAtEntry": false,
@@ -43,7 +46,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/GameBox.Notification/bin/Debug/netcoreapp3.1/GameBox.Notification.dll",
+            "program": "${workspaceFolder}/GameBox.Notification/bin/Debug/net5.0/GameBox.Notification.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,

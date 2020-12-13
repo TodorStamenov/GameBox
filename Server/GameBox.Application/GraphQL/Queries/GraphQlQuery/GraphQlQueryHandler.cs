@@ -24,7 +24,7 @@ namespace GameBox.Application.GraphQL.Queries.GraphQlQuery
                 o.Schema = schema;
                 o.Query = request.Query;
                 o.OperationName = request.OperationName;
-                o.Inputs = request.Variables.ToInputs();
+                o.Inputs = request.Variables?.ToInputs();
             });
         }
     }

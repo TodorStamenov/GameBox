@@ -4,6 +4,8 @@ using GameBox.Scheduler.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace GameBox.Scheduler
@@ -19,33 +21,18 @@ namespace GameBox.Scheduler
         {
             return Host
                 .CreateDefaultBuilder(args)
-                .ConfigureHostConfiguration(context =>
-                {
-                    context
-                        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                        .AddEnvironmentVariables()
-                        .Build();
-                })
-                .ConfigureServices((context, services) =>
-                {
-                    var configuration = context.Configuration;
-
-                    var settings = new Settings
-                    {
-                        ConnectionString = configuration.GetValue<string>("ConnectionString"),
-                        RabbitMQHost = configuration.GetValue<string>("RabbitMQ:Host"),
-                        RabbitMQPort = configuration.GetValue<int>("RabbitMQ:Port"),
-                        RabbitMQUsername = configuration.GetValue<string>("RabbitMQ:Username"),
-                        RabbitMQPassword = configuration.GetValue<string>("RabbitMQ:Password")
-                    };
-
-                    services
-                        .AddOptions()
-                        .AddLogging()
-                        .AddSingleton<Settings>(_ => settings)
-                        .AddSingleton<IQueueSenderService, QueueSenderService>()
-                        .AddHostedService<SchedulerHostedService>();
-                });
+                .ConfigureHostConfiguration(context => context
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+                    .AddEnvironmentVariables()
+                    .Build())
+                .ConfigureServices((context, services) => services
+                    .AddOptions()
+                    .AddLogging()
+                    .Configure<RabbitMQSettings>(context.Configuration.GetSection("RabbitMQ"))
+                    .AddSingleton<IQueueSenderService, QueueSenderService>()
+                    .AddHostedService<SchedulerHostedService>());
         }
     }
 }
