@@ -45,7 +45,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   public onBuyItem(id: string): void {
     this.store.dispatch(new UnloadItem(id));
-    this.cartService.addItem$(id)
+    this.cartService
+      .addItem$(id)
       .subscribe(() => this.router.navigate(['/cart/items']));
   }
 }

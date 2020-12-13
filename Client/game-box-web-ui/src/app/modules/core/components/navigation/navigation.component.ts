@@ -39,6 +39,10 @@ export class NavigationComponent implements OnInit {
     }
   }
 
+  public onCategoriesMenuClick(): void {
+    this.store.dispatch(new LoadCategoryNames());
+  }
+
   public onLogout(): void {
     this.authService.logout();
     this.router.navigate(['/']);

@@ -22,7 +22,8 @@ namespace GameBox.Application
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>))
                 .AddDomainServices(assemblies)
                 .AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService))
-                .AddScoped<ISchema, GameBoxSchema>();
+                .AddScoped<ISchema, GameBoxSchema>()
+                .AddMemoryCache();
 
             services
                 .AddGraphQL(o => o.ExposeExceptions = true)

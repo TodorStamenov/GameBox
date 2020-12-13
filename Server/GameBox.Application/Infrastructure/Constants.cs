@@ -2,6 +2,12 @@
 {
     public static class Constants
     {
+        public static class Caching
+        {
+            public const int CategoryMenuItemsLifeSpan = 60;
+            public const string CategoryMenuItemsKey = "Category_Menu_Items";
+        }
+
         public static class Common
         {
             public const int TokenExpiration = 2;
