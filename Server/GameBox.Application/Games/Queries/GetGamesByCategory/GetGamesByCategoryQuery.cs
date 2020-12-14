@@ -2,8 +2,11 @@
 using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts.Services;
 using GameBox.Application.Games.Queries.GetAllGames;
-using GameBox.Domain.Entities;
+using GameBox.Application.Infrastructure;
+using GameBox.Application.Infrastructure.Extensions;
+using GameBox.Application.Model;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,25 +27,43 @@ namespace GameBox.Application.Games.Queries.GetGamesByCategory
 
             private readonly IMapper mapper;
             private readonly IDataService context;
+            private readonly IDistributedCache cache;
 
-            public GetGamesByCategoryQueryHandler(IMapper mapper, IDataService context)
+            public GetGamesByCategoryQueryHandler(
+                IMapper mapper,
+                IDataService context,
+                IDistributedCache cache)
             {
                 this.mapper = mapper;
                 this.context = context;
+                this.cache = cache;
             }
 
             public async Task<IEnumerable<GamesListViewModel>> Handle(GetGamesByCategoryQuery request, CancellationToken cancellationToken)
             {
-                return await Task.FromResult(this.context
-                    .All<Game>()
+                var games = await this.cache.GetRecordAsync<IEnumerable<GamesCacheModel>>(Constants.Caching.RedisGamesKey);
+
+                if (games is null || !games.Any())
+                {
+                    return Enumerable.Empty<GamesListViewModel>();
+                }
+                
+                return games
                     .Where(g => g.CategoryId == request.CategoryId)
-                    .OrderByDescending(g => g.ReleaseDate)
-                    .ThenByDescending(g => g.ViewCount)
-                    .ThenBy(g => g.Title)
                     .Skip(request.LoadedGames)
                     .Take(GameCardsCount)
-                    .ProjectTo<GamesListViewModel>(this.mapper.ConfigurationProvider)
-                    .ToList());
+                    .Select(g => new GamesListViewModel
+                    {
+                        Id = g.Id,
+                        Title = g.Title,
+                        Description = g.Description,
+                        Price = g.Price,
+                        Size = g.Size,
+                        ThumbnailUrl = g.ThumbnailUrl,
+                        VideoId = g.VideoId,
+                        ViewCount = g.ViewCount
+                    })
+                    .ToList();
             }
         }
     }

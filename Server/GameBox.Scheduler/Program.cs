@@ -30,9 +30,11 @@ namespace GameBox.Scheduler
                 .ConfigureServices((context, services) => services
                     .AddOptions()
                     .AddLogging()
+                    .AddStackExchangeRedisCache(options => options.Configuration = context.Configuration.GetConnectionString("Redis"))
                     .Configure<RabbitMQSettings>(context.Configuration.GetSection("RabbitMQ"))
                     .AddSingleton<IQueueSenderService, QueueSenderService>()
-                    .AddHostedService<SchedulerHostedService>());
+                    .AddHostedService<BrokerHostedService>()
+                    .AddHostedService<RedisCacheHostedService>());
         }
     }
 }

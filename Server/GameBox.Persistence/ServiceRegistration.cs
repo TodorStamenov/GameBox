@@ -11,7 +11,7 @@ namespace GameBox.Persistence
         {
             services.AddDbContext<GameBoxDbContext>(
                 options => options.UseSqlServer(
-                    configuration["ConnectionString"],
+                    configuration.GetConnectionString("Database"),
                     sqlOptions => 
                     {
                         sqlOptions.MigrationsAssembly(typeof(GameBoxDbContext).Assembly.FullName);

@@ -34,11 +34,10 @@ namespace GameBox.Application.Games.Queries.GetOwnedGames
             public async Task<IEnumerable<GamesListViewModel>> Handle(GetOwnedGamesQuery request, CancellationToken cancellationToken)
             {
                 return await Task.FromResult(this.context
-                    .All<User>()
-                    .Where(u => u.Id == request.UserId)
-                    .SelectMany(u => u.Orders
-                        .OrderByDescending(o => o.TimeStamp)
-                        .SelectMany(o => o.Games.Select(g => g.Game)))
+                    .All<Order>()
+                    .Where(o => o.UserId == request.UserId)
+                    .OrderByDescending(o => o.TimeStamp)
+                    .SelectMany(o => o.Games.Select(g => g.Game))
                     .Distinct()
                     .OrderBy(g => g.Title)
                     .Skip(request.LoadedGames)

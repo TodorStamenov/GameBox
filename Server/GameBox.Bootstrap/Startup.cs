@@ -24,7 +24,10 @@ namespace GameBox.Bootstrap
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddApplication(Assembly.GetAssembly(typeof(AccountService)), Assembly.GetAssembly(typeof(DataService)))
+                .AddApplication(
+                    this.Configuration,
+                    Assembly.GetAssembly(typeof(AccountService)),
+                    Assembly.GetAssembly(typeof(DataService)))
                 .AddPersistence(this.Configuration)
                 .AddInfrastructure(this.Configuration)
                 .AddCors()

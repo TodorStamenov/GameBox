@@ -6,6 +6,7 @@ using GraphQL;
 using GraphQL.Server;
 using GraphQL.Types;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +15,7 @@ namespace GameBox.Application
 {
     public static class ServiceRegistration
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services, params Assembly[] assemblies)
+        public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration, params Assembly[] assemblies)
         {
             services
                 .AddAutoMapper(Assembly.GetExecutingAssembly())
@@ -23,7 +24,8 @@ namespace GameBox.Application
                 .AddDomainServices(assemblies)
                 .AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService))
                 .AddScoped<ISchema, GameBoxSchema>()
-                .AddMemoryCache();
+                .AddMemoryCache()
+                .AddStackExchangeRedisCache(options => options.Configuration = configuration.GetConnectionString("Redis"));
 
             services
                 .AddGraphQL(o => o.ExposeExceptions = true)

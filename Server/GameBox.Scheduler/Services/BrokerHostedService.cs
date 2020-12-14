@@ -12,20 +12,20 @@ using System.Threading.Tasks;
 
 namespace GameBox.Scheduler.Services
 {
-    public class SchedulerHostedService : BackgroundService
+    public class BrokerHostedService : BackgroundService
     {
         private readonly string connectionString;
         private readonly RabbitMQSettings settings;
-        private readonly ILogger<SchedulerHostedService> logger;
+        private readonly ILogger<BrokerHostedService> logger;
         private readonly IQueueSenderService queueService;
 
-        public SchedulerHostedService(
+        public BrokerHostedService(
             IConfiguration configuration,
             IQueueSenderService queueService,
             IOptions<RabbitMQSettings> settings,
-            ILogger<SchedulerHostedService> logger)
+            ILogger<BrokerHostedService> logger)
         {
-            this.connectionString = configuration.GetValue<string>("ConnectionString");
+            this.connectionString = configuration.GetConnectionString("Database");
             this.logger = logger;
             this.settings = settings.Value;
             this.queueService = queueService;
@@ -35,23 +35,28 @@ namespace GameBox.Scheduler.Services
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                await this.ProcessMessages();
+                await this.ProcessMessagesAsync();
                 await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }
         }
 
-        private async Task ProcessMessages()
+        private async Task ProcessMessagesAsync()
         {
             try
             {
                 using (var connection = new SqlConnection(this.connectionString))
                 {
-                    var messages = await connection.QueryAsync<Message>("SELECT Id, QueueName, SerializedData [serializedData] FROM Messages WHERE Published = 0");
+                    var messages = await connection.QueryAsync<Message>(
+                        @"SELECT Id, QueueName, SerializedData [serializedData]
+                            FROM Messages
+                           WHERE Published = 0");
 
                     foreach (var message in messages)
                     {
                         this.queueService.PostQueueMessage(message.QueueName, message.SerializedData);
-                        await connection.ExecuteAsync("UPDATE Messages SET Published = 1 WHERE Id = @MessageId", new { MessageId = message.Id });
+                        await connection.ExecuteAsync(
+                            "UPDATE Messages SET Published = 1 WHERE Id = @MessageId",
+                            new { MessageId = message.Id });
                     }
                 }
             }

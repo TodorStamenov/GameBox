@@ -6,6 +6,7 @@
         {
             public const int CategoryMenuItemsLifeSpan = 60;
             public const string CategoryMenuItemsKey = "Category_Menu_Items";
+            public const string RedisGamesKey = "_Games_";
         }
 
         public static class Common

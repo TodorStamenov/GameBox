@@ -29,10 +29,19 @@ services:
     volumes: 
       - "rabbitmq-data:/var/lib/rabbitmq"
 
+  redis:
+    ports:
+      - "6379:6379"
+    networks:
+      - gamebox-network
+    volumes: 
+      - "redis-data:/data"
+
   core.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sql-server;Database=GameBoxCore;User Id=sa;Password=Your_password@123
+      - ConnectionStrings__Redis=172.17.0.1:6379
+      - ConnectionStrings__Database=Server=sql-server;Database=GameBoxCore;User Id=sa;Password=Your_password@123
     ports:
       - "5000:80"
     networks:
@@ -53,7 +62,8 @@ services:
   scheduler:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sql-server;Database=GameBoxCore;User Id=sa;Password=Your_password@123
+      - ConnectionStrings__Redis=172.17.0.1:6379
+      - ConnectionStrings__Database=Server=sql-server;Database=GameBoxCore;User Id=sa;Password=Your_password@123
     networks:
       - gamebox-network
 

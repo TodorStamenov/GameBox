@@ -10,8 +10,12 @@ services:
     image: mongo
 
   rabbitmq:
-    container_name: RabbitMQ
-    image: rabbitmq:3-management-alpine
+    container_name: rabbit-mq
+    image: rabbitmq:3.8.9-management-alpine
+
+  redis:
+    container_name: redis-cache
+    image: redis:6.0.9-alpine
 
   core.api:
     container_name: core-api
@@ -72,6 +76,8 @@ volumes:
     name: GameBoxCoreSQL
   nosql-data:
     name: OrdersMongo
+  redis-data:
+    name: RedisCacheData
   admin-ui-server-data:
     name: AdminUIServerData
   web-ui-server-data:
