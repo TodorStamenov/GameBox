@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameBox.Application\GameBox.Application.csproj" />
+    <ProjectReference Include="..\..\Core\GameBox.Application\GameBox.Application.csproj" />
   </ItemGroup>
 
 </Project>

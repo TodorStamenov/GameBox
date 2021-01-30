@@ -19,9 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Application", "Games.Service\Core\GameBox.Application\GameBox.Application.csproj", "{C6A090E0-C06F-4E90-9BF1-6ECDE39453C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Infrastructure", "Games.Service\Core\GameBox.Infrastructure\GameBox.Infrastructure.csproj", "{1B28F2EA-DE1C-48C3-8EBF-DD99CAC79390}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Infrastructure", "Games.Service\Infrastructure\GameBox.Infrastructure\GameBox.Infrastructure.csproj", "{1B28F2EA-DE1C-48C3-8EBF-DD99CAC79390}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Domain", "Games.Service\Infrastructure\GameBox.Domain\GameBox.Domain.csproj", "{BF34DDAD-F3B0-433C-AF9E-05EEAFF808E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Domain", "Games.Service\Core\GameBox.Domain\GameBox.Domain.csproj", "{BF34DDAD-F3B0-433C-AF9E-05EEAFF808E3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBox.Persistence", "Games.Service\Infrastructure\GameBox.Persistence\GameBox.Persistence.csproj", "{13C2E45E-6F98-461E-B912-14DD5DCCBC61}"
 EndProject

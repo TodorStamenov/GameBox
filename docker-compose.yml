@@ -21,7 +21,7 @@ services:
     container_name: core-api
     restart: on-failure
     build:
-      context: ./Server
+      context: ./Server/Games.Service
       dockerfile: GameBox.Bootstrap/Dockerfile
     depends_on:
       - sql.data

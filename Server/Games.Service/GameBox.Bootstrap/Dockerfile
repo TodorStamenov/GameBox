@@ -1,15 +1,15 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-focal AS base
 WORKDIR /app
 EXPOSE 80/tcp
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
 WORKDIR /src
 COPY ["GameBox.Bootstrap/GameBox.Bootstrap.csproj", "GameBox.Bootstrap/"]
-COPY ["GameBox.Api/GameBox.Api.csproj", "GameBox.Api/"]
-COPY ["GameBox.Application/GameBox.Application.csproj", "GameBox.Application/"]
-COPY ["GameBox.Domain/GameBox.Domain.csproj", "GameBox.Domain/"]
-COPY ["GameBox.Persistence/GameBox.Persistence.csproj", "GameBox.Persistence/"]
-COPY ["GameBox.Infrastructure/GameBox.Infrastructure.csproj", "GameBox.Infrastructure/"]
+COPY ["Presentation/GameBox.Api/GameBox.Api.csproj", "GameBox.Api/"]
+COPY ["Core/GameBox.Application/GameBox.Application.csproj", "GameBox.Application/"]
+COPY ["Core/GameBox.Domain/GameBox.Domain.csproj", "GameBox.Domain/"]
+COPY ["Infrastructure/GameBox.Persistence/GameBox.Persistence.csproj", "GameBox.Persistence/"]
+COPY ["Infrastructure/GameBox.Infrastructure/GameBox.Infrastructure.csproj", "GameBox.Infrastructure/"]
 
 RUN dotnet restore "GameBox.Bootstrap/GameBox.Bootstrap.csproj"
 COPY . .

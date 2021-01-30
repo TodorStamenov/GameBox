@@ -1,8 +1,8 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-focal AS base
 WORKDIR /app
 EXPOSE 80/tcp
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
 WORKDIR /src
 COPY GameBox.Notification.csproj .
 

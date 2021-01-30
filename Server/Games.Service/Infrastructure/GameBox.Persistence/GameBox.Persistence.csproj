@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\GameBox.Application\GameBox.Application.csproj" />
-    <ProjectReference Include="..\GameBox.Domain\GameBox.Domain.csproj" />
+    <ProjectReference Include="..\..\Core\GameBox.Domain\GameBox.Domain.csproj" />
   </ItemGroup>
 
 </Project>
