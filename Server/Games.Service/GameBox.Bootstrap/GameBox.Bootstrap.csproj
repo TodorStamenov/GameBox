@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>7603bb78-5b36-4add-ad24-64c373a195f5</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="9.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\GameBox.Application\GameBox.Application.csproj" />
+    <ProjectReference Include="..\Core\GameBox.Infrastructure\GameBox.Infrastructure.csproj" />
+    <ProjectReference Include="..\Infrastructure\GameBox.Persistence\GameBox.Persistence.csproj" />
+    <ProjectReference Include="..\Presentation\GameBox.Api\GameBox.Api.csproj" />
+  </ItemGroup>
+
+</Project>
