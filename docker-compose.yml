@@ -1,12 +1,16 @@
 version: "3.7"
 
 services:
-  sql.data:
-    container_name: sql-server
+  games.data:
+    container_name: games-database
     image: mcr.microsoft.com/mssql/server
 
-  nosql.data:
-    container_name: mongo-server
+  users.data:
+    container_name: users-database
+    image: postgres:13.1-alpine
+
+  orders.data:
+    container_name: orders-data
     image: mongo
 
   rabbitmq:
@@ -17,16 +21,25 @@ services:
     container_name: redis-cache
     image: redis:6.0.9-alpine
 
-  core.api:
-    container_name: core-api
+  games.api:
+    container_name: games-api
     restart: on-failure
     build:
       context: ./Server/Games.Service
       dockerfile: GameBox.Bootstrap/Dockerfile
     depends_on:
-      - sql.data
+      - games.data
       - rabbitmq
-      
+
+  users.api:
+    container_name: users-api
+    restart: on-failure
+    build:
+      context: ./Server/Users.Service
+      dockerfile: User.Api/Dockerfile
+    depends_on:
+      - users.data
+
   notification.api:
     container_name: notification-api
     restart: on-failure
@@ -43,8 +56,9 @@ services:
       context: ./Server/GameBox.Scheduler
       dockerfile: Dockerfile
     depends_on:
-      - sql.data
+      - games.data
       - rabbitmq
+      - redis
 
   orders.api:
     container_name: orders-api
@@ -52,7 +66,7 @@ services:
       context: ./Server
       dockerfile: game-box-orders-api/Dockerfile
     depends_on:
-      - nosql.data
+      - orders.data
       - rabbitmq
 
   admin.ui:
@@ -72,10 +86,12 @@ networks:
     name: gamebox-network
 
 volumes:
-  sql-data:
-    name: GameBoxCoreSQL
-  nosql-data:
-    name: OrdersMongo
+  games-data:
+    name: GamesData
+  users-data:
+    name: UsersData
+  orders-data:
+    name: OrdersData
   redis-data:
     name: RedisCacheData
   admin-ui-server-data:

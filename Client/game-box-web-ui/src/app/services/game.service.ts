@@ -16,7 +16,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class GameService {
-  private gamesUrl = environment.api.gameBoxApiUrl + 'games/';
+  private gamesUrl = 'environment.api.gameBoxApiUrl' + 'games/';
   private commentsUrl = environment.api.gameBoxApiUrl + 'comments/';
 
   constructor(private http: HttpClient) { }

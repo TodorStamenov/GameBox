@@ -5,37 +5,34 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch Scheduler",
+            "name": ".NET Core Launch Games API",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/GameBox.Scheduler/bin/Debug/net5.0/GameBox.Scheduler.dll",
+            "program": "${workspaceFolder}/Games.Service/GameBox.Bootstrap/bin/Debug/net5.0/GameBox.Bootstrap.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/GameBox.Scheduler",
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
+            "cwd": "${workspaceFolder}/Games.Service/GameBox.Bootstrap",
             "stopAtEntry": false,
-            "console": "internalConsole"
-        },
-        {
-            "name": ".NET Core Launch Web API",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/GameBox.Bootstrap/bin/Debug/net5.0/GameBox.Bootstrap.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/GameBox.Bootstrap",
-            "stopAtEntry": false,
-            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
-            },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "ASPNETCORE_URLS": "http://localhost:5000"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": ".NET Core Launch Users API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/Users.Service/User.Api/bin/Debug/net5.0/User.Api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://localhost:5001"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
@@ -50,17 +47,27 @@
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "ASPNETCORE_URLS": "http://localhost:5001"
+                "ASPNETCORE_URLS": "http://localhost:5002"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
             }
+        },
+        {
+            "name": ".NET Core Launch Scheduler",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/GameBox.Scheduler/bin/Debug/net5.0/GameBox.Scheduler.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/GameBox.Scheduler",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "stopAtEntry": false,
+            "console": "internalConsole"
         },
         {
             "name": "NodeJS Launch Orders API",

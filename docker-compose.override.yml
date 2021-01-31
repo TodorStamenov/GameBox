@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  sql.data:
+  games.data:
     environment:
       SA_PASSWORD: "Your_password@123"
       ACCEPT_EULA: "Y"
@@ -10,15 +10,23 @@ services:
     networks:
       - gamebox-network
     volumes: 
-      - "sql-data:/var/opt/mssql"
+      - "games-data:/var/opt/mssql"
 
-  nosql.data:
+  users.data:
+    environment:
+      POSTGRES_PASSWORD: my_secret_password@123
+    networks:
+      - gamebox-network
+    volumes:
+      - "users-data:/var/lib/postgresql/data"
+
+  orders.data:
     ports:
       - "27017:27017"
     networks:
       - gamebox-network
-    volumes: 
-      - "nosql-data:/data/db"
+    volumes:
+      - "orders-data:/data/db"
 
   rabbitmq:
     ports:
@@ -37,11 +45,11 @@ services:
     volumes: 
       - "redis-data:/data"
 
-  core.api:
+  games.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__Redis=172.17.0.1:6379
-      - ConnectionStrings__Database=Server=sql-server;Database=GameBoxCore;User Id=sa;Password=Your_password@123
+      - ConnectionStrings__Database=Server=games-database;Database=GameBoxCore;User Id=sa;Password=Your_password@123
     ports:
       - "5000:80"
     networks:
@@ -49,7 +57,7 @@ services:
     volumes:
       - data-protection:/root/.aspnet/DataProtection-Keys
 
-  notification.api:
+  users.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
@@ -59,11 +67,21 @@ services:
     volumes:
       - data-protection:/root/.aspnet/DataProtection-Keys
 
+  notification.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5002:80"
+    networks:
+      - gamebox-network
+    volumes:
+      - data-protection:/root/.aspnet/DataProtection-Keys
+
   scheduler:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__Redis=172.17.0.1:6379
-      - ConnectionStrings__Database=Server=sql-server;Database=GameBoxCore;User Id=sa;Password=Your_password@123
+      - ConnectionStrings__Database=Server=games-database;Database=GameBoxCore;User Id=sa;Password=Your_password@123
     networks:
       - gamebox-network
 

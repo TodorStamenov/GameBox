@@ -8,7 +8,7 @@ export const environment = {
   production: false,
   api: {
     gameBoxApiUrl: `http://${baseHost}:5000/api/`,
-    notificationsUrl: `http://${baseHost}:5001/notifications`,
+    notificationsUrl: `http://${baseHost}:5002/notifications`,
     ordersApiUrl: `http://${baseHost}:1337/api/`,
     graphQlUrl: `http://${baseHost}:5000/api/graphql`
   }

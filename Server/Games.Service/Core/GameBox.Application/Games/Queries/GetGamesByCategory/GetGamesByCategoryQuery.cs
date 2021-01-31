@@ -5,6 +5,7 @@ using GameBox.Application.Games.Queries.GetAllGames;
 using GameBox.Application.Infrastructure;
 using GameBox.Application.Infrastructure.Extensions;
 using GameBox.Application.Model;
+using GameBox.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
@@ -41,28 +42,26 @@ namespace GameBox.Application.Games.Queries.GetGamesByCategory
 
             public async Task<IEnumerable<GamesListViewModel>> Handle(GetGamesByCategoryQuery request, CancellationToken cancellationToken)
             {
-                var games = await this.cache.GetRecordAsync<IEnumerable<GamesCacheModel>>(Constants.Caching.RedisGamesKey);
+                var games = await this.cache
+                    .GetRecordAsync<IEnumerable<GamesCacheModel>>(Constants.Caching.RedisGamesKey);
 
                 if (games is null || !games.Any())
                 {
-                    return Enumerable.Empty<GamesListViewModel>();
+                    return this.context
+                        .All<Game>()
+                        .Where(g => g.CategoryId == request.CategoryId)
+                        .Skip(request.LoadedGames)
+                        .Take(GameCardsCount)
+                        .ProjectTo<GamesListViewModel>(this.mapper.ConfigurationProvider)
+                        .ToList();
                 }
                 
                 return games
                     .Where(g => g.CategoryId == request.CategoryId)
                     .Skip(request.LoadedGames)
                     .Take(GameCardsCount)
-                    .Select(g => new GamesListViewModel
-                    {
-                        Id = g.Id,
-                        Title = g.Title,
-                        Description = g.Description,
-                        Price = g.Price,
-                        Size = g.Size,
-                        ThumbnailUrl = g.ThumbnailUrl,
-                        VideoId = g.VideoId,
-                        ViewCount = g.ViewCount
-                    })
+                    .AsQueryable()
+                    .ProjectTo<GamesListViewModel>(this.mapper.ConfigurationProvider)
                     .ToList();
             }
         }
