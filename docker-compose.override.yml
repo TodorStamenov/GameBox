@@ -14,6 +14,7 @@ services:
 
   users.data:
     environment:
+      POSTGRES_USER: admin
       POSTGRES_PASSWORD: my_secret_password@123
     ports:
       - "5432:5432"
@@ -62,7 +63,7 @@ services:
   users.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__Database=Server=users-database;Database=UsersCore;User Id=postgres-user;Password=my_secret_password@123
+      - ConnectionStrings__Database=Server=users-database;Database=UsersCore;User Id=admin;Password=my_secret_password@123
     ports:
       - "5001:80"
     networks:
