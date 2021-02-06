@@ -9,24 +9,21 @@ namespace GameBox.Api.Controllers
 {
     public class AccountController : BaseApiController
     {
-        [HttpPost]
-        [Route("login")]
-        public async Task<IActionResult> Login([FromBody]LoginCommand command)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register([FromBody]RegisterCommand command)
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpPost]
         [Authorize]
-        [Route("changePassword")]
-        public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordCommand command)
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
         {
             command.Username = User.Identity.Name;
 

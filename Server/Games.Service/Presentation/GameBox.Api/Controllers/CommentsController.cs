@@ -12,8 +12,7 @@ namespace GameBox.Api.Controllers
 {
     public class CommentsController : BaseApiController
     {
-        [HttpGet]
-        [Route("{gameId}")]
+        [HttpGet("{gameId:guid}")]
         public async Task<ActionResult<IEnumerable<CommentsListViewModel>>> GetComments([FromRoute]Guid gameId)
         {
             return Ok(await Mediator.Send(new GetCommentsByGameQuery { GameId = gameId }));
@@ -28,7 +27,7 @@ namespace GameBox.Api.Controllers
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         [Authorize(Roles = Constants.Common.Admin)]
         public async Task<IActionResult> Delete([FromRoute]Guid id)
         {

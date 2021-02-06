@@ -19,14 +19,12 @@ namespace GameBox.Api.Controllers
     public class GamesController : BaseApiController
     {
         [HttpGet]
-        [Route("")]
         public async Task<ActionResult<IEnumerable<GamesListViewModel>>> Get([FromQuery]int loadedGames)
         {
             return Ok(await Mediator.Send(new GetAllGamesQuery { LoadedGames = loadedGames }));
         }
 
-        [HttpGet]
-        [Route("category/{categoryId}")]
+        [HttpGet("category/{categoryId:guid}")]
         public async Task<ActionResult<IEnumerable<GamesListViewModel>>> ByCategory([FromRoute]Guid categoryId, [FromQuery]int loadedGames)
         {
             var query = new GetGamesByCategoryQuery
@@ -38,16 +36,14 @@ namespace GameBox.Api.Controllers
             return Ok(await Mediator.Send(query));
         }
 
-        [HttpGet]
-        [Route("details/{id}")]
+        [HttpGet("details/{id:guid}")]
         public async Task<IActionResult> Details([FromRoute]Guid id)
         {
             return Ok(await Mediator.Send(new GetGameDetailsQuery { Id = id }));
         }
 
-        [HttpGet]
         [Authorize]
-        [Route("owned")]
+        [HttpGet("owned")]
         public async Task<ActionResult<IEnumerable<GamesListViewModel>>> Owned([FromQuery]int loadedGames)
         {
             var query = new GetOwnedGamesQuery
@@ -59,25 +55,22 @@ namespace GameBox.Api.Controllers
             return Ok(await Mediator.Send(query));
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         [Authorize(Roles = Constants.Common.Admin)]
-        [Route("all")]
         public async Task<ActionResult<IEnumerable<GamesListByTitleViewModel>>> Get([FromQuery]string title)
         {
             return Ok(await Mediator.Send(new GetGamesByTitleQuery { Title = title }));
         }
 
-        [HttpGet]
+        [HttpGet("{id:guid}")]
         [Authorize(Roles = Constants.Common.Admin)]
-        [Route("{id}")]
         public async Task<IActionResult> Get([FromRoute]Guid id)
         {
             return Ok(await Mediator.Send(new GetGameQuery { Id = id }));
         }
 
-        [HttpPut]
+        [HttpPut("{id:guid}")]
         [Authorize(Roles = Constants.Common.Admin)]
-        [Route("{id}")]
         public async Task<IActionResult> Put([FromRoute]Guid id, [FromBody]UpdateGameCommand command)
         {
             command.Id = id;
@@ -92,9 +85,8 @@ namespace GameBox.Api.Controllers
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         [Authorize(Roles = Constants.Common.Admin)]
-        [Route("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             return Ok(await Mediator.Send(new DeleteGameCommand { Id = id }));

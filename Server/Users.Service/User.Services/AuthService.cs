@@ -1,18 +1,135 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
+using User.DataAccess;
+using User.Services.BindingModels.Auth;
 using User.Services.Contracts;
+using User.Services.Exceptions;
 using User.Services.Infrastructure;
+using User.Services.ViewModels.Auth;
 
 namespace User.Services
 {
     public class AuthService : IAuthService
     {
+        private readonly UserDbContext database;
+
+        public AuthService(UserDbContext database)
+        {
+            this.database = database;
+        }
+
+        public async Task<LoginViewModel> LoginAsync(LoginBindingModel model)
+        {
+            var userInfo = await this.database
+                .Users
+                .Where(u => u.Username == model.Username)
+                .Select(u => new
+                {
+                    u.Id,
+                    u.Username,
+                    u.Password,
+                    u.Salt,
+                    u.IsLocked,
+                    IsAdmin = u.Roles.Any(r => r.Role.Name == Constants.Common.Admin)
+                })
+                .FirstOrDefaultAsync();
+
+            if (userInfo == null)
+            {
+                throw new InvalidCredentialsException();
+            }
+
+            if (userInfo.IsLocked)
+            {
+                throw new AccountLockedException(userInfo.Username);
+            }
+
+            var hashedPassword = this.HashPassword(model.Password, userInfo.Salt);
+
+            if (userInfo.Password != hashedPassword)
+            {
+                throw new InvalidCredentialsException();
+            }
+
+            var token = this.GenerateJwtToken(userInfo.Id.ToString(), userInfo.Username, userInfo.IsAdmin);
+
+            return new LoginViewModel
+            {
+                Id = userInfo.Id,
+                Username = userInfo.Username,
+                IsAdmin = userInfo.IsAdmin,
+                Token = token,
+                ExpirationDate = DateTime.UtcNow.AddDays(Constants.Common.TokenExpiration),
+                Message = string.Format(Constants.Common.Success, nameof(User), userInfo.Username, "Logged In")
+            };
+        }
+
+        public async Task<RegisterViewModel> RegisterAsync(RegisterBindingModel model)
+        {
+            var salt = this.GenerateSalt();
+            var hashedPassword = this.HashPassword(model.Password, salt);
+
+            var user = new Models.User
+            {
+                Username = model.Username,
+                Password = hashedPassword,
+                Salt = salt
+            };
+
+            await this.database.Users.AddAsync(user);
+            await this.database.SaveChangesAsync();
+
+            var token = this.GenerateJwtToken(user.Id.ToString(), user.Username, false);
+
+            return new RegisterViewModel
+            {
+                Username = user.Username,
+                Token = token,
+                IsAdmin = false,
+                ExpirationDate = DateTime.UtcNow.AddDays(Constants.Common.TokenExpiration),
+                Message = string.Format(Constants.Common.Success, nameof(User), user.Username, "Registered")
+            };
+        }
+
+        public async Task<ChangePasswordViewModel> ChangePasswordAsync(ChangePasswordBindingModel model)
+        {
+            var user = await this.database
+                .Users
+                .Where(u => u.Username == model.Username)
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                throw new NotFoundException(nameof(User), model.Username);
+            }
+
+            var oldHashedPassword = this.HashPassword(model.OldPassword, user.Salt);
+
+            if (oldHashedPassword != user.Password)
+            {
+                throw new InvalidCredentialsException();
+            }
+
+            user.Salt = this.GenerateSalt();
+
+            var newHashedPassword = this.HashPassword(model.NewPassword, user.Salt);
+
+            user.Password = newHashedPassword;
+
+            await this.database.SaveChangesAsync();
+
+            return new ChangePasswordViewModel { Message = "You have successfully updated your password!" };
+        }
+
         public byte[] GenerateSalt()
         {
             using (var rng = RandomNumberGenerator.Create())

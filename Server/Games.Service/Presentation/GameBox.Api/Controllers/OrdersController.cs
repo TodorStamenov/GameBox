@@ -11,7 +11,6 @@ namespace GameBox.Api.Controllers
     {
         [HttpPost]
         [Authorize]
-        [Route("")]
         public async Task<IActionResult> Post([FromBody]IEnumerable<Guid> gameIds)
         {
             var command = new CreateOrderCommand

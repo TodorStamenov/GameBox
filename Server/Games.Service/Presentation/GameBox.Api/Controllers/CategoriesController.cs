@@ -16,29 +16,25 @@ namespace GameBox.Api.Controllers
     public class CategoriesController : BaseApiController
     {
         [HttpGet]
-        [Route("")]
         public async Task<ActionResult<IEnumerable<CategoriesListViewModel>>> Get()
         {
             return Ok(await Mediator.Send(new GetAllCategoriesQuery()));
         }
 
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get([FromRoute]Guid id)
         {
             return Ok(await Mediator.Send(new GetCategoryQuery { Id = id }));
         }
 
-        [HttpGet]
-        [Route("menu")]
         [AllowAnonymous]
+        [HttpGet("menu")]
         public async Task<ActionResult<IEnumerable<CategoriesListMenuViewModel>>> Menu()
         {
             return Ok(await Mediator.Send(new GetMenuCategoriesQuery()));
         }
 
-        [HttpPut]
-        [Route("{id}")]
+        [HttpPut("{id:guid}")]
         public async Task<IActionResult> Put([FromRoute]Guid id, [FromBody]UpdateCategoryCommand command)
         {
             command.Id = id;
