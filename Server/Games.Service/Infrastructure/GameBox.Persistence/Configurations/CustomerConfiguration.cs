@@ -5,17 +5,15 @@ using System;
 
 namespace GameBox.Persistence.Configurations
 {
-    public class UserConfiguration : BaseConfiguration<Guid, User>
+    public class CustomerConfiguration : BaseConfiguration<Guid, Customer>
     {
-        public override void Configure(EntityTypeBuilder<User> builder)
+        public override void Configure(EntityTypeBuilder<Customer> builder)
         {
             base.Configure(builder);
 
             builder.Property(u => u.Username).IsRequired();
             builder.HasIndex(u => u.Username).IsUnique();
             builder.Property(u => u.Username).HasMaxLength(Constants.User.UsernameMaxLength);
-            builder.Property(u => u.Password).IsRequired();
-            builder.Property(u => u.Password).HasMaxLength(Constants.User.PasswordMaxLength);
 
             builder
                 .HasMany(u => u.Orders)

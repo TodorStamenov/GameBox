@@ -1,5 +1,4 @@
 ﻿using GameBox.Application.Contracts.Services;
-using GameBox.Application.Infrastructure;
 using GameBox.Application.Orders.Commands.CreateOrder;
 using GameBox.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -11,8 +10,6 @@ namespace GameBox.Persistence
 {
     public static class GameBoxDbContextSeed
     {
-        private const int AdminsCount = 1;
-        private const int UsersCount = 50;
         private const int CategoriesCount = 7;
         private const int GamesCount = CategoriesCount * 10;
 
@@ -31,93 +28,11 @@ namespace GameBox.Persistence
             accountService = account;
             messageQueue = serviceBus;
 
-            await SeedRolesAsync(Constants.Common.Admin);
-            await SeedUsersAsync(UsersCount);
-            await SeedUsersAsync(AdminsCount, Constants.Common.Admin);
             await SeedCategoriesAsync(CategoriesCount);
             await SeedGamesAsync(GamesCount);
             await SeedOrdersAsync();
             await SeedWishlistsAsync();
             await SeedCommentsAsync();
-        }
-
-        private static async Task SeedRolesAsync(string roleName)
-        {
-            if (await context.Roles.AnyAsync())
-            {
-                return;
-            }
-
-            var role = new Role { Name = roleName };
-
-            await context.Roles.AddAsync(role);
-            await context.SaveChangesAsync();
-        }
-
-        private static async Task SeedUsersAsync(int usersCount)
-        {
-            if (await context.Users.AnyAsync(u => !u.Roles.Any()))
-            {
-                return;
-            }
-
-            for (int i = 1; i <= usersCount; i++)
-            {
-                byte[] salt = accountService.GenerateSalt();
-
-                var user = new User
-                {
-                    Username = $"User{i}",
-                    Password = accountService.HashPassword("123", salt),
-                    Salt = salt
-                };
-
-                await context.Users.AddAsync(user);
-            }
-
-            await context.SaveChangesAsync();
-        }
-
-        private static async Task SeedUsersAsync(int usersCount, string role)
-        {
-            if (await context.Users.AnyAsync(u => u.Roles.Any(r => r.Role.Name == role)))
-            {
-                return;
-            }
-
-            Guid roleId = await context
-                .Roles
-                .Where(r => r.Name == role)
-                .Select(r => r.Id)
-                .FirstOrDefaultAsync();
-
-            if (roleId == default)
-            {
-                return;
-            }
-
-            for (int i = 1; i <= usersCount; i++)
-            {
-                byte[] salt = accountService.GenerateSalt();
-
-                var user = new User
-                {
-                    Username = $"{role}{i}",
-                    Password = accountService.HashPassword("123", salt),
-                    Salt = salt
-                };
-
-                var userRole = new UserRoles
-                {
-                    RoleId = roleId
-                };
-
-                user.Roles.Add(userRole);
-
-                await context.Users.AddAsync(user);
-            }
-
-            await context.SaveChangesAsync();
         }
 
         private static async Task SeedCategoriesAsync(int categoriesCount)
@@ -189,7 +104,7 @@ namespace GameBox.Persistence
                 return;
             }
 
-            var users = await context.Users.ToListAsync();
+            var users = await context.Customers.ToListAsync();
             var games = await context.Games.ToListAsync();
 
             foreach (var user in users)
@@ -252,7 +167,7 @@ namespace GameBox.Persistence
                 return;
             }
 
-            var users = await context.Users.ToListAsync();
+            var users = await context.Customers.ToListAsync();
             var gameIds = await context.Games.Select(g => g.Id).ToListAsync();
 
             foreach (var user in users)
@@ -290,7 +205,7 @@ namespace GameBox.Persistence
             }
 
             var games = await context.Games.ToListAsync();
-            var userIds = await context.Users.Select(u => u.Id).ToListAsync();
+            var userIds = await context.Customers.Select(u => u.Id).ToListAsync();
 
             foreach (var game in games)
             {
