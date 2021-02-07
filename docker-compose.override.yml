@@ -1,6 +1,17 @@
 version: "3.7"
 
 services:
+  messages.data:
+    environment:
+      SA_PASSWORD: "Your_password@123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "5434:1433"
+    networks:
+      - gamebox-network
+    volumes: 
+      - "messages-data:/var/opt/mssql"
+
   games.data:
     environment:
       SA_PASSWORD: "Your_password@123"
@@ -52,7 +63,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__Redis=172.17.0.1:6379
-      - ConnectionStrings__Database=Server=games-database;Database=GameBoxCore;User Id=sa;Password=Your_password@123
+      - ConnectionStrings__Games=Server=games-database;Database=GamesCore;User Id=sa;Password=Your_password@123
+      - ConnectionStrings__Messages=Server=messages-database;Database=MessagesCore;User Id=sa;Password=Your_password@123
     ports:
       - "5000:80"
     networks:
@@ -63,7 +75,8 @@ services:
   users.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__Database=Server=users-database;Database=UsersCore;User Id=admin;Password=my_secret_password@123
+      - ConnectionStrings__Users=Server=users-database;Database=UsersCore;User Id=admin;Password=my_secret_password@123
+      - ConnectionStrings__Messages=Server=messages-database;Database=MessagesCore;User Id=sa;Password=Your_password@123
     ports:
       - "5001:80"
     networks:
@@ -85,7 +98,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__Redis=172.17.0.1:6379
-      - ConnectionStrings__Database=Server=games-database;Database=GameBoxCore;User Id=sa;Password=Your_password@123
+      - ConnectionStrings__Games=Server=games-database;Database=GamesCore;User Id=sa;Password=Your_password@123
+      - ConnectionStrings__Messages=Server=messages-database;Database=MessagesCore;User Id=sa;Password=Your_password@123
     networks:
       - gamebox-network
 

@@ -1,6 +1,10 @@
 version: "3.7"
 
 services:
+  messages.data:
+    container_name: messages-database
+    image: mcr.microsoft.com/mssql/server
+
   games.data:
     container_name: games-database
     image: mcr.microsoft.com/mssql/server
@@ -28,8 +32,10 @@ services:
       context: ./Server/Games.Service
       dockerfile: GameBox.Bootstrap/Dockerfile
     depends_on:
+      - messages.data
       - games.data
       - rabbitmq
+      - users.api
 
   users.api:
     container_name: users-api
@@ -38,13 +44,15 @@ services:
       context: ./Server/Users.Service
       dockerfile: User.Api/Dockerfile
     depends_on:
+      - messages.data
       - users.data
+      - rabbitmq
 
   notification.api:
     container_name: notification-api
     restart: on-failure
     build:
-      context: ./Server/GameBox.Notification
+      context: ./Server/Notification.Service
       dockerfile: Dockerfile
     depends_on:
       - rabbitmq
@@ -53,9 +61,10 @@ services:
     container_name: scheduler
     restart: on-failure
     build:
-      context: ./Server/GameBox.Scheduler
+      context: ./Server/Scheduler.Service
       dockerfile: Dockerfile
     depends_on:
+      - messages.data
       - games.data
       - rabbitmq
       - redis
@@ -64,7 +73,7 @@ services:
     container_name: orders-api
     build:
       context: ./Server
-      dockerfile: game-box-orders-api/Dockerfile
+      dockerfile: orders-service/Dockerfile
     depends_on:
       - orders.data
       - rabbitmq
@@ -86,6 +95,8 @@ networks:
     name: gamebox-network
 
 volumes:
+  messages-data:
+    name: MessagesData
   games-data:
     name: GamesData
   users-data:

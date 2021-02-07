@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿using Message.DataAccess;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -14,22 +15,30 @@ using User.Services.BindingModels.Auth;
 using User.Services.Contracts;
 using User.Services.Exceptions;
 using User.Services.Infrastructure;
+using User.Services.Messages;
 using User.Services.ViewModels.Auth;
 
 namespace User.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly UserDbContext database;
+        private readonly UserDbContext userDatabase;
+        private readonly MessageDbContext messageDatabase;
+        private readonly IQueueSenderService queueSender;
 
-        public AuthService(UserDbContext database)
+        public AuthService(
+            UserDbContext userDatabase,
+            MessageDbContext messageDatabase,
+            IQueueSenderService queueSender)
         {
-            this.database = database;
+            this.userDatabase = userDatabase;
+            this.messageDatabase = messageDatabase;
+            this.queueSender = queueSender;
         }
 
         public async Task<LoginViewModel> LoginAsync(LoginBindingModel model)
         {
-            var userInfo = await this.database
+            var userInfo = await this.userDatabase
                 .Users
                 .Where(u => u.Username == model.Username)
                 .Select(u => new
@@ -85,8 +94,25 @@ namespace User.Services
                 Salt = salt
             };
 
-            await this.database.Users.AddAsync(user);
-            await this.database.SaveChangesAsync();
+            await this.userDatabase.Users.AddAsync(user);
+            await this.userDatabase.SaveChangesAsync();
+
+            var queueName = "users";
+            var messageData = new UserRegisteredMessage
+            {
+                UserId = user.Id,
+                Username = user.Username
+            };
+
+            var message = new Message.DataAccess.Models.Message(queueName, messageData);
+
+            await this.messageDatabase.Messages.AddAsync(message);
+            await this.messageDatabase.SaveChangesAsync();
+
+            this.queueSender.PostQueueMessage(queueName, messageData);
+
+            message.MarkAsPublished();
+            await this.messageDatabase.SaveChangesAsync();
 
             var token = this.GenerateJwtToken(user.Id.ToString(), user.Username, false);
 
@@ -102,7 +128,7 @@ namespace User.Services
 
         public async Task<ChangePasswordViewModel> ChangePasswordAsync(ChangePasswordBindingModel model)
         {
-            var user = await this.database
+            var user = await this.userDatabase
                 .Users
                 .Where(u => u.Username == model.Username)
                 .FirstOrDefaultAsync();
@@ -125,7 +151,7 @@ namespace User.Services
 
             user.Password = newHashedPassword;
 
-            await this.database.SaveChangesAsync();
+            await this.userDatabase.SaveChangesAsync();
 
             return new ChangePasswordViewModel { Message = "You have successfully updated your password!" };
         }

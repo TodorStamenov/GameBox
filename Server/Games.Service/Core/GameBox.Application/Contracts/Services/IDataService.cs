@@ -1,4 +1,5 @@
-﻿using GameBox.Domain.Entities;
+﻿using GameBox.Application.Model;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace GameBox.Application.Contracts.Services
 
         Task MarkMessageAsPublished<TKey>(TKey id);
 
-        Task<int> SaveAsync(CancellationToken cancellationToken = default(CancellationToken), params Message[] messages);
+        Task<int> SaveAsync(CancellationToken cancellationToken = default);
+
+        Task<Guid> SaveAsync(string queueName, QueueMessageModel queueMessage, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

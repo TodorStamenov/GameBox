@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using User.Models;
@@ -18,6 +19,7 @@ namespace User.DataAccess
 
         public static async Task SeedDatabaseAsync(
             UserDbContext database,
+            Action<string, string> postQueueMessage,
             Func<byte[]> generateSaltFunc,
             Func<string, byte[], string> hashPasswordFunc)
         {
@@ -28,6 +30,17 @@ namespace User.DataAccess
             await SeedRolesAsync(AdminRoleName);
             await SeedUsersAsync(UsersCount);
             await SeedUsersAsync(AdminsCount, AdminRoleName);
+
+            var users = await context
+                .Users
+                .Select(u => new { u.Username, UserId = u.Id })
+                .ToListAsync();
+
+            foreach (var user in users)
+            {
+                var userAsString = JsonSerializer.Serialize(user);
+                postQueueMessage("users", userAsString);
+            }
         }
 
         private static async Task SeedRolesAsync(string roleName)

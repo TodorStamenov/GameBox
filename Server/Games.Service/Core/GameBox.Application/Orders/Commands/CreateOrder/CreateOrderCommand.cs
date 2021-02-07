@@ -81,11 +81,10 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                 };
 
                 var queueName = "orders";
-                var message = new Message(queueName, messageData);
 
-                await this.context.SaveAsync(cancellationToken, message);
+                var messageId = await this.context.SaveAsync(queueName, messageData, cancellationToken);
                 this.queue.PostQueueMessage(queueName, messageData);
-                await this.context.MarkMessageAsPublished(message.Id);
+                await this.context.MarkMessageAsPublished(messageId);
 
                 return string.Format(Constants.Common.Success, nameof(Order), string.Empty, Constants.Common.Added);
             }

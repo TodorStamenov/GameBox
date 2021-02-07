@@ -11,7 +11,7 @@ namespace User.DataAccess
         {
             services.AddDbContext<UserDbContext>(
                 options => options.UseNpgsql(
-                    configuration.GetConnectionString("Database"),
+                    configuration.GetConnectionString("Users"),
                     sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(typeof(UserDbContext).Assembly.FullName);

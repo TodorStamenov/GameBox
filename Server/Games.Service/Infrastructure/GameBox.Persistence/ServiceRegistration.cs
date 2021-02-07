@@ -9,12 +9,12 @@ namespace GameBox.Persistence
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<GameBoxDbContext>(
+            services.AddDbContext<GameDbContext>(
                 options => options.UseSqlServer(
-                    configuration.GetConnectionString("Database"),
+                    configuration.GetConnectionString("Games"),
                     sqlOptions => 
                     {
-                        sqlOptions.MigrationsAssembly(typeof(GameBoxDbContext).Assembly.FullName);
+                        sqlOptions.MigrationsAssembly(typeof(GameDbContext).Assembly.FullName);
                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                     }));
 

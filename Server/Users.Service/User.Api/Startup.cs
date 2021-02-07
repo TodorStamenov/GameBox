@@ -1,3 +1,4 @@
+using Message.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using User.DataAccess;
 using User.Services;
+using User.Services.Settings;
 
 namespace User.Api
 {
@@ -22,7 +24,9 @@ namespace User.Api
         {
             services
                 .AddPersistence(this.Configuration)
+                .AddMessagePersistence(this.Configuration)
                 .AddServices()
+                .Configure<RabbitMQSettings>(this.Configuration.GetSection("RabbitMQ"))
                 .AddCors()
                 .AddControllers();
 

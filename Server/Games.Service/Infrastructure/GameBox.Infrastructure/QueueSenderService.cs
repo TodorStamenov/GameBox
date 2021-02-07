@@ -1,5 +1,7 @@
 ﻿using GameBox.Application.Contracts.Services;
 using GameBox.Application.Model;
+using GameBox.Infrastructure.Settings;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using System;
 using System.Text;
@@ -9,14 +11,21 @@ namespace GameBox.Infrastructure
 {
     public class QueueSenderService : IQueueSenderService
     {
+        private readonly RabbitMQSettings settings;
+
+        public QueueSenderService(IOptions<RabbitMQSettings> settings)
+        {
+            this.settings = settings.Value;
+        }
+
         public void PostQueueMessage<T>(string queueName, T command) where T : QueueMessageModel
         {
             var connectionFactory = new ConnectionFactory
             {
-                HostName = "172.17.0.1",
-                UserName = "guest",
-                Password = "guest",
-                Port = 5672,
+                Port = this.settings.Port,
+                HostName = this.settings.Host,
+                UserName = this.settings.Username,
+                Password = this.settings.Password,
                 RequestedConnectionTimeout = TimeSpan.FromMilliseconds(3000)
             };
 

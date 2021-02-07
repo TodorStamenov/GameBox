@@ -1,14 +1,16 @@
-﻿using System.Reflection;
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using GameBox.Api.Filters;
 using GameBox.Application;
 using GameBox.Application.Categories.Commands.CreateCategory;
 using GameBox.Infrastructure;
+using GameBox.Infrastructure.Settings;
 using GameBox.Persistence;
+using Message.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace GameBox.Bootstrap
 {
@@ -26,10 +28,12 @@ namespace GameBox.Bootstrap
             services
                 .AddApplication(
                     this.Configuration,
-                    Assembly.GetAssembly(typeof(AccountService)),
+                    Assembly.GetAssembly(typeof(DateTimeService)),
                     Assembly.GetAssembly(typeof(DataService)))
                 .AddPersistence(this.Configuration)
+                .AddMessagePersistence(this.Configuration)
                 .AddInfrastructure(this.Configuration)
+                .Configure<RabbitMQSettings>(this.Configuration.GetSection("RabbitMQ"))
                 .AddCors()
                 .AddControllers(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCategoryCommandValidator>())

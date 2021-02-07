@@ -1,3 +1,4 @@
+using Message.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,11 +17,18 @@ namespace User.Api
                 var services = scope.ServiceProvider;
 
                 var database = services.GetRequiredService<UserDbContext>();
+                var messages = services.GetRequiredService<MessageDbContext>();
                 var account = services.GetRequiredService<IAuthService>();
+                var serviceBus = services.GetRequiredService<IQueueSenderService>();
 
                 database.Database.Migrate();
+                messages.Database.Migrate();
 
-                Task.Run(async () => await UserDbContextSeed.SeedDatabaseAsync(database, account.GenerateSalt, account.HashPassword))
+                Task.Run(async () => await UserDbContextSeed.SeedDatabaseAsync(
+                        database,
+                        serviceBus.PostQueueMessage,
+                        account.GenerateSalt,
+                        account.HashPassword))
                     .GetAwaiter()
                     .GetResult();
             }

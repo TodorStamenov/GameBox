@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Message.DataAccess\Message.DataAccess.csproj" />
     <ProjectReference Include="..\Core\GameBox.Application\GameBox.Application.csproj" />
     <ProjectReference Include="..\Infrastructure\GameBox.Infrastructure\GameBox.Infrastructure.csproj" />
     <ProjectReference Include="..\Infrastructure\GameBox.Persistence\GameBox.Persistence.csproj" />

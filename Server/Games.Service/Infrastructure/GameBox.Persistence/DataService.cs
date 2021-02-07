@@ -1,5 +1,7 @@
 using GameBox.Application.Contracts.Services;
-using GameBox.Domain.Entities;
+using GameBox.Application.Model;
+using Message.DataAccess;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,48 +10,58 @@ namespace GameBox.Persistence
 {
     public class DataService : IDataService
     {
-        public DataService(GameBoxDbContext context)
-        {
-            Context = context;
-        }
+        private readonly GameDbContext games;
+        private readonly MessageDbContext messages;
 
-        public GameBoxDbContext Context { get; set; }
+        public DataService(
+            GameDbContext games,
+            MessageDbContext messages)
+        {
+            this.games = games;
+            this.messages = messages;
+        }
 
         public IQueryable<TEntity> All<TEntity>() where TEntity : class
         {
-            return this.Context.Set<TEntity>().AsQueryable();
+            return this.games.Set<TEntity>().AsQueryable();
         }
 
         public async Task AddAsync<TEntity>(TEntity entity) where TEntity : class
         {
-            await this.Context.Set<TEntity>().AddAsync(entity);
+            await this.games.Set<TEntity>().AddAsync(entity);
         }
 
         public async Task UpdateAsync<TEntity>(TEntity entity) where TEntity : class
         {
-            await Task.FromResult(this.Context.Set<TEntity>().Update(entity));
+            await Task.FromResult(this.games.Set<TEntity>().Update(entity));
         }
 
         public async Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class
         {
-            await Task.FromResult(this.Context.Set<TEntity>().Remove(entity));
+            await Task.FromResult(this.games.Set<TEntity>().Remove(entity));
         }
 
         public async Task MarkMessageAsPublished<TKey>(TKey id)
         {
-            var message = await this.Context.Set<Message>().FindAsync(id);
+            var message = await this.messages.Messages.FindAsync(id);
             message.MarkAsPublished();
-            await this.Context.SaveChangesAsync();
+            await this.messages.SaveChangesAsync();
         }
 
-        public async Task<int> SaveAsync(CancellationToken cancellationToken = default, params Message[] messages)
+        public async Task<int> SaveAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var message in messages)
-            {
-                this.Context.Set<Message>().Add(message);
-            }
+            return await this.games.SaveChangesAsync(cancellationToken);
+        }
 
-            return await this.Context.SaveChangesAsync();
+        public async Task<Guid> SaveAsync(string queueName, QueueMessageModel queueMessage, CancellationToken cancellationToken = default)
+        {
+            var message = new Message.DataAccess.Models.Message(queueName, queueMessage);
+
+            await this.messages.Messages.AddAsync(message);
+            await this.messages.SaveChangesAsync(cancellationToken);
+            await this.games.SaveChangesAsync(cancellationToken);
+
+            return message.Id;
         }
     }
 }
