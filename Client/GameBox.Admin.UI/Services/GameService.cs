@@ -15,7 +15,7 @@ namespace GameBox.Admin.UI.Services
             ConfigurationSettings config)
         {
             this.httpClient = httpClient;
-            this.gamesUrl = $"{config.GameBoxApiUrl}games/";
+            this.gamesUrl = $"{config.GamesApiUrl}games/";
         }
 
         public async Task<IEnumerable<GamesListModel>> SearchGames(string title = "")

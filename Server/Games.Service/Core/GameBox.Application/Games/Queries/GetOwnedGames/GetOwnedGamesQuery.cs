@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using GameBox.Application.Contracts.Services;
+using GameBox.Application.Exceptions;
 using GameBox.Application.Games.Queries.GetAllGames;
 using GameBox.Domain.Entities;
 using MediatR;
@@ -33,9 +34,20 @@ namespace GameBox.Application.Games.Queries.GetOwnedGames
 
             public async Task<IEnumerable<GamesListViewModel>> Handle(GetOwnedGamesQuery request, CancellationToken cancellationToken)
             {
+                var customerId = this.context
+                    .All<Customer>()
+                    .Where(c => c.UserId == request.UserId)
+                    .Select(c => c.Id)
+                    .FirstOrDefault();
+
+                if (customerId == default(Guid))
+                {
+                    throw new NotFoundException(nameof(Customer), request.UserId);
+                }
+
                 return await Task.FromResult(this.context
                     .All<Order>()
-                    .Where(o => o.UserId == request.UserId)
+                    .Where(o => o.UserId == customerId)
                     .OrderByDescending(o => o.TimeStamp)
                     .SelectMany(o => o.Games.Select(g => g.Game))
                     .Distinct()

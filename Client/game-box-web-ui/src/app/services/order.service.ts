@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 })
 export class OrderService {
   private nodeOrdersUrl = environment.api.ordersApiUrl + 'orders';
-  private coreOrdersUrl = environment.api.gameBoxApiUrl + 'orders';
+  private coreOrdersUrl = environment.api.gamesApiUrl + 'orders';
 
   constructor(private http: HttpClient) { }
 

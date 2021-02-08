@@ -4,7 +4,6 @@ using GameBox.Admin.UI.Services;
 using GameBox.Admin.UI.Services.Contracts;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace GameBox.Admin.UI
@@ -29,7 +28,8 @@ namespace GameBox.Admin.UI
             {
                 BaseAppUrl = builder.HostEnvironment.BaseAddress,
                 OrdersApiUrl = builder.Configuration["OrdersApiUrl"],
-                GameBoxApiUrl = builder.Configuration["GameBoxApiUrl"]
+                GamesApiUrl = builder.Configuration["GamesApiUrl"],
+                UsersApiUrl = builder.Configuration["UsersApiUrl"]
             });
 
             builder.Services.AddHttpClient<IHttpClientService, HttpClientService>();

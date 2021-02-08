@@ -18,7 +18,7 @@ import { DisplayToastMessage } from 'src/app/store/+store/core/core.actions';
   providedIn: 'root'
 })
 export class AuthService {
-  private authUrl = environment.api.gameBoxApiUrl + 'account/';
+  private authUrl = environment.api.usersApiUrl + 'auth/';
   private currentUser: IUser;
 
   constructor(
@@ -62,7 +62,7 @@ export class AuthService {
   }
 
   public changePassword$(body: IChangePasswordModel): Observable<void> {
-    return this.http.post<void>(this.authUrl + 'changePassword', body).pipe(take(1));
+    return this.http.post<void>(this.authUrl + 'change-password', body).pipe(take(1));
   }
 
   public logout(): void {

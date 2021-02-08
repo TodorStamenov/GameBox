@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class CartService {
-  private cartUrl = environment.api.gameBoxApiUrl + 'cart/';
+  private cartUrl = environment.api.gamesApiUrl + 'cart/';
 
   constructor(private http: HttpClient) { }
 

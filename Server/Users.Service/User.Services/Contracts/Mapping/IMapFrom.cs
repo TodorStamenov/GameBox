@@ -1,6 +1,6 @@
 ﻿namespace User.Services.Contracts.Mapping
 {
-    public interface IMapFrom
+    public interface IMapFrom<TEntity>
     {
     }
 }

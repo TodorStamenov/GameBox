@@ -34,11 +34,11 @@ namespace GameBox.Infrastructure
             this.InitRabbitMQ();
             var consumer = new EventingBasicConsumer(this.channel);
 
-            using (var scope = scopeFactory.CreateScope())
+            consumer.Received += async (ch, ea) =>
             {
-                var database = scope.ServiceProvider.GetRequiredService<IDataService>();
-                consumer.Received += async (ch, ea) =>
+                using (var scope = scopeFactory.CreateScope())
                 {
+                    var database = scope.ServiceProvider.GetRequiredService<IDataService>();
                     var content = ea.Body.ToArray();
                     var message = JsonSerializer.Deserialize<UserRegisteredMessage>(content);
 
@@ -52,8 +52,8 @@ namespace GameBox.Infrastructure
                     await database.SaveAsync(cancellationToken);
 
                     this.channel.BasicAck(ea.DeliveryTag, false);
-                };
-            }
+                }
+            };
 
             this.channel.BasicConsume(queue: "users", false, consumer);
             return Task.CompletedTask;

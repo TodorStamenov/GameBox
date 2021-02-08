@@ -6,6 +6,8 @@ namespace GameBox.Admin.UI.Model
         
         public string OrdersApiUrl { get; set; }
 
-        public string GameBoxApiUrl { get; set; }
+        public string GamesApiUrl { get; set; }
+
+        public string UsersApiUrl { get; set; }
     }
 }

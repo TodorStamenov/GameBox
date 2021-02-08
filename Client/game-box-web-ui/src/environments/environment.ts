@@ -7,7 +7,8 @@ const baseHost = '172.17.0.1';
 export const environment = {
   production: false,
   api: {
-    gameBoxApiUrl: `http://${baseHost}:5000/api/`,
+    gamesApiUrl: `http://${baseHost}:5000/api/`,
+    usersApiUrl: `http://${baseHost}:5001/api/`,
     notificationsUrl: `http://${baseHost}:5002/notifications`,
     ordersApiUrl: `http://${baseHost}:1337/api/`,
     graphQlUrl: `http://${baseHost}:5000/api/graphql`

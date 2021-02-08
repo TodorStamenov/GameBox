@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class UserService {
-  private usersUrl = environment.api.gameBoxApiUrl + 'users/';
+  private usersUrl = environment.api.usersApiUrl + 'users/';
 
   constructor(private http: HttpClient) { }
 
@@ -29,11 +29,11 @@ export class UserService {
   }
 
   public addRole$(username: string, role: string): Observable<string> {
-    return this.http.get<string>(this.usersUrl + 'addRole?username=' + username + '&roleName=' + role).pipe(take(1));
+    return this.http.get<string>(this.usersUrl + 'add-role?username=' + username + '&roleName=' + role).pipe(take(1));
   }
 
   public removeRole$(username: string, role: string): Observable<string> {
-    return this.http.get<string>(this.usersUrl + 'removeRole?username=' + username + '&roleName=' + role).pipe(take(1));
+    return this.http.get<string>(this.usersUrl + 'remove-role?username=' + username + '&roleName=' + role).pipe(take(1));
   }
 
   public createUser$(body: ICreateUserModel): Observable<void> {

@@ -30,7 +30,7 @@ namespace GameBox.Admin.UI.Services
             this.router = router;
             this.toastService = toastService;
             this.localStorage = localStorage;
-            this.authUrl = $"{config.GameBoxApiUrl}account/";
+            this.authUrl = $"{config.UsersApiUrl}auth/";
         }
 
         public async Task<UserModel> GetCurrentUser()

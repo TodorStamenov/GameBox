@@ -15,7 +15,7 @@ namespace GameBox.Admin.UI.Services
             ConfigurationSettings config)
         {
             this.httpClient = httpClient;
-            this.categoriesUrl = $"{config.GameBoxApiUrl}categories/";
+            this.categoriesUrl = $"{config.GamesApiUrl}categories/";
         }
 
         public async Task<IEnumerable<CategoryListModel>> GetCategories()

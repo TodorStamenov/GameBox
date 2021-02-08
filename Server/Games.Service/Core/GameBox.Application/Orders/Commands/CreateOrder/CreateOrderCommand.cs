@@ -50,6 +50,17 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                     throw new NotFoundException(nameof(Game), request.GameIds.First());
                 }
 
+                var customerId = this.context
+                    .All<Customer>()
+                    .Where(c => c.UserId == request.UserId)
+                    .Select(c => c.Id)
+                    .FirstOrDefault();
+
+                if (customerId == default(Guid))
+                {
+                    throw new NotFoundException(nameof(Customer), request.UserId);
+                }
+
                 foreach (var game in games)
                 {
                     game.OrderCount++;
@@ -57,7 +68,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
 
                 var order = new Order
                 {
-                    UserId = request.UserId,
+                    UserId = customerId,
                     DateAdded = this.dateTime.UtcNow,
                     Price = games.Sum(g => g.Price)
                 };

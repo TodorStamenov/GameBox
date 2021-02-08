@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class CategoryService {
-  private categoriesUrl = environment.api.gameBoxApiUrl + 'categories/';
+  private categoriesUrl = environment.api.gamesApiUrl + 'categories/';
 
   constructor(private http: HttpClient) { }
 

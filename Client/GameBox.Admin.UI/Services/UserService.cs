@@ -15,7 +15,7 @@ namespace GameBox.Admin.UI.Services
             ConfigurationSettings config)
         {
             this.httpClient = httpClient;
-            this.usersUrl = $"{config.GameBoxApiUrl}users/";
+            this.usersUrl = $"{config.UsersApiUrl}users/";
         }
 
         public async Task<IEnumerable<UserListModel>> GetUsers(string username)
@@ -35,12 +35,12 @@ namespace GameBox.Admin.UI.Services
 
         public async Task AddRole(string username, string role)
         {
-            await this.httpClient.GetAsync<string>($"{this.usersUrl}addRole?username={username}&roleName={role}");
+            await this.httpClient.GetAsync<string>($"{this.usersUrl}add-role?username={username}&roleName={role}");
         }
 
         public async Task RemoveRole(string username, string role)
         {
-            await this.httpClient.GetAsync<string>($"{this.usersUrl}removeRole?username={username}&roleName={role}");
+            await this.httpClient.GetAsync<string>($"{this.usersUrl}remove-role?username={username}&roleName={role}");
         }
 
         public async Task CreateUser(UserFormModel user)

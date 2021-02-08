@@ -1,4 +1,5 @@
 ﻿using GameBox.Application.Contracts.Services;
+using GameBox.Application.Exceptions;
 using GameBox.Domain.Entities;
 using MediatR;
 using System;
@@ -24,9 +25,20 @@ namespace GameBox.Application.Wishlists.Queries.GetAllGames
 
             public async Task<IEnumerable<Game>> Handle(GetAllGamesQuery request, CancellationToken cancellationToken)
             {
+                var customerId = this.context
+                    .All<Customer>()
+                    .Where(c => c.UserId == request.UserId)
+                    .Select(c => c.Id)
+                    .FirstOrDefault();
+
+                if (customerId == default(Guid))
+                {
+                    throw new NotFoundException(nameof(Customer), request.UserId);
+                }
+
                 return await Task.FromResult(this.context
                     .All<Wishlist>()
-                    .Where(w => w.UserId == request.UserId)
+                    .Where(w => w.UserId == customerId)
                     .Select(w => w.Game)
                     .OrderBy(g => g.Title)
                     .ToList());
