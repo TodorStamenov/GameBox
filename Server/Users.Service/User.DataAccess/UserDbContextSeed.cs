@@ -26,10 +26,17 @@ namespace User.DataAccess
             context = database;
             generateSalt = generateSaltFunc;
             hashPassword = hashPasswordFunc;
+            
+            var postUsers = false;
 
             await SeedRolesAsync(AdminRoleName);
-            await SeedUsersAsync(UsersCount);
-            await SeedUsersAsync(AdminsCount, AdminRoleName);
+            postUsers = await SeedUsersAsync(UsersCount);
+            postUsers = await SeedUsersAsync(AdminsCount, AdminRoleName);
+
+            if (!postUsers)
+            {
+                return;
+            }
 
             var users = await context
                 .Users
@@ -56,11 +63,11 @@ namespace User.DataAccess
             await context.SaveChangesAsync();
         }
 
-        private static async Task SeedUsersAsync(int usersCount)
+        private static async Task<bool> SeedUsersAsync(int usersCount)
         {
             if (await context.Users.AnyAsync(u => !u.Roles.Any()))
             {
-                return;
+                return false;
             }
 
             for (int i = 1; i <= usersCount; i++)
@@ -78,13 +85,15 @@ namespace User.DataAccess
             }
 
             await context.SaveChangesAsync();
+
+            return true;
         }
 
-        private static async Task SeedUsersAsync(int usersCount, string role)
+        private static async Task<bool> SeedUsersAsync(int usersCount, string role)
         {
             if (await context.Users.AnyAsync(u => u.Roles.Any(r => r.Role.Name == role)))
             {
-                return;
+                return false;
             }
 
             Guid roleId = await context
@@ -95,7 +104,7 @@ namespace User.DataAccess
 
             if (roleId == default)
             {
-                return;
+                return false;
             }
 
             for (int i = 1; i <= usersCount; i++)
@@ -120,6 +129,8 @@ namespace User.DataAccess
             }
 
             await context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

@@ -2,6 +2,7 @@
 using GameBox.Domain.Entities;
 using GameBox.Infrastructure.Messages;
 using GameBox.Infrastructure.Settings;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
@@ -17,14 +18,14 @@ namespace GameBox.Infrastructure
     {
         private IModel channel;
         private IConnection connection;
-        private readonly IDataService database;
+        private readonly IServiceScopeFactory scopeFactory;
         private readonly RabbitMQSettings settings;
 
         public UserRegisteredConsumer(
-            IDataService database,
+            IServiceScopeFactory scopeFactory,
             IOptions<RabbitMQSettings> settings)
         {
-            this.database = database;
+            this.scopeFactory = scopeFactory;
             this.settings = settings.Value;
         }
 
@@ -33,22 +34,26 @@ namespace GameBox.Infrastructure
             this.InitRabbitMQ();
             var consumer = new EventingBasicConsumer(this.channel);
 
-            consumer.Received += async (ch, ea) =>
+            using (var scope = scopeFactory.CreateScope())
             {
-                var content = ea.Body.ToArray();
-                var message = JsonSerializer.Deserialize<UserRegisteredMessage>(content);
-
-                var customer = new Customer
+                var database = scope.ServiceProvider.GetRequiredService<IDataService>();
+                consumer.Received += async (ch, ea) =>
                 {
-                    UserId = message.UserId,
-                    Username = message.Username
+                    var content = ea.Body.ToArray();
+                    var message = JsonSerializer.Deserialize<UserRegisteredMessage>(content);
+
+                    var customer = new Customer
+                    {
+                        UserId = message.UserId,
+                        Username = message.Username
+                    };
+
+                    await database.AddAsync(customer);
+                    await database.SaveAsync(cancellationToken);
+
+                    this.channel.BasicAck(ea.DeliveryTag, false);
                 };
-
-                await this.database.AddAsync(customer);
-                await this.database.SaveAsync(cancellationToken);
-
-                this.channel.BasicAck(ea.DeliveryTag, false);
-            };
+            }
 
             this.channel.BasicConsume(queue: "users", false, consumer);
             return Task.CompletedTask;

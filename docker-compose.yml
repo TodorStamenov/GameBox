@@ -29,8 +29,8 @@ services:
     container_name: games-api
     restart: on-failure
     build:
-      context: ./Server/Games.Service
-      dockerfile: GameBox.Bootstrap/Dockerfile
+      context: ./Server
+      dockerfile: Games.Service/GameBox.Bootstrap/Dockerfile
     depends_on:
       - messages.data
       - games.data
@@ -41,8 +41,8 @@ services:
     container_name: users-api
     restart: on-failure
     build:
-      context: ./Server/Users.Service
-      dockerfile: User.Api/Dockerfile
+      context: ./Server
+      dockerfile: Users.Service/User.Api/Dockerfile
     depends_on:
       - messages.data
       - users.data

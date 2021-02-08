@@ -3,11 +3,11 @@ EXPOSE 1337
 
 WORKDIR /app
 
-COPY game-box-orders-api/package.json .
-COPY game-box-orders-api/package-lock.json .
+COPY orders-service/package.json .
+COPY orders-service/package-lock.json .
 
 RUN npm install
 
-COPY game-box-orders-api .
+COPY orders-service .
 
 ENTRYPOINT ["node", "index.js"]

@@ -4,16 +4,17 @@ EXPOSE 80/tcp
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
 WORKDIR /src
-COPY ["GameBox.Bootstrap/GameBox.Bootstrap.csproj", "GameBox.Bootstrap/"]
-COPY ["Presentation/GameBox.Api/GameBox.Api.csproj", "GameBox.Api/"]
-COPY ["Core/GameBox.Application/GameBox.Application.csproj", "GameBox.Application/"]
-COPY ["Core/GameBox.Domain/GameBox.Domain.csproj", "GameBox.Domain/"]
-COPY ["Infrastructure/GameBox.Persistence/GameBox.Persistence.csproj", "GameBox.Persistence/"]
-COPY ["Infrastructure/GameBox.Infrastructure/GameBox.Infrastructure.csproj", "GameBox.Infrastructure/"]
+COPY ["Games.Service/GameBox.Bootstrap/GameBox.Bootstrap.csproj", "Games.Service/GameBox.Bootstrap/"]
+COPY ["Games.Service/Presentation/GameBox.Api/GameBox.Api.csproj", "Games.Service/GameBox.Api/"]
+COPY ["Games.Service/Core/GameBox.Application/GameBox.Application.csproj", "Games.Service/GameBox.Application/"]
+COPY ["Games.Service/Core/GameBox.Domain/GameBox.Domain.csproj", "Games.Service/GameBox.Domain/"]
+COPY ["Games.Service/Infrastructure/GameBox.Persistence/GameBox.Persistence.csproj", "Games.Service/GameBox.Persistence/"]
+COPY ["Games.Service/Infrastructure/GameBox.Infrastructure/GameBox.Infrastructure.csproj", "Games.Service/GameBox.Infrastructure/"]
+COPY ["Common/Message.DataAccess/Message.DataAccess.csproj", "Games.Service/Message.DataAccess/"]
 
-RUN dotnet restore "GameBox.Bootstrap/GameBox.Bootstrap.csproj"
+RUN dotnet restore "Games.Service/GameBox.Bootstrap/GameBox.Bootstrap.csproj"
 COPY . .
-WORKDIR "/src/GameBox.Bootstrap"
+WORKDIR "/src/Games.Service/GameBox.Bootstrap"
 RUN dotnet build "GameBox.Bootstrap.csproj" -c Release -o /app/build
 
 FROM build AS publish

@@ -204,6 +204,11 @@ namespace GameBox.Persistence
             var games = await context.Games.ToListAsync();
             var userIds = await context.Customers.Select(u => u.Id).ToListAsync();
 
+            if (!games.Any() || !userIds.Any())
+            {
+                return;
+            }
+
             foreach (var game in games)
             {
                 var commentsCount = random.Next(0, 9);
