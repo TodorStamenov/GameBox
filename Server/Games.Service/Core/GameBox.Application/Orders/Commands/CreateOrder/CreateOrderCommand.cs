@@ -13,8 +13,6 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
 {
     public class CreateOrderCommand : IRequest<string>
     {
-        public Guid UserId { get; set; }
-
         public string Username { get; set; }
 
         public IEnumerable<Guid> GameIds { get; set; }
@@ -25,17 +23,20 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
             private readonly IDateTimeService dateTime;
             private readonly IDataService context;
             private readonly IQueueSenderService queue;
+            private readonly ICurrentUserService currentUser;
 
             public CreateOrderCommandHandler(
                 IMediator mediator,
                 IDateTimeService dateTime,
                 IDataService context,
-                IQueueSenderService queue)
+                IQueueSenderService queue,
+                ICurrentUserService currentUser)
             {
                 this.mediator = mediator;
                 this.dateTime = dateTime;
                 this.context = context;
                 this.queue = queue;
+                this.currentUser = currentUser;
             }
 
             public async Task<string> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -50,17 +51,6 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                     throw new NotFoundException(nameof(Game), request.GameIds.First());
                 }
 
-                var customerId = this.context
-                    .All<Customer>()
-                    .Where(c => c.UserId == request.UserId)
-                    .Select(c => c.Id)
-                    .FirstOrDefault();
-
-                if (customerId == default(Guid))
-                {
-                    throw new NotFoundException(nameof(Customer), request.UserId);
-                }
-
                 foreach (var game in games)
                 {
                     game.OrderCount++;
@@ -68,7 +58,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
 
                 var order = new Order
                 {
-                    UserId = customerId,
+                    UserId = this.currentUser.CustomerId,
                     DateAdded = this.dateTime.UtcNow,
                     Price = games.Sum(g => g.Price)
                 };

@@ -22,8 +22,6 @@ namespace GameBox.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Post([FromBody]CreateCommentCommand command)
         {
-            command.UserId = UserId;
-
             return Ok(await Mediator.Send(command));
         }
 

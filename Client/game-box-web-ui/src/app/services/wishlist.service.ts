@@ -12,8 +12,8 @@ import { IGameListItemModel } from '../modules/core/models/game-list-item.model'
 })
 export class WishlistService {
   private wishlistQuery = gql`
-    query wishlist($userId: ID!) {
-      wishlist(userId: $userId) {
+    query wishlist {
+      wishlist {
         id
         title
         price
@@ -26,8 +26,8 @@ export class WishlistService {
   constructor(private apollo: Apollo) { }
 
   public addItem$(id: string): Observable<any> {
-    const mutation = gql`mutation addGameToWishlist($gameId: ID!, $userId: ID!) {
-      addGameToWishlist(gameId: $gameId, userId: $userId)
+    const mutation = gql`mutation addGameToWishlist($gameId: ID!) {
+      addGameToWishlist(gameId: $gameId)
     }`;
 
     return this.apollo.mutate({
@@ -42,8 +42,8 @@ export class WishlistService {
   }
 
   public removeItem$(id: string): Observable<any> {
-    const mutation = gql`mutation removeGameFromWishlist($gameId: ID!, $userId: ID!) {
-      removeGameFromWishlist(gameId: $gameId, userId: $userId)
+    const mutation = gql`mutation removeGameFromWishlist($gameId: ID!) {
+      removeGameFromWishlist(gameId: $gameId)
     }`;
 
     return this.apollo.mutate({
@@ -58,8 +58,8 @@ export class WishlistService {
   }
 
   public clearItems$(): Observable<any> {
-    const mutation = gql`mutation clearGamesFromWishlist($userId: ID!) {
-      clearGamesFromWishlist(userId: $userId)
+    const mutation = gql`mutation clearGamesFromWishlist {
+      clearGamesFromWishlist
     }`;
 
     return this.apollo.mutate({

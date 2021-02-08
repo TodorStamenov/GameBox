@@ -11,23 +11,20 @@ namespace GameBox.Application.GraphQL
     public class GameBoxMutation : ObjectGraphType
     {
         private const string GameId = "gameId";
-        private const string UserId = "userId";
 
         public GameBoxMutation(IMediator mediator)
         {
             FieldAsync<IdGraphType>(
                 "addGameToWishlist",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = GameId },
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = UserId }),
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = GameId }),
                 resolve: async ctx =>
                 {
                     try
                     {
                         var gameId = ctx.GetArgument<Guid>(GameId);
-                        var userId = ctx.GetArgument<Guid>(UserId);
 
-                        return await mediator.Send(new AddGameCommand { UserId = userId, GameId = gameId });
+                        return await mediator.Send(new AddGameCommand { GameId = gameId });
                     }
                     catch (Exception e)
                     {
@@ -41,16 +38,14 @@ namespace GameBox.Application.GraphQL
             FieldAsync<IdGraphType>(
                 "removeGameFromWishlist",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = GameId },
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = UserId }),
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = GameId }),
                 resolve: async ctx =>
                 {
                     try
                     {
                         var gameId = ctx.GetArgument<Guid>(GameId);
-                        var userId = ctx.GetArgument<Guid>(UserId);
 
-                        return await mediator.Send(new RemoveGameCommand { UserId = userId, GameId = gameId });
+                        return await mediator.Send(new RemoveGameCommand { GameId = gameId });
                     }
                     catch (Exception e)
                     {
@@ -63,13 +58,9 @@ namespace GameBox.Application.GraphQL
 
             FieldAsync<ListGraphType<IdGraphType>>(
                 "clearGamesFromWishlist",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = UserId }),
                 resolve: async ctx =>
                 {
-                    var userId = ctx.GetArgument<Guid>(UserId);
-
-                    return await mediator.Send(new ClearGamesCommand { UserId = userId });
+                    return await mediator.Send(new ClearGamesCommand());
                 });
         }
     }

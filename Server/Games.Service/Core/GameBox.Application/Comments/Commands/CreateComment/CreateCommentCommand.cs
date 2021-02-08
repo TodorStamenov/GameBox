@@ -10,8 +10,6 @@ namespace GameBox.Application.Comments.Commands.CreateComment
 {
     public class CreateCommentCommand : IRequest<string>
     {
-        public Guid UserId { get; set; }
-
         public Guid GameId { get; set; }
 
         public string Content { get; set; }
@@ -20,11 +18,16 @@ namespace GameBox.Application.Comments.Commands.CreateComment
         {
             private readonly IDataService context;
             private readonly IDateTimeService dateTime;
+            private readonly ICurrentUserService currentUser;
 
-            public CreateCommentCommandHandler(IDataService context, IDateTimeService dateTime)
+            public CreateCommentCommandHandler(
+                IDataService context,
+                IDateTimeService dateTime,
+                ICurrentUserService currentUser)
             {
                 this.context = context;
                 this.dateTime = dateTime;
+                this.currentUser = currentUser;
             }
 
             public async Task<string> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
@@ -32,7 +35,7 @@ namespace GameBox.Application.Comments.Commands.CreateComment
                 var comment = new Comment
                 {
                     GameId = request.GameId,
-                    UserId = request.UserId,
+                    UserId = this.currentUser.CustomerId,
                     Content = request.Content,
                     DateAdded = this.dateTime.UtcNow
                 };

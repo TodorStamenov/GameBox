@@ -11,35 +11,26 @@ namespace GameBox.Application.Wishlists.Commands.RemoveGame
 {
     public class RemoveGameCommand : IRequest<Guid>
     {
-        public Guid UserId { get; set; }
-
         public Guid GameId { get; set; }
 
         public class RemoveGameCommandHandler : IRequestHandler<RemoveGameCommand, Guid>
         {
             private readonly IDataService context;
+            private readonly ICurrentUserService currentUser;
 
-            public RemoveGameCommandHandler(IDataService context)
+            public RemoveGameCommandHandler(
+                IDataService context,
+                ICurrentUserService currentUser)
             {
                 this.context = context;
+                this.currentUser = currentUser;
             }
 
             public async Task<Guid> Handle(RemoveGameCommand request, CancellationToken cancellationToken)
             {
-                var customerId = this.context
-                    .All<Customer>()
-                    .Where(c => c.UserId == request.UserId)
-                    .Select(c => c.Id)
-                    .FirstOrDefault();
-
-                if (customerId == default(Guid))
-                {
-                    throw new NotFoundException(nameof(Customer), request.UserId);
-                }
-
                 var wishlist = this.context
                     .All<Wishlist>()
-                    .Where(w => w.UserId == customerId)
+                    .Where(w => w.UserId == this.currentUser.CustomerId)
                     .Where(w => w.GameId == request.GameId)
                     .FirstOrDefault();
 

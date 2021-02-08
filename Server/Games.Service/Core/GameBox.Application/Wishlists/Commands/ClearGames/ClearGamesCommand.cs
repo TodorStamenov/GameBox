@@ -1,5 +1,4 @@
 ﻿using GameBox.Application.Contracts.Services;
-using GameBox.Application.Exceptions;
 using GameBox.Domain.Entities;
 using MediatR;
 using System;
@@ -12,35 +11,26 @@ namespace GameBox.Application.Wishlists.Commands.ClearGames
 {
     public class ClearGamesCommand : IRequest<IEnumerable<Guid>>
     {
-        public Guid UserId { get; set; }
-
         public class ClearGamesCommandHandler : IRequestHandler<ClearGamesCommand, IEnumerable<Guid>>
         {
             private readonly IDataService context;
+            private readonly ICurrentUserService currentUser;
 
-            public ClearGamesCommandHandler(IDataService context)
+            public ClearGamesCommandHandler(
+                IDataService context,
+                ICurrentUserService currentUser)
             {
                 this.context = context;
+                this.currentUser = currentUser;
             }
 
             public async Task<IEnumerable<Guid>> Handle(ClearGamesCommand request, CancellationToken cancellationToken)
-            {
-                var customerId = this.context
-                    .All<Customer>()
-                    .Where(c => c.UserId == request.UserId)
-                    .Select(c => c.Id)
-                    .FirstOrDefault();
-
-                if (customerId == default(Guid))
-                {
-                    throw new NotFoundException(nameof(Customer), request.UserId);
-                }
-                
+            {                
                 var result = new List<Guid>();
 
                 var games = this.context
                     .All<Wishlist>()
-                    .Where(w => w.UserId == customerId)
+                    .Where(w => w.UserId == this.currentUser.CustomerId)
                     .ToList();
 
                 foreach (var game in games)

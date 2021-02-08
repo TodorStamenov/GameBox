@@ -1,3 +1,4 @@
+using GameBox.Application.Contracts.Services;
 using GraphQL;
 using GraphQL.Types;
 using MediatR;
@@ -10,15 +11,23 @@ namespace GameBox.Application.GraphQL.Queries.GraphQlQuery
     {
         private readonly ISchema schema;
         private readonly IDocumentExecuter executer;
+        private readonly ICurrentUserService currentUser;
 
-        public GraphQlQueryHandler(ISchema schema, IDocumentExecuter executer)
+        public GraphQlQueryHandler(
+            ISchema schema,
+            IDocumentExecuter executer,
+            ICurrentUserService currentUser)
         {
             this.schema = schema;
             this.executer = executer;
+            this.currentUser = currentUser;
         }
 
         public async Task<object> Handle(GraphQlQuery request, CancellationToken cancellationToken)
         {
+            request.Variables.Add("userId", this.currentUser.UserId);
+            request.Variables.Add("customerId", this.currentUser.CustomerId);
+
             return await executer.ExecuteAsync(o =>
             {
                 o.Schema = schema;

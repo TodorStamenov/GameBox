@@ -11,8 +11,6 @@ namespace GameBox.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<object>> Post([FromBody]GraphQlQuery query)
         {
-            query.Variables.Add("userId", UserId);
-
             return this.Ok(await Mediator.Send(query));
         }
     }

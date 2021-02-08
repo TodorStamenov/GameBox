@@ -15,7 +15,6 @@ namespace GameBox.Api.Controllers
         {
             var command = new CreateOrderCommand
             {
-                UserId = UserId,
                 Username = User.Identity.Name,
                 GameIds = gameIds
             };
