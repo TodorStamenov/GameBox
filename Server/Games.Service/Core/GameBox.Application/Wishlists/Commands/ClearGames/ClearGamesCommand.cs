@@ -30,7 +30,7 @@ namespace GameBox.Application.Wishlists.Commands.ClearGames
 
                 var games = this.context
                     .All<Wishlist>()
-                    .Where(w => w.UserId == this.currentUser.CustomerId)
+                    .Where(w => w.CustomerId == this.currentUser.CustomerId)
                     .ToList();
 
                 foreach (var game in games)

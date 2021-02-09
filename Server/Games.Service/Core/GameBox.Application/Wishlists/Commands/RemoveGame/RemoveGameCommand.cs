@@ -30,7 +30,7 @@ namespace GameBox.Application.Wishlists.Commands.RemoveGame
             {
                 var wishlist = this.context
                     .All<Wishlist>()
-                    .Where(w => w.UserId == this.currentUser.CustomerId)
+                    .Where(w => w.CustomerId == this.currentUser.CustomerId)
                     .Where(w => w.GameId == request.GameId)
                     .FirstOrDefault();
 

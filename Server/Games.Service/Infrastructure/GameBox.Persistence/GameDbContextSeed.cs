@@ -144,7 +144,7 @@ namespace GameBox.Persistence
             var orders = await context.Orders
                 .Select(o => new OrderCreatedMessage
                 {
-                    Username = o.User.Username,
+                    Username = o.Customer.Username,
                     Price = o.Price,
                     GamesCount = o.Games.Count,
                     TimeStamp = o.DateAdded
@@ -183,7 +183,7 @@ namespace GameBox.Persistence
 
                     var wishlistItem = new Wishlist 
                     {
-                        UserId = user.Id,
+                        CustomerId = user.Id,
                         GameId = gameId
                     };
 
@@ -217,7 +217,7 @@ namespace GameBox.Persistence
                 {
                     var userId = userIds[random.Next(0, userIds.Count)];
 
-                    if (game.Comments.Any(c => c.UserId == userId))
+                    if (game.Comments.Any(c => c.CustomerId == userId))
                     {
                         i--;
                         continue;
@@ -226,7 +226,7 @@ namespace GameBox.Persistence
                     var comment = new Comment
                     {
                         GameId = game.Id,
-                        UserId = userId,
+                        CustomerId = userId,
                         DateAdded = DateTime.Now.AddMonths(-i).AddDays(-i),
                         Content = "Comment lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
                             "Suspendisse tellus ipsum, dignissim sit amet rutrum congue, vehicula in elit. " +

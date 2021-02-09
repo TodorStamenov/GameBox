@@ -19,7 +19,7 @@ namespace GameBox.Application.Comments.Queries.GetCommentsByGame
         {
             configuration
                 .CreateMap<Comment, CommentsListViewModel>()
-                .ForMember(cfg => cfg.Username, opt => opt.MapFrom(src => src.User.Username));
+                .ForMember(cfg => cfg.Username, opt => opt.MapFrom(src => src.Customer.Username));
         }
     }
 }

@@ -4,9 +4,9 @@ namespace GameBox.Domain.Entities
 {
     public class Wishlist
     {
-        public Guid UserId { get; set; }
+        public Guid CustomerId { get; set; }
 
-        public Customer User { get; set; }
+        public Customer Customer { get; set; }
 
         public Guid GameId { get; set; }
 

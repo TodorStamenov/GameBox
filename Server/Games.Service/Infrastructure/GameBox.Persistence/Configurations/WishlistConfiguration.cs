@@ -8,12 +8,12 @@ namespace GameBox.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Wishlist> builder)
         {
-            builder.HasKey(w => new { w.UserId, w.GameId });
+            builder.HasKey(w => new { w.CustomerId, w.GameId });
 
             builder
-                .HasOne(w => w.User)
+                .HasOne(w => w.Customer)
                 .WithMany(u => u.Wishlist)
-                .HasForeignKey(w => w.UserId);
+                .HasForeignKey(w => w.CustomerId);
 
             builder
                 .HasOne(w => w.Game)

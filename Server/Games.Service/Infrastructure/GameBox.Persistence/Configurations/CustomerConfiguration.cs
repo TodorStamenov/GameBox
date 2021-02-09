@@ -17,13 +17,13 @@ namespace GameBox.Persistence.Configurations
 
             builder
                 .HasMany(u => u.Orders)
-                .WithOne(o => o.User)
-                .HasForeignKey(o => o.UserId);
+                .WithOne(o => o.Customer)
+                .HasForeignKey(o => o.CustomerId);
 
             builder
                 .HasMany(u => u.Comments)
-                .WithOne(c => c.User)
-                .HasForeignKey(c => c.UserId);
+                .WithOne(c => c.Customer)
+                .HasForeignKey(c => c.CustomerId);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace GameBox.Application.Wishlists.Queries.GetAllGames
             {
                 return await Task.FromResult(this.context
                     .All<Wishlist>()
-                    .Where(w => w.UserId == this.currentUser.CustomerId)
+                    .Where(w => w.CustomerId == this.currentUser.CustomerId)
                     .Select(w => w.Game)
                     .OrderBy(g => g.Title)
                     .ToList());

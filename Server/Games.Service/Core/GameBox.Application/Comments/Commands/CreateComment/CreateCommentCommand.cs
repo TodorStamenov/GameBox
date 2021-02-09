@@ -35,7 +35,7 @@ namespace GameBox.Application.Comments.Commands.CreateComment
                 var comment = new Comment
                 {
                     GameId = request.GameId,
-                    UserId = this.currentUser.CustomerId,
+                    CustomerId = this.currentUser.CustomerId,
                     Content = request.Content,
                     DateAdded = this.dateTime.UtcNow
                 };

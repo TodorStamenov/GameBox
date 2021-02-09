@@ -29,7 +29,7 @@ namespace GameBox.Application.Wishlists.Commands.AddGame
             {                
                 var gameExists = this.context
                     .All<Wishlist>()
-                    .Any(w => w.UserId == this.currentUser.CustomerId && w.GameId == request.GameId);
+                    .Any(w => w.CustomerId == this.currentUser.CustomerId && w.GameId == request.GameId);
 
                 if (gameExists)
                 {
@@ -39,7 +39,7 @@ namespace GameBox.Application.Wishlists.Commands.AddGame
                 var wishlist = new Wishlist
                 {
                     GameId = request.GameId,
-                    UserId = this.currentUser.CustomerId
+                    CustomerId = this.currentUser.CustomerId
                 };
 
                 await this.context.AddAsync(wishlist);

@@ -58,7 +58,7 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
 
                 var order = new Order
                 {
-                    UserId = this.currentUser.CustomerId,
+                    CustomerId = this.currentUser.CustomerId,
                     DateAdded = this.dateTime.UtcNow,
                     Price = games.Sum(g => g.Price)
                 };

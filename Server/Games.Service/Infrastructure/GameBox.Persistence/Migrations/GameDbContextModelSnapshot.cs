@@ -53,6 +53,9 @@ namespace GameBox.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
 
@@ -64,14 +67,11 @@ namespace GameBox.Persistence.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("GameId");
+                    b.HasIndex("CustomerId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("GameId");
 
                     b.ToTable("Comments");
                 });
@@ -181,6 +181,9 @@ namespace GameBox.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
 
@@ -192,25 +195,22 @@ namespace GameBox.Persistence.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("GameBox.Domain.Entities.Wishlist", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId", "GameId");
+                    b.HasKey("CustomerId", "GameId");
 
                     b.HasIndex("GameId");
 
@@ -219,21 +219,21 @@ namespace GameBox.Persistence.Migrations
 
             modelBuilder.Entity("GameBox.Domain.Entities.Comment", b =>
                 {
+                    b.HasOne("GameBox.Domain.Entities.Customer", "Customer")
+                        .WithMany("Comments")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GameBox.Domain.Entities.Game", "Game")
                         .WithMany("Comments")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GameBox.Domain.Entities.Customer", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Customer");
 
                     b.Navigation("Game");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GameBox.Domain.Entities.Game", b =>
@@ -268,32 +268,32 @@ namespace GameBox.Persistence.Migrations
 
             modelBuilder.Entity("GameBox.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("GameBox.Domain.Entities.Customer", "User")
+                    b.HasOne("GameBox.Domain.Entities.Customer", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("GameBox.Domain.Entities.Wishlist", b =>
                 {
+                    b.HasOne("GameBox.Domain.Entities.Customer", "Customer")
+                        .WithMany("Wishlist")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GameBox.Domain.Entities.Game", "Game")
                         .WithMany("Wishlists")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GameBox.Domain.Entities.Customer", "User")
-                        .WithMany("Wishlist")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Customer");
 
                     b.Navigation("Game");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GameBox.Domain.Entities.Category", b =>

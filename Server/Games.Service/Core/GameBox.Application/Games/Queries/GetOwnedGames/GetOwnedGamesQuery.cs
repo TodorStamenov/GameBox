@@ -37,7 +37,7 @@ namespace GameBox.Application.Games.Queries.GetOwnedGames
             {
                 return await Task.FromResult(this.context
                     .All<Order>()
-                    .Where(o => o.UserId == this.currentUser.CustomerId)
+                    .Where(o => o.CustomerId == this.currentUser.CustomerId)
                     .OrderByDescending(o => o.TimeStamp)
                     .SelectMany(o => o.Games.Select(g => g.Game))
                     .Distinct()

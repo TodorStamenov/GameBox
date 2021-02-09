@@ -10,9 +10,9 @@ namespace GameBox.Domain.Entities
             this.Games = new HashSet<GameOrder>();
         }
 
-        public Guid UserId { get; set; }
+        public Guid CustomerId { get; set; }
 
-        public Customer User { get; set; }
+        public Customer Customer { get; set; }
 
         public decimal Price { get; set; }
 
