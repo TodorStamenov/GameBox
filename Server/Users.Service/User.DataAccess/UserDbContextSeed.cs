@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using User.Models;
 
 namespace User.DataAccess
@@ -14,40 +15,24 @@ namespace User.DataAccess
         private const string AdminRoleName = "Admin";
 
         private static UserDbContext context;
+        private static Action<string, string> postQueueMessage;
         private static Func<byte[]> generateSalt;
         private static Func<string, byte[], string> hashPassword;
 
         public static async Task SeedDatabaseAsync(
             UserDbContext database,
-            Action<string, string> postQueueMessage,
+            Action<string, string> postQueueMessageFunc,
             Func<byte[]> generateSaltFunc,
             Func<string, byte[], string> hashPasswordFunc)
         {
             context = database;
+            postQueueMessage = postQueueMessageFunc;
             generateSalt = generateSaltFunc;
             hashPassword = hashPasswordFunc;
-            
-            var postUsers = false;
 
             await SeedRolesAsync(AdminRoleName);
-            postUsers = await SeedUsersAsync(UsersCount);
-            postUsers = await SeedUsersAsync(AdminsCount, AdminRoleName);
-
-            if (!postUsers)
-            {
-                return;
-            }
-
-            var users = await context
-                .Users
-                .Select(u => new { u.Username, UserId = u.Id })
-                .ToListAsync();
-
-            foreach (var user in users)
-            {
-                var userAsString = JsonSerializer.Serialize(user);
-                postQueueMessage("users", userAsString);
-            }
+            await SeedUsersAsync(UsersCount);
+            await SeedUsersAsync(AdminsCount, AdminRoleName);
         }
 
         private static async Task SeedRolesAsync(string roleName)
@@ -63,13 +48,14 @@ namespace User.DataAccess
             await context.SaveChangesAsync();
         }
 
-        private static async Task<bool> SeedUsersAsync(int usersCount)
+        private static async Task SeedUsersAsync(int usersCount)
         {
             if (await context.Users.AnyAsync(u => !u.Roles.Any()))
             {
-                return false;
+                return;
             }
 
+            var users = new List<Models.User>();
             for (int i = 1; i <= usersCount; i++)
             {
                 byte[] salt = generateSalt();
@@ -81,19 +67,28 @@ namespace User.DataAccess
                     Salt = salt
                 };
 
-                await context.Users.AddAsync(user);
+                users.Add(user);
             }
 
+            await context.Users.AddRangeAsync(users);
             await context.SaveChangesAsync();
 
-            return true;
+            var userMessages = users
+                .Select(u => new { u.Username, UserId = u.Id })
+                .ToList();
+
+            foreach (var user in userMessages)
+            {
+                var userAsString = JsonSerializer.Serialize(user);
+                postQueueMessage("users", userAsString);
+            }
         }
 
-        private static async Task<bool> SeedUsersAsync(int usersCount, string role)
+        private static async Task SeedUsersAsync(int usersCount, string role)
         {
             if (await context.Users.AnyAsync(u => u.Roles.Any(r => r.Role.Name == role)))
             {
-                return false;
+                return;
             }
 
             Guid roleId = await context
@@ -104,9 +99,10 @@ namespace User.DataAccess
 
             if (roleId == default)
             {
-                return false;
+                return;
             }
 
+            var users = new List<Models.User>();
             for (int i = 1; i <= usersCount; i++)
             {
                 byte[] salt = generateSalt();
@@ -124,13 +120,21 @@ namespace User.DataAccess
                 };
 
                 user.Roles.Add(userRole);
-
-                await context.Users.AddAsync(user);
+                users.Add(user);
             }
 
+            await context.Users.AddRangeAsync(users);
             await context.SaveChangesAsync();
 
-            return true;
+            var userMessages = users
+                .Select(u => new { u.Username, UserId = u.Id })
+                .ToList();
+
+            foreach (var user in userMessages)
+            {
+                var userAsString = JsonSerializer.Serialize(user);
+                postQueueMessage("users", userAsString);
+            }
         }
     }
 }
