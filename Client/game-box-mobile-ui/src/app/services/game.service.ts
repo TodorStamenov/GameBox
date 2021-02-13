@@ -15,8 +15,8 @@ import { constants } from '~/app/common';
   providedIn: 'root'
 })
 export class GameService {
-  private gamesUrl = constants.gameBoxApiUrl + 'games/';
-  private commentsUrl = constants.gameBoxApiUrl + 'comments/';
+  private gamesUrl = constants.gamesApiUrl + 'games/';
+  private commentsUrl = constants.gamesApiUrl + 'comments/';
 
   constructor(
     private http: HttpClient,

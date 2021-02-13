@@ -13,8 +13,8 @@ import { constants } from '~/app/common';
   providedIn: 'root'
 })
 export class CartService {
-  private cartUrl = constants.gameBoxApiUrl + 'cart/';
-  private ordersUrl = constants.gameBoxApiUrl + 'orders';
+  private cartUrl = constants.gamesApiUrl + 'cart/';
+  private ordersUrl = constants.gamesApiUrl + 'orders';
 
   constructor(
     private http: HttpClient,

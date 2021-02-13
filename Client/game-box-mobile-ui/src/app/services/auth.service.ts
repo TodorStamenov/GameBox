@@ -16,7 +16,7 @@ import { constants } from '../common';
   providedIn: 'root'
 })
 export class AuthService {
-  private authUrl = constants.gameBoxApiUrl + 'account/';
+  private authUrl = constants.usersApiUrl + 'auth/';
   private currentUser: IUser;
 
   constructor(

@@ -20,8 +20,8 @@ export class WishlistService {
   ) { }
 
   public addItem$(id: string): Observable<void> {
-    const mutation = `mutation addGameToWishlist($gameId: ID!, $userId: ID!) {
-      addGameToWishlist(gameId: $gameId, userId: $userId)
+    const mutation = `mutation addGameToWishlist($gameId: ID!) {
+      addGameToWishlist(gameId: $gameId)
     }`;
 
     return this.http.post<void>(this.wishlistUrl, {
@@ -34,8 +34,8 @@ export class WishlistService {
   }
 
   public removeItem$(id: string): Observable<void> {
-    const mutation = `mutation removeGameFromWishlist ($gameId: ID!, $userId: ID!) {
-      removeGameFromWishlist(gameId: $gameId, userId: $userId)
+    const mutation = `mutation removeGameFromWishlist ($gameId: ID!) {
+      removeGameFromWishlist(gameId: $gameId)
     }`;
 
     return this.http.post<void>(this.wishlistUrl, {
@@ -48,8 +48,8 @@ export class WishlistService {
   }
 
   public clearItems$(): Observable<void> {
-    const mutation = `mutation clearGamesFromWishlist($userId: ID!) {
-      clearGamesFromWishlist(userId: $userId)
+    const mutation = `mutation clearGamesFromWishlist {
+      clearGamesFromWishlist
     }`;
 
     return this.http.post<void>(this.wishlistUrl, {
@@ -63,8 +63,8 @@ export class WishlistService {
 
   public getItems$(): Observable<IGameListItemModel[]> {
     const query = `
-      query wishlist($userId: ID!) {
-        wishlist(userId: $userId) {
+      query wishlist {
+        wishlist {
           id
           title
           price
