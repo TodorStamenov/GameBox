@@ -2,32 +2,32 @@
 
 <ActivityIndicator class="activity-indicator" [busy]="loading"></ActivityIndicator>
 
-<Tabs *ngIf="!loading">
-  <TabStrip class="tabs">
-    <TabStripItem>
+<MDTabs *ngIf="!loading">
+  <MDTabStrip class="tabs">
+    <MDTabStripItem>
       <Label text="Games"></Label>
-    </TabStripItem>
+    </MDTabStripItem>
 
-    <TabStripItem>
+    <MDTabStripItem>
       <Label text="Owned"></Label>
-    </TabStripItem>
-  </TabStrip>
+    </MDTabStripItem>
+  </MDTabStrip>
 
-  <TabContentItem>
+  <MDTabContentItem>
     <ns-game-items
       (pullToRefresh)="reloadGames()"
       (loadTap)="loadGames()"
       (detailsTap)="navigateToDetails($event)"
       [games]="games">
     </ns-game-items>
-  </TabContentItem>
+  </MDTabContentItem>
       
-  <TabContentItem>
+  <MDTabContentItem>
     <ns-game-items
       (pullToRefresh)="reloadGames()"
       (loadTap)="loadOwned()"
       (detailsTap)="navigateToDetails($event)"
       [games]="owned">
     </ns-game-items>
-  </TabContentItem>
-</Tabs>
+  </MDTabContentItem>
+</MDTabs>
