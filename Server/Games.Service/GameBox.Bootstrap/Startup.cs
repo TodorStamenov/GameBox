@@ -34,7 +34,7 @@ namespace GameBox.Bootstrap
                     Assembly.GetAssembly(typeof(DataService)))
                 .AddPersistence(this.Configuration)
                 .AddMessagePersistence(this.Configuration)
-                .AddInfrastructure(this.Configuration)
+                .AddInfrastructure()
                 .Configure<RabbitMQSettings>(this.Configuration.GetSection("RabbitMQ"))
                 .AddCors()
                 .AddControllers(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
