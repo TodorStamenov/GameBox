@@ -3,11 +3,10 @@ EXPOSE 1337
 
 WORKDIR /app
 
-COPY orders-service/package.json .
-COPY orders-service/package-lock.json .
-
+COPY orders-service/package.json orders-service/package-lock.json ./
 RUN npm install
 
 COPY orders-service .
+RUN npm run build
 
-ENTRYPOINT ["node", "index.js"]
+ENTRYPOINT ["node", "dist/main"]

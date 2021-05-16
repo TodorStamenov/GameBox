@@ -1,4 +1,4 @@
-{
+export const config = {
   "nodePort": 1337,
   "mongoPort": 27017,
   "rabbitMqPort": 5672,
