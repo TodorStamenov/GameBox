@@ -71,6 +71,7 @@ services:
 
   orders.api:
     container_name: orders-api
+    restart: on-failure
     build:
       context: ./Server
       dockerfile: orders-service/Dockerfile

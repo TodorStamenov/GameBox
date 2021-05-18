@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { Order, OrderDocument } from 'src/entities/order.schema';
+import { OrderMessageModel } from 'src/models/orderMessage.model';
 
 @Injectable()
 export class OrderService {
@@ -33,5 +34,9 @@ export class OrderService {
       .sort({ timeStamp: 'desc' })
       .limit(20)
       .exec();
+  }
+
+  public async addOrderAsync(order: OrderMessageModel): Promise<void> {
+    await this.orderModel.create(order);
   }
 }
