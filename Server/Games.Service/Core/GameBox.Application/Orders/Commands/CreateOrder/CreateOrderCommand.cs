@@ -82,8 +82,8 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                 };
 
                 var queueName = "orders";
-
                 var messageId = await this.context.SaveAsync(queueName, messageData, cancellationToken);
+
                 this.queue.PostQueueMessage(queueName, messageData);
                 await this.context.MarkMessageAsPublished(messageId);
 

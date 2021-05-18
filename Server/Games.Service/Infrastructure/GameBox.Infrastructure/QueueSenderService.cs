@@ -47,7 +47,7 @@ namespace GameBox.Infrastructure
                         exchange: string.Empty,
                         routingKey: queueName,
                         basicProperties: null,
-                        body: body);                    
+                        body: body);
                 }
             }
         }
