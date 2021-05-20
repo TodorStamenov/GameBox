@@ -15,21 +15,18 @@ import { config } from './config/config';
     JwtModule.register({ secret: 'superSecretKey@345' }),
     MongooseModule.forFeature([{ name: Order.name, schema: OrderSchema }]),
     MongooseModule.forRoot(
-      `mongodb://${config.dockerHostIp}:${config.mongoPort}/game-box`, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }),
+      `mongodb://${config.dockerHostIp}:${config.mongoPort}/game-box`,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
+    ),
     RabbitMQModule.forRoot(RabbitMQModule, {
       uri: `amqp://guest:guest@${config.dockerHostIp}:${config.rabbitMqPort}`,
-      connectionInitOptions: { wait: true }
-    })
+      connectionInitOptions: { wait: true },
+    }),
   ],
-  controllers: [
-    OrdersController
-  ],
-  providers: [
-    OrderService,
-    MessagingService
-  ]
+  controllers: [OrdersController],
+  providers: [OrderService, MessagingService],
 })
-export class AppModule { }
+export class AppModule {}

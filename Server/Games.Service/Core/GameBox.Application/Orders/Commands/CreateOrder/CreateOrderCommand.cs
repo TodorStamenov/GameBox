@@ -78,7 +78,17 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
                     Username = request.Username,
                     Price = order.Price,
                     GamesCount = order.Games.Count,
-                    TimeStamp = order.DateAdded
+                    TimeStamp = order.DateAdded,
+                    Games = order.Games
+                        .Select(g => new OrderGame
+                        {
+                            Id = g.GameId,
+                            Title = g.Game.Title,
+                            Price = g.Game.Price,
+                            ViewCount = g.Game.ViewCount,
+                            OrderCount = g.Game.OrderCount
+                        })
+                        .ToList()
                 };
 
                 var queueName = "orders";

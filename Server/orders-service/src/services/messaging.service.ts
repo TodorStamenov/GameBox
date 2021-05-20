@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
-import { OrderService } from './order.service';
 import { OrderMessageModel } from 'src/models/orderMessage.model';
+import { Order, OrderDocument } from 'src/entities/order.schema';
 
 @Injectable()
 export class MessagingService {
-  constructor(private readonly orderService: OrderService) { }
+  constructor(
+    @InjectModel(Order.name) private orderModel: Model<OrderDocument>,
+  ) {}
 
   @RabbitSubscribe({
     exchange: 'amq.direct',
@@ -15,10 +19,10 @@ export class MessagingService {
     queueOptions: {
       durable: false,
       exclusive: false,
-      autoDelete: true
-    }
+      autoDelete: true,
+    },
   })
-  public async pubSubHandler(message: OrderMessageModel) {
-    await this.orderService.addOrderAsync(message);
+  public async pubSubHandler(order: OrderMessageModel) {
+    await this.orderModel.create(order);
   }
 }

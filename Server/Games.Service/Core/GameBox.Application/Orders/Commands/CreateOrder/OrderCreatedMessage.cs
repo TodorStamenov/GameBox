@@ -1,5 +1,6 @@
 ﻿using GameBox.Application.Model;
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace GameBox.Application.Orders.Commands.CreateOrder
@@ -17,5 +18,8 @@ namespace GameBox.Application.Orders.Commands.CreateOrder
 
         [JsonPropertyName("timeStamp")]
         public DateTime TimeStamp { get; set; }
+
+        [JsonPropertyName("games")]
+        public IEnumerable<OrderGame> Games { get; set; }
     }
 }

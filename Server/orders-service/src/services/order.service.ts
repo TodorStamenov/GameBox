@@ -3,15 +3,17 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { Order, OrderDocument } from 'src/entities/order.schema';
-import { OrderMessageModel } from 'src/models/orderMessage.model';
 
 @Injectable()
 export class OrderService {
   constructor(
-    @InjectModel(Order.name) private orderModel: Model<OrderDocument>
-  ) { }
+    @InjectModel(Order.name) private orderModel: Model<OrderDocument>,
+  ) {}
 
-  public async getOrdersAsync(startDate?: string, endDate?: string): Promise<Order[]> {
+  public async getOrdersAsync(
+    startDate?: string,
+    endDate?: string,
+  ): Promise<Order[]> {
     if (!startDate) {
       startDate = new Date(1970, 1, 1).toISOString();
     } else {
@@ -28,15 +30,11 @@ export class OrderService {
       .find({
         timeStamp: {
           $gte: startDate,
-          $lte: endDate
-        }
+          $lte: endDate,
+        },
       })
       .sort({ timeStamp: 'desc' })
       .limit(20)
       .exec();
-  }
-
-  public async addOrderAsync(order: OrderMessageModel): Promise<void> {
-    await this.orderModel.create(order);
   }
 }
