@@ -28,12 +28,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let order of orders$ | async">
-            <td>{{ order.username }}</td>
-            <td>{{ order.timeStamp | date:'medium' }}</td>
-            <td>{{ order.price | currency }}</td>
-            <td>{{ order.gamesCount }}</td>
-          </tr>
+          <ng-container *ngFor="let order of orders$ | async">
+            <tr>
+              <td>{{ order.username }}</td>
+              <td>{{ order.timeStamp | date:'medium' }}</td>
+              <td>{{ order.price | currency }}</td>
+              <td>{{ order.gamesCount }}</td>
+            </tr>
+            <tr *ngFor="let game of order.games">
+              <td class="text-right" colspan="4">
+                <a class="mr-4 pr-4" routerLink="/games/details/{{game.id}}">
+                  {{ game.title }} | {{ game.price | currency }} | Views: {{ game.viewCount }} | Orders: {{ game.orderCount }}
+                </a>
+              </td>
+            </tr>
+          </ng-container>
         </tbody>
       </table>
     </div>

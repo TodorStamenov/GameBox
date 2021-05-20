@@ -107,17 +107,14 @@ namespace GameBox.Persistence
             foreach (var user in users)
             {
                 var ordersCount = random.Next(0, 4);
-
                 for (int i = 0; i < ordersCount; i++)
                 {
                     var order = new Order();
-
                     var gamesCount = random.Next(1, 6);
 
                     for (int j = 0; j < gamesCount; j++)
                     {
-                        Game game = games[random.Next(0, games.Count)];
-
+                        var game = games[random.Next(0, games.Count)];
                         if (order.Games.Any(g => g.GameId == game.Id))
                         {
                             j--;
@@ -147,7 +144,17 @@ namespace GameBox.Persistence
                     Username = o.Customer.Username,
                     Price = o.Price,
                     GamesCount = o.Games.Count,
-                    TimeStamp = o.DateAdded
+                    TimeStamp = o.DateAdded,
+                    Games = o.Games
+                        .Select(g => new OrderGame
+                        {
+                            Id = g.GameId,
+                            Title = g.Game.Title,
+                            Price = g.Game.Price,
+                            ViewCount = g.Game.ViewCount,
+                            OrderCount = g.Game.OrderCount
+                        })
+                        .ToList()
                 })
                 .ToListAsync();
 
@@ -170,11 +177,9 @@ namespace GameBox.Persistence
             foreach (var user in users)
             {
                 var itemsCount = random.Next(0, 6);
-
                 for (int i = 0; i < itemsCount; i++)
                 {
                     var gameId = gameIds[random.Next(0, gameIds.Count)];
-
                     if (user.Wishlist.Any(w => w.GameId == gameId))
                     {
                         i--;
@@ -212,11 +217,9 @@ namespace GameBox.Persistence
             foreach (var game in games)
             {
                 var commentsCount = random.Next(0, 9);
-
                 for (int i = 0; i < commentsCount; i++)
                 {
                     var userId = userIds[random.Next(0, userIds.Count)];
-
                     if (game.Comments.Any(c => c.CustomerId == userId))
                     {
                         i--;
