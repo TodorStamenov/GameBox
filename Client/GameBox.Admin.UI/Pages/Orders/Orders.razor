@@ -52,7 +52,17 @@
                             <td>@order.TimeStamp.ToShortDateString()</td>
                             <td>@order.Price.ToString("C2")</td>
                             <td>@order.GamesCount</td>
-                        </tr>                        
+                        </tr>
+                        @foreach (var game in order.Games)
+                        {
+                            <tr>
+                                <td class="text-right" colspan="4">
+                                    <a class="mr-4 pr-4" href="/games/edit?gameId=@game.Id">
+                                        @game.Title | @game.Price.ToString("C2") | Views: @game.ViewCount | Orders: @game.OrderCount
+                                    </a>
+                                </td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>

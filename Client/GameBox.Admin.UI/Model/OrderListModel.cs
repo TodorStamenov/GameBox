@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace GameBox.Admin.UI.Model
@@ -16,5 +17,8 @@ namespace GameBox.Admin.UI.Model
 
         [JsonPropertyName("gamesCount")]
         public int GamesCount { get; set; }
+
+        [JsonPropertyName("games")]
+        public IEnumerable<GameOrderModel> Games { get; set; }
     }
 }
