@@ -39,7 +39,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scheduler.Service", "Schedu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{4AD359A8-A9E5-4299-A83D-92EC9F1341D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Message.DataAccess", "Common\Message.DataAccess\Message.DataAccess.csproj", "{D71A93F4-7A94-49A4-8AD2-E8903B9FBF69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Message.DataAccess", "Common\Message.DataAccess\Message.DataAccess.csproj", "{D71A93F4-7A94-49A4-8AD2-E8903B9FBF69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seeder.Service", "Seeder.Service\Seeder.Service.csproj", "{3F9A9436-43C5-42DC-90B7-5751EF185A49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,10 @@ Global
 		{D71A93F4-7A94-49A4-8AD2-E8903B9FBF69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D71A93F4-7A94-49A4-8AD2-E8903B9FBF69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D71A93F4-7A94-49A4-8AD2-E8903B9FBF69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F9A9436-43C5-42DC-90B7-5751EF185A49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F9A9436-43C5-42DC-90B7-5751EF185A49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F9A9436-43C5-42DC-90B7-5751EF185A49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F9A9436-43C5-42DC-90B7-5751EF185A49}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
