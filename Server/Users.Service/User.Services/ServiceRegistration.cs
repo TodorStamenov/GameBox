@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Linq;
@@ -14,6 +13,7 @@ namespace User.Services
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddGrpc();
             services
                 .AddDomainServices()
                 .AddAutoMapper(Assembly.GetExecutingAssembly())

@@ -1,0 +1,12 @@
+﻿syntax = "proto3";
+
+service UsersSeeder {
+  rpc SeedUsersDatabase (SeedUsersRequest) returns (SeedUsersReply);
+}
+
+message SeedUsersRequest {
+}
+
+message SeedUsersReply {
+  bool seeded = 1;
+}

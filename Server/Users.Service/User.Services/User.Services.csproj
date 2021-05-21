@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.37.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="5.0.6" />
     <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
@@ -17,6 +18,16 @@
     <ProjectReference Include="..\..\Common\Message.DataAccess\Message.DataAccess.csproj" />
     <ProjectReference Include="..\User.DataAccess\User.DataAccess.csproj" />
     <ProjectReference Include="..\User.Models\User.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\users_seeder.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Protos\users_seeder.proto">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

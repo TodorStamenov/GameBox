@@ -9,6 +9,7 @@ namespace GameBox.Persistence
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddGrpc();
             services.AddDbContext<GameDbContext>(
                 options => options.UseSqlServer(
                     configuration.GetConnectionString("Games"),

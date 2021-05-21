@@ -83,7 +83,11 @@ namespace GameBox.Bootstrap
                 .UseCors(cors => cors.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
                 .UseAuthentication()
                 .UseAuthorization()
-                .UseEndpoints(endpoints => endpoints.MapControllers());
+                .UseEndpoints(endpoints => 
+                {
+                    endpoints.MapGrpcService<GameDbContextSeedService>();
+                    endpoints.MapControllers();
+                });
 
             // app.UseGraphQL<GameBoxSchema>("/api/graphql");
             // app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());

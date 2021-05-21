@@ -1,6 +1,7 @@
 ﻿using GameBox.Application.Contracts.Services;
 using GameBox.Application.Orders.Commands.CreateOrder;
 using GameBox.Domain.Entities;
+using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -8,33 +9,38 @@ using System.Threading.Tasks;
 
 namespace GameBox.Persistence
 {
-    public static class GameDbContextSeed
+    public class GameDbContextSeedService : GamesSeeder.GamesSeederBase
     {
         private const int CategoriesCount = 7;
         private const int GamesCount = CategoriesCount * 10;
 
-        private static GameDbContext context;
-        private static IQueueSenderService messageQueue;
+        private readonly GameDbContext context;
+        private readonly IQueueSenderService messageQueue;
 
         private static readonly Random random = new Random();
 
-        public static async Task SeedDatabaseAsync(
-            GameDbContext database,
-            IQueueSenderService serviceBus)
+        public GameDbContextSeedService(
+            GameDbContext context,
+            IQueueSenderService messageQueue)
         {
-            context = database;
-            messageQueue = serviceBus;
-
-            await SeedCategoriesAsync(CategoriesCount);
-            await SeedGamesAsync(GamesCount);
-            await SeedOrdersAsync();
-            await SeedWishlistsAsync();
-            await SeedCommentsAsync();
+            this.context = context;
+            this.messageQueue = messageQueue;
         }
 
-        private static async Task SeedCategoriesAsync(int categoriesCount)
+        public override async Task<SeedGamesReply> SeedGamesDatabase(SeedGamesRequest request, ServerCallContext context)
         {
-            if (await context.Categories.AnyAsync())
+            await this.SeedCategoriesAsync(CategoriesCount);
+            await this.SeedGamesAsync(GamesCount);
+            await this.SeedOrdersAsync();
+            await this.SeedWishlistsAsync();
+            await this.SeedCommentsAsync();
+
+            return new SeedGamesReply { Seeded = true };
+        }
+
+        private async Task SeedCategoriesAsync(int categoriesCount)
+        {
+            if (await this.context.Categories.AnyAsync())
             {
                 return;
             }
@@ -42,16 +48,15 @@ namespace GameBox.Persistence
             for (int i = 1; i <= categoriesCount; i++)
             {
                 var category = new Category { Name = $"Category{i}" };
-
-                await context.Categories.AddAsync(category);
+                await this.context.Categories.AddAsync(category);
             }
 
-            await context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
         }
 
-        private static async Task SeedGamesAsync(int gamesCount)
+        private async Task SeedGamesAsync(int gamesCount)
         {
-            if (await context.Games.AnyAsync())
+            if (await this.context.Games.AnyAsync())
             {
                 return;
             }
@@ -88,21 +93,21 @@ namespace GameBox.Persistence
                         "lectus at massa convallis fringilla.Morbi commodo ex enim, nec interdum nisl viverra id."
                 };
 
-                await context.Games.AddAsync(game);
+                await this.context.Games.AddAsync(game);
             }
 
-            await context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
         }
 
-        private static async Task SeedOrdersAsync()
+        private async Task SeedOrdersAsync()
         {
-            if (await context.Orders.AnyAsync())
+            if (await this.context.Orders.AnyAsync())
             {
                 return;
             }
 
-            var users = await context.Customers.ToListAsync();
-            var games = await context.Games.ToListAsync();
+            var users = await this.context.Customers.ToListAsync();
+            var games = await this.context.Games.ToListAsync();
 
             foreach (var user in users)
             {
@@ -136,9 +141,10 @@ namespace GameBox.Persistence
                 }
             }
 
-            await context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
 
-            var orders = await context.Orders
+            var orders = await this.context
+                .Orders
                 .Select(o => new OrderCreatedMessage
                 {
                     Username = o.Customer.Username,
@@ -160,19 +166,22 @@ namespace GameBox.Persistence
 
             foreach (var order in orders)
             {
-                messageQueue.PostQueueMessage(queueName: "orders", order);
+                this.messageQueue.PostQueueMessage(queueName: "orders", order);
             }
         }
 
-        private static async Task SeedWishlistsAsync()
+        private async Task SeedWishlistsAsync()
         {
-            if (await context.Wishlists.AnyAsync())
+            if (await this.context.Wishlists.AnyAsync())
             {
                 return;
             }
 
-            var users = await context.Customers.ToListAsync();
-            var gameIds = await context.Games.Select(g => g.Id).ToListAsync();
+            var users = await this.context.Customers.ToListAsync();
+            var gameIds = await this.context
+                .Games
+                .Select(g => g.Id)
+                .ToListAsync();
 
             foreach (var user in users)
             {
@@ -196,18 +205,21 @@ namespace GameBox.Persistence
                 }
             }
 
-            await context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
         }
 
-        private static async Task SeedCommentsAsync()
+        private async Task SeedCommentsAsync()
         {
-            if (await context.Comments.AnyAsync())
+            if (await this.context.Comments.AnyAsync())
             {
                 return;
             }
 
-            var games = await context.Games.ToListAsync();
-            var userIds = await context.Customers.Select(u => u.Id).ToListAsync();
+            var games = await this.context.Games.ToListAsync();
+            var userIds = await this.context
+                .Customers
+                .Select(u => u.Id)
+                .ToListAsync();
 
             if (!games.Any() || !userIds.Any())
             {
@@ -243,7 +255,7 @@ namespace GameBox.Persistence
                 }
             }
 
-            await context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
         }
     }
 }

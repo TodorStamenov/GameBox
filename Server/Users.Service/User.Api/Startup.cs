@@ -72,7 +72,11 @@ namespace User.Api
                 .UseCors(cors => cors.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
                 .UseAuthentication()
                 .UseAuthorization()
-                .UseEndpoints(endpoints => endpoints.MapControllers());
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapGrpcService<UserDbContextSeedService>();
+                    endpoints.MapControllers();
+                });
         }
     }
 }

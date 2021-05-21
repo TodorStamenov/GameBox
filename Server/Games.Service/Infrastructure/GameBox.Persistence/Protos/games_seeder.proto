@@ -1,0 +1,12 @@
+﻿syntax = "proto3";
+
+service GamesSeeder {
+  rpc SeedGamesDatabase (SeedGamesRequest) returns (SeedGamesReply);
+}
+
+message SeedGamesRequest {
+}
+
+message SeedGamesReply {
+  bool seeded = 1;
+}
