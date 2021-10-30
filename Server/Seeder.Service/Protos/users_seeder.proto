@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-option csharp_namespace = "GrpcUsersSeeder";
+option csharp_namespace = "GrpcUsersSeederClient";
 package userseeder;
 
 service UsersSeeder {

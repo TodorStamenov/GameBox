@@ -1,26 +1,36 @@
 ﻿using Grpc.Net.Client;
+using GrpcGamesSeederClient;
+using GrpcUsersSeederClient;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Seeder.Service
 {
     public class Program
     {
-        private const string BaseApiUrl = "http://172.17.0.1:";
+        private const string BaseApiUrl = "https://172.17.0.1:";
 
         public static async Task Main()
         {
-            var seeded = await SeedUsersDatabaseAsync();
+            var channelOptions = new GrpcChannelOptions
+            {
+                HttpHandler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                }
+            };
 
+            var seeded = await SeedUsersDatabaseAsync(channelOptions);
             if (seeded)
             {
                 await Task.Delay(5000);
-                await SeedGamesDatabaseAsync();
+                await SeedGamesDatabaseAsync(channelOptions);
             }
         }
 
-        private static async Task<bool> SeedUsersDatabaseAsync()
+        private static async Task<bool> SeedUsersDatabaseAsync(GrpcChannelOptions channelOptions)
         {
-            using (var channel = GrpcChannel.ForAddress($"{BaseApiUrl}5000"))
+            using (var channel = GrpcChannel.ForAddress($"{BaseApiUrl}5001", channelOptions))
             {
                 var client = new UsersSeeder.UsersSeederClient(channel);
                 var response = await client.SeedUsersDatabaseAsync(new SeedUsersRequest());
@@ -28,9 +38,9 @@ namespace Seeder.Service
             }
         }
 
-        private static async Task<bool> SeedGamesDatabaseAsync()
+        private static async Task<bool> SeedGamesDatabaseAsync(GrpcChannelOptions channelOptions)
         {
-            using (var channel = GrpcChannel.ForAddress($"{BaseApiUrl}5001"))
+            using (var channel = GrpcChannel.ForAddress($"{BaseApiUrl}5000", channelOptions))
             {
                 var client = new GamesSeeder.GamesSeederClient(channel);
                 var response = await client.SeedGamesDatabaseAsync(new SeedGamesRequest());

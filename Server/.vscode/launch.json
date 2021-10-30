@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch Games API",
+            "name": "Launch Games API",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -15,14 +15,14 @@
             "stopAtEntry": false,
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "ASPNETCORE_URLS": "http://localhost:5000"
+                "ASPNETCORE_URLS": "https://localhost:5000"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
             }
         },
         {
-            "name": ".NET Core Launch Users API",
+            "name": "Launch Users API",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -32,14 +32,14 @@
             "stopAtEntry": false,
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "ASPNETCORE_URLS": "http://localhost:5001"
+                "ASPNETCORE_URLS": "https://localhost:5001"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
             }
         },
         {
-            "name": ".NET Core Launch Notification API",
+            "name": "Launch Notification API",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -56,13 +56,27 @@
             }
         },
         {
-            "name": ".NET Core Launch Scheduler",
+            "name": "Launch Scheduler",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/Scheduler.Service/bin/Debug/net5.0/Scheduler.Service.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Scheduler.Service",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": "Launch Seeder",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/Seeder.Service/bin/Debug/net5.0/Seeder.Service.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Seeder.Service",
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },

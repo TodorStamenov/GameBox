@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.19.1" />
-    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.40.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.40.0" />
     <PackageReference Include="Grpc.Tools" Version="2.41.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -19,12 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\Games.Service\Infrastructure\GameBox.Persistence\Protos\games_seeder.proto" GrpcServices="Client">
-      <Link>Protos\games_seeder.proto</Link>
-    </Protobuf>
-    <Protobuf Include="..\Users.Service\User.Services\Protos\users_seeder.proto" GrpcServices="Client">
-      <Link>Protos\users_seeder.proto</Link>
-    </Protobuf>
+    <Protobuf Include="Protos\games_seeder.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\users_seeder.proto" GrpcServices="Client" />
   </ItemGroup>
 
 </Project>

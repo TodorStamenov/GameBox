@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-option csharp_namespace = "GrpcGamesSeeder";
+option csharp_namespace = "GrpcGamesSeederClient";
 package gameseeder;
 
 service GamesSeeder {

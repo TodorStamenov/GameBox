@@ -2,6 +2,7 @@
 using GameBox.Application.Orders.Commands.CreateOrder;
 using GameBox.Domain.Entities;
 using Grpc.Core;
+using GrpcGamesSeeder;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
