@@ -25,7 +25,7 @@
     "@angular/router": "^12.2.5",
     "@nativescript-community/ui-material-tabs": "^6.2.1",
     "@nativescript/angular": "^12.2.0",
-    "@nativescript/core": "~8.1.4",
+    "@nativescript/core": "~8.1.5",
     "@nativescript/theme": "^3.0.0",
     "@nstudio/nativescript-pulltorefresh": "^3.0.1",
     "codelyzer": "^5.2.0",

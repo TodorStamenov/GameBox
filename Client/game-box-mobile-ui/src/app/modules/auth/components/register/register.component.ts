@@ -70,10 +70,10 @@ export class RegisterComponent implements OnInit {
 
     this.loading = true;
     this.authService.register$(this.registerForm.value)
-      .subscribe(
-        () => this.uiService.navigate('/'),
-        () => this.loading = false
-      );
+      .subscribe({
+        next: () => this.uiService.navigate('/'),
+        error: () => this.loading = false
+      });
   }
 
   public onFormTap(): void {

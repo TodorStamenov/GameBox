@@ -62,6 +62,9 @@ services:
   games.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=cert_password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ConnectionStrings__Redis=172.17.0.1:6379
       - ConnectionStrings__Games=Server=games-database;Database=GamesCore;User Id=sa;Password=Your_password@123
       - ConnectionStrings__Messages=Server=messages-database;Database=MessagesCore;User Id=sa;Password=Your_password@123
@@ -71,14 +74,19 @@ services:
       - RabbitMQ__Password=guest
     ports:
       - "5000:80"
+      - "6000:443"
     networks:
       - gamebox-network
     volumes:
+      - ~/.aspnet/https:/https:ro
       - data-protection:/root/.aspnet/DataProtection-Keys
 
   users.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=cert_password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ConnectionStrings__Users=Server=users-database;Database=UsersCore;User Id=admin;Password=my_secret_password@123
       - ConnectionStrings__Messages=Server=messages-database;Database=MessagesCore;User Id=sa;Password=Your_password@123
       - RabbitMQ__Host=172.17.0.1
@@ -87,9 +95,11 @@ services:
       - RabbitMQ__Password=guest
     ports:
       - "5001:80"
+      - "6001:443"
     networks:
       - gamebox-network
     volumes:
+      - ~/.aspnet/https:/https:ro
       - data-protection:/root/.aspnet/DataProtection-Keys
 
   notification.api:

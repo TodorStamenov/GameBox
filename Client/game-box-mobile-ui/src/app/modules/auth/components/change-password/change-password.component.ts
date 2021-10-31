@@ -72,10 +72,10 @@ export class ChangePasswordComponent implements OnInit {
 
     this.loading = true;
     this.authService.changePassword$(this.changePasswordForm.value)
-      .subscribe(
-        () => this.router.backToPreviousPage(),
-        () => this.loading = false
-      );
+      .subscribe({
+        next: () => this.router.backToPreviousPage(),
+        error: () => this.loading = false
+      });
   }
 
   public onFormTap(): void {

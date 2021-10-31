@@ -57,10 +57,13 @@ export class LoginComponent implements OnInit {
 
     this.loading = true;
     this.authService.login$(this.loginForm.value)
-      .subscribe(
-        () => this.uiService.navigate('/'),
-        () => this.loading = false
-      );
+      .subscribe({
+        next: () => this.uiService.navigate('/'),
+        error: (err) => {
+          this.loading = false;
+          console.log(err);
+        }
+      });
   }
 
   public onFormTap(): void {

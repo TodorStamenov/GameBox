@@ -26,7 +26,7 @@ export class GamesTabsComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-   this.reloadGames();
+    this.reloadGames();
   }
 
   public ngOnDestroy(): void {
@@ -36,19 +36,19 @@ export class GamesTabsComponent implements OnInit, OnDestroy {
   public loadGames(): void {
     this.gameService.getGames$(this.games.length).pipe(
       takeWhile(() => this.isActive)
-    ).subscribe(
-      games => this.games = [...this.games, ...games],
-      () => this.loading = false
-    );
+    ).subscribe({
+      next: games => this.games = [...this.games, ...games],
+      error: () => this.loading = false
+    });
   }
 
   public loadOwned(): void {
     this.gameService.getOwned$(this.owned.length).pipe(
       takeWhile(() => this.isActive)
-    ).subscribe(
-      owned => this.owned = [...this.owned, ...owned],
-      () => this.loading = false
-    );
+    ).subscribe({
+      next: owned => this.owned = [...this.owned, ...owned],
+      error: () => this.loading = false
+    });
   }
 
   public navigateToDetails(id: string): void {
@@ -66,11 +66,14 @@ export class GamesTabsComponent implements OnInit, OnDestroy {
       this.gameService.getOwned$(this.owned.length)
     ]).pipe(
       takeWhile(() => this.isActive)
-    ).subscribe(([games, owned]) => {
-      this.games = [...this.games, ...games];
-      this.owned = [...this.owned, ...owned];
+    ).subscribe({
+      next: ([games, owned]) => {
+        this.games = [...this.games, ...games];
+        this.owned = [...this.owned, ...owned];
 
-      this.loading = false;
-    }, () => this.loading = false);
+        this.loading = false;
+      },
+      error: () => this.loading = false
+    });
   }
 }

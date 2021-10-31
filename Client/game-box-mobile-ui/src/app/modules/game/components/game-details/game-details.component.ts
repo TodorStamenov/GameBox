@@ -51,12 +51,15 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
       this.gameService.getComments$(this.gameId)
     ]).pipe(
       takeWhile(() => this.isActive)
-    ).subscribe(([game, comments]) => {
-      this.game = game;
-      this.embedHtml = this.getHtmlEmbedTag(game.videoId);
-      this.comments = comments;
-      this.loading = false;
-    }, () => this.loading = false);
+    ).subscribe({
+      next: ([game, comments]) => {
+        this.game = game;
+        this.embedHtml = this.getHtmlEmbedTag(game.videoId);
+        this.comments = comments;
+        this.loading = false;
+      },
+      error: () => this.loading = false
+    });
 
     this.commentForm = new FormGroup({
       'gameId': new FormControl(this.gameId),
@@ -109,14 +112,14 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
       takeWhile(() => this.isActive),
       switchMap(() => this.gameService.getComments$(this.gameId))
     )
-    .subscribe(comments => {
-      this.comments = comments;
-      this.commentForm.reset();
-      this.commentForm.setValue({
-        gameId: this.gameId,
-        content: null
+      .subscribe(comments => {
+        this.comments = comments;
+        this.commentForm.reset();
+        this.commentForm.setValue({
+          gameId: this.gameId,
+          content: null
+        });
       });
-    });
   }
 
   private getHtmlEmbedTag(gameId: string): string {

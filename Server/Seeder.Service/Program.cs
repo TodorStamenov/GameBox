@@ -30,7 +30,7 @@ namespace Seeder.Service
 
         private static async Task<bool> SeedUsersDatabaseAsync(GrpcChannelOptions channelOptions)
         {
-            using (var channel = GrpcChannel.ForAddress($"{BaseApiUrl}5001", channelOptions))
+            using (var channel = GrpcChannel.ForAddress($"{BaseApiUrl}6001", channelOptions))
             {
                 var client = new UsersSeeder.UsersSeederClient(channel);
                 var response = await client.SeedUsersDatabaseAsync(new SeedUsersRequest());
@@ -40,7 +40,7 @@ namespace Seeder.Service
 
         private static async Task<bool> SeedGamesDatabaseAsync(GrpcChannelOptions channelOptions)
         {
-            using (var channel = GrpcChannel.ForAddress($"{BaseApiUrl}5000", channelOptions))
+            using (var channel = GrpcChannel.ForAddress($"{BaseApiUrl}6000", channelOptions))
             {
                 var client = new GamesSeeder.GamesSeederClient(channel);
                 var response = await client.SeedGamesDatabaseAsync(new SeedGamesRequest());
