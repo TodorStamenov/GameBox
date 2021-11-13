@@ -11,7 +11,7 @@ export const environment = {
     usersApiUrl: `http://${baseHost}:5001/api/`,
     notificationsUrl: `http://${baseHost}:5002/notifications`,
     ordersApiUrl: `http://${baseHost}:1337/api/`,
-    graphQlUrl: `http://${baseHost}:5000/api/graphql`
+    graphQlUrl: `http://${baseHost}:5000/graphql`
   }
 };
 

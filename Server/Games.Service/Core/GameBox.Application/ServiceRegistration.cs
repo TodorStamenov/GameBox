@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using GameBox.Application.Contracts;
+﻿using GameBox.Application.Contracts;
 using GameBox.Application.GraphQL;
+using GameBox.Application.GraphQL.Wishlists;
 using GameBox.Application.Infrastructure;
-using GraphQL;
-using GraphQL.Server;
-using GraphQL.Types;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,14 +19,18 @@ namespace GameBox.Application
                 .AddMediatR(Assembly.GetExecutingAssembly())
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>))
                 .AddDomainServices(assemblies)
-                .AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService))
-                .AddScoped<ISchema, GameBoxSchema>()
                 .AddMemoryCache()
                 .AddStackExchangeRedisCache(options => options.Configuration = configuration.GetConnectionString("Redis"));
 
             services
-                .AddGraphQL(o => o.ExposeExceptions = true)
-                .AddGraphTypes(ServiceLifetime.Scoped);
+                .AddTransient<Query>()
+                .AddTransient<Mutation>()
+                .AddGraphQLServer()
+                .AddQueryType<Query>()
+                .AddMutationType<Mutation>()
+                .AddType<AddGameInputType>()
+                .AddFiltering()
+                .AddSorting();
 
             return services;
         }

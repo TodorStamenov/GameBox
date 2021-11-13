@@ -69,28 +69,26 @@ namespace GameBox.Bootstrap
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder appBuilder, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Game.Api v1"));
+                appBuilder.UseDeveloperExceptionPage();
+                appBuilder.UseSwagger();
+                appBuilder.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Game.Api v1"));
             }
 
-            app
+            appBuilder
                 .UseRouting()
                 .UseCors(cors => cors.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
                 .UseAuthentication()
                 .UseAuthorization()
-                .UseEndpoints(endpoints => 
+                .UseEndpoints(endpoints =>
                 {
-                    endpoints.MapGrpcService<GameDbContextSeedService>();
+                    endpoints.MapGraphQL();
                     endpoints.MapControllers();
+                    endpoints.MapGrpcService<GameDbContextSeedService>();
                 });
-
-            // app.UseGraphQL<GameBoxSchema>("/api/graphql");
-            // app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
         }
     }
 }

@@ -26,14 +26,16 @@ export class WishlistService {
   constructor(private apollo: Apollo) { }
 
   public addItem$(id: string): Observable<any> {
-    const mutation = gql`mutation addGameToWishlist($gameId: ID!) {
-      addGameToWishlist(gameId: $gameId)
+    const mutation = gql`mutation addGame($input: AddGameInput) {
+      addGame(input: $input)
     }`;
 
     return this.apollo.mutate({
       mutation,
       variables: {
-        gameId: id
+        input: {
+          gameId: id
+        }
       },
       refetchQueries: [{
         query: this.wishlistQuery
@@ -42,14 +44,16 @@ export class WishlistService {
   }
 
   public removeItem$(id: string): Observable<any> {
-    const mutation = gql`mutation removeGameFromWishlist($gameId: ID!) {
-      removeGameFromWishlist(gameId: $gameId)
+    const mutation = gql`mutation removeGame($input: RemoveGameInput) {
+      removeGame(input: $input)
     }`;
 
     return this.apollo.mutate({
       mutation,
       variables: {
-        gameId: id
+        input: {
+          gameId: id
+        }
       },
       refetchQueries: [{
         query: this.wishlistQuery
@@ -58,8 +62,8 @@ export class WishlistService {
   }
 
   public clearItems$(): Observable<any> {
-    const mutation = gql`mutation clearGamesFromWishlist {
-      clearGamesFromWishlist
+    const mutation = gql`mutation clearGames {
+      clearGames
     }`;
 
     return this.apollo.mutate({
