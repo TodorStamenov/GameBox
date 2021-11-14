@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Message.DataAccess.Models
 {
@@ -35,7 +36,10 @@ namespace Message.DataAccess.Models
                 return JsonSerializer.Deserialize(
                     this.serializedData,
                     this.Type,
-                    new JsonSerializerOptions { IgnoreNullValues = true });
+                    new JsonSerializerOptions
+                    {
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                    });
             }
 
             set
@@ -44,7 +48,10 @@ namespace Message.DataAccess.Models
 
                 this.serializedData = JsonSerializer.Serialize(
                     value,
-                    new JsonSerializerOptions { IgnoreNullValues = true });
+                    new JsonSerializerOptions
+                    {
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                    });
             }
         }
     }
