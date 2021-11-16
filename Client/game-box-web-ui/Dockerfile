@@ -1,4 +1,4 @@
-FROM node:16.13.0-alpine AS build
+FROM node:16.13-alpine AS build
 
 WORKDIR /usr/src/app
 
@@ -8,7 +8,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-FROM nginx:1.19.6-alpine AS final
+FROM nginx:1.21-alpine AS final
 WORKDIR /usr/share/nginx/html
 COPY --from=build /usr/src/app/dist/game-box-web-ui .
 COPY nginx.conf /etc/nginx/nginx.conf

@@ -1,7 +1,4 @@
 {
-    // Use IntelliSense to find out which attributes exist for C# debugging
-    // Use hover for the description of the existing attributes
-    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
     "version": "0.2.0",
     "configurations": [
         {
@@ -9,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Games.Service/GameBox.Bootstrap/bin/Debug/net5.0/GameBox.Bootstrap.dll",
+            "program": "${workspaceFolder}/Games.Service/GameBox.Bootstrap/bin/Debug/net6.0/GameBox.Bootstrap.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Games.Service/GameBox.Bootstrap",
             "stopAtEntry": false,
@@ -26,7 +23,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Users.Service/User.Api/bin/Debug/net5.0/User.Api.dll",
+            "program": "${workspaceFolder}/Users.Service/User.Api/bin/Debug/net6.0/User.Api.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Users.Service/User.Api",
             "stopAtEntry": false,
@@ -43,7 +40,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Notification.Service/bin/Debug/net5.0/Notification.Service.dll",
+            "program": "${workspaceFolder}/Notification.Service/bin/Debug/net6.0/Notification.Service.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Notification.Service",
             "stopAtEntry": false,
@@ -60,7 +57,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Scheduler.Service/bin/Debug/net5.0/Scheduler.Service.dll",
+            "program": "${workspaceFolder}/Scheduler.Service/bin/Debug/net6.0/Scheduler.Service.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Scheduler.Service",
             "env": {
@@ -74,7 +71,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Seeder.Service/bin/Debug/net5.0/Seeder.Service.dll",
+            "program": "${workspaceFolder}/Seeder.Service/bin/Debug/net6.0/Seeder.Service.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Seeder.Service",
             "env": {
