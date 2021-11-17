@@ -11,7 +11,7 @@ services:
 
   users.data:
     container_name: users-database
-    image: postgres:13.1-alpine
+    image: postgres:14.1-alpine
 
   orders.data:
     container_name: orders-data
@@ -19,11 +19,11 @@ services:
 
   rabbitmq:
     container_name: rabbit-mq
-    image: rabbitmq:3.8.9-management-alpine
+    image: rabbitmq:3.9-management-alpine
 
   redis:
     container_name: redis-cache
-    image: redis:6.0.9-alpine
+    image: redis:6.2-alpine
 
   games.api:
     container_name: games-api
