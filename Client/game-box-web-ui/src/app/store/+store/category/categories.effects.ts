@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { mergeMap, map } from 'rxjs/operators';
 
@@ -19,27 +19,24 @@ export class CategoriesEffects {
     private categoryService: CategoryService
   ) { }
 
-  @Effect()
-  loadCategories$ = this.actions$.pipe(
+  loadCategories$ = createEffect(() => this.actions$.pipe(
     ofType(CategoryActionTypes.LoadAllCategories),
     mergeMap(() => this.categoryService.getCategories$().pipe(
       map(categories => new GetAllCategories(categories))
     ))
-  );
+  ));
 
-  @Effect()
-  loadCategory$ = this.actions$.pipe(
+  loadCategory$ = createEffect(() => this.actions$.pipe(
     ofType(CategoryActionTypes.LoadCategoryToEdit),
     mergeMap((action: LoadCategoryToEdit) => this.categoryService.getCategory$(action.payload).pipe(
       map((category => new GetCategoryToEdit(category)))
     ))
-  );
+  ));
 
-  @Effect()
-  loadCategoryNames$ = this.actions$.pipe(
+  loadCategoryNames$ = createEffect(() => this.actions$.pipe(
     ofType(CategoryActionTypes.LoadCategoryNames),
     mergeMap(() => this.categoryService.getCategoryNames$().pipe(
       map((categories => new GetCategoryNames(categories)))
     ))
-  );
+  ));
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { mergeMap, map } from 'rxjs/operators';
 
@@ -13,11 +13,10 @@ export class OrdersEffects {
     private orderService: OrderService
   ) { }
 
-  @Effect()
-  loadOrders$ = this.actions$.pipe(
+  loadOrders$ = createEffect(() => this.actions$.pipe(
     ofType(OrderActionTypes.LoadAllOrders),
     mergeMap((action: LoadAllOrders) => this.orderService.getOrders$(action.payload.startDate, action.payload.endDate).pipe(
       map(orders => new GetAllOrders(orders))
     ))
-  );
+  ));
 }

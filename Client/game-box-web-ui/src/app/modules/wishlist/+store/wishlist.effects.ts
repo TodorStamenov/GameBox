@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { mergeMap, map } from 'rxjs/operators';
 
@@ -13,27 +13,24 @@ export class WishlistEffects {
     private wishlistService: WishlistService
   ) { }
 
-  @Effect()
-  loadWishlistItems$ = this.actions$.pipe(
+  loadWishlistItems$ = createEffect(() => this.actions$.pipe(
     ofType(WishlistActionTypes.LoadAllItems),
     mergeMap(() => this.wishlistService.getItems$().pipe(
       map(items => new GetAllItems(items))
     ))
-  );
+  ));
 
-  @Effect()
-  removeWishlistItem$ = this.actions$.pipe(
+  removeWishlistItem$ = createEffect(() => this.actions$.pipe(
     ofType(WishlistActionTypes.UnloadItem),
     mergeMap((action: UnloadItem) => this.wishlistService.removeItem$(action.payload).pipe(
       map(() => new RemoveItem(action.payload))
     ))
-  );
+  ));
 
-  @Effect()
-  clearWishlistItems$ = this.actions$.pipe(
+  clearWishlistItems$ = createEffect(() => this.actions$.pipe(
     ofType(WishlistActionTypes.UnloadItems),
     mergeMap(() => this.wishlistService.clearItems$().pipe(
       map(() => new ClearItems())
     ))
-  );
+  ));
 }
