@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as signalR from '@aspnet/signalr';
+import * as signalR from '@microsoft/signalr';
 
 import { AuthService } from './auth.service';
 import { IAppState } from 'src/app/store/app.state';

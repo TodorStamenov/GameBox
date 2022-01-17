@@ -98,6 +98,15 @@
               "src/assets"
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -120,5 +129,8 @@
       }
     }
   },
-  "defaultProject": "game-box-web-ui"
+  "defaultProject": "game-box-web-ui",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
