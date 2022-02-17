@@ -1,14 +1,14 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableNativeFeedback } from 'react-native';
 
-import Header from '../shared/header';
-
-const Login = () => {
+const Login = ({ navigation }) => {
   return (
     <View style={styles.page}>
-      <Header title="Login" />
       <View style={styles.content}>
-        <Text style={styles.mainText}>Login Page!</Text>
+        <TouchableNativeFeedback
+          onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.mainText}>Login Page!</Text>
+        </TouchableNativeFeedback>
       </View>
     </View>
   );
