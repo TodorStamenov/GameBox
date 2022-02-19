@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_box_mobile_ui/shared/header.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -11,18 +12,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Color(0xff343A40),
-        title: Text(
-          'Home',
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+      appBar: Header(
+        title: 'Home',
       ),
       body: Column(
         children: [
@@ -39,7 +30,6 @@ class _HomeState extends State<Home> {
             ),
           ),
           Expanded(
-            flex: 1,
             child: Center(
               child: MaterialButton(
                 color: Color(0xff343A40),
@@ -48,7 +38,7 @@ class _HomeState extends State<Home> {
                   horizontal: 20,
                 ),
                 child: Text(
-                  'Counter ++',
+                  'Counter++',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -59,28 +49,59 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: Center(
-              child: MaterialButton(
-                color: Color(0xff343A40),
-                padding: EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 20,
-                ),
+        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              child: Center(
                 child: Text(
-                  'Todos',
+                  'Game Box',
                   style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
+                    fontSize: 21,
+                    color: Color(0xff343A40),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                onPressed: () => Navigator.pushNamed(context, '/todos'),
               ),
             ),
-          ),
-        ],
+            ListTile(
+              title: Text(
+                'Login',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xff343A40),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onTap: () => Navigator.pushNamed(context, '/login'),
+            ),
+            ListTile(
+              title: Text(
+                'Register',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xff343A40),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onTap: () => Navigator.pushNamed(context, '/register'),
+            ),
+            ListTile(
+              title: Text(
+                'Todos',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xff343A40),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onTap: () => Navigator.pushNamed(context, '/todos'),
+            ),
+          ],
+        ),
       ),
     );
   }

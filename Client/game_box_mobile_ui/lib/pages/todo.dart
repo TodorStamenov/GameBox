@@ -8,7 +8,7 @@ class Todo extends StatefulWidget {
 class _TodoState extends State<Todo> {
   List<String> todos = [];
 
-  void getData() async {
+  void getTodos() async {
     List<String> todos = await Future.delayed(
       Duration(seconds: 2),
       () => [
@@ -25,7 +25,7 @@ class _TodoState extends State<Todo> {
   @override
   void initState() {
     super.initState();
-    this.getData();
+    this.getTodos();
   }
 
   @override
@@ -49,7 +49,7 @@ class _TodoState extends State<Todo> {
         children: this
             .todos
             .map((todo) => Padding(
-                  padding: const EdgeInsets.only(top: 80),
+                  padding: const EdgeInsets.only(top: 50),
                   child: Text(
                     todo,
                     textAlign: TextAlign.center,
