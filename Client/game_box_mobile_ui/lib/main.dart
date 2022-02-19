@@ -1,18 +1,41 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(
+      MaterialApp(
+        home: Home(),
+      ),
+    );
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Title Text!'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Title Text',
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        body: const Text('Hello world!'),
+        centerTitle: true,
+        backgroundColor: Color(0xff343a40),
+      ),
+      body: Center(
+        child: Text(
+          'Hello world!',
+          style: TextStyle(
+            fontSize: 20.0,
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Text('Click'),
+        onPressed: () => print('clicked!'),
+        backgroundColor: Color(0xff343a40),
       ),
     );
   }
