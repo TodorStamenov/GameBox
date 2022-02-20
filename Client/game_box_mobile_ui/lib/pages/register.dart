@@ -9,7 +9,9 @@ class Register extends StatelessWidget {
         title: 'Register',
       ),
       body: Center(
-        child: Text('Register page'),
+        child: Text(
+          'Register page',
+        ),
       ),
     );
   }

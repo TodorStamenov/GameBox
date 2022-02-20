@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_box_mobile_ui/shared/header.dart';
 
 class Todo extends StatefulWidget {
   @override
@@ -6,6 +7,7 @@ class Todo extends StatefulWidget {
 }
 
 class _TodoState extends State<Todo> {
+  bool isLoading = true;
   List<String> todos = [];
 
   void getTodos() async {
@@ -19,7 +21,10 @@ class _TodoState extends State<Todo> {
       ],
     );
 
-    setState(() => this.todos = todos);
+    if (mounted) {
+      setState(() => this.todos.addAll(todos));
+      setState(() => this.isLoading = false);
+    }
   }
 
   @override
@@ -31,37 +36,54 @@ class _TodoState extends State<Todo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Color(0xff343A40),
-        title: Text(
-          'Todos',
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+      appBar: Header(
+        title: 'Todos',
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: this
-            .todos
-            .map((todo) => Padding(
-                  padding: const EdgeInsets.only(top: 50),
+      body: this.isLoading
+          ? Center(
+              child: CircularProgressIndicator(
+                color: Color(0xff343A40),
+              ),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: this.todos.length,
+                    itemBuilder: (context, index) => ListTile(
+                      title: Text(
+                        todos[index],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                MaterialButton(
+                  color: Color(0xff343A40),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 20,
+                  ),
                   child: Text(
-                    todo,
-                    textAlign: TextAlign.center,
+                    'Load Todos!',
                     style: TextStyle(
                       fontSize: 18,
-                      color: Colors.black,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ))
-            .toList(),
-      ),
+                  onPressed: () {
+                    this.setState(() => this.isLoading = true);
+                    this.getTodos();
+                  },
+                ),
+              ],
+            ),
     );
   }
 }

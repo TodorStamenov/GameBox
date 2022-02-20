@@ -9,7 +9,9 @@ class Login extends StatelessWidget {
         title: 'Login',
       ),
       body: Center(
-        child: Text('Login page'),
+        child: Text(
+          'Login page',
+        ),
       ),
     );
   }
