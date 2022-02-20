@@ -3,6 +3,8 @@ import 'package:game_box_mobile_ui/shared/header.dart';
 import 'package:game_box_mobile_ui/shared/side_drawer.dart';
 
 class Home extends StatefulWidget {
+  static const String routeName = '/';
+
   @override
   State<Home> createState() => _HomeState();
 }

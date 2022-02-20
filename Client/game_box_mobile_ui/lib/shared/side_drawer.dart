@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:game_box_mobile_ui/pages/todo.dart';
+import 'package:game_box_mobile_ui/pages/login.dart';
+import 'package:game_box_mobile_ui/pages/register.dart';
 
 class SideDrawer extends StatelessWidget {
   @override
@@ -30,7 +33,7 @@ class SideDrawer extends StatelessWidget {
             ),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/login');
+              Navigator.pushNamed(context, Login.routeName);
             },
           ),
           ListTile(
@@ -44,7 +47,7 @@ class SideDrawer extends StatelessWidget {
             ),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/register');
+              Navigator.pushNamed(context, Register.routeName);
             },
           ),
           ListTile(
@@ -58,7 +61,7 @@ class SideDrawer extends StatelessWidget {
             ),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/todos');
+              Navigator.pushNamed(context, Todo.routeName);
             },
           ),
         ],

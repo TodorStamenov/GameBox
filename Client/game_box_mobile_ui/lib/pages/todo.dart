@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:game_box_mobile_ui/shared/header.dart';
 
 class Todo extends StatefulWidget {
+  static const String routeName = '/todos';
+
   @override
   State<Todo> createState() => _TodoState();
 }

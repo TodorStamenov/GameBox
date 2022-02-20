@@ -7,12 +7,13 @@ import 'package:game_box_mobile_ui/pages/todo.dart';
 void main() {
   runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => Home(),
-        '/login': (context) => Login(),
-        '/register': (context) => Register(),
-        '/todos': (context) => Todo(),
+        Home.routeName: (context) => Home(),
+        Login.routeName: (context) => Login(),
+        Register.routeName: (context) => Register(),
+        Todo.routeName: (context) => Todo(),
       },
     ),
   );
