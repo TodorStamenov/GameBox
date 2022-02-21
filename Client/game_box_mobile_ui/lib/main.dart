@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:game_box_mobile_ui/pages/home.dart';
+import 'package:game_box_mobile_ui/pages/games.dart';
 import 'package:game_box_mobile_ui/pages/login.dart';
 import 'package:game_box_mobile_ui/pages/register.dart';
-import 'package:game_box_mobile_ui/pages/todo.dart';
 
 void main() {
   runApp(
@@ -10,10 +9,9 @@ void main() {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        Home.routeName: (context) => Home(),
+        Games.routeName: (context) => Games(),
         Login.routeName: (context) => Login(),
         Register.routeName: (context) => Register(),
-        Todo.routeName: (context) => Todo(),
       },
     ),
   );
