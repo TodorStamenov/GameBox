@@ -1,5 +1,10 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.game_box_mobile_ui">
-   <application
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.game_box_mobile_ui">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
         android:label="Game Box"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
@@ -12,7 +17,7 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
-            
+
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme" />
@@ -22,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        
+
         <meta-data android:name="flutterEmbedding" android:value="2" />
     </application>
 </manifest>

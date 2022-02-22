@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:game_box_mobile_ui/api/auth.dart';
 import 'package:game_box_mobile_ui/shared/header.dart';
 import 'package:game_box_mobile_ui/shared/side_drawer.dart';
-import 'package:game_box_mobile_ui/style/constants.dart';
+import 'package:game_box_mobile_ui/common/constants.dart';
 
 class Login extends StatefulWidget {
   static const String routeName = '/login';
@@ -79,7 +80,10 @@ class _LoginState extends State<Login> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  onPressed: () => print('${this.username.text} - ${this.password.text}'),
+                  onPressed: () async {
+                    var user = await login(this.username.text, this.password.text);
+                    print(user);
+                  },
                 ),
               ),
             ],

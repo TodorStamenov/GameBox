@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:game_box_mobile_ui/api/auth.dart';
 import 'package:game_box_mobile_ui/shared/header.dart';
 import 'package:game_box_mobile_ui/shared/side_drawer.dart';
-import 'package:game_box_mobile_ui/style/constants.dart';
+import 'package:game_box_mobile_ui/common/constants.dart';
 
 class Register extends StatefulWidget {
   static const String routeName = '/register';
@@ -99,8 +100,11 @@ class _RegisterState extends State<Register> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  onPressed: () => print(
-                      '${this.username.text} - ${this.password.text} - ${this.repeatPassword.text}'),
+                  onPressed: () async {
+                    var user = await register(
+                        this.username.text, this.password.text, this.repeatPassword.text);
+                    print(user);
+                  },
                 ),
               ),
             ],
