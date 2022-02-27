@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:game_box_mobile_ui/api/auth.dart';
+import 'package:game_box_mobile_ui/pages/games.dart';
 import 'package:game_box_mobile_ui/shared/header.dart';
 import 'package:game_box_mobile_ui/shared/side_drawer.dart';
 import 'package:game_box_mobile_ui/common/constants.dart';
+import 'package:game_box_mobile_ui/utils/toaster.dart';
 
 class Login extends StatefulWidget {
   static const String routeName = '/login';
@@ -81,8 +83,12 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   onPressed: () async {
-                    var user = await login(this.username.text, this.password.text);
-                    print(user);
+                    var result = await login(this.username.text, this.password.text);
+                    showToast(result.message!);
+
+                    if (result.success) {
+                      Navigator.pushReplacementNamed(context, Games.routeName);
+                    }
                   },
                 ),
               ),

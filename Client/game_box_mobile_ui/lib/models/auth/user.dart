@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
-
 class User {
   final String id;
   final String username;
   final String token;
-  final String expirationDate;
+  final DateTime expirationDate;
   final bool isAdmin;
 
   User({
@@ -18,10 +16,10 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'] as String,
-      username: json['username'] as String,
       token: json['token'] as String,
-      expirationDate: json['expirationDate'] as String,
       isAdmin: json['isAdmin'] as bool,
+      username: json['username'] as String,
+      expirationDate: DateTime.parse(json['expirationDate'] as String),
     );
   }
 }
