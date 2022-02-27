@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:game_box_mobile_ui/pages/games.dart';
 import 'package:game_box_mobile_ui/pages/login.dart';
 import 'package:game_box_mobile_ui/pages/register.dart';
 
@@ -43,17 +42,6 @@ class SideDrawer extends StatelessWidget {
               ),
             ),
             onTap: () => Navigator.pushReplacementNamed(context, Register.routeName),
-          ),
-          ListTile(
-            title: Text(
-              'Games',
-              style: TextStyle(
-                fontSize: 18,
-                color: Color(0xff343A40),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onTap: () => Navigator.pushReplacementNamed(context, Games.routeName),
           ),
         ],
       ),
