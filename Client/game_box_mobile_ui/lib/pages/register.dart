@@ -21,6 +21,7 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: SideDrawer(),
       appBar: Header(
         title: 'Register',
       ),
@@ -121,7 +122,6 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ),
-      drawer: SideDrawer(),
     );
   }
 }

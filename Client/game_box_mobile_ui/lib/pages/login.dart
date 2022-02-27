@@ -20,6 +20,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: SideDrawer(),
       appBar: Header(
         title: 'Login',
       ),
@@ -96,7 +97,6 @@ class _LoginState extends State<Login> {
           ),
         ),
       ),
-      drawer: SideDrawer(),
     );
   }
 }

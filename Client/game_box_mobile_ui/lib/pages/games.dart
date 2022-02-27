@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:game_box_mobile_ui/api/games.dart';
 import 'package:game_box_mobile_ui/common/constants.dart';
 import 'package:game_box_mobile_ui/models/game/game.dart';
+import 'package:game_box_mobile_ui/shared/header_tab.dart';
 import 'package:game_box_mobile_ui/shared/side_drawer.dart';
+import 'package:game_box_mobile_ui/shared/spinner.dart';
 import 'package:game_box_mobile_ui/utils/toaster.dart';
+import 'package:game_box_mobile_ui/widgets/game_items.dart';
 
 class Games extends StatefulWidget {
   static const String routeName = '/games';
@@ -13,10 +16,19 @@ class Games extends StatefulWidget {
 }
 
 class _GamesState extends State<Games> {
+  bool isLoading = true;
   List<Game> games = [];
   List<Game> owned = [];
 
-  void getGames() async {
+  Future<void> getGames(bool resetState) async {
+    if (mounted && resetState) {
+      this.setState(() {
+        this.games = [];
+        this.owned = [];
+        this.isLoading = true;
+      });
+    }
+
     var results = await Future.wait([
       getAllGames(this.games.length),
       getOwnedGames(this.games.length),
@@ -25,13 +37,8 @@ class _GamesState extends State<Games> {
     var gamesResult = results[0];
     var ownedResult = results[1];
 
-    if (!gamesResult.success) {
-      showToast(gamesResult.message!);
-      return;
-    }
-
-    if (!ownedResult.success) {
-      showToast(ownedResult.message!);
+    if (!gamesResult.success || !ownedResult.success) {
+      showToast('Fetch games failed!');
       return;
     }
 
@@ -39,6 +46,7 @@ class _GamesState extends State<Games> {
       setState(() {
         this.games.addAll(gamesResult.data);
         this.owned.addAll(ownedResult.data);
+        this.isLoading = false;
       });
     }
   }
@@ -46,7 +54,7 @@ class _GamesState extends State<Games> {
   @override
   void initState() {
     super.initState();
-    this.getGames();
+    this.getGames(true);
   }
 
   @override
@@ -54,6 +62,7 @@ class _GamesState extends State<Games> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        drawer: SideDrawer(),
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
@@ -67,75 +76,28 @@ class _GamesState extends State<Games> {
             ),
           ),
           bottom: TabBar(
+            indicatorColor: Colors.white,
             tabs: [
-              Tab(
-                child: Text(
-                  'Games',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              HeaderTab(title: 'Games'),
+              HeaderTab(title: 'Owned'),
+            ],
+          ),
+        ),
+        body: Spinner(
+          isLoading: this.isLoading,
+          child: TabBarView(
+            children: [
+              GameItems(
+                games: this.games,
+                loadGames: this.getGames,
               ),
-              Tab(
-                child: Text(
-                  'Owned',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              GameItems(
+                games: this.owned,
+                loadGames: this.getGames,
               ),
             ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: this.games.length,
-                    itemBuilder: (context, index) => ListTile(
-                      title: Text(
-                        this.games[index].title,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: this.owned.length,
-                    itemBuilder: (context, index) => ListTile(
-                      title: Text(
-                        this.owned[index].title,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        drawer: SideDrawer(),
       ),
     );
   }

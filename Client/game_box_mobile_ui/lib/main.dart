@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:game_box_mobile_ui/pages/cart.dart';
 import 'package:game_box_mobile_ui/pages/games.dart';
 import 'package:game_box_mobile_ui/pages/login.dart';
 import 'package:game_box_mobile_ui/pages/register.dart';
+import 'package:game_box_mobile_ui/pages/wishlist.dart';
 import 'package:game_box_mobile_ui/utils/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +19,8 @@ Future main() async {
         Games.routeName: (context) => Games(),
         Login.routeName: (context) => Login(),
         Register.routeName: (context) => Register(),
+        Cart.routeName: (context) => Cart(),
+        Wishlist.routeName: (context) => Wishlist(),
       },
     ),
   );

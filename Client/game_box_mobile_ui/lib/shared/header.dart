@@ -4,7 +4,9 @@ import 'package:game_box_mobile_ui/common/constants.dart';
 class Header extends StatelessWidget with PreferredSizeWidget {
   final String title;
 
-  Header({required this.title});
+  Header({
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
