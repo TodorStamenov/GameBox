@@ -4,7 +4,7 @@ import 'package:game_box_mobile_ui/common/constants.dart';
 class Header extends StatelessWidget with PreferredSizeWidget {
   final String title;
 
-  Header({
+  const Header({
     required this.title,
   });
 

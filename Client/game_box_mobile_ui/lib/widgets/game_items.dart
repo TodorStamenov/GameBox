@@ -2,29 +2,56 @@ import 'package:flutter/material.dart';
 import 'package:game_box_mobile_ui/common/constants.dart';
 import 'package:game_box_mobile_ui/models/game/game.dart';
 
-class GameItems extends StatelessWidget {
+class GameItems extends StatefulWidget {
   final List<Game> games;
   final Function loadGames;
+  final Function loadMoreGames;
 
   const GameItems({
     required this.games,
     required this.loadGames,
+    required this.loadMoreGames,
   });
+
+  @override
+  State<GameItems> createState() => _GameItemsState();
+}
+
+class _GameItemsState extends State<GameItems> {
+  final controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    this.controller.addListener(() {
+      if (this.controller.position.atEdge &&
+          this.controller.position.pixels != 0 &&
+          this.widget.games.length >= 9) {
+        this.widget.loadMoreGames();
+      }
+    });
+  }
+
+  String getGameInfo(Game game) {
+    return '\$${game.price} | ${game.size}GB | ${game.viewCount} Views';
+  }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       color: Constants.primaryColor,
-      onRefresh: () => loadGames(true),
+      onRefresh: () => this.widget.loadGames(),
       child: ListView.builder(
-        itemCount: this.games.length,
+        physics: AlwaysScrollableScrollPhysics(),
+        controller: this.controller,
+        itemCount: this.widget.games.length,
         itemBuilder: (context, index) => ListTile(
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(height: 20),
               Text(
-                this.games[index].title,
+                this.widget.games[index].title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
@@ -33,17 +60,17 @@ class GameItems extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              Image.network(this.games[index].thumbnailUrl!),
+              Image.network(this.widget.games[index].thumbnailUrl!),
               SizedBox(height: 10),
               Text(
-                '\$${this.games[index].price} | ${this.games[index].size}GB | ${this.games[index].viewCount} Views',
+                this.getGameInfo(this.widget.games[index]),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
-              )
+              ),
             ],
           ),
         ),

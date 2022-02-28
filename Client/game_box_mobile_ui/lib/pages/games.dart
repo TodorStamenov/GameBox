@@ -20,18 +20,14 @@ class _GamesState extends State<Games> {
   List<Game> games = [];
   List<Game> owned = [];
 
-  Future<void> getGames(bool resetState) async {
-    if (mounted && resetState) {
-      this.setState(() {
-        this.games = [];
-        this.owned = [];
-        this.isLoading = true;
-      });
+  Future<void> getGames() async {
+    if (mounted) {
+      this.setState(() => this.isLoading = true);
     }
 
     var results = await Future.wait([
-      getAllGames(this.games.length),
-      getOwnedGames(this.games.length),
+      getAllGames(0),
+      getOwnedGames(0),
     ]);
 
     var gamesResult = results[0];
@@ -39,22 +35,49 @@ class _GamesState extends State<Games> {
 
     if (!gamesResult.success || !ownedResult.success) {
       showToast('Fetch games failed!');
+      this.setState(() => this.isLoading = false);
+
       return;
     }
 
     if (mounted) {
       setState(() {
-        this.games.addAll(gamesResult.data);
-        this.owned.addAll(ownedResult.data);
+        this.games = gamesResult.data;
+        this.owned = ownedResult.data;
         this.isLoading = false;
       });
+    }
+  }
+
+  Future<void> loadAllGames() async {
+    var result = await getAllGames(this.games.length);
+    if (!result.success) {
+      showToast(result.message!);
+      return;
+    }
+
+    if (mounted) {
+      setState(() => this.games.addAll(result.data));
+    }
+  }
+
+  Future<void> loadOwnedGames() async {
+    var result = await getOwnedGames(this.owned.length);
+
+    if (!result.success) {
+      showToast(result.message!);
+      return;
+    }
+
+    if (mounted) {
+      setState(() => this.owned.addAll(result.data));
     }
   }
 
   @override
   void initState() {
     super.initState();
-    this.getGames(true);
+    this.getGames();
   }
 
   @override
@@ -90,10 +113,12 @@ class _GamesState extends State<Games> {
               GameItems(
                 games: this.games,
                 loadGames: this.getGames,
+                loadMoreGames: this.loadAllGames,
               ),
               GameItems(
                 games: this.owned,
                 loadGames: this.getGames,
+                loadMoreGames: this.loadOwnedGames,
               ),
             ],
           ),
