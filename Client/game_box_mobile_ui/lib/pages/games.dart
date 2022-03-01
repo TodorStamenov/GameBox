@@ -36,7 +36,6 @@ class _GamesState extends State<Games> {
     if (!gamesResult.success || !ownedResult.success) {
       showToast('Fetch games failed!');
       this.setState(() => this.isLoading = false);
-
       return;
     }
 
