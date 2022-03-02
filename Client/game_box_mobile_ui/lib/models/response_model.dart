@@ -1,9 +1,9 @@
-class Response {
+class ResponseModel {
   bool success;
   String? message;
   dynamic data;
 
-  Response({
+  ResponseModel({
     required this.success,
     this.message,
     this.data,

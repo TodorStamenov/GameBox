@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:game_box_mobile_ui/models/auth/user.dart';
+import 'package:game_box_mobile_ui/models/user_model.dart';
 import 'package:game_box_mobile_ui/pages/cart.dart';
 import 'package:game_box_mobile_ui/pages/games.dart';
 import 'package:game_box_mobile_ui/pages/login.dart';
@@ -16,6 +16,14 @@ class SideDrawer extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           DrawerHeader(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.black,
+                  width: 0.5,
+                ),
+              ),
+            ),
             child: Center(
               child: Text(
                 'Game Box',
@@ -69,7 +77,7 @@ class SideDrawer extends StatelessWidget {
                 color: Colors.black,
               ),
               title: Text(
-                User.fromJson(jsonDecode((Storage.prefs?.getString('user'))!)).username,
+                UserModel.fromJson(jsonDecode((Storage.prefs?.getString('user'))!)).username,
                 style: TextStyle(
                   fontSize: 18,
                   color: Color(0xff343A40),
@@ -79,6 +87,7 @@ class SideDrawer extends StatelessWidget {
             ),
             Divider(
               height: 20,
+              color: Colors.black,
             ),
             ListTile(
               leading: Icon(

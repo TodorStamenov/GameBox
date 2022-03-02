@@ -1,4 +1,4 @@
-class Game {
+class GameModel {
   String id;
   String title;
   double price;
@@ -8,7 +8,7 @@ class Game {
   String description;
   int viewCount;
 
-  Game({
+  GameModel({
     required this.id,
     required this.title,
     required this.price,
@@ -19,10 +19,10 @@ class Game {
     required this.viewCount,
   });
 
-  factory Game.fromJson(Map<String, dynamic> json) {
+  factory GameModel.fromJson(Map<String, dynamic> json) {
     var videoId = json['videoId'] as String;
 
-    return Game(
+    return GameModel(
       id: json['id'] as String,
       title: json['title'] as String,
       price: json['price'] as double,

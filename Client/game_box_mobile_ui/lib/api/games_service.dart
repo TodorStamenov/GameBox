@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:game_box_mobile_ui/common/constants.dart';
-import 'package:game_box_mobile_ui/models/game/game.dart';
-import 'package:game_box_mobile_ui/models/response.dart';
+import 'package:game_box_mobile_ui/models/game_model.dart';
+import 'package:game_box_mobile_ui/models/response_model.dart';
 import 'package:game_box_mobile_ui/utils/jwt.dart';
 import 'package:http/http.dart' as http;
 
-Future<Response> getAllGames(int loadedGames) async {
+Future<ResponseModel> getAllGames(int loadedGames) async {
   var token = getUserToken();
 
   var response = await http.get(
@@ -17,7 +17,7 @@ Future<Response> getAllGames(int loadedGames) async {
   );
 
   if (response.statusCode != 200) {
-    return Response(
+    return ResponseModel(
       success: false,
       message: 'Fetch all games failed!',
       data: [],
@@ -26,13 +26,13 @@ Future<Response> getAllGames(int loadedGames) async {
 
   var games = jsonDecode(response.body) as List;
 
-  return Response(
+  return ResponseModel(
     success: true,
-    data: games.map((g) => Game.fromJson(g)).toList(),
+    data: games.map((g) => GameModel.fromJson(g)).toList(),
   );
 }
 
-Future<Response> getOwnedGames(int loadedGames) async {
+Future<ResponseModel> getOwnedGames(int loadedGames) async {
   var token = getUserToken();
 
   var response = await http.get(
@@ -44,18 +44,18 @@ Future<Response> getOwnedGames(int loadedGames) async {
   );
 
   if (response.statusCode != 200) {
-    return Response(
+    return ResponseModel(
       success: false,
       message: 'Fetch owned games failed!',
-      data: [],
+      data: List<GameModel>.empty(),
     );
   }
 
   var games = jsonDecode(response.body) as List;
 
-  return Response(
+  return ResponseModel(
     success: true,
-    data: games.map((g) => Game.fromJson(g)).toList(),
+    data: games.map((g) => GameModel.fromJson(g)).toList(),
   );
 }
 

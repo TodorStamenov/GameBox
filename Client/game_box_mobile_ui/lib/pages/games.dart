@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:game_box_mobile_ui/api/games.dart';
+import 'package:game_box_mobile_ui/api/games_service.dart';
 import 'package:game_box_mobile_ui/common/constants.dart';
-import 'package:game_box_mobile_ui/models/game/game.dart';
+import 'package:game_box_mobile_ui/models/game_model.dart';
 import 'package:game_box_mobile_ui/shared/header_tab.dart';
 import 'package:game_box_mobile_ui/shared/side_drawer.dart';
 import 'package:game_box_mobile_ui/shared/spinner.dart';
@@ -17,8 +17,8 @@ class Games extends StatefulWidget {
 
 class _GamesState extends State<Games> {
   bool isLoading = true;
-  List<Game> games = [];
-  List<Game> owned = [];
+  List<GameModel> games = [];
+  List<GameModel> owned = [];
 
   Future<void> getGames() async {
     if (mounted) {
@@ -35,8 +35,6 @@ class _GamesState extends State<Games> {
 
     if (!gamesResult.success || !ownedResult.success) {
       showToast('Fetch games failed!');
-      this.setState(() => this.isLoading = false);
-      return;
     }
 
     if (mounted) {

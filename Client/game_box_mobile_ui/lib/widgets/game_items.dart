@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:game_box_mobile_ui/common/constants.dart';
-import 'package:game_box_mobile_ui/models/game/game.dart';
+import 'package:game_box_mobile_ui/models/game_model.dart';
 
 class GameItems extends StatefulWidget {
-  final List<Game> games;
+  final List<GameModel> games;
   final Function loadGames;
   final Function loadMoreGames;
 
@@ -32,7 +32,7 @@ class _GameItemsState extends State<GameItems> {
     });
   }
 
-  String getGameInfo(Game game) {
+  String getGameInfo(GameModel game) {
     return '\$${game.price} | ${game.size}GB | ${game.viewCount} Views';
   }
 
@@ -49,7 +49,7 @@ class _GameItemsState extends State<GameItems> {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 20),
+              index == 0 ? SizedBox(height: 20) : SizedBox(height: 0),
               Text(
                 this.widget.games[index].title,
                 textAlign: TextAlign.center,
@@ -70,6 +70,10 @@ class _GameItemsState extends State<GameItems> {
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
+              ),
+              Divider(
+                height: 30,
+                color: Colors.black,
               ),
             ],
           ),

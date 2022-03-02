@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:game_box_mobile_ui/common/constants.dart';
-import 'package:game_box_mobile_ui/models/auth/user.dart';
-import 'package:game_box_mobile_ui/models/response.dart';
+import 'package:game_box_mobile_ui/models/user_model.dart';
+import 'package:game_box_mobile_ui/models/response_model.dart';
 import 'package:game_box_mobile_ui/utils/storage.dart';
 import 'package:http/http.dart' as http;
 
-Future<Response> login(String username, String password) async {
+Future<ResponseModel> login(String username, String password) async {
   var response = await http.post(
     getUrl('login'),
     body: jsonEncode({'username': username, 'password': password}),
@@ -13,23 +13,23 @@ Future<Response> login(String username, String password) async {
   );
 
   if (response.statusCode != 200) {
-    return Response(
+    return ResponseModel(
       success: false,
       message: 'Login failed!',
     );
   }
 
   Storage.prefs!.setString('user', response.body);
-  var user = User.fromJson(jsonDecode(response.body));
+  var user = UserModel.fromJson(jsonDecode(response.body));
 
-  return Response(
+  return ResponseModel(
     success: true,
     message: 'Login successful!',
     data: user,
   );
 }
 
-Future<Response> register(String username, String password, String repeatPassword) async {
+Future<ResponseModel> register(String username, String password, String repeatPassword) async {
   var response = await http.post(
     getUrl('register'),
     body: jsonEncode({
@@ -41,16 +41,16 @@ Future<Response> register(String username, String password, String repeatPasswor
   );
 
   if (response.statusCode != 200) {
-    return Response(
+    return ResponseModel(
       success: false,
       message: 'Register failed!',
     );
   }
 
   Storage.prefs!.setString('user', response.body);
-  var user = User.fromJson(jsonDecode(response.body));
+  var user = UserModel.fromJson(jsonDecode(response.body));
 
-  return Response(
+  return ResponseModel(
     success: true,
     message: 'Login successful',
     data: user,

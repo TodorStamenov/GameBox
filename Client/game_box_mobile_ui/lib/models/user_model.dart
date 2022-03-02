@@ -1,11 +1,11 @@
-class User {
+class UserModel {
   final String id;
   final String username;
   final String token;
   final DateTime expirationDate;
   final bool isAdmin;
 
-  User({
+  UserModel({
     required this.id,
     required this.username,
     required this.token,
@@ -13,8 +13,8 @@ class User {
     required this.isAdmin,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
       id: json['id'] as String,
       token: json['token'] as String,
       isAdmin: json['isAdmin'] as bool,

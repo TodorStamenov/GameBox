@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_box_mobile_ui/api/auth.dart';
+import 'package:game_box_mobile_ui/api/auth_service.dart';
 import 'package:game_box_mobile_ui/pages/games.dart';
 import 'package:game_box_mobile_ui/shared/header.dart';
 import 'package:game_box_mobile_ui/shared/side_drawer.dart';
