@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:game_box_mobile_ui/pages/cart.dart';
+import 'package:game_box_mobile_ui/pages/game_details.dart';
 import 'package:game_box_mobile_ui/pages/games.dart';
 import 'package:game_box_mobile_ui/pages/login.dart';
 import 'package:game_box_mobile_ui/pages/register.dart';
@@ -17,6 +18,7 @@ Future main() async {
       home: Storage.prefs?.getString('user') == null ? Login() : Games(),
       routes: {
         Games.routeName: (context) => Games(),
+        GameDetails.routeName: (context) => GameDetails(),
         Login.routeName: (context) => Login(),
         Register.routeName: (context) => Register(),
         Cart.routeName: (context) => Cart(),

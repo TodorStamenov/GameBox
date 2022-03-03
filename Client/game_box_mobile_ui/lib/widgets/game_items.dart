@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_box_mobile_ui/common/constants.dart';
 import 'package:game_box_mobile_ui/models/game_model.dart';
+import 'package:game_box_mobile_ui/pages/game_details.dart';
 
 class GameItems extends StatefulWidget {
   final List<GameModel> games;
@@ -60,7 +61,14 @@ class _GameItemsState extends State<GameItems> {
                 ),
               ),
               SizedBox(height: 20),
-              Image.network(this.widget.games[index].thumbnailUrl!),
+              TextButton(
+                onPressed: () => Navigator.pushNamed(
+                  context,
+                  GameDetails.routeName,
+                  arguments: this.widget.games[index].id,
+                ),
+                child: Image.network(this.widget.games[index].thumbnailUrl!),
+              ),
               SizedBox(height: 10),
               Text(
                 this.getGameInfo(this.widget.games[index]),
