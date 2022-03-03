@@ -5,7 +5,7 @@ import 'package:game_box_mobile_ui/models/game_list_item_model.dart';
 import 'package:game_box_mobile_ui/utils/jwt.dart';
 import 'package:http/http.dart' as http;
 
-Future<ResponseModel> getAllItems() async {
+Future<ResponseModel> getAllWishlistItems() async {
   var query = '''
     query wishlist {
       wishlist {
@@ -43,7 +43,35 @@ Future<ResponseModel> getAllItems() async {
   );
 }
 
-Future<ResponseModel> removeListItem(String gameId) async {
+Future<ResponseModel> addWishlistItem(String gameId) async {
+  var mutation = '''mutation addGame(\$input: AddGameInput) {
+      addGame(input: \$input)
+    }''';
+
+  var response = await http.post(
+    getUrl(),
+    headers: getHttpHeaders(),
+    body: jsonEncode({
+      'operationName': 'addGame',
+      'query': mutation,
+      'variables': {
+        'input': {'gameId': gameId}
+      },
+    }),
+  );
+
+  if (response.statusCode != 200) {
+    return ResponseModel(
+      success: false,
+      message: 'Add wishlist item failed!',
+      data: List<GameListItemModel>.empty(),
+    );
+  }
+
+  return await getAllWishlistItems();
+}
+
+Future<ResponseModel> removeWishlistItem(String gameId) async {
   var mutation = '''mutation removeGame(\$input: RemoveGameInput) {
       removeGame(input: \$input)
     }''';
@@ -68,10 +96,10 @@ Future<ResponseModel> removeListItem(String gameId) async {
     );
   }
 
-  return await getAllItems();
+  return await getAllWishlistItems();
 }
 
-Future<ResponseModel> removeAllItems() async {
+Future<ResponseModel> removeWishlistItems() async {
   var mutation = '''mutation clearGames {
       clearGames
     }''';
@@ -94,7 +122,7 @@ Future<ResponseModel> removeAllItems() async {
     );
   }
 
-  return await getAllItems();
+  return await getAllWishlistItems();
 }
 
 Uri getUrl() {

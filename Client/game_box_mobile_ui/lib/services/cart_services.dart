@@ -36,6 +36,23 @@ void clearItems() {
   setCart([]);
 }
 
+Future<ResponseModel> createOrder() async {
+  var response = await http.post(
+    Uri.parse('${Constants.baseGameApiUrl}orders'),
+    headers: getHttpHeaders(),
+    body: jsonEncode(getCart()),
+  );
+
+  if (response.statusCode != 200) {
+    return ResponseModel(
+      success: false,
+      message: 'Create order failed',
+    );
+  }
+
+  return ResponseModel(success: true);
+}
+
 Future<ResponseModel> upsertCart() async {
   var response = await http.post(
     Uri.parse('${Constants.baseGameApiUrl}cart'),

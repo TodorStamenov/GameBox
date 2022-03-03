@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:game_box_mobile_ui/models/game_list_item_model.dart';
+import 'package:game_box_mobile_ui/pages/games.dart';
 import 'package:game_box_mobile_ui/services/cart_services.dart';
 import 'package:game_box_mobile_ui/shared/header.dart';
 import 'package:game_box_mobile_ui/shared/side_drawer.dart';
@@ -38,6 +39,23 @@ class _CartState extends State<Cart> {
     }
   }
 
+  Future<void> order() async {
+    if (mounted) {
+      this.setState(() => this.isLoading);
+    }
+
+    var result = await createOrder();
+
+    if (!result.success) {
+      showToast(result.message!);
+    }
+
+    clearItems();
+    if (mounted) {
+      setState(() => this.isLoading = false);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -63,9 +81,26 @@ class _CartState extends State<Cart> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
+                                Text(
+                                  'Total: \$${this.games.map((g) => g.price).reduce((x, y) => x + y).toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
                                 PrimaryActionButton(
                                   text: 'Order',
-                                  action: () {},
+                                  action: () async {
+                                    await this.order();
+                                    Navigator.pushReplacementNamed(context, Games.routeName);
+                                  },
                                 ),
                                 SizedBox(width: 15),
                                 PrimaryActionButton(
@@ -96,19 +131,19 @@ class _CartState extends State<Cart> {
                             SizedBox(height: 20),
                             Image.network(this.games[index].thumbnailUrl),
                             SizedBox(height: 20),
-                            Text(
-                              '\$${this.games[index].price}',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 20),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+                                Text(
+                                  '\$${this.games[index].price}',
+                                  textAlign: TextAlign.end,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 PrimaryActionButton(
                                   text: 'Remove',
                                   action: () {

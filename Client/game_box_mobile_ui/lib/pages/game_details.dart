@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:game_box_mobile_ui/models/game_comment_model.dart';
 import 'package:game_box_mobile_ui/models/game_details_model.dart';
 import 'package:game_box_mobile_ui/services/games_service.dart';
 import 'package:game_box_mobile_ui/shared/header.dart';
-import 'package:game_box_mobile_ui/shared/side_drawer.dart';
 import 'package:game_box_mobile_ui/shared/spinner.dart';
 import 'package:game_box_mobile_ui/utils/toaster.dart';
 
@@ -16,18 +16,30 @@ class GameDetails extends StatefulWidget {
 class _GameDetailsState extends State<GameDetails> {
   bool isLoading = true;
   GameDetailsModel? game;
+  List<GameCommentModel> comments = [];
 
   Future<void> getGame(String gameId) async {
-    var result = await getGameDetails(gameId);
+    var results = await Future.wait([
+      getGameDetails(gameId),
+      getGameComments(gameId),
+    ]);
 
-    if (!result.success) {
-      showToast(result.message!);
+    var gameResult = results[0];
+    var commentsResult = results[1];
+
+    if (!gameResult.success) {
+      showToast(gameResult.message!);
+    }
+
+    if (!commentsResult.success) {
+      showToast(commentsResult.message!);
     }
 
     if (mounted) {
       setState(() {
         this.isLoading = false;
-        this.game = result.data;
+        this.game = gameResult.data;
+        this.comments = commentsResult.data;
       });
     }
   }
@@ -49,8 +61,24 @@ class _GameDetailsState extends State<GameDetails> {
       ),
       body: Spinner(
         isLoading: this.isLoading,
-        child: Center(
-          child: Text(this.game?.title ?? 'Failed!'),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              this.game?.title ?? 'Failed!',
+              textAlign: TextAlign.center,
+            ),
+            ...this
+                .comments
+                .map((c) => Column(
+                      children: [
+                        SizedBox(height: 20),
+                        Text(c.content),
+                        SizedBox(height: 20),
+                      ],
+                    ))
+                .toList(),
+          ],
         ),
       ),
     );

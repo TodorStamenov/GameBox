@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_box_mobile_ui/models/game_list_item_model.dart';
+import 'package:game_box_mobile_ui/pages/cart.dart';
+import 'package:game_box_mobile_ui/services/cart_services.dart';
 import 'package:game_box_mobile_ui/services/wishlist_service.dart';
 import 'package:game_box_mobile_ui/shared/header.dart';
 import 'package:game_box_mobile_ui/shared/side_drawer.dart';
@@ -20,7 +22,7 @@ class _WishlistState extends State<Wishlist> {
   List<GameListItemModel> games = [];
 
   Future<void> getGames() async {
-    var result = await getAllItems();
+    var result = await getAllWishlistItems();
 
     if (!result.success) {
       showToast(result.message!);
@@ -34,12 +36,12 @@ class _WishlistState extends State<Wishlist> {
     }
   }
 
-  Future<void> removeItem(String gameId) async {
+  Future<void> removeGame(String gameId) async {
     if (mounted) {
       this.setState(() => this.isLoading = true);
     }
 
-    var result = await removeListItem(gameId);
+    var result = await removeWishlistItem(gameId);
 
     if (!result.success) {
       showToast(result.message!);
@@ -53,12 +55,12 @@ class _WishlistState extends State<Wishlist> {
     }
   }
 
-  Future<void> clearItems() async {
+  Future<void> clearGames() async {
     if (mounted) {
       this.setState(() => this.isLoading = true);
     }
 
-    var result = await removeAllItems();
+    var result = await removeWishlistItems();
 
     if (!result.success) {
       showToast(result.message!);
@@ -97,7 +99,7 @@ class _WishlistState extends State<Wishlist> {
                           children: [
                             PrimaryActionButton(
                               text: 'Clear',
-                              action: this.clearItems,
+                              action: this.clearGames,
                             ),
                             SizedBox(height: 25),
                           ],
@@ -118,28 +120,34 @@ class _WishlistState extends State<Wishlist> {
                             SizedBox(height: 20),
                             Image.network(this.games[index].thumbnailUrl),
                             SizedBox(height: 20),
-                            Text(
-                              '\$${this.games[index].price}',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 15),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+                                Expanded(
+                                  child: Text(
+                                    '\$${this.games[index].price}',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                                 PrimaryActionButton(
                                   text: 'Buy',
-                                  action: () {},
+                                  action: () {
+                                    var gameId = this.games[index].id;
+                                    this.removeGame(gameId);
+                                    addItem(gameId);
+                                    Navigator.pushReplacementNamed(context, Cart.routeName);
+                                  },
                                 ),
                                 SizedBox(width: 10),
                                 PrimaryActionButton(
                                   text: 'Remove',
-                                  action: () => this.removeItem(this.games[index].id),
+                                  action: () => this.removeGame(this.games[index].id),
                                 ),
                               ],
                             ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:game_box_mobile_ui/common/constants.dart';
+import 'package:game_box_mobile_ui/models/game_comment_model.dart';
 import 'package:game_box_mobile_ui/models/game_details_model.dart';
 import 'package:game_box_mobile_ui/models/game_model.dart';
 import 'package:game_box_mobile_ui/models/response_model.dart';
@@ -25,6 +26,28 @@ Future<ResponseModel> getGameDetails(String gameId) async {
   return ResponseModel(
     success: true,
     data: game,
+  );
+}
+
+Future<ResponseModel> getGameComments(String gameId) async {
+  var response = await http.get(
+    Uri.parse('${Constants.baseGameApiUrl}comments/$gameId'),
+    headers: getHttpHeaders(),
+  );
+
+  if (response.statusCode != 200) {
+    return ResponseModel(
+      success: false,
+      message: 'Fetch game comments failed!',
+      data: List<GameCommentModel>.empty(),
+    );
+  }
+
+  var comments = jsonDecode(response.body) as List;
+
+  return ResponseModel(
+    success: true,
+    data: comments.map((c) => GameCommentModel.fromJson(c)).toList(),
   );
 }
 

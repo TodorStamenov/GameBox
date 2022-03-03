@@ -49,9 +49,7 @@ class SideDrawer extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, Login.routeName);
-              },
+              onTap: () => Navigator.pushReplacementNamed(context, Login.routeName),
             ),
             ListTile(
               leading: Icon(
@@ -66,9 +64,7 @@ class SideDrawer extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, Register.routeName);
-              },
+              onTap: () => Navigator.pushReplacementNamed(context, Register.routeName),
             ),
           ] else ...[
             ListTile(
@@ -102,9 +98,7 @@ class SideDrawer extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, Games.routeName);
-              },
+              onTap: () => Navigator.pushReplacementNamed(context, Games.routeName),
             ),
             ListTile(
               leading: Icon(
@@ -119,9 +113,7 @@ class SideDrawer extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, Cart.routeName);
-              },
+              onTap: () => Navigator.pushReplacementNamed(context, Cart.routeName),
             ),
             ListTile(
               leading: Icon(
@@ -136,9 +128,7 @@ class SideDrawer extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, Wishlist.routeName);
-              },
+              onTap: () => Navigator.pushReplacementNamed(context, Wishlist.routeName),
             ),
             Expanded(
               child: Align(
