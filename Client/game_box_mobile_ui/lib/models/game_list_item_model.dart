@@ -1,11 +1,11 @@
-class WishlistItemModel {
+class GameListItemModel {
   String id;
   String title;
   String videoId;
   String thumbnailUrl;
   double price;
 
-  WishlistItemModel({
+  GameListItemModel({
     required this.id,
     required this.title,
     required this.videoId,
@@ -13,10 +13,10 @@ class WishlistItemModel {
     required this.price,
   });
 
-  factory WishlistItemModel.fromJson(Map<String, dynamic> json) {
+  factory GameListItemModel.fromJson(Map<String, dynamic> json) {
     var videoId = json['videoId'] as String;
 
-    return WishlistItemModel(
+    return GameListItemModel(
       id: json['id'] as String,
       title: json['title'] as String,
       videoId: json['videoId'] as String,

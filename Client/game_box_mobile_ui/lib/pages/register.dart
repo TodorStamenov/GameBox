@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:game_box_mobile_ui/api/auth_service.dart';
 import 'package:game_box_mobile_ui/pages/games.dart';
+import 'package:game_box_mobile_ui/services/auth_service.dart';
 import 'package:game_box_mobile_ui/shared/header.dart';
 import 'package:game_box_mobile_ui/shared/side_drawer.dart';
 import 'package:game_box_mobile_ui/common/constants.dart';
 import 'package:game_box_mobile_ui/utils/toaster.dart';
+import 'package:game_box_mobile_ui/widgets/primary_action_button.dart';
 
 class Register extends StatefulWidget {
   static const String routeName = '/register';
@@ -17,6 +18,19 @@ class _RegisterState extends State<Register> {
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController repeatPassword = TextEditingController();
+
+  Future<void> registerUser() async {
+    var result = await register(this.username.text, this.password.text, this.repeatPassword.text);
+
+    if (!result.success) {
+      return;
+    }
+
+    showToast(result.message!);
+    if (result.success) {
+      Navigator.pushReplacementNamed(context, Games.routeName);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +50,7 @@ class _RegisterState extends State<Register> {
                 controller: this.username,
                 cursorColor: Constants.primaryColor,
                 decoration: InputDecoration(
-                  hintText: 'Username',
-                  labelText: 'username',
+                  labelText: 'Username',
                   labelStyle: TextStyle(
                     color: Constants.primaryColor,
                   ),
@@ -55,8 +68,7 @@ class _RegisterState extends State<Register> {
                 obscureText: true,
                 cursorColor: Constants.primaryColor,
                 decoration: InputDecoration(
-                  hintText: 'Password',
-                  labelText: 'password',
+                  labelText: 'Password',
                   labelStyle: TextStyle(
                     color: Constants.primaryColor,
                   ),
@@ -74,8 +86,7 @@ class _RegisterState extends State<Register> {
                 obscureText: true,
                 cursorColor: Constants.primaryColor,
                 decoration: InputDecoration(
-                  hintText: 'Repeat Password',
-                  labelText: 'repeat password',
+                  labelText: 'Repeat Password',
                   labelStyle: TextStyle(
                     color: Constants.primaryColor,
                   ),
@@ -89,33 +100,9 @@ class _RegisterState extends State<Register> {
               ),
               SizedBox(height: 50),
               Center(
-                child: MaterialButton(
-                  color: Constants.primaryColor,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 15,
-                    horizontal: 50,
-                  ),
-                  child: Text(
-                    'Register',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onPressed: () async {
-                    var result = await register(
-                        this.username.text, this.password.text, this.repeatPassword.text);
-
-                    if (!result.success) {
-                      return;
-                    }
-
-                    showToast(result.message!);
-                    if (result.success) {
-                      Navigator.pushReplacementNamed(context, Games.routeName);
-                    }
-                  },
+                child: PrimaryActionButton(
+                  text: 'Register',
+                  action: this.registerUser,
                 ),
               ),
             ],

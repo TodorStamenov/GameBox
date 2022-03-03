@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:game_box_mobile_ui/api/games_service.dart';
 import 'package:game_box_mobile_ui/common/constants.dart';
 import 'package:game_box_mobile_ui/models/game_model.dart';
+import 'package:game_box_mobile_ui/services/games_service.dart';
 import 'package:game_box_mobile_ui/shared/header_tab.dart';
 import 'package:game_box_mobile_ui/shared/side_drawer.dart';
 import 'package:game_box_mobile_ui/shared/spinner.dart';

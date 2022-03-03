@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:game_box_mobile_ui/api/wishlist_service.dart';
-import 'package:game_box_mobile_ui/common/constants.dart';
-import 'package:game_box_mobile_ui/models/wishlist_item_model.dart';
+import 'package:game_box_mobile_ui/models/game_list_item_model.dart';
+import 'package:game_box_mobile_ui/services/wishlist_service.dart';
 import 'package:game_box_mobile_ui/shared/header.dart';
 import 'package:game_box_mobile_ui/shared/side_drawer.dart';
 import 'package:game_box_mobile_ui/shared/spinner.dart';
 import 'package:game_box_mobile_ui/utils/toaster.dart';
+import 'package:game_box_mobile_ui/widgets/empty_collection_message.dart';
+import 'package:game_box_mobile_ui/widgets/primary_action_button.dart';
 
 class Wishlist extends StatefulWidget {
   static const String routeName = '/wishlist';
@@ -16,9 +17,9 @@ class Wishlist extends StatefulWidget {
 
 class _WishlistState extends State<Wishlist> {
   bool isLoading = true;
-  List<WishlistItemModel> items = [];
+  List<GameListItemModel> games = [];
 
-  Future<void> getItems() async {
+  Future<void> getGames() async {
     var result = await getAllItems();
 
     if (!result.success) {
@@ -28,7 +29,7 @@ class _WishlistState extends State<Wishlist> {
     if (mounted) {
       setState(() {
         this.isLoading = false;
-        this.items = result.data;
+        this.games = result.data;
       });
     }
   }
@@ -47,7 +48,7 @@ class _WishlistState extends State<Wishlist> {
     if (mounted) {
       setState(() {
         this.isLoading = false;
-        this.items = result.data;
+        this.games = result.data;
       });
     }
   }
@@ -66,7 +67,7 @@ class _WishlistState extends State<Wishlist> {
     if (mounted) {
       setState(() {
         this.isLoading = false;
-        this.items = result.data;
+        this.games = result.data;
       });
     }
   }
@@ -74,7 +75,7 @@ class _WishlistState extends State<Wishlist> {
   @override
   void initState() {
     super.initState();
-    this.getItems();
+    this.getGames();
   }
 
   @override
@@ -86,32 +87,19 @@ class _WishlistState extends State<Wishlist> {
       ),
       body: Spinner(
         isLoading: this.isLoading,
-        child: this.items.isNotEmpty
+        child: this.games.isNotEmpty
             ? ListView.builder(
-                itemCount: this.items.length + 1,
+                itemCount: this.games.length + 1,
                 itemBuilder: (context, index) => ListTile(
-                  title: index == this.items.length
+                  title: index == this.games.length
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            SizedBox(height: 20),
-                            MaterialButton(
-                              color: Constants.primaryColor,
-                              padding: EdgeInsets.symmetric(
-                                vertical: 10,
-                                horizontal: 30,
-                              ),
-                              child: Text(
-                                'Clear',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              onPressed: () => this.clearItems(),
+                            PrimaryActionButton(
+                              text: 'Clear',
+                              action: this.clearItems,
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: 25),
                           ],
                         )
                       : Column(
@@ -119,7 +107,7 @@ class _WishlistState extends State<Wishlist> {
                           children: [
                             index == 0 ? SizedBox(height: 20) : SizedBox(height: 0),
                             Text(
-                              this.items[index].title,
+                              this.games[index].title,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 18,
@@ -128,10 +116,10 @@ class _WishlistState extends State<Wishlist> {
                               ),
                             ),
                             SizedBox(height: 20),
-                            Image.network(this.items[index].thumbnailUrl),
+                            Image.network(this.games[index].thumbnailUrl),
                             SizedBox(height: 20),
                             Text(
-                              '\$${this.items[index].price}',
+                              '\$${this.games[index].price}',
                               textAlign: TextAlign.end,
                               style: TextStyle(
                                 fontSize: 16,
@@ -144,38 +132,14 @@ class _WishlistState extends State<Wishlist> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                MaterialButton(
-                                  color: Constants.primaryColor,
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 30,
-                                  ),
-                                  child: Text(
-                                    'Buy',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  onPressed: () {},
+                                PrimaryActionButton(
+                                  text: 'Buy',
+                                  action: () {},
                                 ),
                                 SizedBox(width: 10),
-                                MaterialButton(
-                                  color: Constants.primaryColor,
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 30,
-                                  ),
-                                  child: Text(
-                                    'Remove',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  onPressed: () => this.removeItem(this.items[index].id),
+                                PrimaryActionButton(
+                                  text: 'Remove',
+                                  action: () => this.removeItem(this.games[index].id),
                                 ),
                               ],
                             ),
@@ -191,15 +155,7 @@ class _WishlistState extends State<Wishlist> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(height: 80),
-                  Text(
-                    'Your wishlist is empty!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  EmptyCollection(collectionName: 'wishlist'),
                 ],
               ),
       ),

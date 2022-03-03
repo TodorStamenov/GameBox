@@ -6,21 +6,16 @@ import 'package:game_box_mobile_ui/utils/jwt.dart';
 import 'package:http/http.dart' as http;
 
 Future<ResponseModel> getAllGames(int loadedGames) async {
-  var token = getUserToken();
-
   var response = await http.get(
     getUrl('?loadedGames=$loadedGames'),
-    headers: {
-      'content-type': 'application/json',
-      'Authorization': 'Bearer $token',
-    },
+    headers: getHttpHeaders(),
   );
 
   if (response.statusCode != 200) {
     return ResponseModel(
       success: false,
       message: 'Fetch all games failed!',
-      data: [],
+      data: List<GameModel>.empty(),
     );
   }
 
@@ -33,14 +28,9 @@ Future<ResponseModel> getAllGames(int loadedGames) async {
 }
 
 Future<ResponseModel> getOwnedGames(int loadedGames) async {
-  var token = getUserToken();
-
   var response = await http.get(
     getUrl('owned?loadedGames=$loadedGames'),
-    headers: {
-      'content-type': 'application/json',
-      'Authorization': 'Bearer $token',
-    },
+    headers: getHttpHeaders(),
   );
 
   if (response.statusCode != 200) {

@@ -71,10 +71,12 @@ class _GameItemsState extends State<GameItems> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Divider(
-                height: 30,
-                color: Colors.black,
-              ),
+              index < this.widget.games.length - 1
+                  ? Divider(
+                      height: 30,
+                      color: Colors.black,
+                    )
+                  : SizedBox(height: 30),
             ],
           ),
         ),
