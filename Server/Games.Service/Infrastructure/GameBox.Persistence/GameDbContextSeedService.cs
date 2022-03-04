@@ -5,6 +5,7 @@ using Grpc.Core;
 using GrpcGamesSeeder;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -62,6 +63,14 @@ namespace GameBox.Persistence
                 return;
             }
 
+            var videoIds = new List<string>
+            {
+                "8X2kIfS6fb8",
+                "pyZw_oqk7Q8",
+                "K0u_kAWLJOA",
+                "DbXXdE_GqRY"
+            };
+
             var categoryIds = await context
                 .Categories
                 .Select(c => c.Id)
@@ -76,7 +85,7 @@ namespace GameBox.Persistence
                     Size = random.Next(1, 230),
                     ReleaseDate = DateTime.Now.AddMonths(-i),
                     CategoryId = categoryIds[random.Next(0, categoryIds.Count)],
-                    VideoId = "pyZw_oqk7Q8",
+                    VideoId = videoIds[random.Next(0, videoIds.Count)],
                     ViewCount = random.Next(10, 10000),
                     OrderCount = random.Next(10, 10000),
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
@@ -196,7 +205,7 @@ namespace GameBox.Persistence
                         continue;
                     }
 
-                    var wishlistItem = new Wishlist 
+                    var wishlistItem = new Wishlist
                     {
                         CustomerId = user.Id,
                         GameId = gameId

@@ -223,8 +223,9 @@ class _GameDetailsState extends State<GameDetails> {
                 TextFormField(
                   minLines: 4,
                   maxLines: null,
-                  keyboardType: TextInputType.multiline,
                   controller: this.comment,
+                  textInputAction: TextInputAction.done,
+                  keyboardType: TextInputType.multiline,
                   cursorColor: Constants.primaryColor,
                   decoration: InputDecoration(
                     labelText: 'Comment',

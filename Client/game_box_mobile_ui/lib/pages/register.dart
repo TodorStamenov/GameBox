@@ -48,6 +48,7 @@ class _RegisterState extends State<Register> {
             children: [
               TextFormField(
                 controller: this.username,
+                textInputAction: TextInputAction.next,
                 cursorColor: Constants.primaryColor,
                 decoration: InputDecoration(
                   labelText: 'Username',
@@ -64,8 +65,9 @@ class _RegisterState extends State<Register> {
               ),
               SizedBox(height: 50),
               TextFormField(
-                controller: this.password,
                 obscureText: true,
+                controller: this.password,
+                textInputAction: TextInputAction.next,
                 cursorColor: Constants.primaryColor,
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -82,8 +84,9 @@ class _RegisterState extends State<Register> {
               ),
               SizedBox(height: 50),
               TextFormField(
-                controller: this.repeatPassword,
                 obscureText: true,
+                controller: this.repeatPassword,
+                textInputAction: TextInputAction.done,
                 cursorColor: Constants.primaryColor,
                 decoration: InputDecoration(
                   labelText: 'Repeat Password',

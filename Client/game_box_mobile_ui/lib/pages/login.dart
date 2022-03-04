@@ -43,6 +43,7 @@ class _LoginState extends State<Login> {
             children: [
               TextFormField(
                 controller: this.username,
+                textInputAction: TextInputAction.next,
                 cursorColor: Constants.primaryColor,
                 decoration: InputDecoration(
                   labelText: 'Username',
@@ -59,8 +60,9 @@ class _LoginState extends State<Login> {
               ),
               SizedBox(height: 50),
               TextFormField(
-                controller: this.password,
                 obscureText: true,
+                controller: this.password,
+                textInputAction: TextInputAction.done,
                 cursorColor: Constants.primaryColor,
                 decoration: InputDecoration(
                   labelText: 'Password',
