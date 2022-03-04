@@ -89,83 +89,80 @@ class _WishlistState extends State<Wishlist> {
       ),
       body: Spinner(
         isLoading: this.isLoading,
-        child: this.games.isNotEmpty
-            ? ListView.builder(
-                itemCount: this.games.length + 1,
-                itemBuilder: (context, index) => ListTile(
-                  title: index == this.games.length
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            PrimaryActionButton(
-                              text: 'Clear',
-                              action: this.clearGames,
-                            ),
-                            SizedBox(height: 25),
-                          ],
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            index == 0 ? SizedBox(height: 20) : SizedBox(height: 0),
-                            Text(
-                              this.games[index].title,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 20),
-                            Image.network(this.games[index].thumbnailUrl),
-                            SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    '\$${this.games[index].price}',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                PrimaryActionButton(
-                                  text: 'Buy',
-                                  action: () {
-                                    var gameId = this.games[index].id;
-                                    this.removeGame(gameId);
-                                    addItem(gameId);
-                                    Navigator.pushReplacementNamed(context, Cart.routeName);
-                                  },
-                                ),
-                                SizedBox(width: 10),
-                                PrimaryActionButton(
-                                  text: 'Remove',
-                                  action: () => this.removeGame(this.games[index].id),
-                                ),
-                              ],
-                            ),
-                            Divider(
-                              height: 20,
-                              color: Colors.black,
-                            ),
-                          ],
-                        ),
-                ),
-              )
-            : Column(
+        child: EmptyCollection(
+          collectionLength: this.games.length,
+          emptyCollectionMessage: 'Your wishlist is empty!',
+          child: ListView.builder(
+            itemCount: this.games.length,
+            itemBuilder: (context, index) => ListTile(
+              title: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 80),
-                  EmptyCollection(collectionName: 'wishlist'),
+                  index == 0 ? SizedBox(height: 20) : SizedBox(height: 0),
+                  Text(
+                    this.games[index].title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Image.network(this.games[index].thumbnailUrl),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '\$${this.games[index].price}',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      PrimaryActionButton(
+                        text: 'Buy',
+                        action: () {
+                          var gameId = this.games[index].id;
+                          this.removeGame(gameId);
+                          addItem(gameId);
+                          Navigator.pushReplacementNamed(context, Cart.routeName);
+                        },
+                      ),
+                      SizedBox(width: 10),
+                      PrimaryActionButton(
+                        text: 'Remove',
+                        action: () => this.removeGame(this.games[index].id),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    height: 20,
+                    color: Colors.black,
+                  ),
+                  if (index == this.games.length - 1) ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        PrimaryActionButton(
+                          text: 'Clear',
+                          action: this.clearGames,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 25),
+                  ]
                 ],
               ),
+            ),
+          ),
+        ),
       ),
     );
   }

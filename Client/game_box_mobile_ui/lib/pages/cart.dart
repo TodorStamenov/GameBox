@@ -71,103 +71,96 @@ class _CartState extends State<Cart> {
       ),
       body: Spinner(
         isLoading: this.isLoading,
-        child: this.games.isNotEmpty
-            ? ListView.builder(
-                itemCount: this.games.length + 1,
-                itemBuilder: (context, index) => ListTile(
-                  title: index == this.games.length
-                      ? Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Total: \$${this.games.map((g) => g.price).reduce((x, y) => x + y).toStringAsFixed(2)}',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 15),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                PrimaryActionButton(
-                                  text: 'Order',
-                                  action: () async {
-                                    await this.order();
-                                    Navigator.pushReplacementNamed(context, Games.routeName);
-                                  },
-                                ),
-                                SizedBox(width: 15),
-                                PrimaryActionButton(
-                                  text: 'Clear',
-                                  action: () {
-                                    clearItems();
-                                    this.getGames();
-                                  },
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 25),
-                          ],
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            if (index == 0) SizedBox(height: 20) else SizedBox(height: 0),
-                            Text(
-                              this.games[index].title,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 20),
-                            Image.network(this.games[index].thumbnailUrl),
-                            SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '\$${this.games[index].price}',
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                PrimaryActionButton(
-                                  text: 'Remove',
-                                  action: () {
-                                    removeItem(this.games[index].id);
-                                    this.getGames();
-                                  },
-                                ),
-                              ],
-                            ),
-                            Divider(
-                              height: 20,
-                              color: Colors.black,
-                            ),
-                          ],
-                        ),
-                ),
-              )
-            : Column(
+        child: EmptyCollection(
+          collectionLength: this.games.length,
+          emptyCollectionMessage: 'Your cart is empty!',
+          child: ListView.builder(
+            itemCount: this.games.length,
+            itemBuilder: (context, index) => ListTile(
+              title: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 80),
-                  EmptyCollection(collectionName: 'cart'),
+                  if (index == 0) SizedBox(height: 20) else SizedBox(height: 0),
+                  Text(
+                    this.games[index].title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Image.network(this.games[index].thumbnailUrl),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '\$${this.games[index].price}',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      PrimaryActionButton(
+                        text: 'Remove',
+                        action: () {
+                          removeItem(this.games[index].id);
+                          this.getGames();
+                        },
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    height: 20,
+                    color: Colors.black,
+                  ),
+                  if (index == this.games.length - 1) ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Total: \$${this.games.map((g) => g.price).reduce((x, y) => x + y).toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        PrimaryActionButton(
+                          text: 'Order',
+                          action: () async {
+                            await this.order();
+                            Navigator.pushReplacementNamed(context, Games.routeName);
+                          },
+                        ),
+                        SizedBox(width: 15),
+                        PrimaryActionButton(
+                          text: 'Clear',
+                          action: () {
+                            clearItems();
+                            this.getGames();
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 25),
+                  ]
                 ],
               ),
+            ),
+          ),
+        ),
       ),
     );
   }
