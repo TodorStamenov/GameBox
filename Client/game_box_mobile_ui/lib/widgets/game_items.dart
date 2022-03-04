@@ -50,7 +50,7 @@ class _GameItemsState extends State<GameItems> {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              index == 0 ? SizedBox(height: 20) : SizedBox(height: 0),
+              if (index == 0) SizedBox(height: 20) else SizedBox(height: 0),
               Text(
                 this.widget.games[index].title,
                 textAlign: TextAlign.center,
@@ -61,8 +61,8 @@ class _GameItemsState extends State<GameItems> {
                 ),
               ),
               SizedBox(height: 20),
-              TextButton(
-                onPressed: () => Navigator.pushNamed(
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(
                   context,
                   GameDetails.routeName,
                   arguments: this.widget.games[index].id,
@@ -79,12 +79,13 @@ class _GameItemsState extends State<GameItems> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              index < this.widget.games.length - 1
-                  ? Divider(
-                      height: 30,
-                      color: Colors.black,
-                    )
-                  : SizedBox(height: 30),
+              if (index < this.widget.games.length - 1)
+                Divider(
+                  height: 30,
+                  color: Colors.black,
+                )
+              else
+                SizedBox(height: 30),
             ],
           ),
         ),

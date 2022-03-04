@@ -12,15 +12,28 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Storage.prefs = await SharedPreferences.getInstance();
 
+  Widget unfocusOnTap(Widget child) {
+    return GestureDetector(
+      child: child,
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+    );
+  }
+
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Storage.prefs?.getString('user') == null ? Login() : Games(),
+      home: (() {
+        if (Storage.prefs?.getString('user') != null) {
+          return Games();
+        } else {
+          return Login();
+        }
+      }()),
       routes: {
         Games.routeName: (context) => Games(),
-        GameDetails.routeName: (context) => GameDetails(),
-        Login.routeName: (context) => Login(),
-        Register.routeName: (context) => Register(),
+        GameDetails.routeName: (context) => unfocusOnTap(GameDetails()),
+        Login.routeName: (context) => unfocusOnTap(Login()),
+        Register.routeName: (context) => unfocusOnTap(Register()),
         Cart.routeName: (context) => Cart(),
         Wishlist.routeName: (context) => Wishlist(),
       },

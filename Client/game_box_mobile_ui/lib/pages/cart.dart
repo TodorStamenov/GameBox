@@ -118,7 +118,7 @@ class _CartState extends State<Cart> {
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            index == 0 ? SizedBox(height: 20) : SizedBox(height: 0),
+                            if (index == 0) SizedBox(height: 20) else SizedBox(height: 0),
                             Text(
                               this.games[index].title,
                               textAlign: TextAlign.center,

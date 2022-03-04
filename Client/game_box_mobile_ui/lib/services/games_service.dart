@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 Future<ResponseModel> getGameDetails(String gameId) async {
   var response = await http.get(
-    getUrl('details/$gameId'),
+    getGamesUrl('details/$gameId'),
     headers: getHttpHeaders(),
   );
 
@@ -31,7 +31,7 @@ Future<ResponseModel> getGameDetails(String gameId) async {
 
 Future<ResponseModel> getGameComments(String gameId) async {
   var response = await http.get(
-    Uri.parse('${Constants.baseGameApiUrl}comments/$gameId'),
+    getGameCommentsUrl(gameId),
     headers: getHttpHeaders(),
   );
 
@@ -51,9 +51,31 @@ Future<ResponseModel> getGameComments(String gameId) async {
   );
 }
 
+Future<ResponseModel> addGameComment(String gameId, String content) async {
+  var response = await http.post(
+    getGameCommentsUrl(''),
+    headers: getHttpHeaders(),
+    body: jsonEncode({
+      'gameId': gameId,
+      'content': content,
+    }),
+  );
+
+  if (response.statusCode != 200) {
+    return ResponseModel(
+      success: false,
+      message: 'Add comment to game failed!',
+    );
+  }
+
+  return ResponseModel(
+    success: true,
+  );
+}
+
 Future<ResponseModel> getAllGames(int loadedGames) async {
   var response = await http.get(
-    getUrl('?loadedGames=$loadedGames'),
+    getGamesUrl('?loadedGames=$loadedGames'),
     headers: getHttpHeaders(),
   );
 
@@ -75,7 +97,7 @@ Future<ResponseModel> getAllGames(int loadedGames) async {
 
 Future<ResponseModel> getOwnedGames(int loadedGames) async {
   var response = await http.get(
-    getUrl('owned?loadedGames=$loadedGames'),
+    getGamesUrl('owned?loadedGames=$loadedGames'),
     headers: getHttpHeaders(),
   );
 
@@ -95,6 +117,10 @@ Future<ResponseModel> getOwnedGames(int loadedGames) async {
   );
 }
 
-Uri getUrl(String path) {
+Uri getGamesUrl(String path) {
   return Uri.parse('${Constants.baseGameApiUrl}games/$path');
+}
+
+Uri getGameCommentsUrl(String path) {
+  return Uri.parse('${Constants.baseGameApiUrl}comments/$path');
 }
