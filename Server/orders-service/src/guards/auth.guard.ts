@@ -8,7 +8,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
 
-export const AuthGuard = (requiredRole: string) => {
+export const AuthGuard = (requiredRole: string): any => {
   @Injectable()
   class AuthGuardMixing implements CanActivate {
     constructor(private jwtService: JwtService) {}
