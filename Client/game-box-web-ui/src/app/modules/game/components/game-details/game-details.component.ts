@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
@@ -29,12 +29,12 @@ export class GameDetailsComponent implements OnInit {
   public comments$: Observable<IGameCommentModel[]>;
 
   public videoId: SafeResourceUrl;
-  public commentForm: FormGroup;
+  public commentForm: UntypedFormGroup;
 
   private gameId: string;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,

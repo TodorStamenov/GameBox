@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
@@ -21,14 +21,14 @@ import { LoadCategoryNames } from 'src/app/store/+store/category/categories.acti
 })
 export class GameComponent implements OnInit, OnDestroy {
   public categories$: Observable<ICategoryMenuModel[]>;
-  public gameForm: FormGroup;
+  public gameForm: UntypedFormGroup;
 
   private componentActive = true;
   private gameId: string | undefined;
   private actionType: ActionType | undefined;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private gameService: GameService,
     private router: Router,
     private route: ActivatedRoute,

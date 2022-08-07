@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup, AbstractControl } from '@angular/forms';
 
 import { AuthService } from '../../../../services/auth.service';
 import { FormService } from 'src/app/services/form.service';
@@ -10,10 +10,10 @@ import { FormService } from 'src/app/services/form.service';
   templateUrl: './change-password.component.html'
 })
 export class ChangePasswordComponent implements OnInit {
-  public changePasswordForm: FormGroup;
+  public changePasswordForm: UntypedFormGroup;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private authService: AuthService,
     private router: Router,
     public formService: FormService

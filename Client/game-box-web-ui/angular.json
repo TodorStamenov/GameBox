@@ -129,8 +129,9 @@
       }
     }
   },
-  "defaultProject": "game-box-web-ui",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

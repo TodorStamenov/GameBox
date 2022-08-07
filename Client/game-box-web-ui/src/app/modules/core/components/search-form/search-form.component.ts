@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import {
   Component,
   OnInit,
@@ -18,12 +18,12 @@ import { debounceTime, takeWhile } from 'rxjs/operators';
 })
 export class SearchFormComponent implements OnInit, OnDestroy {
   private componentActive = true;
-  public searchForm: FormGroup;
+  public searchForm: UntypedFormGroup;
 
   @Input() public fieldName: string;
   @Output() public textChange = new EventEmitter<string>();
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: UntypedFormBuilder) { }
 
   public ngOnInit(): void {
     this.searchForm = this.fb.group({

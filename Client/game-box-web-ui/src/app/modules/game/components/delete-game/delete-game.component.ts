@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
@@ -19,10 +19,10 @@ export class DeleteGameComponent implements OnInit, OnDestroy {
   private componentActive = true;
 
   public gameId: string;
-  public deleteGameForm: FormGroup;
+  public deleteGameForm: UntypedFormGroup;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private gameService: GameService,
     private router: Router,
     private route: ActivatedRoute,
@@ -35,14 +35,14 @@ export class DeleteGameComponent implements OnInit, OnDestroy {
     this.store.dispatch(new LoadGameById(this.gameId));
 
     this.deleteGameForm = this.fb.group({
-      'title': new FormControl({ value: '', disabled: true }),
-      'description': new FormControl({ value: '', disabled: true }),
-      'thumbnailUrl': new FormControl({ value: '', disabled: true }),
-      'price': new FormControl({ value: '', disabled: true }),
-      'size': new FormControl({ value: '', disabled: true }),
-      'videoId': new FormControl({ value: '', disabled: true }),
-      'releaseDate': new FormControl({ value: '', disabled: true }),
-      'categoryId': new FormControl({ value: '', disabled: true })
+      'title': new UntypedFormControl({ value: '', disabled: true }),
+      'description': new UntypedFormControl({ value: '', disabled: true }),
+      'thumbnailUrl': new UntypedFormControl({ value: '', disabled: true }),
+      'price': new UntypedFormControl({ value: '', disabled: true }),
+      'size': new UntypedFormControl({ value: '', disabled: true }),
+      'videoId': new UntypedFormControl({ value: '', disabled: true }),
+      'releaseDate': new UntypedFormControl({ value: '', disabled: true }),
+      'categoryId': new UntypedFormControl({ value: '', disabled: true })
     });
 
     this.store.pipe(

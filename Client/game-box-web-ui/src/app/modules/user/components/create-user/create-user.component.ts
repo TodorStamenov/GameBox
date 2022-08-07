@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { UserService } from '../../../../services/user.service';
@@ -10,10 +10,10 @@ import { FormService } from 'src/app/services/form.service';
   templateUrl: './create-user.component.html'
 })
 export class CreateUserComponent implements OnInit {
-  public createUserForm: FormGroup;
+  public createUserForm: UntypedFormGroup;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private userService: UserService,
     private router: Router,
     public formService: FormService

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 
@@ -14,17 +14,17 @@ import { IState } from '../../+store/orders.state';
 })
 export class OrdersListComponent implements OnInit {
   public orders$: Observable<IOrdersListModel[]>;
-  public dateRange: FormGroup;
+  public dateRange: UntypedFormGroup;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private store: Store<IState>
   ) { }
 
   public ngOnInit(): void {
     this.dateRange = this.fb.group({
-      'startDate': new FormControl(''),
-      'endDate': new FormControl('')
+      'startDate': new UntypedFormControl(''),
+      'endDate': new UntypedFormControl('')
     });
 
     this.getOrders('', '');

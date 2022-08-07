@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
 import { takeWhile, filter } from 'rxjs/operators';
@@ -20,10 +20,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   private categoryId: string | undefined;
   private actionType: ActionType | undefined;
 
-  public categoryForm: FormGroup;
+  public categoryForm: UntypedFormGroup;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private categoryService: CategoryService,
     private router: Router,
     private route: ActivatedRoute,
