@@ -12,7 +12,7 @@ class Games extends StatefulWidget {
   static const String routeName = '/games';
 
   @override
-  _GamesState createState() => _GamesState();
+  State<Games> createState() => _GamesState();
 }
 
 class _GamesState extends State<Games> {

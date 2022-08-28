@@ -13,7 +13,7 @@ class Cart extends StatefulWidget {
   static const String routeName = '/cart';
 
   @override
-  _CartState createState() => _CartState();
+  State<Cart> createState() => _CartState();
 }
 
 class _CartState extends State<Cart> {
@@ -141,7 +141,10 @@ class _CartState extends State<Cart> {
                           text: 'Order',
                           action: () async {
                             await this.order();
-                            Navigator.pushReplacementNamed(context, Games.routeName);
+
+                            if (mounted) {
+                              Navigator.pushReplacementNamed(context, Games.routeName);
+                            }
                           },
                         ),
                         SizedBox(width: 15),

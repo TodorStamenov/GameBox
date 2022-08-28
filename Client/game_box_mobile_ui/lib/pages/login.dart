@@ -22,7 +22,7 @@ class _LoginState extends State<Login> {
     var result = await login(this.username.text, this.password.text);
     showToast(result.message!);
 
-    if (result.success) {
+    if (mounted && result.success) {
       Navigator.pushReplacementNamed(context, Games.routeName);
     }
   }

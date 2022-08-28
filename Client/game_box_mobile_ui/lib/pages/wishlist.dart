@@ -14,7 +14,7 @@ class Wishlist extends StatefulWidget {
   static const String routeName = '/wishlist';
 
   @override
-  _WishlistState createState() => _WishlistState();
+  State<Wishlist> createState() => _WishlistState();
 }
 
 class _WishlistState extends State<Wishlist> {

@@ -27,7 +27,7 @@ class _RegisterState extends State<Register> {
     }
 
     showToast(result.message!);
-    if (result.success) {
+    if (mounted && result.success) {
       Navigator.pushReplacementNamed(context, Games.routeName);
     }
   }

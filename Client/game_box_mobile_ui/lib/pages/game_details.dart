@@ -78,7 +78,9 @@ class _GameDetailsState extends State<GameDetails> {
       return;
     }
 
-    Navigator.pushReplacementNamed(context, Wishlist.routeName);
+    if (mounted) {
+      Navigator.pushReplacementNamed(context, Wishlist.routeName);
+    }
   }
 
   Future<void> addComment() async {
