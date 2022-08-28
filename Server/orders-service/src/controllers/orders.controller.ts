@@ -1,7 +1,7 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 
-import { AuthGuard } from 'src/guards/auth.guard';
-import { Order } from 'src/entities/order.schema';
+import { Order } from '../entities/order.schema';
+import { AuthGuard } from '../guards/auth.guard';
 import { OrderService } from '../services/order.service';
 
 @Controller('api/orders')

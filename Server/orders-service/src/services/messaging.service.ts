@@ -3,8 +3,8 @@ import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { OrderMessageModel } from 'src/models/orderMessage.model';
-import { Order, OrderDocument } from 'src/entities/order.schema';
+import { OrderMessageModel } from '../models/orderMessage.model';
+import { Order, OrderDocument } from '../entities/order.schema';
 
 @Injectable()
 export class MessagingService {

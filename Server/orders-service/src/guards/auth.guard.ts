@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+import { JwtService } from '@nestjs/jwt';
 import {
   CanActivate,
   ExecutionContext,
@@ -5,8 +7,6 @@ import {
   mixin,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { Observable } from 'rxjs';
 
 export const AuthGuard = (requiredRole: string): any => {
   @Injectable()
