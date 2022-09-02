@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 class GameInfo extends StatelessWidget {
-  final String text;
+  final String _text;
 
-  const GameInfo({required this.text});
+  const GameInfo({
+    required String text,
+  }) : _text = text;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      this.text,
-      style: TextStyle(
+      _text,
+      style: const TextStyle(
         fontSize: 14,
         color: Colors.black,
         fontWeight: FontWeight.bold,

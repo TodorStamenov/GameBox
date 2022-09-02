@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:game_box_mobile_ui/models/game_comment_model.dart';
 
 class GameComments extends StatelessWidget {
-  final List<GameCommentModel> comments;
+  final List<GameCommentModel> _comments;
 
-  const GameComments({required this.comments});
+  const GameComments({
+    required List<GameCommentModel> comments,
+  }) : _comments = comments;
 
   Widget buildColumn(GameCommentModel comment) {
     var date = DateTime.parse(comment.dateAdded);
@@ -12,34 +14,34 @@ class GameComments extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Text(
           comment.username,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Text(
           comment.content,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             color: Colors.black,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Text(
           '${date.month}/${date.day}/${date.year}',
           textAlign: TextAlign.end,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 12,
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }
@@ -48,7 +50,7 @@ class GameComments extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: this.comments.map((c) => this.buildColumn(c)).toList(),
+      children: _comments.map((c) => buildColumn(c)).toList(),
     );
   }
 }

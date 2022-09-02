@@ -4,15 +4,17 @@ import 'package:game_box_mobile_ui/models/game_model.dart';
 import 'package:game_box_mobile_ui/pages/game_details.dart';
 
 class GameItems extends StatefulWidget {
-  final List<GameModel> games;
-  final Function loadGames;
-  final Function loadMoreGames;
+  final List<GameModel> _games;
+  final Function _loadGames;
+  final Function _loadMoreGames;
 
   const GameItems({
-    required this.games,
-    required this.loadGames,
-    required this.loadMoreGames,
-  });
+    required List<GameModel> games,
+    required Function loadGames,
+    required Function loadMoreGames,
+  })  : _games = games,
+        _loadGames = loadGames,
+        _loadMoreGames = loadMoreGames;
 
   @override
   State<GameItems> createState() => _GameItemsState();
@@ -24,11 +26,9 @@ class _GameItemsState extends State<GameItems> {
   @override
   void initState() {
     super.initState();
-    this.controller.addListener(() {
-      if (this.controller.position.atEdge &&
-          this.controller.position.pixels != 0 &&
-          this.widget.games.length >= 9) {
-        this.widget.loadMoreGames();
+    controller.addListener(() {
+      if (controller.position.atEdge && controller.position.pixels != 0 && widget._games.length >= 9) {
+        widget._loadMoreGames();
       }
     });
   }
@@ -41,51 +41,51 @@ class _GameItemsState extends State<GameItems> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       color: Constants.primaryColor,
-      onRefresh: () => this.widget.loadGames(),
+      onRefresh: () => widget._loadGames(),
       child: ListView.builder(
-        physics: AlwaysScrollableScrollPhysics(),
-        controller: this.controller,
-        itemCount: this.widget.games.length,
+        physics: const AlwaysScrollableScrollPhysics(),
+        controller: controller,
+        itemCount: widget._games.length,
         itemBuilder: (context, index) => ListTile(
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (index == 0) SizedBox(height: 20) else SizedBox(height: 0),
+              if (index == 0) const SizedBox(height: 20) else const SizedBox(height: 0),
               Text(
-                this.widget.games[index].title,
+                widget._games[index].title,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(
                   context,
                   GameDetails.routeName,
-                  arguments: this.widget.games[index].id,
+                  arguments: widget._games[index].id,
                 ),
-                child: Image.network(this.widget.games[index].thumbnailUrl!),
+                child: Image.network(widget._games[index].thumbnailUrl!),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
-                this.getGameInfo(this.widget.games[index]),
+                getGameInfo(widget._games[index]),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              if (index < this.widget.games.length - 1)
-                Divider(
+              if (index < widget._games.length - 1)
+                const Divider(
                   height: 30,
                   color: Colors.black,
                 )
               else
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
             ],
           ),
         ),

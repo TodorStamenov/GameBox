@@ -16,13 +16,13 @@ class Games extends StatefulWidget {
 }
 
 class _GamesState extends State<Games> {
-  bool isLoading = true;
-  List<GameModel> games = [];
-  List<GameModel> owned = [];
+  bool _isLoading = true;
+  List<GameModel> _games = [];
+  List<GameModel> _owned = [];
 
   Future<void> getGames() async {
     if (mounted) {
-      this.setState(() => this.isLoading = true);
+      setState(() => _isLoading = true);
     }
 
     var results = await Future.wait([
@@ -39,27 +39,27 @@ class _GamesState extends State<Games> {
 
     if (mounted) {
       setState(() {
-        this.games = gamesResult.data;
-        this.owned = ownedResult.data;
-        this.isLoading = false;
+        _games = gamesResult.data;
+        _owned = ownedResult.data;
+        _isLoading = false;
       });
     }
   }
 
   Future<void> loadAllGames() async {
-    var result = await getAllGames(this.games.length);
+    var result = await getAllGames(_games.length);
     if (!result.success) {
       showToast(result.message!);
       return;
     }
 
     if (mounted) {
-      setState(() => this.games.addAll(result.data));
+      setState(() => _games.addAll(result.data));
     }
   }
 
   Future<void> loadOwnedGames() async {
-    var result = await getOwnedGames(this.owned.length);
+    var result = await getOwnedGames(_owned.length);
 
     if (!result.success) {
       showToast(result.message!);
@@ -67,14 +67,14 @@ class _GamesState extends State<Games> {
     }
 
     if (mounted) {
-      setState(() => this.owned.addAll(result.data));
+      setState(() => _owned.addAll(result.data));
     }
   }
 
   @override
   void initState() {
     super.initState();
-    this.getGames();
+    getGames();
   }
 
   @override
@@ -87,7 +87,7 @@ class _GamesState extends State<Games> {
           elevation: 0,
           centerTitle: true,
           backgroundColor: Constants.primaryColor,
-          title: Text(
+          title: const Text(
             'Games',
             style: TextStyle(
               fontSize: 18,
@@ -95,7 +95,7 @@ class _GamesState extends State<Games> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          bottom: TabBar(
+          bottom: const TabBar(
             indicatorColor: Colors.white,
             tabs: [
               HeaderTab(title: 'Games'),
@@ -104,18 +104,18 @@ class _GamesState extends State<Games> {
           ),
         ),
         body: Spinner(
-          isLoading: this.isLoading,
+          isLoading: _isLoading,
           child: TabBarView(
             children: [
               GameItems(
-                games: this.games,
-                loadGames: this.getGames,
-                loadMoreGames: this.loadAllGames,
+                games: _games,
+                loadGames: getGames,
+                loadMoreGames: loadAllGames,
               ),
               GameItems(
-                games: this.owned,
-                loadGames: this.getGames,
-                loadMoreGames: this.loadOwnedGames,
+                games: _owned,
+                loadGames: getGames,
+                loadMoreGames: loadOwnedGames,
               ),
             ],
           ),

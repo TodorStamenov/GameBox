@@ -23,11 +23,11 @@ class GameDetails extends StatefulWidget {
 }
 
 class _GameDetailsState extends State<GameDetails> {
-  bool isLoading = true;
-  bool showCommentForm = false;
-  List<GameCommentModel> comments = [];
-  TextEditingController comment = TextEditingController();
-  GameDetailsModel game = GameDetailsModel(
+  bool _isLoading = true;
+  bool _showCommentForm = false;
+  List<GameCommentModel> _comments = [];
+  final TextEditingController _comment = TextEditingController();
+  GameDetailsModel _game = GameDetailsModel(
     id: '',
     title: '',
     price: 0,
@@ -58,23 +58,23 @@ class _GameDetailsState extends State<GameDetails> {
 
     if (mounted) {
       setState(() {
-        this.isLoading = false;
-        this.game = gameResult.data;
-        this.comments = commentsResult.data;
+        _isLoading = false;
+        _game = gameResult.data;
+        _comments = commentsResult.data;
       });
     }
   }
 
   Future<void> addWishlistGame(String gameId) async {
     if (mounted) {
-      this.setState(() => this.isLoading = true);
+      setState(() => _isLoading = true);
     }
 
     var result = await addWishlistItem(gameId);
 
     if (!result.success) {
       showToast(result.message!);
-      this.setState(() => this.isLoading = false);
+      setState(() => _isLoading = false);
       return;
     }
 
@@ -84,40 +84,40 @@ class _GameDetailsState extends State<GameDetails> {
   }
 
   Future<void> addComment() async {
-    if (this.comment.text.length < 3) {
+    if (_comment.text.length < 3) {
       showToast('Comment length must be at least three symbols long!');
       return;
     }
 
     if (mounted) {
-      this.setState(() {
-        this.isLoading = true;
-        this.showCommentForm = false;
+      setState(() {
+        _isLoading = true;
+        _showCommentForm = false;
       });
     }
 
-    var addCommentresult = await addGameComment(this.game.id, this.comment.text);
+    var addCommentresult = await addGameComment(_game.id, _comment.text);
 
     if (!addCommentresult.success) {
       showToast(addCommentresult.message!);
-      this.setState(() => this.isLoading = false);
+      setState(() => _isLoading = false);
       return;
     }
 
-    var commentsResult = await getGameComments(this.game.id);
+    var commentsResult = await getGameComments(_game.id);
 
     if (!commentsResult.success) {
       showToast(commentsResult.message!);
-      this.setState(() => this.isLoading = false);
+      setState(() => _isLoading = false);
       return;
     }
 
     if (mounted) {
       setState(() {
-        this.isLoading = false;
-        this.showCommentForm = false;
-        this.comment.clear();
-        this.comments = commentsResult.data;
+        _isLoading = false;
+        _showCommentForm = false;
+        _comment.clear();
+        _comments = commentsResult.data;
       });
     }
   }
@@ -127,67 +127,67 @@ class _GameDetailsState extends State<GameDetails> {
     super.initState();
     Future.microtask(() async {
       var gameId = ModalRoute.of(context)?.settings.arguments as String;
-      await this.getGameAndComments(gameId);
+      await getGameAndComments(gameId);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(
+      appBar: const Header(
         title: 'Game Details',
       ),
       body: Spinner(
-        isLoading: this.isLoading,
+        isLoading: _isLoading,
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: 15,
             horizontal: 15,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              EmbededPlayer(videoId: this.game.videoId),
-              SizedBox(height: 40),
+              EmbededPlayer(videoId: _game.videoId),
+              const SizedBox(height: 40),
               Text(
-                this.game.title,
+                _game.title,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
-                this.game.description,
-                style: TextStyle(
+                _game.description,
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 15,
                 ),
               ),
-              Divider(
+              const Divider(
                 height: 30,
                 color: Colors.black,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GameInfo(text: 'Price: \$${this.game.price.toStringAsFixed(2)}'),
-                  SizedBox(width: 20),
-                  GameInfo(text: 'Size: ${this.game.size.toStringAsFixed(1)} GB'),
+                  GameInfo(text: 'Price: \$${_game.price.toStringAsFixed(2)}'),
+                  const SizedBox(width: 20),
+                  GameInfo(text: 'Size: ${_game.size.toStringAsFixed(1)} GB'),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GameInfo(text: 'Views: ${this.game.viewCount}'),
-                  SizedBox(width: 20),
-                  GameInfo(text: 'Release Date: ${this.game.releaseDate}'),
+                  GameInfo(text: 'Views: ${_game.viewCount}'),
+                  const SizedBox(width: 20),
+                  GameInfo(text: 'Release Date: ${_game.releaseDate}'),
                 ],
               ),
-              Divider(
+              const Divider(
                 height: 30,
                 color: Colors.black,
               ),
@@ -197,39 +197,39 @@ class _GameDetailsState extends State<GameDetails> {
                   PrimaryActionButton(
                     icon: Icons.shopping_cart,
                     action: () {
-                      addItem(this.game.id);
+                      addItem(_game.id);
                       Navigator.pushReplacementNamed(context, Cart.routeName);
                     },
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   PrimaryActionButton(
                     icon: Icons.favorite,
-                    action: () => this.addWishlistGame(this.game.id),
+                    action: () => addWishlistGame(_game.id),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   PrimaryActionButton(
                     icon: Icons.comment,
-                    action: () => this.setState(() => this.showCommentForm = !this.showCommentForm),
+                    action: () => setState(() => _showCommentForm = !_showCommentForm),
                   ),
                 ],
               ),
-              if (this.showCommentForm) ...[
-                SizedBox(height: 20),
+              if (_showCommentForm) ...[
+                const SizedBox(height: 20),
                 Center(
                   child: PrimaryActionButton(
                     text: 'Save',
-                    action: this.addComment,
+                    action: addComment,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   minLines: 4,
                   maxLines: null,
-                  controller: this.comment,
+                  controller: _comment,
                   textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.multiline,
                   cursorColor: Constants.primaryColor,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Comment',
                     labelStyle: TextStyle(
                       color: Constants.primaryColor,
@@ -243,8 +243,8 @@ class _GameDetailsState extends State<GameDetails> {
                   ),
                 ),
               ],
-              SizedBox(height: 20),
-              GameComments(comments: this.comments),
+              const SizedBox(height: 20),
+              GameComments(comments: _comments),
             ],
           ),
         ),

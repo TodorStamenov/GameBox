@@ -15,11 +15,11 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController username = TextEditingController();
-  TextEditingController password = TextEditingController();
+  final TextEditingController _username = TextEditingController();
+  final TextEditingController _password = TextEditingController();
 
   Future<void> loginUser() async {
-    var result = await login(this.username.text, this.password.text);
+    var result = await login(_username.text, _password.text);
     showToast(result.message!);
 
     if (mounted && result.success) {
@@ -31,21 +31,21 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideDrawer(),
-      appBar: Header(
+      appBar: const Header(
         title: 'Login',
       ),
       body: Center(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(40),
+          padding: const EdgeInsets.all(40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
-                controller: this.username,
+                controller: _username,
                 textInputAction: TextInputAction.next,
                 cursorColor: Constants.primaryColor,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Username',
                   labelStyle: TextStyle(
                     color: Constants.primaryColor,
@@ -58,13 +58,13 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               TextFormField(
                 obscureText: true,
-                controller: this.password,
+                controller: _password,
                 textInputAction: TextInputAction.done,
                 cursorColor: Constants.primaryColor,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Password',
                   labelStyle: TextStyle(
                     color: Constants.primaryColor,
@@ -77,11 +77,11 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               Center(
                 child: PrimaryActionButton(
                   text: 'Log in',
-                  action: this.loginUser,
+                  action: loginUser,
                 ),
               ),
             ],

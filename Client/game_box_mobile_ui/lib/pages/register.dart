@@ -15,12 +15,12 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  TextEditingController username = TextEditingController();
-  TextEditingController password = TextEditingController();
-  TextEditingController repeatPassword = TextEditingController();
+  final TextEditingController _username = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  final TextEditingController _repeatPassword = TextEditingController();
 
   Future<void> registerUser() async {
-    var result = await register(this.username.text, this.password.text, this.repeatPassword.text);
+    var result = await register(_username.text, _password.text, _repeatPassword.text);
 
     if (!result.success) {
       return;
@@ -36,21 +36,21 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideDrawer(),
-      appBar: Header(
+      appBar: const Header(
         title: 'Register',
       ),
       body: Center(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(40),
+          padding: const EdgeInsets.all(40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
-                controller: this.username,
+                controller: _username,
                 textInputAction: TextInputAction.next,
                 cursorColor: Constants.primaryColor,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Username',
                   labelStyle: TextStyle(
                     color: Constants.primaryColor,
@@ -63,13 +63,13 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               TextFormField(
                 obscureText: true,
-                controller: this.password,
+                controller: _password,
                 textInputAction: TextInputAction.next,
                 cursorColor: Constants.primaryColor,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Password',
                   labelStyle: TextStyle(
                     color: Constants.primaryColor,
@@ -82,13 +82,13 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               TextFormField(
                 obscureText: true,
-                controller: this.repeatPassword,
+                controller: _repeatPassword,
                 textInputAction: TextInputAction.done,
                 cursorColor: Constants.primaryColor,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Repeat Password',
                   labelStyle: TextStyle(
                     color: Constants.primaryColor,
@@ -101,11 +101,11 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               Center(
                 child: PrimaryActionButton(
                   text: 'Register',
-                  action: this.registerUser,
+                  action: registerUser,
                 ),
               ),
             ],

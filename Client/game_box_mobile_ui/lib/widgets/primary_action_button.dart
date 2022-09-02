@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:game_box_mobile_ui/common/constants.dart';
 
 class PrimaryActionButton extends StatelessWidget {
-  final String? text;
-  final IconData? icon;
-  final Function action;
+  final String? _text;
+  final IconData? _icon;
+  final Function _action;
 
   const PrimaryActionButton({
-    this.text,
-    this.icon,
-    required this.action,
-  });
+    String? text,
+    IconData? icon,
+    required Function action,
+  })  : _text = text,
+        _icon = icon,
+        _action = action;
 
   Widget getChild() {
-    if (this.text != null) {
+    if (_text != null) {
       return Text(
-        this.text!,
-        style: TextStyle(
+        _text!,
+        style: const TextStyle(
           fontSize: 18,
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -24,7 +26,7 @@ class PrimaryActionButton extends StatelessWidget {
       );
     } else {
       return Icon(
-        this.icon,
+        _icon,
         color: Colors.white,
       );
     }
@@ -34,12 +36,12 @@ class PrimaryActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       color: Constants.primaryColor,
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         vertical: 10,
         horizontal: 30,
       ),
-      child: this.getChild(),
-      onPressed: () => this.action(),
+      child: getChild(),
+      onPressed: () => _action(),
     );
   }
 }

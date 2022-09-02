@@ -2,22 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class EmbededPlayer extends StatelessWidget {
-  final String videoId;
+  final String _videoId;
 
-  const EmbededPlayer({required this.videoId});
+  const EmbededPlayer({
+    required String videoId,
+  }) : _videoId = videoId;
 
   @override
   Widget build(BuildContext context) {
     return YoutubePlayer(
       controller: YoutubePlayerController(
-        initialVideoId: this.videoId,
-        flags: YoutubePlayerFlags(
+        initialVideoId: _videoId,
+        flags: const YoutubePlayerFlags(
           autoPlay: false,
           mute: false,
         ),
       ),
       showVideoProgressIndicator: true,
-      progressColors: ProgressBarColors(
+      progressColors: const ProgressBarColors(
         playedColor: Colors.red,
         handleColor: Colors.red,
       ),

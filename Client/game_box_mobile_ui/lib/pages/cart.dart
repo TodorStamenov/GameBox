@@ -17,12 +17,12 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
-  bool isLoading = true;
-  List<GameListItemModel> games = [];
+  bool _isLoading = true;
+  List<GameListItemModel> _games = [];
 
   Future<void> getGames() async {
     if (mounted) {
-      this.setState(() => this.isLoading = true);
+      setState(() => _isLoading = true);
     }
 
     var result = await upsertCart();
@@ -33,15 +33,15 @@ class _CartState extends State<Cart> {
 
     if (mounted) {
       setState(() {
-        this.isLoading = false;
-        this.games = result.data;
+        _isLoading = false;
+        _games = result.data;
       });
     }
   }
 
   Future<void> order() async {
     if (mounted) {
-      this.setState(() => this.isLoading);
+      setState(() => _isLoading);
     }
 
     var result = await createOrder();
@@ -52,55 +52,55 @@ class _CartState extends State<Cart> {
 
     clearItems();
     if (mounted) {
-      setState(() => this.isLoading = false);
+      setState(() => _isLoading = false);
     }
   }
 
   @override
   void initState() {
     super.initState();
-    this.getGames();
+    getGames();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideDrawer(),
-      appBar: Header(
+      appBar: const Header(
         title: 'Cart',
       ),
       body: Spinner(
-        isLoading: this.isLoading,
+        isLoading: _isLoading,
         child: EmptyCollection(
-          collectionLength: this.games.length,
+          collectionLength: _games.length,
           emptyCollectionMessage: 'Your cart is empty!',
           child: ListView.builder(
-            itemCount: this.games.length,
+            itemCount: _games.length,
             itemBuilder: (context, index) => ListTile(
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (index == 0) SizedBox(height: 20) else SizedBox(height: 0),
+                  if (index == 0) const SizedBox(height: 20) else const SizedBox(height: 0),
                   Text(
-                    this.games[index].title,
+                    _games[index].title,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Image.network(this.games[index].thumbnailUrl),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
+                  Image.network(_games[index].thumbnailUrl),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        '\$${this.games[index].price}',
+                        '\$${_games[index].price}',
                         textAlign: TextAlign.end,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -109,23 +109,23 @@ class _CartState extends State<Cart> {
                       PrimaryActionButton(
                         text: 'Remove',
                         action: () {
-                          removeItem(this.games[index].id);
-                          this.getGames();
+                          removeItem(_games[index].id);
+                          getGames();
                         },
                       ),
                     ],
                   ),
-                  Divider(
+                  const Divider(
                     height: 20,
                     color: Colors.black,
                   ),
-                  if (index == this.games.length - 1) ...[
+                  if (index == _games.length - 1) ...[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          'Total: \$${this.games.map((g) => g.price).reduce((x, y) => x + y).toStringAsFixed(2)}',
-                          style: TextStyle(
+                          'Total: \$${_games.map((g) => g.price).reduce((x, y) => x + y).toStringAsFixed(2)}',
+                          style: const TextStyle(
                             fontSize: 16,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -133,31 +133,31 @@ class _CartState extends State<Cart> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         PrimaryActionButton(
                           text: 'Order',
                           action: () async {
-                            await this.order();
+                            await order();
 
                             if (mounted) {
                               Navigator.pushReplacementNamed(context, Games.routeName);
                             }
                           },
                         ),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
                         PrimaryActionButton(
                           text: 'Clear',
                           action: () {
                             clearItems();
-                            this.getGames();
+                            getGames();
                           },
                         ),
                       ],
                     ),
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                   ]
                 ],
               ),

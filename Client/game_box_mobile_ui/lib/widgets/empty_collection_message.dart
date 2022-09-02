@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
 
 class EmptyCollection extends StatelessWidget {
-  final int collectionLength;
-  final String emptyCollectionMessage;
-  final Widget child;
+  final int _collectionLength;
+  final String _emptyCollectionMessage;
+  final Widget _child;
 
   const EmptyCollection({
-    required this.collectionLength,
-    required this.emptyCollectionMessage,
-    required this.child,
-  });
+    required int collectionLength,
+    required String emptyCollectionMessage,
+    required Widget child,
+  })  : _collectionLength = collectionLength,
+        _emptyCollectionMessage = emptyCollectionMessage,
+        _child = child;
 
   @override
   Widget build(BuildContext context) {
-    if (this.collectionLength == 0) {
+    if (_collectionLength == 0) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(height: 80),
+          const SizedBox(height: 80),
           Text(
-            this.emptyCollectionMessage,
+            _emptyCollectionMessage,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -31,6 +33,6 @@ class EmptyCollection extends StatelessWidget {
       );
     }
 
-    return this.child;
+    return _child;
   }
 }

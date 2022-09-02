@@ -18,8 +18,8 @@ class Wishlist extends StatefulWidget {
 }
 
 class _WishlistState extends State<Wishlist> {
-  bool isLoading = true;
-  List<GameListItemModel> games = [];
+  bool _isLoading = true;
+  List<GameListItemModel> _games = [];
 
   Future<void> getGames() async {
     var result = await getAllWishlistItems();
@@ -30,15 +30,15 @@ class _WishlistState extends State<Wishlist> {
 
     if (mounted) {
       setState(() {
-        this.isLoading = false;
-        this.games = result.data;
+        _isLoading = false;
+        _games = result.data;
       });
     }
   }
 
   Future<void> removeGame(String gameId) async {
     if (mounted) {
-      this.setState(() => this.isLoading = true);
+      setState(() => _isLoading = true);
     }
 
     var result = await removeWishlistItem(gameId);
@@ -49,15 +49,15 @@ class _WishlistState extends State<Wishlist> {
 
     if (mounted) {
       setState(() {
-        this.isLoading = false;
-        this.games = result.data;
+        _isLoading = false;
+        _games = result.data;
       });
     }
   }
 
   Future<void> clearGames() async {
     if (mounted) {
-      this.setState(() => this.isLoading = true);
+      setState(() => _isLoading = true);
     }
 
     var result = await removeWishlistItems();
@@ -68,8 +68,8 @@ class _WishlistState extends State<Wishlist> {
 
     if (mounted) {
       setState(() {
-        this.isLoading = false;
-        this.games = result.data;
+        _isLoading = false;
+        _games = result.data;
       });
     }
   }
@@ -77,49 +77,49 @@ class _WishlistState extends State<Wishlist> {
   @override
   void initState() {
     super.initState();
-    this.getGames();
+    getGames();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideDrawer(),
-      appBar: Header(
+      appBar: const Header(
         title: 'Wishlist',
       ),
       body: Spinner(
-        isLoading: this.isLoading,
+        isLoading: _isLoading,
         child: EmptyCollection(
-          collectionLength: this.games.length,
+          collectionLength: _games.length,
           emptyCollectionMessage: 'Your wishlist is empty!',
           child: ListView.builder(
-            itemCount: this.games.length,
+            itemCount: _games.length,
             itemBuilder: (context, index) => ListTile(
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  index == 0 ? SizedBox(height: 20) : SizedBox(height: 0),
+                  index == 0 ? const SizedBox(height: 20) : const SizedBox(height: 0),
                   Text(
-                    this.games[index].title,
+                    _games[index].title,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Image.network(this.games[index].thumbnailUrl),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
+                  Image.network(_games[index].thumbnailUrl),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                         child: Text(
-                          '\$${this.games[index].price}',
+                          '\$${_games[index].price}',
                           textAlign: TextAlign.start,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -129,34 +129,34 @@ class _WishlistState extends State<Wishlist> {
                       PrimaryActionButton(
                         text: 'Buy',
                         action: () {
-                          var gameId = this.games[index].id;
-                          this.removeGame(gameId);
+                          var gameId = _games[index].id;
+                          removeGame(gameId);
                           addItem(gameId);
                           Navigator.pushReplacementNamed(context, Cart.routeName);
                         },
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       PrimaryActionButton(
                         text: 'Remove',
-                        action: () => this.removeGame(this.games[index].id),
+                        action: () => removeGame(_games[index].id),
                       ),
                     ],
                   ),
-                  Divider(
+                  const Divider(
                     height: 20,
                     color: Colors.black,
                   ),
-                  if (index == this.games.length - 1) ...[
+                  if (index == _games.length - 1) ...[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         PrimaryActionButton(
                           text: 'Clear',
-                          action: this.clearGames,
+                          action: clearGames,
                         ),
                       ],
                     ),
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                   ]
                 ],
               ),

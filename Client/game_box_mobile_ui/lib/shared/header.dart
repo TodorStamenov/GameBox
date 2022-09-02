@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:game_box_mobile_ui/common/constants.dart';
 
 class Header extends StatelessWidget with PreferredSizeWidget {
-  final String title;
+  final String _title;
 
   const Header({
-    required this.title,
-  });
+    required String title,
+  }) : _title = title;
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +15,8 @@ class Header extends StatelessWidget with PreferredSizeWidget {
       centerTitle: true,
       backgroundColor: Constants.primaryColor,
       title: Text(
-        this.title,
-        style: TextStyle(
+        _title,
+        style: const TextStyle(
           fontSize: 18,
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -26,5 +26,5 @@ class Header extends StatelessWidget with PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
