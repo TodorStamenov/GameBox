@@ -38,8 +38,9 @@ namespace GameBox.Bootstrap
                 .AddInfrastructure()
                 .Configure<RabbitMQSettings>(this.Configuration.GetSection("RabbitMQ"))
                 .AddCors()
+                .AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters() 
                 .AddControllers(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCategoryCommandValidator>())
                 .AddNewtonsoftJson();
 
             services.AddSwaggerGen(c =>

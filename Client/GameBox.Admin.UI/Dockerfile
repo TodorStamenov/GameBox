@@ -11,7 +11,7 @@ RUN dotnet build "GameBox.Admin.UI.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "GameBox.Admin.UI.csproj" -c Release -o /app/publish
 
-FROM nginx:1.21-alpine AS final
+FROM nginx:1.23-alpine AS final
 WORKDIR /usr/share/nginx/html
 COPY --from=publish /app/publish/wwwroot .
 COPY nginx.conf /etc/nginx/nginx.conf

@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 
 services:
   messages.data:
@@ -11,19 +11,19 @@ services:
 
   users.data:
     container_name: users-database
-    image: postgres:14.1-alpine
+    image: postgres:14.5-alpine
 
   orders.data:
     container_name: orders-data
-    image: mongo
+    image: mongo:6
 
   rabbitmq:
     container_name: rabbit-mq
-    image: rabbitmq:3.9-management-alpine
+    image: rabbitmq:3.11-management-alpine
 
   redis:
     container_name: redis-cache
-    image: redis:6.2-alpine
+    image: redis:7.0-alpine
 
   games.api:
     container_name: games-api
