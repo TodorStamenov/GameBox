@@ -26,7 +26,8 @@ class _GameDetailsState extends State<GameDetails> {
   bool _isLoading = true;
   bool _showCommentForm = false;
   List<GameCommentModel> _comments = [];
-  final TextEditingController _comment = TextEditingController();
+
+  final _comment = TextEditingController();
   GameDetailsModel _game = GameDetailsModel(
     id: '',
     title: '',

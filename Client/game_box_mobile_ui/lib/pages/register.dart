@@ -15,11 +15,17 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final TextEditingController _username = TextEditingController();
-  final TextEditingController _password = TextEditingController();
-  final TextEditingController _repeatPassword = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  final _username = TextEditingController();
+  final _password = TextEditingController();
+  final _repeatPassword = TextEditingController();
 
   Future<void> registerUser() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
     var result = await register(_username.text, _password.text, _repeatPassword.text);
 
     if (!result.success) {
@@ -42,73 +48,101 @@ class _RegisterState extends State<Register> {
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _username,
-                textInputAction: TextInputAction.next,
-                cursorColor: Constants.primaryColor,
-                decoration: const InputDecoration(
-                  labelText: 'Username',
-                  labelStyle: TextStyle(
-                    color: Constants.primaryColor,
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  controller: _username,
+                  textInputAction: TextInputAction.next,
+                  cursorColor: Constants.primaryColor,
+                  decoration: const InputDecoration(
+                    labelText: 'Username',
+                    labelStyle: TextStyle(
                       color: Constants.primaryColor,
-                      width: 2,
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Constants.primaryColor,
+                        width: 2,
+                      ),
                     ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Username is required';
+                    }
+
+                    return null;
+                  },
                 ),
-              ),
-              const SizedBox(height: 50),
-              TextFormField(
-                obscureText: true,
-                controller: _password,
-                textInputAction: TextInputAction.next,
-                cursorColor: Constants.primaryColor,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  labelStyle: TextStyle(
-                    color: Constants.primaryColor,
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
+                const SizedBox(height: 50),
+                TextFormField(
+                  obscureText: true,
+                  controller: _password,
+                  textInputAction: TextInputAction.next,
+                  cursorColor: Constants.primaryColor,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    labelStyle: TextStyle(
                       color: Constants.primaryColor,
-                      width: 2,
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Constants.primaryColor,
+                        width: 2,
+                      ),
                     ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Password is required';
+                    }
+
+                    return null;
+                  },
                 ),
-              ),
-              const SizedBox(height: 50),
-              TextFormField(
-                obscureText: true,
-                controller: _repeatPassword,
-                textInputAction: TextInputAction.done,
-                cursorColor: Constants.primaryColor,
-                decoration: const InputDecoration(
-                  labelText: 'Repeat Password',
-                  labelStyle: TextStyle(
-                    color: Constants.primaryColor,
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
+                const SizedBox(height: 50),
+                TextFormField(
+                  obscureText: true,
+                  controller: _repeatPassword,
+                  textInputAction: TextInputAction.done,
+                  cursorColor: Constants.primaryColor,
+                  decoration: const InputDecoration(
+                    labelText: 'Repeat Password',
+                    labelStyle: TextStyle(
                       color: Constants.primaryColor,
-                      width: 2,
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Constants.primaryColor,
+                        width: 2,
+                      ),
                     ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Repeat Password is required';
+                    }
+
+                    if (value != _password.text) {
+                      return 'Repeat Password should match Password';
+                    }
+
+                    return null;
+                  },
                 ),
-              ),
-              const SizedBox(height: 50),
-              Center(
-                child: PrimaryActionButton(
-                  text: 'Register',
-                  action: registerUser,
+                const SizedBox(height: 50),
+                Center(
+                  child: PrimaryActionButton(
+                    text: 'Register',
+                    action: registerUser,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
