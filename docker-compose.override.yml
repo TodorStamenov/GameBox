@@ -66,8 +66,8 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=cert_password
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ConnectionStrings__Redis=172.17.0.1:6379
-      - ConnectionStrings__Games=Server=games-database;Database=GamesCore;User Id=sa;Password=Your_password@123
-      - ConnectionStrings__Messages=Server=messages-database;Database=MessagesCore;User Id=sa;Password=Your_password@123
+      - ConnectionStrings__Games=Server=games-database;Database=GamesCore;User Id=sa;Password=Your_password@123;TrustServerCertificate=true
+      - ConnectionStrings__Messages=Server=messages-database;Database=MessagesCore;User Id=sa;Password=Your_password@123;TrustServerCertificate=true
       - RabbitMQ__Host=172.17.0.1
       - RabbitMQ__Port=5672
       - RabbitMQ__Usernamet=guest
@@ -88,7 +88,7 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=cert_password
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ConnectionStrings__Users=Server=users-database;Database=UsersCore;User Id=admin;Password=my_secret_password@123
-      - ConnectionStrings__Messages=Server=messages-database;Database=MessagesCore;User Id=sa;Password=Your_password@123
+      - ConnectionStrings__Messages=Server=messages-database;Database=MessagesCore;User Id=sa;Password=Your_password@123;TrustServerCertificate=true
       - RabbitMQ__Host=172.17.0.1
       - RabbitMQ__Port=5672
       - RabbitMQ__Usernamet=guest
@@ -120,8 +120,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__Redis=172.17.0.1:6379
-      - ConnectionStrings__Games=Server=games-database;Database=GamesCore;User Id=sa;Password=Your_password@123
-      - ConnectionStrings__Messages=Server=messages-database;Database=MessagesCore;User Id=sa;Password=Your_password@123
+      - ConnectionStrings__Games=Server=games-database;Database=GamesCore;User Id=sa;Password=Your_password@123;TrustServerCertificate=true
+      - ConnectionStrings__Messages=Server=messages-database;Database=MessagesCore;User Id=sa;Password=Your_password@123;TrustServerCertificate=true
       - RabbitMQ__Host=172.17.0.1
       - RabbitMQ__Port=5672
       - RabbitMQ__Usernamet=guest
