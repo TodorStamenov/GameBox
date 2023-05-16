@@ -4,14 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GameBox.Api.Controllers
+namespace GameBox.Api.Controllers;
+
+public class CartController : BaseApiController
 {
-    public class CartController : BaseApiController
+    [HttpPost]
+    public async Task<ActionResult<IEnumerable<GamesListCartViewModel>>> Get([FromBody] IEnumerable<Guid> gameIds)
     {
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<GamesListCartViewModel>>> Get([FromBody]IEnumerable<Guid> gameIds)
-        {
-            return Ok(await Mediator.Send(new GetGamesInCartQuery { GameIds = gameIds }));
-        }
+        return Ok(await Mediator.Send(new GetGamesInCartQuery { GameIds = gameIds }));
     }
 }

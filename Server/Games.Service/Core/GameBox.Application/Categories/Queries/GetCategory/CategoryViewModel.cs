@@ -1,10 +1,9 @@
 ﻿using GameBox.Application.Contracts.Mapping;
 using GameBox.Domain.Entities;
 
-namespace GameBox.Application.Categories.Queries.GetCategory
+namespace GameBox.Application.Categories.Queries.GetCategory;
+
+public class CategoryViewModel : IMapFrom<Category>
 {
-    public class CategoryViewModel : IMapFrom<Category>
-    {
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
 }

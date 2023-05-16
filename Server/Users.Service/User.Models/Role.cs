@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace User.Models
+namespace User.Models;
+
+public class Role : Entity<Guid>
 {
-    public class Role : Entity<Guid>
+    public Role()
     {
-        public Role()
-        {
-            this.Users = new HashSet<UserRole>();
-        }
-
-        public string Name { get; set; }
-
-        public ICollection<UserRole> Users { get; private set; }
+        this.Users = new HashSet<UserRole>();
     }
+
+    public string Name { get; set; }
+
+    public ICollection<UserRole> Users { get; private set; }
 }

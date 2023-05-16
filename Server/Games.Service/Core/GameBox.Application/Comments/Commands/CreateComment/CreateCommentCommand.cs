@@ -6,45 +6,44 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GameBox.Application.Comments.Commands.CreateComment
+namespace GameBox.Application.Comments.Commands.CreateComment;
+
+public class CreateCommentCommand : IRequest<string>
 {
-    public class CreateCommentCommand : IRequest<string>
+    public Guid GameId { get; set; }
+
+    public string Content { get; set; }
+
+    public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand, string>
     {
-        public Guid GameId { get; set; }
+        private readonly IDataService context;
+        private readonly IDateTimeService dateTime;
+        private readonly ICurrentUserService currentUser;
 
-        public string Content { get; set; }
-
-        public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand, string>
+        public CreateCommentCommandHandler(
+            IDataService context,
+            IDateTimeService dateTime,
+            ICurrentUserService currentUser)
         {
-            private readonly IDataService context;
-            private readonly IDateTimeService dateTime;
-            private readonly ICurrentUserService currentUser;
+            this.context = context;
+            this.dateTime = dateTime;
+            this.currentUser = currentUser;
+        }
 
-            public CreateCommentCommandHandler(
-                IDataService context,
-                IDateTimeService dateTime,
-                ICurrentUserService currentUser)
+        public async Task<string> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
+        {
+            var comment = new Comment
             {
-                this.context = context;
-                this.dateTime = dateTime;
-                this.currentUser = currentUser;
-            }
+                GameId = request.GameId,
+                CustomerId = this.currentUser.CustomerId,
+                Content = request.Content,
+                DateAdded = this.dateTime.UtcNow
+            };
 
-            public async Task<string> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
-            {
-                var comment = new Comment
-                {
-                    GameId = request.GameId,
-                    CustomerId = this.currentUser.CustomerId,
-                    Content = request.Content,
-                    DateAdded = this.dateTime.UtcNow
-                };
+            await this.context.AddAsync(comment);
+            await this.context.SaveAsync();
 
-                await this.context.AddAsync(comment);
-                await this.context.SaveAsync();
-
-                return string.Format(Constants.Common.Success, nameof(Comment), string.Empty, Constants.Common.Added);
-            }
+            return string.Format(Constants.Common.Success, nameof(Comment), string.Empty, Constants.Common.Added);
         }
     }
 }

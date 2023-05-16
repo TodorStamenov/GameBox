@@ -9,41 +9,40 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Scheduler.Service.Services
+namespace Scheduler.Service.Services;
+
+public class RedisCacheHostedService : BackgroundService
 {
-    public class RedisCacheHostedService : BackgroundService
+    private readonly string databaseConnectionString;
+    private readonly IDistributedCache cache;
+
+    public RedisCacheHostedService(
+        IDistributedCache cache,
+        IConfiguration configuration)
     {
-        private readonly string databaseConnectionString;
-        private readonly IDistributedCache cache;
+        this.cache = cache;
+        this.databaseConnectionString = configuration.GetConnectionString("Games");
+    }
 
-        public RedisCacheHostedService(
-            IDistributedCache cache,
-            IConfiguration configuration)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
         {
-            this.cache = cache;
-            this.databaseConnectionString = configuration.GetConnectionString("Games");
+            await this.UpdateDataAsync();
+            await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
         }
+    }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    private async Task UpdateDataAsync()
+    {
+        using (var connection = new SqlConnection(this.databaseConnectionString))
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                await this.UpdateDataAsync();
-                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
-            }
-        }
-
-        private async Task UpdateDataAsync()
-        {
-            using (var connection = new SqlConnection(this.databaseConnectionString))
-            {
-                var games = await connection.QueryAsync<GamesCacheModel>(
-                    @"SELECT Id, CategoryId, Title, Description, VideoId, ThumbnailUrl, Price, Size, ViewCount
+            var games = await connection.QueryAsync<GamesCacheModel>(
+                @"SELECT Id, CategoryId, Title, Description, VideoId, ThumbnailUrl, Price, Size, ViewCount
                         FROM Games
                     ORDER BY ReleaseDate DESC, ViewCount DESC, Title ASC");
 
-                await this.cache.SetRecordAsync("_Games_", games);
-            }
+            await this.cache.SetRecordAsync("_Games_", games);
         }
     }
 }

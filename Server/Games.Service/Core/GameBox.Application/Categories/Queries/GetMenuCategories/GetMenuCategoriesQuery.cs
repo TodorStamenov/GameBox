@@ -11,39 +11,38 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace GameBox.Application.Categories.Queries.GetMenuCategories
+namespace GameBox.Application.Categories.Queries.GetMenuCategories;
+
+public class GetMenuCategoriesQuery : IRequest<IEnumerable<CategoriesListMenuViewModel>>
 {
-    public class GetMenuCategoriesQuery : IRequest<IEnumerable<CategoriesListMenuViewModel>>
+    public class GetMenuCategoriesQueryHandler : IRequestHandler<GetMenuCategoriesQuery, IEnumerable<CategoriesListMenuViewModel>>
     {
-        public class GetMenuCategoriesQueryHandler : IRequestHandler<GetMenuCategoriesQuery, IEnumerable<CategoriesListMenuViewModel>>
+        private readonly IMapper mapper;
+        private readonly IDataService context;
+        private readonly IMemoryCache cache;
+
+        public GetMenuCategoriesQueryHandler(
+            IMapper mapper,
+            IDataService context,
+            IMemoryCache cache)
         {
-            private readonly IMapper mapper;
-            private readonly IDataService context;
-            private readonly IMemoryCache cache;
+            this.mapper = mapper;
+            this.context = context;
+            this.cache = cache;
+        }
 
-            public GetMenuCategoriesQueryHandler(
-                IMapper mapper,
-                IDataService context,
-                IMemoryCache cache)
+        public async Task<IEnumerable<CategoriesListMenuViewModel>> Handle(GetMenuCategoriesQuery request, CancellationToken cancellationToken)
+        {
+            return await this.cache.GetOrCreateAsync(Constants.Caching.CategoryMenuItemsKey, entry =>
             {
-                this.mapper = mapper;
-                this.context = context;
-                this.cache = cache;
-            }
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(Constants.Caching.CategoryMenuItemsLifeSpan);
 
-            public async Task<IEnumerable<CategoriesListMenuViewModel>> Handle(GetMenuCategoriesQuery request, CancellationToken cancellationToken)
-            {
-                return await this.cache.GetOrCreateAsync(Constants.Caching.CategoryMenuItemsKey, entry =>
-                {
-                    entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(Constants.Caching.CategoryMenuItemsLifeSpan);
-
-                    return Task.FromResult(this.context
-                        .All<Category>()
-                        .OrderBy(c => c.Name)
-                        .ProjectTo<CategoriesListMenuViewModel>(this.mapper.ConfigurationProvider)
-                        .ToList());
-                });
-            }
+                return Task.FromResult(this.context
+                    .All<Category>()
+                    .OrderBy(c => c.Name)
+                    .ProjectTo<CategoriesListMenuViewModel>(this.mapper.ConfigurationProvider)
+                    .ToList());
+            });
         }
     }
 }

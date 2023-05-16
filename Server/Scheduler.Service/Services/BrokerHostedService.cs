@@ -9,57 +9,56 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Scheduler.Service.Services
+namespace Scheduler.Service.Services;
+
+public class BrokerHostedService : BackgroundService
 {
-    public class BrokerHostedService : BackgroundService
+    private readonly string connectionString;
+    private readonly ILogger<BrokerHostedService> logger;
+    private readonly IQueueSenderService queueService;
+
+    public BrokerHostedService(
+        IConfiguration configuration,
+        IQueueSenderService queueService,
+        ILogger<BrokerHostedService> logger)
     {
-        private readonly string connectionString;
-        private readonly ILogger<BrokerHostedService> logger;
-        private readonly IQueueSenderService queueService;
+        this.connectionString = configuration.GetConnectionString("Messages");
+        this.logger = logger;
+        this.queueService = queueService;
+    }
 
-        public BrokerHostedService(
-            IConfiguration configuration,
-            IQueueSenderService queueService,
-            ILogger<BrokerHostedService> logger)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
         {
-            this.connectionString = configuration.GetConnectionString("Messages");
-            this.logger = logger;
-            this.queueService = queueService;
+            await this.ProcessMessagesAsync();
+            await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
         }
+    }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    private async Task ProcessMessagesAsync()
+    {
+        try
         {
-            while (!stoppingToken.IsCancellationRequested)
+            using (var connection = new SqlConnection(this.connectionString))
             {
-                await this.ProcessMessagesAsync();
-                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
-            }
-        }
-
-        private async Task ProcessMessagesAsync()
-        {
-            try
-            {
-                using (var connection = new SqlConnection(this.connectionString))
-                {
-                    var messages = await connection.QueryAsync<Message>(
-                        @"SELECT Id, QueueName, SerializedData [serializedData]
+                var messages = await connection.QueryAsync<Message>(
+                    @"SELECT Id, QueueName, SerializedData [serializedData]
                             FROM Messages
                            WHERE Published = 0");
 
-                    foreach (var message in messages)
-                    {
-                        this.queueService.PostQueueMessage(message.QueueName, message.SerializedData);
-                        await connection.ExecuteAsync(
-                            "UPDATE Messages SET Published = 1 WHERE Id = @MessageId",
-                            new { MessageId = message.Id });
-                    }
+                foreach (var message in messages)
+                {
+                    this.queueService.PostQueueMessage(message.QueueName, message.SerializedData);
+                    await connection.ExecuteAsync(
+                        "UPDATE Messages SET Published = 1 WHERE Id = @MessageId",
+                        new { MessageId = message.Id });
                 }
             }
-            catch (Exception ex)
-            {
-                this.logger.LogInformation($"Post messages on queue failed: {ex.Message}");
-            }
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogInformation($"Post messages on queue failed: {ex.Message}");
         }
     }
 }

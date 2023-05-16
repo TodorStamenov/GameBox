@@ -8,41 +8,40 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GameBox.Application.Categories.Commands.UpdateCategory
+namespace GameBox.Application.Categories.Commands.UpdateCategory;
+
+public class UpdateCategoryCommand : IRequest<string>
 {
-    public class UpdateCategoryCommand : IRequest<string>
+    public Guid Id { get; set; }
+
+    public string Name { get; set; }
+
+    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, string>
     {
-        public Guid Id { get; set; }
+        private readonly IDataService context;
 
-        public string Name { get; set; }
-
-        public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, string>
+        public UpdateCategoryCommandHandler(IDataService context)
         {
-            private readonly IDataService context;
+            this.context = context;
+        }
 
-            public UpdateCategoryCommandHandler(IDataService context)
+        public async Task<string> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+        {
+            var category = this.context
+                .All<Category>()
+                .Where(c => c.Id == request.Id)
+                .FirstOrDefault();
+
+            if (category == null)
             {
-                this.context = context;
+                throw new NotFoundException(nameof(Category), request.Id);
             }
 
-            public async Task<string> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
-            {
-                var category = this.context
-                    .All<Category>()
-                    .Where(c => c.Id == request.Id)
-                    .FirstOrDefault();
+            category.Name = request.Name;
 
-                if (category == null)
-                {
-                    throw new NotFoundException(nameof(Category), request.Id);
-                }
+            await this.context.SaveAsync(cancellationToken);
 
-                category.Name = request.Name;
-
-                await this.context.SaveAsync(cancellationToken);
-
-                return string.Format(Constants.Common.Success, nameof(Category), request.Name, Constants.Common.Edited);
-            }
+            return string.Format(Constants.Common.Success, nameof(Category), request.Name, Constants.Common.Edited);
         }
     }
 }

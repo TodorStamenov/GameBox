@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace User.Services.Exceptions
+namespace User.Services.Exceptions;
+
+public class AccountUnlockedException : Exception
 {
-    public class AccountUnlockedException : Exception
-    {
-        public AccountUnlockedException(string username)
-            : base($"User {username} is locked!")
-        { }
-    }
+    public AccountUnlockedException(string username)
+        : base($"User {username} is locked!")
+    { }
 }

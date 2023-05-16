@@ -1,7 +1,6 @@
-﻿namespace User.Services.ViewModels.Auth
+﻿namespace User.Services.ViewModels.Auth;
+
+public class ChangePasswordViewModel
 {
-    public class ChangePasswordViewModel
-    {
-        public string Message { get; set; }
-    }
+    public string Message { get; set; }
 }

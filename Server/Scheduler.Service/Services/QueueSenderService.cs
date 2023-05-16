@@ -5,47 +5,46 @@ using Scheduler.Service.Model;
 using System;
 using System.Text;
 
-namespace Scheduler.Service.Services
+namespace Scheduler.Service.Services;
+
+public class QueueSenderService : IQueueSenderService
 {
-    public class QueueSenderService : IQueueSenderService
+    private readonly RabbitMQSettings settings;
+
+    public QueueSenderService(IOptions<RabbitMQSettings> settings)
     {
-        private readonly RabbitMQSettings settings;
-        
-        public QueueSenderService(IOptions<RabbitMQSettings> settings)
+        this.settings = settings.Value;
+    }
+
+    public void PostQueueMessage(string queueName, string message)
+    {
+        var connectionFactory = new ConnectionFactory
         {
-            this.settings = settings.Value;
-        }
+            Port = this.settings.Port,
+            HostName = this.settings.Host,
+            UserName = this.settings.Username,
+            Password = this.settings.Password,
+            RequestedConnectionTimeout = TimeSpan.FromMilliseconds(3000)
+        };
 
-        public void PostQueueMessage(string queueName, string message)
+        using (var rabbitConnection = connectionFactory.CreateConnection())
         {
-            var connectionFactory = new ConnectionFactory
+            using (var channel = rabbitConnection.CreateModel())
             {
-                Port = this.settings.Port,
-                HostName = this.settings.Host,
-                UserName = this.settings.Username,
-                Password = this.settings.Password,
-                RequestedConnectionTimeout = TimeSpan.FromMilliseconds(3000)
-            };
+                var body = Encoding.UTF8.GetBytes(message);
 
-            using (var rabbitConnection = connectionFactory.CreateConnection())
-            {
-                using (var channel = rabbitConnection.CreateModel())
-                {
-                    var body = Encoding.UTF8.GetBytes(message);
+                channel.QueueDeclare(
+                    queue: queueName,
+                    durable: false,
+                    exclusive: false,
+                    autoDelete: true,
+                    arguments: null);
 
-                    channel.QueueDeclare(
-                        queue: queueName,
-                        durable: false,
-                        exclusive: false,
-                        autoDelete: true,
-                        arguments: null);
-
-                    channel.BasicPublish(
-                        exchange: string.Empty,
-                        routingKey: queueName,
-                        basicProperties: null,
-                        body: body);
-                }
+                channel.BasicPublish(
+                    exchange: string.Empty,
+                    routingKey: queueName,
+                    basicProperties: null,
+                    body: body);
             }
         }
     }

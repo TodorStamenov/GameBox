@@ -3,25 +3,24 @@ using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Scheduler.Service.Extensions
+namespace Scheduler.Service.Extensions;
+
+public static class DistributedCacheExtensions
 {
-    public static class DistributedCacheExtensions
+    public static async Task SetRecordAsync<T>(
+        this IDistributedCache cache,
+        string recordId,
+        T data,
+        TimeSpan? absoluteExpireTime = null,
+        TimeSpan? unusedExpireTime = null)
     {
-        public static async Task SetRecordAsync<T>(
-            this IDistributedCache cache,
-            string recordId,
-            T data,
-            TimeSpan? absoluteExpireTime = null,
-            TimeSpan? unusedExpireTime = null)
-        {
-            var options = new DistributedCacheEntryOptions();
+        var options = new DistributedCacheEntryOptions();
 
-            options.AbsoluteExpirationRelativeToNow = absoluteExpireTime ?? TimeSpan.FromMinutes(2);
-            options.SlidingExpiration = unusedExpireTime;
+        options.AbsoluteExpirationRelativeToNow = absoluteExpireTime ?? TimeSpan.FromMinutes(2);
+        options.SlidingExpiration = unusedExpireTime;
 
-            var jsonData = JsonSerializer.Serialize(data);
+        var jsonData = JsonSerializer.Serialize(data);
 
-            await cache.SetStringAsync(recordId, jsonData, options);
-        }
+        await cache.SetStringAsync(recordId, jsonData, options);
     }
 }

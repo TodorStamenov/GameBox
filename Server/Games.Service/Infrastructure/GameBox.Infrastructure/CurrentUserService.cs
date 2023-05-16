@@ -6,32 +6,31 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 
-namespace GameBox.Infrastructure
+namespace GameBox.Infrastructure;
+
+public class CurrentUserService : ICurrentUserService
 {
-    public class CurrentUserService : ICurrentUserService
+    public CurrentUserService(
+        IDataService database,
+        IHttpContextAccessor httpContextAccessor)
     {
-        public CurrentUserService(
-            IDataService database,
-            IHttpContextAccessor httpContextAccessor)
+        var userId = httpContextAccessor
+            .HttpContext?
+            .User?
+            .FindFirstValue(Constants.Common.UserIdClaimKey);
+
+        if (userId != null)
         {
-            var userId = httpContextAccessor
-                .HttpContext?
-                .User?
-                .FindFirstValue(Constants.Common.UserIdClaimKey);
-
-            if (userId != null)
-            {
-                this.UserId = Guid.Parse(userId);
-                this.CustomerId = database
-                    .All<Customer>()
-                    .Where(c => c.UserId == this.UserId)
-                    .Select(c => c.Id)
-                    .FirstOrDefault();
-            }
+            this.UserId = Guid.Parse(userId);
+            this.CustomerId = database
+                .All<Customer>()
+                .Where(c => c.UserId == this.UserId)
+                .Select(c => c.Id)
+                .FirstOrDefault();
         }
-
-        public Guid UserId { get; }
-
-        public Guid CustomerId { get; }
     }
+
+    public Guid UserId { get; }
+
+    public Guid CustomerId { get; }
 }

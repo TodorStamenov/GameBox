@@ -12,7 +12,7 @@ import { config } from './config/config';
 
 @Module({
   imports: [
-    JwtModule.register({ secret: 'superSecretKey@345' }),
+    JwtModule.register({ secret: '*^Super_Secret_Symmetric_Security_Key^*' }),
     MongooseModule.forFeature([{ name: Order.name, schema: OrderSchema }]),
     MongooseModule.forRoot(
       `mongodb://${config.dockerHostIp}:${config.mongoPort}/game-box`,

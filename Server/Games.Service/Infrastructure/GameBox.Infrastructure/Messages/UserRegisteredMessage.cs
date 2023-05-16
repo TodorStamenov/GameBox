@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace GameBox.Infrastructure.Messages
-{
-    public class UserRegisteredMessage
-    {
-        public Guid UserId { get; set; }
+namespace GameBox.Infrastructure.Messages;
 
-        public string Username { get; set; }
-    }
+public class UserRegisteredMessage
+{
+    public Guid UserId { get; set; }
+
+    public string Username { get; set; }
 }

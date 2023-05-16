@@ -1,6 +1,5 @@
-﻿namespace User.Services.Messages
+﻿namespace User.Services.Messages;
+
+public abstract class QueueMessageModel
 {
-    public abstract class QueueMessageModel
-    {
-    }
 }

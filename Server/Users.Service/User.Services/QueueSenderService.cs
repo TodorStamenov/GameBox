@@ -7,53 +7,52 @@ using User.Services.Contracts;
 using User.Services.Messages;
 using User.Services.Settings;
 
-namespace User.Services
+namespace User.Services;
+
+public class QueueSenderService : IQueueSenderService
 {
-    public class QueueSenderService : IQueueSenderService
+    private readonly RabbitMQSettings settings;
+
+    public QueueSenderService(IOptions<RabbitMQSettings> settings)
     {
-        private readonly RabbitMQSettings settings;
+        this.settings = settings.Value;
+    }
 
-        public QueueSenderService(IOptions<RabbitMQSettings> settings)
-        {
-            this.settings = settings.Value;
-        }
+    public void PostQueueMessage<T>(string queueName, T command) where T : QueueMessageModel
+    {
+        var message = JsonSerializer.Serialize(command);
+        this.PostQueueMessage(queueName, message);
+    }
 
-        public void PostQueueMessage<T>(string queueName, T command) where T : QueueMessageModel
+    public void PostQueueMessage(string queueName, string message)
+    {
+        var connectionFactory = new ConnectionFactory
         {
-            var message = JsonSerializer.Serialize(command);
-            this.PostQueueMessage(queueName, message);
-        }
+            Port = this.settings.Port,
+            HostName = this.settings.Host,
+            UserName = this.settings.Username,
+            Password = this.settings.Password,
+            RequestedConnectionTimeout = TimeSpan.FromMilliseconds(3000)
+        };
 
-        public void PostQueueMessage(string queueName, string message)
+        using (var rabbitConnection = connectionFactory.CreateConnection())
         {
-            var connectionFactory = new ConnectionFactory
+            using (var channel = rabbitConnection.CreateModel())
             {
-                Port = this.settings.Port,
-                HostName = this.settings.Host,
-                UserName = this.settings.Username,
-                Password = this.settings.Password,
-                RequestedConnectionTimeout = TimeSpan.FromMilliseconds(3000)
-            };
+                var body = Encoding.UTF8.GetBytes(message);
 
-            using (var rabbitConnection = connectionFactory.CreateConnection())
-            {
-                using (var channel = rabbitConnection.CreateModel())
-                {
-                    var body = Encoding.UTF8.GetBytes(message);
+                channel.QueueDeclare(
+                    queue: queueName,
+                    durable: false,
+                    exclusive: false,
+                    autoDelete: true,
+                    arguments: null);
 
-                    channel.QueueDeclare(
-                        queue: queueName,
-                        durable: false,
-                        exclusive: false,
-                        autoDelete: true,
-                        arguments: null);
-
-                    channel.BasicPublish(
-                        exchange: string.Empty,
-                        routingKey: queueName,
-                        basicProperties: null,
-                        body: body);
-                }
+                channel.BasicPublish(
+                    exchange: string.Empty,
+                    routingKey: queueName,
+                    basicProperties: null,
+                    body: body);
             }
         }
     }

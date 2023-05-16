@@ -5,51 +5,50 @@ using Notification.Service.Messages;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Notification.Service.Infrastructure
+namespace Notification.Service.Infrastructure;
+
+public static class ServiceRegistration
 {
-    public static class ServiceRegistration
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
-        {
-            services
-                .AddHostedService<GameCreatedConsumer>()
-                .AddAuthentication(authentication =>
+        services
+            .AddHostedService<GameCreatedConsumer>()
+            .AddAuthentication(authentication =>
+            {
+                authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                authentication.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(bearer =>
+            {
+                bearer.RequireHttpsMetadata = false;
+                bearer.SaveToken = true;
+                bearer.TokenValidationParameters = new TokenValidationParameters
                 {
-                    authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    authentication.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(bearer =>
-                {
-                    bearer.RequireHttpsMetadata = false;
-                    bearer.SaveToken = true;
-                    bearer.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.SymmetricSecurityKey))
-                    };
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.SymmetricSecurityKey))
+                };
 
-                    bearer.Events = new JwtBearerEvents
+                bearer.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
                     {
-                        OnMessageReceived = context =>
+                        var accessToken = context.Request.Query["access_token"];
+
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            path.StartsWithSegments("/notifications"))
                         {
-                            var accessToken = context.Request.Query["access_token"];
-
-                            var path = context.HttpContext.Request.Path;
-                            if (!string.IsNullOrEmpty(accessToken) &&
-                                path.StartsWithSegments("/notifications"))
-                            {
-                                context.Token = accessToken;
-                            }
-
-                            return Task.CompletedTask;
+                            context.Token = accessToken;
                         }
-                    };
-                });
 
-            return services;
-        }
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
+        return services;
     }
 }

@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 
-namespace User.Services.Contracts.Mapping
+namespace User.Services.Contracts.Mapping;
+
+public interface ICustomMapping
 {
-    public interface ICustomMapping
-    {
-        void CreateMappings(Profile configuration);
-    }
+    void CreateMappings(Profile configuration);
 }

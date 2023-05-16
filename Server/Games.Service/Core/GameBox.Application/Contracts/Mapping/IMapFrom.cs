@@ -1,6 +1,5 @@
-﻿namespace GameBox.Application.Contracts.Mapping
+﻿namespace GameBox.Application.Contracts.Mapping;
+
+public interface IMapFrom<TEntity>
 {
-    public interface IMapFrom<TEntity>
-    {
-    }
 }

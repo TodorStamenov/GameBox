@@ -9,32 +9,31 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GameBox.Application.Comments.Queries.GetCommentsByGame
+namespace GameBox.Application.Comments.Queries.GetCommentsByGame;
+
+public class GetCommentsByGameQuery : IRequest<IEnumerable<CommentsListViewModel>>
 {
-    public class GetCommentsByGameQuery : IRequest<IEnumerable<CommentsListViewModel>>
+    public Guid GameId { get; set; }
+
+    public class GetCommentsByGameQueryHandler : IRequestHandler<GetCommentsByGameQuery, IEnumerable<CommentsListViewModel>>
     {
-        public Guid GameId { get; set; }
+        private readonly IMapper mapper;
+        private readonly IDataService context;
 
-        public class GetCommentsByGameQueryHandler : IRequestHandler<GetCommentsByGameQuery, IEnumerable<CommentsListViewModel>>
+        public GetCommentsByGameQueryHandler(IMapper mapper, IDataService context)
         {
-            private readonly IMapper mapper;
-            private readonly IDataService context;
+            this.mapper = mapper;
+            this.context = context;
+        }
 
-            public GetCommentsByGameQueryHandler(IMapper mapper, IDataService context)
-            {
-                this.mapper = mapper;
-                this.context = context;
-            }
-
-            public async Task<IEnumerable<CommentsListViewModel>> Handle(GetCommentsByGameQuery request, CancellationToken cancellationToken)
-            {
-                return await Task.FromResult(this.context
-                    .All<Comment>()
-                    .Where(c => c.GameId == request.GameId)
-                    .OrderByDescending(c => c.TimeStamp)
-                    .ProjectTo<CommentsListViewModel>(this.mapper.ConfigurationProvider)
-                    .ToList());
-            }
+        public async Task<IEnumerable<CommentsListViewModel>> Handle(GetCommentsByGameQuery request, CancellationToken cancellationToken)
+        {
+            return await Task.FromResult(this.context
+                .All<Comment>()
+                .Where(c => c.GameId == request.GameId)
+                .OrderByDescending(c => c.TimeStamp)
+                .ProjectTo<CommentsListViewModel>(this.mapper.ConfigurationProvider)
+                .ToList());
         }
     }
 }

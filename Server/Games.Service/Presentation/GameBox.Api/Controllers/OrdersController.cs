@@ -5,21 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GameBox.Api.Controllers
-{
-    public class OrdersController : BaseApiController
-    {
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Post([FromBody]IEnumerable<Guid> gameIds)
-        {
-            var command = new CreateOrderCommand
-            {
-                Username = User.Identity.Name,
-                GameIds = gameIds
-            };
+namespace GameBox.Api.Controllers;
 
-            return Ok(await Mediator.Send(command));
-        }
+public class OrdersController : BaseApiController
+{
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> Post([FromBody] IEnumerable<Guid> gameIds)
+    {
+        var command = new CreateOrderCommand
+        {
+            Username = User.Identity.Name,
+            GameIds = gameIds
+        };
+
+        return Ok(await Mediator.Send(command));
     }
 }

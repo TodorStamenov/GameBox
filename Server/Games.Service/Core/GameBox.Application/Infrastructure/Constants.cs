@@ -13,7 +13,7 @@
         {
             public const int TokenExpiration = 2;
             public const string UserIdClaimKey = "UserId";
-            public const string SymmetricSecurityKey = "superSecretKey@345";
+            public const string SymmetricSecurityKey = "*^Super_Secret_Symmetric_Security_Key^*";
 
             public const string Admin = "Admin";
 

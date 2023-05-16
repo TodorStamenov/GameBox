@@ -1,9 +1,8 @@
-﻿namespace User.Services.BindingModels.Auth
-{
-    public class LoginBindingModel
-    {
-        public string Username { get; set; }
+﻿namespace User.Services.BindingModels.Auth;
 
-        public string Password { get; set; }
-    }
+public class LoginBindingModel
+{
+    public string Username { get; set; }
+
+    public string Password { get; set; }
 }

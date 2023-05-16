@@ -10,137 +10,136 @@ using User.DataAccess;
 using User.Models;
 using User.Services.Contracts;
 
-namespace User.Services
+namespace User.Services;
+
+public class UserDbContextSeedService : UsersSeeder.UsersSeederBase
 {
-    public class UserDbContextSeedService : UsersSeeder.UsersSeederBase
+    private const int AdminsCount = 1;
+    private const int UsersCount = 50;
+    private const string AdminRoleName = "Admin";
+
+    private readonly UserDbContext context;
+    private readonly IAuthService authService;
+    private readonly IQueueSenderService messageQueue;
+
+    public UserDbContextSeedService(
+        UserDbContext context,
+        IAuthService authService,
+        IQueueSenderService messageQueue)
     {
-        private const int AdminsCount = 1;
-        private const int UsersCount = 50;
-        private const string AdminRoleName = "Admin";
+        this.context = context;
+        this.authService = authService;
+        this.messageQueue = messageQueue;
+    }
 
-        private readonly UserDbContext context;
-        private readonly IAuthService authService;
-        private readonly IQueueSenderService messageQueue;
+    public override async Task<SeedUsersReply> SeedUsersDatabase(SeedUsersRequest request, ServerCallContext context)
+    {
+        await this.SeedRolesAsync(AdminRoleName);
+        await this.SeedUsersAsync(UsersCount);
+        await this.SeedUsersAsync(AdminsCount, AdminRoleName);
 
-        public UserDbContextSeedService(
-            UserDbContext context,
-            IAuthService authService,
-            IQueueSenderService messageQueue)
+        return new SeedUsersReply { Seeded = true };
+    }
+
+    private async Task SeedRolesAsync(string roleName)
+    {
+        if (await this.context.Roles.AnyAsync())
         {
-            this.context = context;
-            this.authService = authService;
-            this.messageQueue = messageQueue;
+            return;
         }
 
-        public override async Task<SeedUsersReply> SeedUsersDatabase(SeedUsersRequest request, ServerCallContext context)
-        {
-            await this.SeedRolesAsync(AdminRoleName);
-            await this.SeedUsersAsync(UsersCount);
-            await this.SeedUsersAsync(AdminsCount, AdminRoleName);
+        var role = new Role { Name = roleName };
 
-            return new SeedUsersReply { Seeded = true };
+        await this.context.Roles.AddAsync(role);
+        await this.context.SaveChangesAsync();
+    }
+
+    private async Task SeedUsersAsync(int usersCount)
+    {
+        if (await this.context.Users.AnyAsync(u => !u.Roles.Any()))
+        {
+            return;
         }
 
-        private async Task SeedRolesAsync(string roleName)
+        var users = new List<Models.User>();
+        for (int i = 1; i <= usersCount; i++)
         {
-            if (await this.context.Roles.AnyAsync())
+            byte[] salt = this.authService.GenerateSalt();
+
+            var user = new Models.User
             {
-                return;
-            }
+                Username = $"User{i}",
+                Password = this.authService.HashPassword("123", salt),
+                Salt = salt
+            };
 
-            var role = new Role { Name = roleName };
-
-            await this.context.Roles.AddAsync(role);
-            await this.context.SaveChangesAsync();
+            users.Add(user);
         }
 
-        private async Task SeedUsersAsync(int usersCount)
+        await this.context.Users.AddRangeAsync(users);
+        await this.context.SaveChangesAsync();
+
+        var userMessages = users
+            .Select(u => new { u.Username, UserId = u.Id })
+            .ToList();
+
+        foreach (var user in userMessages)
         {
-            if (await this.context.Users.AnyAsync(u => !u.Roles.Any()))
-            {
-                return;
-            }
+            var userAsString = JsonSerializer.Serialize(user);
+            this.messageQueue.PostQueueMessage("users", userAsString);
+        }
+    }
 
-            var users = new List<Models.User>();
-            for (int i = 1; i <= usersCount; i++)
-            {
-                byte[] salt = this.authService.GenerateSalt();
-
-                var user = new Models.User
-                {
-                    Username = $"User{i}",
-                    Password = this.authService.HashPassword("123", salt),
-                    Salt = salt
-                };
-
-                users.Add(user);
-            }
-
-            await this.context.Users.AddRangeAsync(users);
-            await this.context.SaveChangesAsync();
-
-            var userMessages = users
-                .Select(u => new { u.Username, UserId = u.Id })
-                .ToList();
-
-            foreach (var user in userMessages)
-            {
-                var userAsString = JsonSerializer.Serialize(user);
-                this.messageQueue.PostQueueMessage("users", userAsString);
-            }
+    private async Task SeedUsersAsync(int usersCount, string role)
+    {
+        if (await this.context.Users.AnyAsync(u => u.Roles.Any(r => r.Role.Name == role)))
+        {
+            return;
         }
 
-        private async Task SeedUsersAsync(int usersCount, string role)
+        Guid roleId = await this.context
+            .Roles
+            .Where(r => r.Name == role)
+            .Select(r => r.Id)
+            .FirstOrDefaultAsync();
+
+        if (roleId == default)
         {
-            if (await this.context.Users.AnyAsync(u => u.Roles.Any(r => r.Role.Name == role)))
+            return;
+        }
+
+        var users = new List<Models.User>();
+        for (int i = 1; i <= usersCount; i++)
+        {
+            byte[] salt = this.authService.GenerateSalt();
+
+            var user = new Models.User
             {
-                return;
-            }
+                Username = $"{role}{i}",
+                Password = this.authService.HashPassword("123", salt),
+                Salt = salt
+            };
 
-            Guid roleId = await this.context
-                .Roles
-                .Where(r => r.Name == role)
-                .Select(r => r.Id)
-                .FirstOrDefaultAsync();
-
-            if (roleId == default)
+            var userRole = new UserRole
             {
-                return;
-            }
+                RoleId = roleId
+            };
 
-            var users = new List<Models.User>();
-            for (int i = 1; i <= usersCount; i++)
-            {
-                byte[] salt = this.authService.GenerateSalt();
+            user.Roles.Add(userRole);
+            users.Add(user);
+        }
 
-                var user = new Models.User
-                {
-                    Username = $"{role}{i}",
-                    Password = this.authService.HashPassword("123", salt),
-                    Salt = salt
-                };
+        await this.context.Users.AddRangeAsync(users);
+        await this.context.SaveChangesAsync();
 
-                var userRole = new UserRole
-                {
-                    RoleId = roleId
-                };
+        var userMessages = users
+            .Select(u => new { u.Username, UserId = u.Id })
+            .ToList();
 
-                user.Roles.Add(userRole);
-                users.Add(user);
-            }
-
-            await this.context.Users.AddRangeAsync(users);
-            await this.context.SaveChangesAsync();
-
-            var userMessages = users
-                .Select(u => new { u.Username, UserId = u.Id })
-                .ToList();
-
-            foreach (var user in userMessages)
-            {
-                var userAsString = JsonSerializer.Serialize(user);
-                this.messageQueue.PostQueueMessage("users", userAsString);
-            }
+        foreach (var user in userMessages)
+        {
+            var userAsString = JsonSerializer.Serialize(user);
+            this.messageQueue.PostQueueMessage("users", userAsString);
         }
     }
 }

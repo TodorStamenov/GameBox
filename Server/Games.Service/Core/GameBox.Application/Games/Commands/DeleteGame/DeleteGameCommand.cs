@@ -8,38 +8,37 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GameBox.Application.Games.Commands.DeleteGame
+namespace GameBox.Application.Games.Commands.DeleteGame;
+
+public class DeleteGameCommand : IRequest<string>
 {
-    public class DeleteGameCommand : IRequest<string>
+    public Guid Id { get; set; }
+
+    public class DeleteGameCommandHandler : IRequestHandler<DeleteGameCommand, string>
     {
-        public Guid Id { get; set; }
+        private readonly IDataService context;
 
-        public class DeleteGameCommandHandler : IRequestHandler<DeleteGameCommand, string>
+        public DeleteGameCommandHandler(IDataService context)
         {
-            private readonly IDataService context;
+            this.context = context;
+        }
 
-            public DeleteGameCommandHandler(IDataService context)
+        public async Task<string> Handle(DeleteGameCommand request, CancellationToken cancellationToken)
+        {
+            var game = this.context
+                .All<Game>()
+                .Where(g => g.Id == request.Id)
+                .FirstOrDefault();
+
+            if (game == null)
             {
-                this.context = context;
+                throw new NotFoundException(nameof(Game), request.Id);
             }
 
-            public async Task<string> Handle(DeleteGameCommand request, CancellationToken cancellationToken)
-            {
-                var game = this.context
-                    .All<Game>()
-                    .Where(g => g.Id == request.Id)
-                    .FirstOrDefault();
+            await this.context.DeleteAsync(game);
+            await this.context.SaveAsync(cancellationToken);
 
-                if (game == null)
-                {
-                    throw new NotFoundException(nameof(Game), request.Id);
-                }
-
-                await this.context.DeleteAsync(game);
-                await this.context.SaveAsync(cancellationToken);
-
-                return string.Format(Constants.Common.Success, nameof(Game), game.Title, Constants.Common.Deleted);
-            }
+            return string.Format(Constants.Common.Success, nameof(Game), game.Title, Constants.Common.Deleted);
         }
     }
 }

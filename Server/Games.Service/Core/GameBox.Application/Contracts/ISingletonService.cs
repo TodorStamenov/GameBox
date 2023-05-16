@@ -1,6 +1,5 @@
-﻿namespace GameBox.Application.Contracts
+﻿namespace GameBox.Application.Contracts;
+
+public interface ISingletonService
 {
-    public interface ISingletonService
-    {
-    }
 }

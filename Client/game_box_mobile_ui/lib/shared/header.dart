@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_box_mobile_ui/common/constants.dart';
 
-class Header extends StatelessWidget with PreferredSizeWidget {
+class Header extends StatelessWidget implements PreferredSizeWidget {
   final String _title;
 
   const Header({

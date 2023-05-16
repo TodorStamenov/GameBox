@@ -1,7 +1,6 @@
-﻿namespace User.Models
+﻿namespace User.Models;
+
+public abstract class Entity<TKey>
 {
-    public abstract class Entity<TKey>
-    {
-        public TKey Id { get; set; }
-    }
+    public TKey Id { get; set; }
 }

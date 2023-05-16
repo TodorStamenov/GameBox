@@ -9,38 +9,37 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace GameBox.Application.Comments.Commands.DeleteComment
+namespace GameBox.Application.Comments.Commands.DeleteComment;
+
+public class DeleteCommentCommand : IRequest<string>
 {
-    public class DeleteCommentCommand : IRequest<string>
+    public Guid Id { get; set; }
+
+    public class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand, string>
     {
-        public Guid Id { get; set; }
+        private readonly IDataService context;
 
-        public class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand, string>
+        public DeleteCommentCommandHandler(IDataService context)
         {
-            private readonly IDataService context;
+            this.context = context;
+        }
 
-            public DeleteCommentCommandHandler(IDataService context)
+        public async Task<string> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
+        {
+            var comment = this.context
+                .All<Comment>()
+                .Where(c => c.Id == request.Id)
+                .FirstOrDefault();
+
+            if (comment == null)
             {
-                this.context = context;
+                throw new NotFoundException(nameof(Comment), request.Id);
             }
 
-            public async Task<string> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
-            {
-                var comment = this.context
-                    .All<Comment>()
-                    .Where(c => c.Id == request.Id)
-                    .FirstOrDefault();
+            await this.context.DeleteAsync(comment);
+            await this.context.SaveAsync(cancellationToken);
 
-                if (comment == null)
-                {
-                    throw new NotFoundException(nameof(Comment), request.Id);
-                }
-
-                await this.context.DeleteAsync(comment);
-                await this.context.SaveAsync(cancellationToken);
-
-                return string.Format(Constants.Common.Success, nameof(Comment), string.Empty, Constants.Common.Deleted);
-            }
+            return string.Format(Constants.Common.Success, nameof(Comment), string.Empty, Constants.Common.Deleted);
         }
     }
 }

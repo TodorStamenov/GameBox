@@ -14,81 +14,80 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GameBox.Api.Controllers
+namespace GameBox.Api.Controllers;
+
+public class GamesController : BaseApiController
 {
-    public class GamesController : BaseApiController
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<GamesListViewModel>>> Get([FromQuery] int loadedGames)
     {
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<GamesListViewModel>>> Get([FromQuery]int loadedGames)
+        return Ok(await Mediator.Send(new GetAllGamesQuery { LoadedGames = loadedGames }));
+    }
+
+    [HttpGet("category/{categoryId:guid}")]
+    public async Task<ActionResult<IEnumerable<GamesListViewModel>>> ByCategory([FromRoute] Guid categoryId, [FromQuery] int loadedGames)
+    {
+        var query = new GetGamesByCategoryQuery
         {
-            return Ok(await Mediator.Send(new GetAllGamesQuery { LoadedGames = loadedGames }));
-        }
+            CategoryId = categoryId,
+            LoadedGames = loadedGames
+        };
 
-        [HttpGet("category/{categoryId:guid}")]
-        public async Task<ActionResult<IEnumerable<GamesListViewModel>>> ByCategory([FromRoute]Guid categoryId, [FromQuery]int loadedGames)
+        return Ok(await Mediator.Send(query));
+    }
+
+    [HttpGet("details/{id:guid}")]
+    public async Task<IActionResult> Details([FromRoute] Guid id)
+    {
+        return Ok(await Mediator.Send(new GetGameDetailsQuery { Id = id }));
+    }
+
+    [Authorize]
+    [HttpGet("owned")]
+    public async Task<ActionResult<IEnumerable<GamesListViewModel>>> Owned([FromQuery] int loadedGames)
+    {
+        var query = new GetOwnedGamesQuery
         {
-            var query = new GetGamesByCategoryQuery
-            {
-                CategoryId = categoryId,
-                LoadedGames = loadedGames
-            };
+            LoadedGames = loadedGames
+        };
 
-            return Ok(await Mediator.Send(query));
-        }
+        return Ok(await Mediator.Send(query));
+    }
 
-        [HttpGet("details/{id:guid}")]
-        public async Task<IActionResult> Details([FromRoute]Guid id)
-        {
-            return Ok(await Mediator.Send(new GetGameDetailsQuery { Id = id }));
-        }
+    [HttpGet("all")]
+    [Authorize(Roles = Constants.Common.Admin)]
+    public async Task<ActionResult<IEnumerable<GamesListByTitleViewModel>>> Get([FromQuery] string title)
+    {
+        return Ok(await Mediator.Send(new GetGamesByTitleQuery { Title = title }));
+    }
 
-        [Authorize]
-        [HttpGet("owned")]
-        public async Task<ActionResult<IEnumerable<GamesListViewModel>>> Owned([FromQuery]int loadedGames)
-        {
-            var query = new GetOwnedGamesQuery
-            {
-                LoadedGames = loadedGames
-            };
-            
-            return Ok(await Mediator.Send(query));
-        }
+    [HttpGet("{id:guid}")]
+    [Authorize(Roles = Constants.Common.Admin)]
+    public async Task<IActionResult> Get([FromRoute] Guid id)
+    {
+        return Ok(await Mediator.Send(new GetGameQuery { Id = id }));
+    }
 
-        [HttpGet("all")]
-        [Authorize(Roles = Constants.Common.Admin)]
-        public async Task<ActionResult<IEnumerable<GamesListByTitleViewModel>>> Get([FromQuery]string title)
-        {
-            return Ok(await Mediator.Send(new GetGamesByTitleQuery { Title = title }));
-        }
+    [HttpPut("{id:guid}")]
+    [Authorize(Roles = Constants.Common.Admin)]
+    public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] UpdateGameCommand command)
+    {
+        command.Id = id;
 
-        [HttpGet("{id:guid}")]
-        [Authorize(Roles = Constants.Common.Admin)]
-        public async Task<IActionResult> Get([FromRoute]Guid id)
-        {
-            return Ok(await Mediator.Send(new GetGameQuery { Id = id }));
-        }
+        return Ok(await Mediator.Send(command));
+    }
 
-        [HttpPut("{id:guid}")]
-        [Authorize(Roles = Constants.Common.Admin)]
-        public async Task<IActionResult> Put([FromRoute]Guid id, [FromBody]UpdateGameCommand command)
-        {
-            command.Id = id;
+    [HttpPost]
+    [Authorize(Roles = Constants.Common.Admin)]
+    public async Task<IActionResult> Post([FromBody] CreateGameCommand command)
+    {
+        return Ok(await Mediator.Send(command));
+    }
 
-            return Ok(await Mediator.Send(command));
-        }
-
-        [HttpPost]
-        [Authorize(Roles = Constants.Common.Admin)]
-        public async Task<IActionResult> Post([FromBody]CreateGameCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
-
-        [HttpDelete("{id:guid}")]
-        [Authorize(Roles = Constants.Common.Admin)]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            return Ok(await Mediator.Send(new DeleteGameCommand { Id = id }));
-        }
+    [HttpDelete("{id:guid}")]
+    [Authorize(Roles = Constants.Common.Admin)]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        return Ok(await Mediator.Send(new DeleteGameCommand { Id = id }));
     }
 }

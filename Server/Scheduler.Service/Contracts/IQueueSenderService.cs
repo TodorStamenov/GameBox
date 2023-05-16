@@ -1,7 +1,6 @@
-namespace Scheduler.Service.Contracts
+namespace Scheduler.Service.Contracts;
+
+public interface IQueueSenderService
 {
-    public interface IQueueSenderService
-    {
-        void PostQueueMessage(string queueName, string message);
-    }
+    void PostQueueMessage(string queueName, string message);
 }

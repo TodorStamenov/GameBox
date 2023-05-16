@@ -2,57 +2,56 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Message.DataAccess.Models
+namespace Message.DataAccess.Models;
+
+public class Message
 {
-    public class Message
+    public string serializedData;
+
+    private Message() { }
+
+    public Message(string queueName, object data)
     {
-        public string serializedData;
+        this.QueueName = queueName;
+        this.Data = data;
+    }
 
-        private Message() { }
+    public Guid Id { get; set; }
 
-        public Message(string queueName, object data)
+    public string QueueName { get; private set; }
+
+    public Type Type { get; private set; }
+
+    public bool Published { get; private set; }
+
+    public void MarkAsPublished()
+    {
+        this.Published = true;
+    }
+
+    public object Data
+    {
+        get
         {
-            this.QueueName = queueName;
-            this.Data = data;
+            return JsonSerializer.Deserialize(
+                this.serializedData,
+                this.Type,
+                new JsonSerializerOptions
+                {
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                });
         }
 
-        public Guid Id { get; set; }
-
-        public string QueueName { get; private set; }
-
-        public Type Type { get; private set; }
-
-        public bool Published { get; private set; }
-
-        public void MarkAsPublished()
+        set
         {
-            this.Published = true;
-        }
+            this.Type = value.GetType();
 
-        public object Data
-        {
-            get
-            {
-                return JsonSerializer.Deserialize(
-                    this.serializedData,
-                    this.Type,
-                    new JsonSerializerOptions
-                    {
-                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-                    });
-            }
-
-            set
-            {
-                this.Type = value.GetType();
-
-                this.serializedData = JsonSerializer.Serialize(
-                    value,
-                    new JsonSerializerOptions
-                    {
-                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-                    });
-            }
+            this.serializedData = JsonSerializer.Serialize(
+                value,
+                new JsonSerializerOptions
+                {
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                });
         }
     }
 }

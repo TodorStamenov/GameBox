@@ -9,38 +9,37 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GameBox.Application.Categories.Queries.GetCategory
+namespace GameBox.Application.Categories.Queries.GetCategory;
+
+public class GetCategoryQuery : IRequest<CategoryViewModel>
 {
-    public class GetCategoryQuery : IRequest<CategoryViewModel>
+    public Guid Id { get; set; }
+
+    public class GetCategoryQueryHandler : IRequestHandler<GetCategoryQuery, CategoryViewModel>
     {
-        public Guid Id { get; set; }
+        private readonly IMapper mapper;
+        private readonly IDataService context;
 
-        public class GetCategoryQueryHandler : IRequestHandler<GetCategoryQuery, CategoryViewModel>
+        public GetCategoryQueryHandler(IMapper mapper, IDataService context)
         {
-            private readonly IMapper mapper;
-            private readonly IDataService context;
+            this.mapper = mapper;
+            this.context = context;
+        }
 
-            public GetCategoryQueryHandler(IMapper mapper, IDataService context)
+        public async Task<CategoryViewModel> Handle(GetCategoryQuery request, CancellationToken cancellationToken)
+        {
+            var category = this.context
+                .All<Category>()
+                .Where(c => c.Id == request.Id)
+                .ProjectTo<CategoryViewModel>(this.mapper.ConfigurationProvider)
+                .FirstOrDefault();
+
+            if (category == null)
             {
-                this.mapper = mapper;
-                this.context = context;
+                throw new NotFoundException(nameof(Category), request.Id);
             }
 
-            public async Task<CategoryViewModel> Handle(GetCategoryQuery request, CancellationToken cancellationToken)
-            {
-                var category = this.context
-                    .All<Category>()
-                    .Where(c => c.Id == request.Id)
-                    .ProjectTo<CategoryViewModel>(this.mapper.ConfigurationProvider)
-                    .FirstOrDefault();
-
-                if (category == null)
-                {
-                    throw new NotFoundException(nameof(Category), request.Id);
-                }
-
-                return await Task.FromResult(category);
-            }
+            return await Task.FromResult(category);
         }
     }
 }

@@ -7,48 +7,47 @@ using System;
 using System.Text;
 using System.Text.Json;
 
-namespace GameBox.Infrastructure
+namespace GameBox.Infrastructure;
+
+public class QueueSenderService : IQueueSenderService
 {
-    public class QueueSenderService : IQueueSenderService
+    private readonly RabbitMQSettings settings;
+
+    public QueueSenderService(IOptions<RabbitMQSettings> settings)
     {
-        private readonly RabbitMQSettings settings;
+        this.settings = settings.Value;
+    }
 
-        public QueueSenderService(IOptions<RabbitMQSettings> settings)
+    public void PostQueueMessage<T>(string queueName, T command) where T : QueueMessageModel
+    {
+        var connectionFactory = new ConnectionFactory
         {
-            this.settings = settings.Value;
-        }
+            Port = this.settings.Port,
+            HostName = this.settings.Host,
+            UserName = this.settings.Username,
+            Password = this.settings.Password,
+            RequestedConnectionTimeout = TimeSpan.FromMilliseconds(3000)
+        };
 
-        public void PostQueueMessage<T>(string queueName, T command) where T : QueueMessageModel
+        using (var rabbitConnection = connectionFactory.CreateConnection())
         {
-            var connectionFactory = new ConnectionFactory
+            using (var channel = rabbitConnection.CreateModel())
             {
-                Port = this.settings.Port,
-                HostName = this.settings.Host,
-                UserName = this.settings.Username,
-                Password = this.settings.Password,
-                RequestedConnectionTimeout = TimeSpan.FromMilliseconds(3000)
-            };
+                var message = JsonSerializer.Serialize(command);
+                var body = Encoding.UTF8.GetBytes(message);
 
-            using (var rabbitConnection = connectionFactory.CreateConnection())
-            {
-                using (var channel = rabbitConnection.CreateModel())
-                {
-                    var message = JsonSerializer.Serialize(command);
-                    var body = Encoding.UTF8.GetBytes(message);
+                channel.QueueDeclare(
+                    queue: queueName,
+                    durable: false,
+                    exclusive: false,
+                    autoDelete: true,
+                    arguments: null);
 
-                    channel.QueueDeclare(
-                        queue: queueName,
-                        durable: false,
-                        exclusive: false,
-                        autoDelete: true,
-                        arguments: null);
-
-                    channel.BasicPublish(
-                        exchange: string.Empty,
-                        routingKey: queueName,
-                        basicProperties: null,
-                        body: body);
-                }
+                channel.BasicPublish(
+                    exchange: string.Empty,
+                    routingKey: queueName,
+                    basicProperties: null,
+                    body: body);
             }
         }
     }

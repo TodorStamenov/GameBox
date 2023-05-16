@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 
-namespace GameBox.Application.Contracts.Mapping
+namespace GameBox.Application.Contracts.Mapping;
+
+public interface ICustomMapping
 {
-    public interface ICustomMapping
-    {
-        void CreateMappings(Profile configuration);
-    }
+    void CreateMappings(Profile configuration);
 }

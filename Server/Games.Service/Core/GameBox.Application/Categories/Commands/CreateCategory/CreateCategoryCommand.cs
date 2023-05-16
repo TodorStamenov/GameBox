@@ -5,33 +5,32 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GameBox.Application.Categories.Commands.CreateCategory
+namespace GameBox.Application.Categories.Commands.CreateCategory;
+
+public class CreateCategoryCommand : IRequest<string>
 {
-    public class CreateCategoryCommand : IRequest<string>
+    public string Name { get; set; }
+
+    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, string>
     {
-        public string Name { get; set; }
+        private readonly IDataService context;
 
-        public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, string>
+        public CreateCategoryCommandHandler(IDataService context)
         {
-            private readonly IDataService context;
+            this.context = context;
+        }
 
-            public CreateCategoryCommandHandler(IDataService context)
+        public async Task<string> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+        {
+            var category = new Category
             {
-                this.context = context;
-            }
+                Name = request.Name
+            };
 
-            public async Task<string> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
-            {
-                var category = new Category
-                {
-                    Name = request.Name
-                };
+            await this.context.AddAsync(category);
+            await this.context.SaveAsync(cancellationToken);
 
-                await this.context.AddAsync(category);
-                await this.context.SaveAsync(cancellationToken);
-
-                return string.Format(Constants.Common.Success, nameof(Category), request.Name, Constants.Common.Added);
-            }
+            return string.Format(Constants.Common.Success, nameof(Category), request.Name, Constants.Common.Added);
         }
     }
 }

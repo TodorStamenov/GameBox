@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace User.Services.Messages
-{
-    public class UserRegisteredMessage : QueueMessageModel
-    {
-        public Guid UserId { get; set; }
+namespace User.Services.Messages;
 
-        public string Username { get; set; }
-    }
+public class UserRegisteredMessage : QueueMessageModel
+{
+    public Guid UserId { get; set; }
+
+    public string Username { get; set; }
 }

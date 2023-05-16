@@ -1,15 +1,14 @@
 ﻿using FluentValidation;
 using GameBox.Application.Infrastructure;
 
-namespace GameBox.Application.Categories.Commands.CreateCategory
+namespace GameBox.Application.Categories.Commands.CreateCategory;
+
+public class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
 {
-    public class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
+    public CreateCategoryCommandValidator()
     {
-        public CreateCategoryCommandValidator()
-        {
-            RuleFor(c => c.Name)
-                .Length(Constants.Category.NameMinLength, Constants.Category.NameMaxLength)
-                .NotEmpty();
-        }
+        RuleFor(c => c.Name)
+            .Length(Constants.Category.NameMinLength, Constants.Category.NameMaxLength)
+            .NotEmpty();
     }
 }

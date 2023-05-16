@@ -1,20 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Message.DataAccess
+namespace Message.DataAccess;
+
+public class MessageDbContext : DbContext
 {
-    public class MessageDbContext : DbContext
+    public MessageDbContext(DbContextOptions<MessageDbContext> options)
+        : base(options)
     {
-        public MessageDbContext(DbContextOptions<MessageDbContext> options)
-            : base(options)
-        {
-        }
+    }
 
-        public DbSet<Models.Message> Messages { get; set; }
+    public DbSet<Models.Message> Messages { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            builder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
-            base.OnModelCreating(builder);
-        }
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+        base.OnModelCreating(builder);
     }
 }

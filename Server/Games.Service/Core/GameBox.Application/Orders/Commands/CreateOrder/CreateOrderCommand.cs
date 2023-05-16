@@ -9,96 +9,92 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GameBox.Application.Orders.Commands.CreateOrder
+namespace GameBox.Application.Orders.Commands.CreateOrder;
+
+public class CreateOrderCommand : IRequest<string>
 {
-    public class CreateOrderCommand : IRequest<string>
+    public string Username { get; set; }
+
+    public IEnumerable<Guid> GameIds { get; set; }
+
+    public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, string>
     {
-        public string Username { get; set; }
+        private readonly IDateTimeService dateTime;
+        private readonly IDataService context;
+        private readonly IQueueSenderService queue;
+        private readonly ICurrentUserService currentUser;
 
-        public IEnumerable<Guid> GameIds { get; set; }
-
-        public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, string>
+        public CreateOrderCommandHandler(
+            IDateTimeService dateTime,
+            IDataService context,
+            IQueueSenderService queue,
+            ICurrentUserService currentUser)
         {
-            private readonly IMediator mediator;
-            private readonly IDateTimeService dateTime;
-            private readonly IDataService context;
-            private readonly IQueueSenderService queue;
-            private readonly ICurrentUserService currentUser;
+            this.dateTime = dateTime;
+            this.context = context;
+            this.queue = queue;
+            this.currentUser = currentUser;
+        }
 
-            public CreateOrderCommandHandler(
-                IMediator mediator,
-                IDateTimeService dateTime,
-                IDataService context,
-                IQueueSenderService queue,
-                ICurrentUserService currentUser)
+        public async Task<string> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+        {
+            var games = this.context
+                .All<Game>()
+                .Where(g => request.GameIds.Contains(g.Id))
+                .ToList();
+
+            if (!games.Any())
             {
-                this.mediator = mediator;
-                this.dateTime = dateTime;
-                this.context = context;
-                this.queue = queue;
-                this.currentUser = currentUser;
+                throw new NotFoundException(nameof(Game), request.GameIds.First());
             }
 
-            public async Task<string> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+            foreach (var game in games)
             {
-                var games = this.context
-                    .All<Game>()
-                    .Where(g => request.GameIds.Contains(g.Id))
-                    .ToList();
+                game.OrderCount++;
+            }
 
-                if (!games.Any())
-                {
-                    throw new NotFoundException(nameof(Game), request.GameIds.First());
-                }
+            var order = new Order
+            {
+                CustomerId = this.currentUser.CustomerId,
+                DateAdded = this.dateTime.UtcNow,
+                Price = games.Sum(g => g.Price)
+            };
 
-                foreach (var game in games)
+            foreach (var game in games)
+            {
+                order.Games.Add(new GameOrder
                 {
-                    game.OrderCount++;
-                }
+                    GameId = game.Id
+                });
+            }
 
-                var order = new Order
-                {
-                    CustomerId = this.currentUser.CustomerId,
-                    DateAdded = this.dateTime.UtcNow,
-                    Price = games.Sum(g => g.Price)
-                };
+            await this.context.AddAsync(order);
 
-                foreach (var game in games)
-                {
-                    order.Games.Add(new GameOrder
+            var messageData = new OrderCreatedMessage
+            {
+                Username = request.Username,
+                Price = order.Price,
+                GamesCount = order.Games.Count,
+                TimeStamp = order.DateAdded,
+                Games = order.Games
+                    .Select(g => new OrderGame
                     {
-                        GameId = game.Id
-                    });
-                }
+                        Id = g.GameId,
+                        Title = g.Game.Title,
+                        Price = g.Game.Price,
+                        ViewCount = g.Game.ViewCount,
+                        OrderCount = g.Game.OrderCount
+                    })
+                    .ToList()
+            };
 
-                await this.context.AddAsync(order);
+            var queueName = "orders";
+            var messageId = await this.context.SaveAsync(queueName, messageData, cancellationToken);
 
-                var messageData = new OrderCreatedMessage
-                {
-                    Username = request.Username,
-                    Price = order.Price,
-                    GamesCount = order.Games.Count,
-                    TimeStamp = order.DateAdded,
-                    Games = order.Games
-                        .Select(g => new OrderGame
-                        {
-                            Id = g.GameId,
-                            Title = g.Game.Title,
-                            Price = g.Game.Price,
-                            ViewCount = g.Game.ViewCount,
-                            OrderCount = g.Game.OrderCount
-                        })
-                        .ToList()
-                };
+            this.queue.PostQueueMessage(queueName, messageData);
+            await this.context.MarkMessageAsPublished(messageId);
 
-                var queueName = "orders";
-                var messageId = await this.context.SaveAsync(queueName, messageData, cancellationToken);
-
-                this.queue.PostQueueMessage(queueName, messageData);
-                await this.context.MarkMessageAsPublished(messageId);
-
-                return string.Format(Constants.Common.Success, nameof(Order), string.Empty, Constants.Common.Added);
-            }
+            return string.Format(Constants.Common.Success, nameof(Order), string.Empty, Constants.Common.Added);
         }
     }
 }
