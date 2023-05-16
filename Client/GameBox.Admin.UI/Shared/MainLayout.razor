@@ -4,15 +4,15 @@
 @inject ConfigurationSettings Configuration
 @inject NavigationManager Router
 
+<BlazoredToasts Position="ToastPosition.TopRight" Timeout="3" />
+
 <Navigation />
 
 <div class="container-fluid" style="margin-top: 70px; margin-bottom: 60px">
     @if (shouldRenderBody)
     {
-        @Body        
+        @Body
     }
-
-    <BlazoredToasts Position="ToastPosition.TopRight" Timeout="3" />
 </div>
 
 <Footer />
@@ -47,7 +47,7 @@
         {
             this.Router.NavigateTo("/games/all");
         }
-        else if(!isAdmin && this.Router.Uri != loginUrl)
+        else if (!isAdmin && this.Router.Uri != loginUrl)
         {
             this.Router.NavigateTo("/auth/login");
         }
