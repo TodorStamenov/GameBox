@@ -1,9 +1,6 @@
-using System;
+namespace GameBox.Application.GraphQL.Wishlists;
 
-namespace GameBox.Application.GraphQL.Wishlists
+public class AddGameInput
 {
-    public class AddGameInput
-    {
-        public Guid GameId { get; set; }
-    }
+    public Guid GameId { get; set; }
 }

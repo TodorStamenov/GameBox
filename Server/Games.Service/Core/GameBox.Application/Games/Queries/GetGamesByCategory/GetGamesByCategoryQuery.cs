@@ -8,62 +8,56 @@ using GameBox.Application.Model;
 using GameBox.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace GameBox.Application.Games.Queries.GetGamesByCategory
+namespace GameBox.Application.Games.Queries.GetGamesByCategory;
+
+public class GetGamesByCategoryQuery : IRequest<IEnumerable<GamesListViewModel>>
 {
-    public class GetGamesByCategoryQuery : IRequest<IEnumerable<GamesListViewModel>>
+    public int LoadedGames { get; set; }
+
+    public Guid CategoryId { get; set; }
+
+    public class GetGamesByCategoryQueryHandler : IRequestHandler<GetGamesByCategoryQuery, IEnumerable<GamesListViewModel>>
     {
-        public int LoadedGames { get; set; }
+        private const int GameCardsCount = 9;
 
-        public Guid CategoryId { get; set; }
+        private readonly IMapper mapper;
+        private readonly IDataService context;
+        private readonly IDistributedCache cache;
 
-        public class GetGamesByCategoryQueryHandler : IRequestHandler<GetGamesByCategoryQuery, IEnumerable<GamesListViewModel>>
+        public GetGamesByCategoryQueryHandler(
+            IMapper mapper,
+            IDataService context,
+            IDistributedCache cache)
         {
-            private const int GameCardsCount = 9;
+            this.mapper = mapper;
+            this.context = context;
+            this.cache = cache;
+        }
 
-            private readonly IMapper mapper;
-            private readonly IDataService context;
-            private readonly IDistributedCache cache;
+        public async Task<IEnumerable<GamesListViewModel>> Handle(GetGamesByCategoryQuery request, CancellationToken cancellationToken)
+        {
+            var games = await this.cache
+                .GetRecordAsync<IEnumerable<GamesCacheModel>>(Constants.Caching.RedisGamesKey);
 
-            public GetGamesByCategoryQueryHandler(
-                IMapper mapper,
-                IDataService context,
-                IDistributedCache cache)
+            if (games is null || !games.Any())
             {
-                this.mapper = mapper;
-                this.context = context;
-                this.cache = cache;
-            }
-
-            public async Task<IEnumerable<GamesListViewModel>> Handle(GetGamesByCategoryQuery request, CancellationToken cancellationToken)
-            {
-                var games = await this.cache
-                    .GetRecordAsync<IEnumerable<GamesCacheModel>>(Constants.Caching.RedisGamesKey);
-
-                if (games is null || !games.Any())
-                {
-                    return this.context
-                        .All<Game>()
-                        .Where(g => g.CategoryId == request.CategoryId)
-                        .Skip(request.LoadedGames)
-                        .Take(GameCardsCount)
-                        .ProjectTo<GamesListViewModel>(this.mapper.ConfigurationProvider)
-                        .ToList();
-                }
-                
-                return games
+                return this.context
+                    .All<Game>()
                     .Where(g => g.CategoryId == request.CategoryId)
                     .Skip(request.LoadedGames)
                     .Take(GameCardsCount)
-                    .AsQueryable()
                     .ProjectTo<GamesListViewModel>(this.mapper.ConfigurationProvider)
                     .ToList();
             }
+            
+            return games
+                .Where(g => g.CategoryId == request.CategoryId)
+                .Skip(request.LoadedGames)
+                .Take(GameCardsCount)
+                .AsQueryable()
+                .ProjectTo<GamesListViewModel>(this.mapper.ConfigurationProvider)
+                .ToList();
         }
     }
 }

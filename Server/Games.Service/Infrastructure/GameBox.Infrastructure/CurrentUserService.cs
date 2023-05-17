@@ -2,8 +2,6 @@ using GameBox.Application.Contracts.Services;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Linq;
 using System.Security.Claims;
 
 namespace GameBox.Infrastructure;

@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using GameBox.Application.Exceptions;
-using System;
 using System.Net;
-using System.Linq;
 
 namespace GameBox.Api.Filters;
 

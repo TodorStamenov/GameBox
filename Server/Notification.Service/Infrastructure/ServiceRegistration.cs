@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Notification.Service.Messages;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Notification.Service.Infrastructure;
 

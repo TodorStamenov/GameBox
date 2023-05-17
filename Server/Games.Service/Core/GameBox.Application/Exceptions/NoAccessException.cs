@@ -1,5 +1,3 @@
-using System;
-
 namespace GameBox.Application.Exceptions;
 
 public class NoAccessException : Exception

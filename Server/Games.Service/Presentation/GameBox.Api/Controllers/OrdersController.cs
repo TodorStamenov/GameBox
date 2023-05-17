@@ -1,9 +1,6 @@
 ﻿using GameBox.Application.Orders.Commands.CreateOrder;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace GameBox.Api.Controllers;
 
@@ -15,10 +12,10 @@ public class OrdersController : BaseApiController
     {
         var command = new CreateOrderCommand
         {
-            Username = User.Identity.Name,
+            Username = base.User.Identity.Name,
             GameIds = gameIds
         };
 
-        return Ok(await Mediator.Send(command));
+        return base.Ok(await base.Mediator.Send(command));
     }
 }

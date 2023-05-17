@@ -4,11 +4,6 @@ using GameBox.Application.Contracts.Services;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace GameBox.Application.Categories.Queries.GetMenuCategories;

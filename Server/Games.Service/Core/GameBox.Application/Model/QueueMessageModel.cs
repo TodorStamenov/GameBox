@@ -1,6 +1,5 @@
-﻿namespace GameBox.Application.Model
+﻿namespace GameBox.Application.Model;
+
+public abstract class QueueMessageModel
 {
-    public abstract class QueueMessageModel
-    {
-    }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace User.Services.Exceptions;
+﻿namespace User.Services.Exceptions;
 
 public class AccountLockedException : Exception
 {

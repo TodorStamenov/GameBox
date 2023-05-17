@@ -1,11 +1,8 @@
-using System;
+namespace GameBox.Application.Contracts.Services;
 
-namespace GameBox.Application.Contracts.Services
+public interface ICurrentUserService : ITransientService
 {
-    public interface ICurrentUserService : ITransientService
-    {
-        Guid UserId { get; }
+    Guid UserId { get; }
 
-        Guid CustomerId { get; }
-    }
+    Guid CustomerId { get; }
 }

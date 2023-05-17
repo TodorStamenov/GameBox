@@ -1,5 +1,3 @@
-using System;
-
 namespace Scheduler.Service.Model;
 
 public class Message

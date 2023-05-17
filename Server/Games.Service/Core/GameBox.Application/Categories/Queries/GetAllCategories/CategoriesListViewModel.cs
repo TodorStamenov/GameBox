@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using GameBox.Application.Contracts.Mapping;
 using GameBox.Domain.Entities;
-using System;
 
 namespace GameBox.Application.Categories.Queries.GetAllCategories;
 

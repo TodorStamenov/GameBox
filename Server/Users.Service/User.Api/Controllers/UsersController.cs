@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using User.Services.BindingModels.Auth;
 using User.Services.Contracts;
 using User.Services.Infrastructure;

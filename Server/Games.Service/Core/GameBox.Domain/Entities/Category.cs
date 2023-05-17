@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace GameBox.Domain.Entities;
+﻿namespace GameBox.Domain.Entities;
 
 public class Category : Entity<Guid>
 {

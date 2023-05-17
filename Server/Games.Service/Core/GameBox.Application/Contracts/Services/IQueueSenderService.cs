@@ -1,9 +1,8 @@
 ﻿using GameBox.Application.Model;
 
-namespace GameBox.Application.Contracts.Services
+namespace GameBox.Application.Contracts.Services;
+
+public interface IQueueSenderService : ITransientService
 {
-    public interface IQueueSenderService : ITransientService
-    {
-        void PostQueueMessage<T>(string queueName, T command) where T : QueueMessageModel;
-    }
+    void PostQueueMessage<T>(string queueName, T command) where T : QueueMessageModel;
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GameBox.Application.Exceptions;
+﻿namespace GameBox.Application.Exceptions;
 
 public class DeleteFailureException : Exception
 {

@@ -1,12 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Scheduler.Service.Contracts;
+﻿using Scheduler.Service.Contracts;
 using Scheduler.Service.Model;
 using Scheduler.Service.Services;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Scheduler.Service;
 

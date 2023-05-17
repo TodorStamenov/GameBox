@@ -1,8 +1,6 @@
 ﻿using Grpc.Net.Client;
 using GrpcGamesSeederClient;
 using GrpcUsersSeederClient;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Seeder.Service;
 

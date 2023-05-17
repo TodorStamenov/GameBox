@@ -1,7 +1,5 @@
 using Microsoft.Extensions.Caching.Distributed;
-using System;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Scheduler.Service.Extensions;
 

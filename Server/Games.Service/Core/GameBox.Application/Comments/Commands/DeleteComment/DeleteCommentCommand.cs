@@ -3,10 +3,6 @@ using GameBox.Application.Exceptions;
 using GameBox.Application.Infrastructure;
 using GameBox.Domain.Entities;
 using MediatR;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 
 namespace GameBox.Application.Comments.Commands.DeleteComment;

@@ -1,5 +1,3 @@
-using System;
-
 namespace GameBox.Domain.Entities;
 
 public class Comment : Entity<Guid>

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using User.Services.BindingModels.Auth;
+﻿using User.Services.BindingModels.Auth;
 using User.Services.Contracts.ServiceTypes;
 using User.Services.ViewModels.Auth;
 

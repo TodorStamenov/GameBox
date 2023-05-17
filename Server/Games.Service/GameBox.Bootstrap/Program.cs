@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-
-namespace GameBox.Bootstrap;
+﻿namespace GameBox.Bootstrap;
 
 public class Program
 {

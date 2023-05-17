@@ -1,13 +1,8 @@
 using Dapper;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Scheduler.Service.Extensions;
 using Scheduler.Service.Model;
-using System;
 using System.Data.SqlClient;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Scheduler.Service.Services;
 

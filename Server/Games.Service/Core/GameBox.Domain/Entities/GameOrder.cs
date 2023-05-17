@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GameBox.Domain.Entities;
+﻿namespace GameBox.Domain.Entities;
 
 public class GameOrder
 {

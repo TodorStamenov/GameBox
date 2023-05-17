@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using User.Services.Contracts.ServiceTypes;

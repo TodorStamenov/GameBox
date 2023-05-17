@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GameBox.Infrastructure.Messages;
+﻿namespace GameBox.Infrastructure.Messages;
 
 public class UserRegisteredMessage
 {

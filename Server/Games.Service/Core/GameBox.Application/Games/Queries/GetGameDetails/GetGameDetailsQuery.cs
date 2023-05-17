@@ -3,46 +3,41 @@ using GameBox.Application.Contracts.Services;
 using GameBox.Application.Exceptions;
 using GameBox.Domain.Entities;
 using MediatR;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace GameBox.Application.Games.Queries.GetGameDetails
+namespace GameBox.Application.Games.Queries.GetGameDetails;
+
+public class GetGameDetailsQuery : IRequest<GameDetailsViewModel>
 {
-    public class GetGameDetailsQuery : IRequest<GameDetailsViewModel>
+    public Guid Id { get; set; }
+
+    public class GetGameDetailsQueryHandler : IRequestHandler<GetGameDetailsQuery, GameDetailsViewModel>
     {
-        public Guid Id { get; set; }
+        private readonly IMapper mapper;
+        private readonly IDataService context;
 
-        public class GetGameDetailsQueryHandler : IRequestHandler<GetGameDetailsQuery, GameDetailsViewModel>
+        public GetGameDetailsQueryHandler(IMapper mapper, IDataService context)
         {
-            private readonly IMapper mapper;
-            private readonly IDataService context;
+            this.mapper = mapper;
+            this.context = context;
+        }
 
-            public GetGameDetailsQueryHandler(IMapper mapper, IDataService context)
+        public async Task<GameDetailsViewModel> Handle(GetGameDetailsQuery request, CancellationToken cancellationToken)
+        {
+            var game = this.context
+                .All<Game>()
+                .Where(g => g.Id == request.Id)
+                .FirstOrDefault();
+
+            if (game == null)
             {
-                this.mapper = mapper;
-                this.context = context;
+                throw new NotFoundException(nameof(Game), request.Id);
             }
 
-            public async Task<GameDetailsViewModel> Handle(GetGameDetailsQuery request, CancellationToken cancellationToken)
-            {
-                var game = this.context
-                    .All<Game>()
-                    .Where(g => g.Id == request.Id)
-                    .FirstOrDefault();
+            game.ViewCount++;
 
-                if (game == null)
-                {
-                    throw new NotFoundException(nameof(Game), request.Id);
-                }
+            await this.context.SaveAsync(cancellationToken);
 
-                game.ViewCount++;
-
-                await this.context.SaveAsync(cancellationToken);
-
-                return this.mapper.Map<GameDetailsViewModel>(game);
-            }
+            return this.mapper.Map<GameDetailsViewModel>(game);
         }
     }
 }

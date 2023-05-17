@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Linq;
 using User.Services.Contracts.Mapping;
 using User.Services.Infrastructure;
 

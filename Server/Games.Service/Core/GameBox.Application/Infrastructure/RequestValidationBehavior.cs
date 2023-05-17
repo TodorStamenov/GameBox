@@ -1,39 +1,34 @@
 ﻿using FluentValidation;
 using MediatR;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ValidationException = GameBox.Application.Exceptions.ValidationException;
 
-namespace GameBox.Application.Infrastructure
+namespace GameBox.Application.Infrastructure;
+
+public class RequestValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IRequest<TResponse>
 {
-    public class RequestValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+    private readonly IEnumerable<IValidator<TRequest>> validators;
+
+    public RequestValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
     {
-        private readonly IEnumerable<IValidator<TRequest>> validators;
+        this.validators = validators;
+    }
 
-        public RequestValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+    public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    {
+        var context = new ValidationContext<TRequest>(request);
+
+        var failures = this.validators
+            .Select(v => v.Validate(context))
+            .SelectMany(result => result.Errors)
+            .Where(f => f != null)
+            .ToList();
+
+        if (failures.Count != 0)
         {
-            this.validators = validators;
+            throw new ValidationException(failures);
         }
 
-        public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
-        {
-            var context = new ValidationContext<TRequest>(request);
-
-            var failures = this.validators
-                .Select(v => v.Validate(context))
-                .SelectMany(result => result.Errors)
-                .Where(f => f != null)
-                .ToList();
-
-            if (failures.Count != 0)
-            {
-                throw new ValidationException(failures);
-            }
-
-            return next();
-        }
+        return next();
     }
 }

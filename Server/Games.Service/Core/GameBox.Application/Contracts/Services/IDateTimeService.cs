@@ -1,11 +1,8 @@
-﻿using System;
+﻿namespace GameBox.Application.Contracts.Services;
 
-namespace GameBox.Application.Contracts.Services
+public interface IDateTimeService : ITransientService
 {
-    public interface IDateTimeService : ITransientService
-    {
-        DateTime Now { get; }
+    DateTime Now { get; }
 
-        DateTime UtcNow { get; }
-    }
+    DateTime UtcNow { get; }
 }

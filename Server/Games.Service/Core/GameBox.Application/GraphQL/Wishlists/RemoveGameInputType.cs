@@ -1,18 +1,15 @@
-using HotChocolate.Types;
+namespace GameBox.Application.GraphQL.Wishlists;
 
-namespace GameBox.Application.GraphQL.Wishlists
+public class RemoveGameInputType : InputObjectType<RemoveGameInput>
 {
-    public class RemoveGameInputType : InputObjectType<RemoveGameInput>
+    protected override void Configure(IInputObjectTypeDescriptor<RemoveGameInput> descriptor)
     {
-        protected override void Configure(IInputObjectTypeDescriptor<RemoveGameInput> descriptor)
-        {
-            descriptor.Description("Represents the input to remove a game.");
+        descriptor.Description("Represents the input to remove a game.");
 
-            descriptor
-                .Field(g => g.GameId)
-                .Description("Represents the game id for the game.");
+        descriptor
+            .Field(g => g.GameId)
+            .Description("Represents the game id for the game.");
 
-            base.Configure(descriptor);
-        }
+        base.Configure(descriptor);
     }
 }

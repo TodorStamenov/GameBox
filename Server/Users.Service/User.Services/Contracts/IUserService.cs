@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using User.Services.Contracts.ServiceTypes;
+﻿using User.Services.Contracts.ServiceTypes;
 using User.Services.ViewModels.Users;
 
 namespace User.Services.Contracts;

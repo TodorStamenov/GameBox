@@ -1,5 +1,4 @@
-﻿using System;
-using User.Services.Infrastructure;
+﻿using User.Services.Infrastructure;
 
 namespace User.Services.Exceptions;
 

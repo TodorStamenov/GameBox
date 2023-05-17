@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
-using System;
 using System.Text;
 using System.Text.Json;
 using User.Services.Contracts;

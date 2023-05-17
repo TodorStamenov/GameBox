@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace User.Models;
+﻿namespace User.Models;
 
 public class UserRole
 {

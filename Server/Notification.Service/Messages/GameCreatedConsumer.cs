@@ -1,14 +1,10 @@
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Notification.Service.Hubs;
 using Notification.Service.Models;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Notification.Service.Messages;
 

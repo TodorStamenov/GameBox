@@ -2,7 +2,6 @@ using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using Scheduler.Service.Contracts;
 using Scheduler.Service.Model;
-using System;
 using System.Text;
 
 namespace Scheduler.Service.Services;

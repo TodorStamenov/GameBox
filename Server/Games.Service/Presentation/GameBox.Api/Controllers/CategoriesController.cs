@@ -6,9 +6,6 @@ using GameBox.Application.Categories.Queries.GetMenuCategories;
 using GameBox.Application.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace GameBox.Api.Controllers;
 
@@ -18,20 +15,20 @@ public class CategoriesController : BaseApiController
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CategoriesListViewModel>>> Get()
     {
-        return Ok(await Mediator.Send(new GetAllCategoriesQuery()));
+        return base.Ok(await base.Mediator.Send(new GetAllCategoriesQuery()));
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
-        return Ok(await Mediator.Send(new GetCategoryQuery { Id = id }));
+        return base.Ok(await base.Mediator.Send(new GetCategoryQuery { Id = id }));
     }
 
     [AllowAnonymous]
     [HttpGet("menu")]
     public async Task<ActionResult<IEnumerable<CategoriesListMenuViewModel>>> Menu()
     {
-        return Ok(await Mediator.Send(new GetMenuCategoriesQuery()));
+        return base.Ok(await base.Mediator.Send(new GetMenuCategoriesQuery()));
     }
 
     [HttpPut("{id:guid}")]
@@ -39,12 +36,12 @@ public class CategoriesController : BaseApiController
     {
         command.Id = id;
 
-        return Ok(await Mediator.Send(command));
+        return base.Ok(await base.Mediator.Send(command));
     }
 
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateCategoryCommand command)
     {
-        return Ok(await Mediator.Send(command));
+        return base.Ok(await base.Mediator.Send(command));
     }
 }

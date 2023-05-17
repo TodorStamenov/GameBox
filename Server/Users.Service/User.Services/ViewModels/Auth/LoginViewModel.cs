@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace User.Services.ViewModels.Auth;
+﻿namespace User.Services.ViewModels.Auth;
 
 public class LoginViewModel
 {

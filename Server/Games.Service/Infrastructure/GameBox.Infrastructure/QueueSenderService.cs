@@ -3,7 +3,6 @@ using GameBox.Application.Model;
 using GameBox.Infrastructure.Settings;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
-using System;
 using System.Text;
 using System.Text.Json;
 

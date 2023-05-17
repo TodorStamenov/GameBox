@@ -1,7 +1,5 @@
 using Message.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using User.DataAccess;
 
 namespace User.Api;

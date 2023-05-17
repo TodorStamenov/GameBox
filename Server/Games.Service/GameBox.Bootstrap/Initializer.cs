@@ -1,8 +1,6 @@
 ﻿using GameBox.Persistence;
 using Message.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace GameBox.Bootstrap;
 

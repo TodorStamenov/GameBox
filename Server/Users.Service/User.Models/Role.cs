@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace User.Models;
+﻿namespace User.Models;
 
 public class Role : Entity<Guid>
 {

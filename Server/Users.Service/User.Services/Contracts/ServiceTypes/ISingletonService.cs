@@ -1,6 +1,5 @@
-﻿namespace User.Services.Contracts.ServiceTypes
+﻿namespace User.Services.Contracts.ServiceTypes;
+
+public interface ISingletonService
 {
-    public interface ISingletonService
-    {
-    }
 }

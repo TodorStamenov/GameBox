@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace User.Services.Messages;
+﻿namespace User.Services.Messages;
 
 public class UserRegisteredMessage : QueueMessageModel
 {

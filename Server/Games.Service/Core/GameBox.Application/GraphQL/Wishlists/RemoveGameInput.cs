@@ -1,9 +1,6 @@
-using System;
+namespace GameBox.Application.GraphQL.Wishlists;
 
-namespace GameBox.Application.GraphQL.Wishlists
+public class RemoveGameInput
 {
-    public class RemoveGameInput
-    {
-        public Guid GameId { get; set; }
-    }
+    public Guid GameId { get; set; }
 }
