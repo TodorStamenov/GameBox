@@ -11,9 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.5
-  http: ^0.13.5
-  fluttertoast: ^8.2.1
-  shared_preferences: ^2.0.18
+  http: ^1.0.0
+  fluttertoast: ^8.2.2
+  shared_preferences: ^2.1.1
   youtube_player_flutter: ^8.1.2
 
 dev_dependencies:
