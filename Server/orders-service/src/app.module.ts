@@ -16,10 +16,6 @@ import { config } from './config/config';
     MongooseModule.forFeature([{ name: Order.name, schema: OrderSchema }]),
     MongooseModule.forRoot(
       `mongodb://${config.dockerHostIp}:${config.mongoPort}/game-box`,
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      },
     ),
     RabbitMQModule.forRoot(RabbitMQModule, {
       uri: `amqp://guest:guest@${config.dockerHostIp}:${config.rabbitMqPort}`,
