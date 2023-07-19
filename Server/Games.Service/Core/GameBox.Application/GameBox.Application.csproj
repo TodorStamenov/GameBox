@@ -8,14 +8,14 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="FluentValidation" Version="11.5.2" />
-    <PackageReference Include="HotChocolate.AspNetCore" Version="13.2.1" />
-    <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.2.1" />
-    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.6.0" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="13.3.3" />
+    <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.3.3" />
+    <PackageReference Include="MediatR" Version="12.1.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.9" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
-    <PackageReference Include="StackExchange.Redis" Version="2.6.116" />
+    <PackageReference Include="StackExchange.Redis" Version="2.6.122" />
   </ItemGroup>
 
   <ItemGroup>
