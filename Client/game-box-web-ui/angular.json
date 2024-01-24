@@ -68,18 +68,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "game-box-web-ui:build"
+            "buildTarget": "game-box-web-ui:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "game-box-web-ui:build:production"
+              "buildTarget": "game-box-web-ui:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "game-box-web-ui:build"
+            "buildTarget": "game-box-web-ui:build"
           }
         },
         "test": {
@@ -132,7 +132,8 @@
   "cli": {
     "schematicCollections": [
       "@angular-eslint/schematics"
-    ]
+    ],
+    "analytics": false
   },
   "schematics": {
     "@angular-eslint/schematics:application": {

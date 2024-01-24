@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 80/tcp
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["Games.Service/GameBox.Bootstrap/GameBox.Bootstrap.csproj", "Games.Service/GameBox.Bootstrap/"]
 COPY ["Games.Service/Presentation/GameBox.Api/GameBox.Api.csproj", "Games.Service/GameBox.Api/"]

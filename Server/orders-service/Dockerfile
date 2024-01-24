@@ -1,4 +1,4 @@
-FROM node:18.17-alpine
+FROM node:20.11-alpine
 EXPOSE 1337
 
 WORKDIR /app

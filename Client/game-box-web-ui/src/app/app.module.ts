@@ -38,7 +38,7 @@ import { CategoriesEffects } from './store/+store/category/categories.effects';
       name: 'Game Box App Devtools',
       maxAge: 25,
       logOnly: environment.production
-    }),
+    , connectInZone: true}),
     GraphQLModule
   ],
   providers: [{
