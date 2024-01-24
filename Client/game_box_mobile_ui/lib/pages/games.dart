@@ -86,6 +86,7 @@ class _GamesState extends State<Games> {
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
+          foregroundColor: Colors.white,
           backgroundColor: Constants.primaryColor,
           title: const Text(
             'Games',
@@ -97,6 +98,13 @@ class _GamesState extends State<Games> {
           ),
           bottom: const TabBar(
             indicatorColor: Colors.white,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicator: UnderlineTabIndicator(
+              borderSide: BorderSide(
+                width: 4.0,
+                color: Colors.white,
+              ),
+            ),
             tabs: [
               HeaderTab(title: 'Games'),
               HeaderTab(title: 'Owned'),
