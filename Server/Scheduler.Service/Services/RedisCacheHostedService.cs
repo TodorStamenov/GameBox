@@ -30,14 +30,12 @@ public class RedisCacheHostedService : BackgroundService
 
     private async Task UpdateDataAsync()
     {
-        using (var connection = new SqlConnection(this.databaseConnectionString))
-        {
-            var games = await connection.QueryAsync<GamesCacheModel>(
-                @"SELECT Id, CategoryId, Title, Description, VideoId, ThumbnailUrl, Price, Size, ViewCount
+        using var connection = new SqlConnection(this.databaseConnectionString);
+        var games = await connection.QueryAsync<GamesCacheModel>(
+            @"SELECT Id, CategoryId, Title, Description, VideoId, ThumbnailUrl, Price, Size, ViewCount
                         FROM Games
                     ORDER BY ReleaseDate DESC, ViewCount DESC, Title ASC");
 
-            await this.cache.SetRecordAsync("_Games_", games);
-        }
+        await this.cache.SetRecordAsync("_Games_", games);
     }
 }

@@ -34,25 +34,23 @@ public class BrokerHostedService : BackgroundService
     {
         try
         {
-            using (var connection = new SqlConnection(this.connectionString))
-            {
-                var messages = await connection.QueryAsync<Message>(
-                    @"SELECT Id, QueueName, SerializedData [serializedData]
+            using var connection = new SqlConnection(this.connectionString);
+            var messages = await connection.QueryAsync<Message>(
+                @"SELECT Id, QueueName, SerializedData [serializedData]
                             FROM Messages
                            WHERE Published = 0");
 
-                foreach (var message in messages)
-                {
-                    this.queueService.PostQueueMessage(message.QueueName, message.SerializedData);
-                    await connection.ExecuteAsync(
-                        "UPDATE Messages SET Published = 1 WHERE Id = @MessageId",
-                        new { MessageId = message.Id });
-                }
+            foreach (var message in messages)
+            {
+                this.queueService.PostQueueMessage(message.QueueName, message.SerializedData);
+                await connection.ExecuteAsync(
+                    "UPDATE Messages SET Published = 1 WHERE Id = @MessageId",
+                    new { MessageId = message.Id });
             }
         }
         catch (Exception ex)
         {
-            this.logger.LogInformation($"Post messages on queue failed: {ex.Message}");
+            this.logger.LogInformation("Post messages on queue failed: {Message}", ex.Message);
         }
     }
 }

@@ -154,12 +154,10 @@ public class AuthService : IAuthService
 
     public byte[] GenerateSalt()
     {
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            byte[] salt = new byte[128 / 8];
-            rng.GetBytes(salt);
-            return salt;
-        }
+        using var rng = RandomNumberGenerator.Create();
+        byte[] salt = new byte[128 / 8];
+        rng.GetBytes(salt);
+        return salt;
     }
 
     public string HashPassword(string password, byte[] salt)

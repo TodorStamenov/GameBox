@@ -33,23 +33,21 @@ public class UserRegisteredConsumer : IHostedService
 
         consumer.Received += async (ch, ea) =>
         {
-            using (var scope = scopeFactory.CreateScope())
+            using var scope = scopeFactory.CreateScope();
+            var database = scope.ServiceProvider.GetRequiredService<IDataService>();
+            var content = ea.Body.ToArray();
+            var message = JsonSerializer.Deserialize<UserRegisteredMessage>(content);
+
+            var customer = new Customer
             {
-                var database = scope.ServiceProvider.GetRequiredService<IDataService>();
-                var content = ea.Body.ToArray();
-                var message = JsonSerializer.Deserialize<UserRegisteredMessage>(content);
+                UserId = message.UserId,
+                Username = message.Username
+            };
 
-                var customer = new Customer
-                {
-                    UserId = message.UserId,
-                    Username = message.Username
-                };
+            await database.AddAsync(customer);
+            await database.SaveAsync(cancellationToken);
 
-                await database.AddAsync(customer);
-                await database.SaveAsync(cancellationToken);
-
-                this.channel.BasicAck(ea.DeliveryTag, false);
-            }
+            this.channel.BasicAck(ea.DeliveryTag, false);
         };
 
         this.channel.BasicConsume(queue: "users", false, consumer);
