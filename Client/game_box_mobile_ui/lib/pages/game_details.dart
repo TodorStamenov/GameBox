@@ -210,7 +210,8 @@ class _GameDetailsState extends State<GameDetails> {
                   const SizedBox(width: 10),
                   PrimaryActionButton(
                     icon: Icons.comment,
-                    action: () => setState(() => _showCommentForm = !_showCommentForm),
+                    action: () =>
+                        setState(() => _showCommentForm = !_showCommentForm),
                   ),
                 ],
               ),

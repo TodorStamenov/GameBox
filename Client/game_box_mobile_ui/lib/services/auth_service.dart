@@ -29,7 +29,8 @@ Future<ResponseModel> login(String username, String password) async {
   );
 }
 
-Future<ResponseModel> register(String username, String password, String repeatPassword) async {
+Future<ResponseModel> register(
+    String username, String password, String repeatPassword) async {
   var response = await http.post(
     getUrl('register'),
     body: jsonEncode({

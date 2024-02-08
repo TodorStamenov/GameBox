@@ -26,7 +26,8 @@ class _RegisterState extends State<Register> {
       return;
     }
 
-    var result = await register(_username.text, _password.text, _repeatPassword.text);
+    var result =
+        await register(_username.text, _password.text, _repeatPassword.text);
 
     if (!result.success) {
       return;

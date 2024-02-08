@@ -49,7 +49,8 @@ class SideDrawer extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onTap: () => Navigator.pushReplacementNamed(context, Login.routeName),
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, Login.routeName),
             ),
             ListTile(
               leading: const Icon(
@@ -64,7 +65,8 @@ class SideDrawer extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onTap: () => Navigator.pushReplacementNamed(context, Register.routeName),
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, Register.routeName),
             ),
           ] else ...[
             ListTile(
@@ -73,7 +75,9 @@ class SideDrawer extends StatelessWidget {
                 color: Colors.black,
               ),
               title: Text(
-                UserModel.fromJson(jsonDecode((Storage.prefs?.getString('user'))!)).username,
+                UserModel.fromJson(
+                        jsonDecode((Storage.prefs?.getString('user'))!))
+                    .username,
                 style: const TextStyle(
                   fontSize: 18,
                   color: Color(0xff343A40),
@@ -98,7 +102,8 @@ class SideDrawer extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onTap: () => Navigator.pushReplacementNamed(context, Games.routeName),
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, Games.routeName),
             ),
             ListTile(
               leading: const Icon(
@@ -113,7 +118,8 @@ class SideDrawer extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onTap: () => Navigator.pushReplacementNamed(context, Cart.routeName),
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, Cart.routeName),
             ),
             ListTile(
               leading: const Icon(
@@ -128,7 +134,8 @@ class SideDrawer extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onTap: () => Navigator.pushReplacementNamed(context, Wishlist.routeName),
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, Wishlist.routeName),
             ),
             Expanded(
               child: Align(

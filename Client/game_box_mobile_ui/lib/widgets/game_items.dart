@@ -27,7 +27,9 @@ class _GameItemsState extends State<GameItems> {
   void initState() {
     super.initState();
     controller.addListener(() {
-      if (controller.position.atEdge && controller.position.pixels != 0 && widget._games.length >= 9) {
+      if (controller.position.atEdge &&
+          controller.position.pixels != 0 &&
+          widget._games.length >= 9) {
         widget._loadMoreGames();
       }
     });
@@ -50,7 +52,10 @@ class _GameItemsState extends State<GameItems> {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (index == 0) const SizedBox(height: 20) else const SizedBox(height: 0),
+              if (index == 0)
+                const SizedBox(height: 20)
+              else
+                const SizedBox(height: 0),
               Text(
                 widget._games[index].title,
                 textAlign: TextAlign.center,

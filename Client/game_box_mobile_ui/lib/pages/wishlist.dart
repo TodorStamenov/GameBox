@@ -98,7 +98,9 @@ class _WishlistState extends State<Wishlist> {
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  index == 0 ? const SizedBox(height: 20) : const SizedBox(height: 0),
+                  index == 0
+                      ? const SizedBox(height: 20)
+                      : const SizedBox(height: 0),
                   Text(
                     _games[index].title,
                     textAlign: TextAlign.center,
@@ -132,7 +134,8 @@ class _WishlistState extends State<Wishlist> {
                           var gameId = _games[index].id;
                           removeGame(gameId);
                           addItem(gameId);
-                          Navigator.pushReplacementNamed(context, Cart.routeName);
+                          Navigator.pushReplacementNamed(
+                              context, Cart.routeName);
                         },
                       ),
                       const SizedBox(width: 10),

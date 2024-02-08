@@ -80,7 +80,10 @@ class _CartState extends State<Cart> {
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (index == 0) const SizedBox(height: 20) else const SizedBox(height: 0),
+                  if (index == 0)
+                    const SizedBox(height: 20)
+                  else
+                    const SizedBox(height: 0),
                   Text(
                     _games[index].title,
                     textAlign: TextAlign.center,
@@ -143,7 +146,8 @@ class _CartState extends State<Cart> {
                             await order();
 
                             if (mounted) {
-                              Navigator.pushReplacementNamed(context, Games.routeName);
+                              Navigator.pushReplacementNamed(
+                                  context, Games.routeName);
                             }
                           },
                         ),
